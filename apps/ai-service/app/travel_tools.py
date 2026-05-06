@@ -17,22 +17,58 @@ class LocalDestination:
 
 
 DESTINATIONS: list[LocalDestination] = [
-    LocalDestination("da-nang", "Đà Nẵng", "Việt Nam", "February to August", ["Mì Quảng", "Bánh tráng cuốn thịt heo", "Hải sản"], 800000, 3000000, ["Dress modestly in pagodas.", "Use licensed transport after late beach walks."]),
-    LocalDestination("phu-quoc", "Phú Quốc", "Việt Nam", "November to April", ["Gỏi cá trích", "Hải sản", "Tiêu Phú Quốc"], 1100000, 4200000, ["Protect reefs.", "Confirm island transfer schedules locally."]),
-    LocalDestination("paris", "Paris", "France", "April to June", ["Croissant", "Steak frites", "Patisserie"], 3000000, 9500000, ["Book museum slots early.", "Watch for pickpockets in crowded tourist zones."]),
-    LocalDestination("tokyo", "Tokyo", "Japan", "March to May", ["Sushi", "Ramen", "Izakaya"], 2500000, 8000000, ["Keep trains quiet.", "Carry cash for small shops."]),
+    LocalDestination(
+        "da-nang",
+        "Da Nang",
+        "Vietnam",
+        "February to August",
+        ["Mi Quang", "Banh trang cuon thit heo", "Seafood"],
+        800000,
+        3000000,
+        ["Dress modestly in pagodas.", "Use licensed transport after late beach walks."],
+    ),
+    LocalDestination(
+        "phu-quoc",
+        "Phu Quoc",
+        "Vietnam",
+        "November to April",
+        ["Goi ca trich", "Seafood", "Phu Quoc pepper"],
+        1100000,
+        4200000,
+        ["Protect reefs.", "Confirm island transfer schedules locally."],
+    ),
+    LocalDestination(
+        "paris",
+        "Paris",
+        "France",
+        "April to June",
+        ["Croissant", "Steak frites", "Patisserie"],
+        3000000,
+        9500000,
+        ["Book museum slots early.", "Watch for pickpockets in crowded tourist zones."],
+    ),
+    LocalDestination(
+        "tokyo",
+        "Tokyo",
+        "Japan",
+        "March to May",
+        ["Sushi", "Ramen", "Izakaya"],
+        2500000,
+        8000000,
+        ["Keep trains quiet.", "Carry cash for small shops."],
+    ),
 ]
 
 
 def detect_travel_style(text: str) -> str:
     lowered = text.lower()
-    if any(word in lowered for word in ["food", "ăn", "cafe", "street"]):
+    if any(word in lowered for word in ["food", "an", "cafe", "street"]):
         return "Food Hunter"
-    if any(word in lowered for word in ["beach", "biển", "island"]):
+    if any(word in lowered for word in ["beach", "bien", "island"]):
         return "Beach Lover"
-    if any(word in lowered for word in ["family", "gia đình", "kids"]):
+    if any(word in lowered for word in ["family", "gia dinh", "kids"]):
         return "Family Planner"
-    if any(word in lowered for word in ["cheap", "budget", "tiết kiệm"]):
+    if any(word in lowered for word in ["cheap", "budget", "tiet kiem"]):
         return "Budget Backpacker"
     return "Culture Seeker"
 
@@ -64,29 +100,42 @@ def travel_personality(text: str) -> dict[str, Any]:
     recommended = [destination.slug for destination in DESTINATIONS if destination.name in answer_from_style(style)][:4]
     if not recommended:
         recommended = [destination.slug for destination in DESTINATIONS[:3]]
-    return {"style": style, "score": 88, "description": profile["description"], "traits": profile["traits"], "recommended_destination_slugs": recommended}
+    return {
+        "style": style,
+        "score": 88,
+        "description": profile["description"],
+        "traits": profile["traits"],
+        "recommended_destination_slugs": recommended,
+    }
 
 
 def answer_from_style(style: str) -> list[str]:
     if style == "Food Hunter":
-        return ["Đà Nẵng", "Tokyo", "Paris"]
+        return ["Da Nang", "Tokyo", "Paris"]
     if style == "Beach Lover":
-        return ["Đà Nẵng", "Phú Quốc"]
+        return ["Da Nang", "Phu Quoc"]
     if style == "Family Planner":
-        return ["Phú Quốc", "Đà Nẵng"]
-    return ["Đà Nẵng", "Paris", "Tokyo"]
+        return ["Phu Quoc", "Da Nang"]
+    return ["Da Nang", "Paris", "Tokyo"]
 
 
 def suggest_destination(text: str) -> LocalDestination:
     lowered = text.lower()
+    aliases = {
+        "da nang": "da-nang",
+        "danang": "da-nang",
+        "phu quoc": "phu-quoc",
+        "phuquoc": "phu-quoc",
+    }
+    for alias, slug in aliases.items():
+        if alias in lowered:
+            return _destination_by_slug(slug)
     for destination in DESTINATIONS:
         if destination.slug in lowered or destination.name.lower() in lowered:
             return destination
-    if "paris" in lowered:
-        return DESTINATIONS[2]
-    if "phú quốc" in lowered or "family" in lowered:
-        return DESTINATIONS[1]
-    return DESTINATIONS[0]
+    if "family" in lowered:
+        return _destination_by_slug("phu-quoc")
+    return _destination_by_slug("da-nang")
 
 
 def estimate_budget(destination: LocalDestination, days: int, travelers: int = 2) -> dict[str, Any]:
@@ -99,7 +148,7 @@ def estimate_budget(destination: LocalDestination, days: int, travelers: int = 2
         "low": low,
         "high": high,
         "currency": "VND",
-        "note": "Mock/local estimate. No real-time flight, hotel, visa, or weather data.",
+        "note": realtime_guardrail_notice(),
     }
 
 
@@ -153,7 +202,7 @@ def find_experiences_mock(destination: LocalDestination) -> list[str]:
 def compare_destinations(slugs: list[str]) -> list[dict[str, Any]]:
     results = []
     for slug in slugs:
-        destination = next((item for item in DESTINATIONS if item.slug == slug), DESTINATIONS[0])
+        destination = _destination_by_slug(slug)
         results.append(
             {
                 "destination": destination.name,
@@ -170,11 +219,11 @@ def compare_destinations(slugs: list[str]) -> list[dict[str, Any]]:
 def mood_search(query: str) -> dict[str, Any]:
     lowered = query.lower()
     tags = []
-    if "beach" in lowered or "bien" in lowered or "biển" in lowered:
+    if "beach" in lowered or "bien" in lowered:
         tags.append("beach")
-    if "food" in lowered or "an ngon" in lowered or "ăn ngon" in lowered:
+    if "food" in lowered or "an ngon" in lowered:
         tags.append("food")
-    if "quiet" in lowered or "yen binh" in lowered or "yên bình" in lowered:
+    if "quiet" in lowered or "yen binh" in lowered:
         tags.append("quiet")
     style = detect_travel_style(query)
     matched = [
@@ -206,13 +255,48 @@ def generate_packing_list(destination: LocalDestination) -> list[str]:
 
 def answer_from_knowledge_base(query: str) -> dict[str, Any]:
     destination = suggest_destination(query)
-    realtime = any(token in query.lower() for token in ["real-time", "current", "today", "flight price", "visa", "weather now", "giá vé bay", "thời tiết hiện tại"])
+    realtime = is_realtime_query(query)
     style = detect_travel_style(query)
     return {
         "summary": "Local knowledge-base response" if not realtime else "Local KB limitation notice",
-        "answer": "I do not have live flight, visa, or current weather data. Please verify official sources." if realtime else f"{destination.name} is a strong fit for {style}.",
+        "answer": realtime_guardrail_notice() if realtime else f"{destination.name} is a strong fit for {style}.",
         "destination": destination.name,
         "citations": [{"title": destination.name, "source_id": f"destinations/{destination.slug}.md", "chunk_id": f"{destination.slug}-overview"}],
         "itinerary": build_itinerary(destination, 5 if "5" in query else 3, style),
         "safety": {"grounded": not realtime, "confidence": "medium" if realtime else "high"},
     }
+
+
+def is_realtime_query(query: str) -> bool:
+    lowered = query.lower()
+    realtime_tokens = [
+        "real-time",
+        "realtime",
+        "live",
+        "current",
+        "today",
+        "tomorrow",
+        "flight price",
+        "flight prices",
+        "airfare",
+        "visa",
+        "e-visa",
+        "weather now",
+        "weather today",
+        "forecast",
+        "gia ve bay",
+        "thoi tiet hien tai",
+    ]
+    return any(token in lowered for token in realtime_tokens)
+
+
+def realtime_guardrail_notice() -> str:
+    return (
+        "I cannot verify real-time flight prices, visa rules, or current weather from this local AI service, "
+        "so I will not invent those details. Please confirm flights with airlines or booking providers, visa rules "
+        "with official government sources, and weather with a live forecast before booking."
+    )
+
+
+def _destination_by_slug(slug: str) -> LocalDestination:
+    return next((item for item in DESTINATIONS if item.slug == slug), DESTINATIONS[0])

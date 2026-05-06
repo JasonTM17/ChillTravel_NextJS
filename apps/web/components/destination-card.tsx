@@ -4,6 +4,7 @@ import type { Destination } from "@vietwander/shared";
 import { getDestinationCopy } from "@/lib/destination-copy";
 import { getDestinationImage } from "@/lib/destination-images";
 import { formatVnd } from "@/lib/utils";
+import { safetyLabel, tagLabel } from "@/lib/vietnamese";
 
 export function DestinationCard({ destination }: { destination: Destination }) {
   const copy = getDestinationCopy(destination);
@@ -21,7 +22,7 @@ export function DestinationCard({ destination }: { destination: Destination }) {
             {copy.country}
           </span>
           <button
-            aria-label={`Save ${copy.name}`}
+            aria-label={`Lưu ${copy.name}`}
             className="grid h-10 w-10 place-items-center rounded-full bg-white/90 text-[#071827] backdrop-blur transition hover:bg-white"
           >
             <Heart size={18} />
@@ -41,10 +42,10 @@ export function DestinationCard({ destination }: { destination: Destination }) {
           <div className="flex items-center gap-2 text-sm font-bold text-[#b45309]">
             <Star size={17} fill="currentColor" />
             {destination.ratingAvg.toFixed(1)}
-            <span className="font-medium text-[#5c6b73]">({destination.reviewCount} reviews)</span>
+            <span className="font-medium text-[#5c6b73]">({destination.reviewCount} đánh giá)</span>
           </div>
           <span className="rounded-full border border-[#d9ecfb] bg-[#f3f9ff] px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-[#0277d4]">
-            {destination.safetyLevel} safety
+            {safetyLabel(destination.safetyLevel)}
           </span>
         </div>
 
@@ -55,14 +56,14 @@ export function DestinationCard({ destination }: { destination: Destination }) {
             <WalletCards className="mt-0.5 text-[#0f766e]" size={17} aria-hidden="true" />
             <div>
               <p className="font-bold text-[#071827]">{formatVnd(destination.budgetMin)}</p>
-              <p className="text-xs text-[#687983]">starting budget</p>
+              <p className="text-xs text-[#687983]">ngân sách từ</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
             <CalendarDays className="mt-0.5 text-[#0f766e]" size={17} aria-hidden="true" />
             <div>
-              <p className="line-clamp-1 font-bold text-[#071827]">{destination.bestTimeToVisit}</p>
-              <p className="text-xs text-[#687983]">best season</p>
+              <p className="line-clamp-1 font-bold text-[#071827]">{copy.bestTimeToVisit}</p>
+              <p className="text-xs text-[#687983]">mùa đẹp</p>
             </div>
           </div>
         </div>
@@ -70,7 +71,7 @@ export function DestinationCard({ destination }: { destination: Destination }) {
         <div className="mt-4 flex flex-wrap gap-2">
           {destination.tags.slice(0, 3).map((tag) => (
             <span key={tag} className="rounded-full bg-[#f5efe4] px-3 py-1 text-xs font-semibold text-[#40515d]">
-              {tag.replace("AI recommended", "curated")}
+              {tagLabel(tag)}
             </span>
           ))}
         </div>
@@ -80,14 +81,14 @@ export function DestinationCard({ destination }: { destination: Destination }) {
             href={`/destinations/${destination.slug}`}
             className="inline-flex min-w-0 items-center justify-between rounded-lg bg-[#0277d4] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#005ea8] focus:outline-none focus:ring-2 focus:ring-[#0277d4]/30 focus:ring-offset-2"
           >
-            <span className="truncate">Open dossier</span>
+            <span className="truncate">Xem chi tiết</span>
             <ArrowUpRight size={17} aria-hidden="true" />
           </Link>
           <Link
             href={`/ai-planner?destination=${destination.slug}`}
             className="inline-flex items-center rounded-lg border border-[#ffd5bd] bg-[#fff7f0] px-3 py-3 text-sm font-black text-[#c24f05] transition hover:border-[#ff6d1a] hover:text-[#a84304] focus:outline-none focus:ring-2 focus:ring-[#ff6d1a]/30 focus:ring-offset-2"
           >
-            Plan
+            Lên lịch
           </Link>
         </div>
       </div>

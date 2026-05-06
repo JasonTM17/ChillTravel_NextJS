@@ -1,4 +1,5 @@
 import { destinations } from "@vietwander/shared";
+import { getDestinationCopy } from "./destination-copy";
 
 function normalizeSearch(value: string) {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").toLowerCase();
@@ -14,5 +15,8 @@ export function getDestinationBySlug(slug: string) {
 
 export function filterDestinations(query: string) {
   const normalized = normalizeSearch(query);
-  return destinations.filter((destination) => normalizeSearch([destination.name, destination.country, destination.city, destination.tags.join(" ")].join(" ")).includes(normalized));
+  return destinations.filter((destination) => {
+    const copy = getDestinationCopy(destination);
+    return normalizeSearch([copy.name, copy.country, copy.city, copy.summary, destination.slug, destination.tags.join(" ")].join(" ")).includes(normalized);
+  });
 }

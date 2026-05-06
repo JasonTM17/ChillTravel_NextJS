@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { Type } from "class-transformer";
 import { IsIn, IsNumber, IsOptional, IsString, Max, MaxLength, Min } from "class-validator";
-import { demoPaymentMethods, envelope } from "@vietwander/shared";
+import { demoPaymentMethods, envelope, type BookingCreateRequest, type PaymentConfirmRequest, type PaymentMethod } from "@vietwander/shared";
 import { BookingService } from "./booking.service";
 
-class BookingDto {
+class BookingDto implements BookingCreateRequest {
   @IsString()
   @MaxLength(120)
   itemName!: string;
@@ -16,10 +16,10 @@ class BookingDto {
   amount!: number;
 
   @IsIn(demoPaymentMethods)
-  method!: (typeof demoPaymentMethods)[number];
+  method!: PaymentMethod;
 }
 
-class PaymentConfirmDto {
+class PaymentConfirmDto implements PaymentConfirmRequest {
   @IsOptional()
   @IsString()
   @MaxLength(40)

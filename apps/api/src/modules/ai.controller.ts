@@ -1,10 +1,22 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { Type } from "class-transformer";
 import { ArrayMinSize, IsArray, IsBoolean, IsIn, IsInt, IsOptional, IsString, Max, MaxLength, Min, MinLength } from "class-validator";
-import { envelope, type BudgetSimulationInput, type TravelQuizAnswer, type TravelStyle } from "@vietwander/shared";
+import {
+  envelope,
+  type AiBudgetEstimateRequest,
+  type AiChatRequest,
+  type AiCompareRequest,
+  type AiItineraryRequest,
+  type AiMoodSearchRequest,
+  type AiPersonalityRequest,
+  type AiReindexRequest,
+  type BudgetSimulationInput,
+  type TravelQuizAnswer,
+  type TravelStyle
+} from "@vietwander/shared";
 import { AiService } from "./ai.service";
 
-class ChatDto {
+class ChatDto implements AiChatRequest {
   @IsString()
   @MinLength(1)
   @MaxLength(1000)
@@ -16,7 +28,7 @@ class ChatDto {
   contextSlug?: string;
 }
 
-class ItineraryDto {
+class ItineraryDto implements AiItineraryRequest {
   @IsOptional()
   @IsString()
   @MaxLength(80)
@@ -35,7 +47,7 @@ class ItineraryDto {
   style?: string;
 }
 
-class CompareDto {
+class CompareDto implements AiCompareRequest {
   @IsArray()
   @ArrayMinSize(1)
   @IsString({ each: true })
@@ -46,7 +58,7 @@ class CompareDto {
   style?: TravelStyle;
 }
 
-class BudgetEstimateDto {
+class BudgetEstimateDto implements AiBudgetEstimateRequest {
   @IsOptional()
   @IsString()
   @MaxLength(80)
@@ -90,20 +102,20 @@ class BudgetDto implements BudgetSimulationInput {
   activityLevel!: BudgetSimulationInput["activityLevel"];
 }
 
-class PersonalityDto {
+class PersonalityDto implements AiPersonalityRequest {
   @IsArray()
   @ArrayMinSize(1)
   answers!: TravelQuizAnswer[];
 }
 
-class MoodSearchDto {
+class MoodSearchDto implements AiMoodSearchRequest {
   @IsString()
   @MinLength(1)
   @MaxLength(160)
   query!: string;
 }
 
-class ReindexDto {
+class ReindexDto implements AiReindexRequest {
   @IsOptional()
   @IsBoolean()
   force?: boolean;

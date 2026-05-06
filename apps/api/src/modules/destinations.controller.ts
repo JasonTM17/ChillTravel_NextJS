@@ -1,9 +1,9 @@
 import { Controller, Get, Param, Query } from "@nestjs/common";
 import { IsIn, IsOptional, IsString, MaxLength } from "class-validator";
-import { envelope } from "@vietwander/shared";
+import { envelope, type DestinationListQuery } from "@vietwander/shared";
 import { DestinationsService } from "./destinations.service";
 
-class DestinationListQueryDto {
+class DestinationListQueryDto implements DestinationListQuery {
   @IsOptional()
   @IsString()
   @MaxLength(80)
@@ -21,7 +21,7 @@ class DestinationListQueryDto {
 
   @IsOptional()
   @IsIn(["cheapest", "popular"])
-  sort?: string;
+  sort?: DestinationListQuery["sort"];
 }
 
 class SearchQueryDto {

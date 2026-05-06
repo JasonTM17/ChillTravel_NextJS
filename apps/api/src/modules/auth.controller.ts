@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
 import { IsEmail, IsIn, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
-import { envelope, type Role } from "@vietwander/shared";
+import { envelope, type AuthLoginRequest, type AuthRegisterRequest, type Role } from "@vietwander/shared";
 import { AuthService } from "./auth.service";
 import { CurrentUser, JwtAuthGuard, type AuthUser } from "./security";
 
-class LoginDto {
+class LoginDto implements AuthLoginRequest {
   @IsEmail()
   @MaxLength(160)
   email!: string;
@@ -15,8 +15,7 @@ class LoginDto {
   password!: string;
 }
 
-class RegisterDto extends LoginDto {
-
+class RegisterDto extends LoginDto implements AuthRegisterRequest {
   @IsOptional()
   @IsIn(["USER", "HOST", "GUIDE", "ADMIN"])
   role?: Role;

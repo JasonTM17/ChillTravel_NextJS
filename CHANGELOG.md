@@ -32,3 +32,4 @@
 - Localized secondary web pages and AI utility components, including budget, compare, mood search, personality, auth, map, trips, wishlist, profile, hotels, and experiences.
 - Localized admin overview, destination operations, bookings, analytics, and AI Knowledge Studio copy while keeping production-safe demo boundaries visible.
 - Expanded Vietnamese UX smoke tests to cover secondary pages, admin pages, and AI utility components.
+- Finalized shared API and mobile contracts for auth, destinations, booking/payment, AI, budget, comparison, and offline snapshots.

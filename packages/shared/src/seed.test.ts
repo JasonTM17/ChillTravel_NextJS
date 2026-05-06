@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { destinations } from "./seed";
 import { compareDestinations, detectTravelStyle, localAiAnswer, moodSearch, simulateBudget } from "./ai-tools";
+import type { AiChatRequest, BookingCreateRequest, DestinationListQuery, MobileOfflineSnapshot, VietWanderApiContract } from "./contracts";
 
 describe("seed data and travel intelligence", () => {
   it("contains rich Vietnam and world destinations", () => {
@@ -42,5 +43,19 @@ describe("seed data and travel intelligence", () => {
     const mood = moodSearch("yen binh co bien va an ngon");
     expect(mood.inferredFilters.pace).toBe("chill");
     expect(mood.destinations.length).toBeGreaterThan(0);
+  });
+
+  it("exports shared API and mobile contracts", () => {
+    const destinationQuery = { q: "Da Nang", sort: "popular" } satisfies DestinationListQuery;
+    const bookingRequest = { itemName: "Demo tour", amount: 1000000, method: "MOCK_MOMO" } satisfies BookingCreateRequest;
+    const chatRequest = { message: "Da Nang food itinerary", contextSlug: "da-nang" } satisfies AiChatRequest;
+    const snapshot = { itineraries: [], wishlist: [], bookings: [], cachedAt: new Date(0).toISOString() } satisfies MobileOfflineSnapshot;
+    const contract = "ai" satisfies keyof VietWanderApiContract;
+
+    expect(destinationQuery.sort).toBe("popular");
+    expect(bookingRequest.method).toBe("MOCK_MOMO");
+    expect(chatRequest.contextSlug).toBe("da-nang");
+    expect(snapshot.cachedAt).toBe("1970-01-01T00:00:00.000Z");
+    expect(contract).toBe("ai");
   });
 });

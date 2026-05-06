@@ -1,5 +1,5 @@
 import type { Destination, TripPlan } from "@vietwander/shared";
-import { getDestinationCopy } from "@/lib/destination-copy";
+import { getDestinationCopy } from "./destination-copy";
 
 export const demoPaymentWarning = "Thanh toán demo — không phát sinh giao dịch thật";
 

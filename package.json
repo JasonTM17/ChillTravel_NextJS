@@ -1,0 +1,22 @@
+{
+  "name": "vietwander-ai",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "typecheck": "turbo typecheck",
+    "format:check": "prettier --check .",
+    "docker:config": "docker compose -f infra/docker/docker-compose.yml config",
+    "seed": "pnpm --filter @vietwander/db seed",
+    "ai:test": "python -m unittest discover apps/ai-service/tests"
+  },
+  "devDependencies": {
+    "prettier": "^3.7.4",
+    "turbo": "^2.6.3",
+    "typescript": "^5.9.3"
+  }
+}

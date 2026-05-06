@@ -63,8 +63,11 @@ describe("Vietnamese travel-commerce UX", () => {
       "app/admin/bookings/page.tsx",
       "app/admin/analytics/page.tsx",
       "app/admin/ai-knowledge/page.tsx",
+      "components/catalog-listing.tsx",
+      "components/commerce-primitives.tsx",
       "components/destination-card.tsx",
       "components/itinerary-timeline.tsx",
+      "components/page-shell.tsx",
       "components/feature-overview.tsx",
       "components/ai/compare-console.tsx",
       "components/ai/mood-search-panel.tsx",
@@ -75,6 +78,22 @@ describe("Vietnamese travel-commerce UX", () => {
     expect(source).not.toMatch(
       /Demo payment - no real transaction|Open dossier|Mock booking|Search results|Your trip cart|Build itinerary|Starting from|Admin dashboard|Traveler profile|Wishlist|Login|Register|Bo nhan dien phong cach du lich|Map discovery|Hotels mock|So sanh thong minh/
     );
+  });
+
+  it("keeps shipped web source on the ChillTravel brand boundary", () => {
+    const files = [
+      "app/layout.tsx",
+      "app/page.tsx",
+      "app/explore/page.tsx",
+      "app/booking/[id]/page.tsx",
+      "components/site-header.tsx",
+      "components/commerce-primitives.tsx",
+      "components/catalog-listing.tsx"
+    ];
+    const source = files.map((file) => readFileSync(`${root}/${file}`, "utf8")).join("\n");
+
+    expect(source).toContain("ChillTravel");
+    expect(source).not.toMatch(/VietWander AI|VIETWANDER AI|VietnamWanderAI|ChillTravel AI|traveloka/i);
   });
 
   it("keeps Vietnamese route labels for the expanded web surface", () => {

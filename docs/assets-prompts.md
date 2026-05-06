@@ -43,3 +43,10 @@ Vietnamese traveler using a mobile AI travel app while viewing a cinematic world
 - Usage: Things-to-do and local experience card background.
 - Tool: Built-in image generation.
 - Prompt: Hoi An lanterns, street food tasting, guided walking tour, local craft market details, warm evening atmosphere; realistic activity marketplace image, no text, no logo, no watermark, no brand marks.
+
+### logo-mark-ai-islands.png
+- Date: 2026-05-06
+- File: `apps/web/public/brand/logo-mark-ai-islands.png`
+- Usage: Header logo mark and favicon.
+- Tool: Built-in image generation plus local chroma-key background removal.
+- Prompt: Regenerate the visible VietWander AI compass-pin travel logo as a clean vector-friendly raster mark, but correct the Vietnam geography by including both Hoang Sa and Truong Sa archipelagos as two subtle small island-dot clusters in the East Sea: Hoang Sa to the east of central Vietnam, Truong Sa farther southeast. Keep them visible but minimal, integrated inside the inner map circle. No text, no labels, no Traveloka logo, no bird silhouette, no copied third-party mark, no watermark.

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Nền tảng du lịch Việt Nam và thế giới với tìm kiếm, lịch trình AI ưu tiên chạy local và thanh toán demo an toàn.",
   metadataBase: new URL("https://vietwander.local"),
   icons: {
-    icon: "/brand/favicon.svg"
+    icon: "/brand/logo-mark-ai-islands.png"
   }
 };
 

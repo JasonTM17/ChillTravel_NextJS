@@ -1,0 +1,45 @@
+{
+  "name": "projects/1439968317747880611",
+  "projectId": "1439968317747880611",
+  "title": "VIETWANDER AI — Travel Intelligence Platform",
+  "visibility": "PRIVATE",
+  "projectType": "PROJECT_DESIGN",
+  "origin": "STITCH",
+  "deviceType": "DESKTOP",
+  "screens": {
+    "travel-commerce-core-home": {
+      "id": "7b4e758951664dafbeadaaa319b762b2",
+      "sourceScreen": "projects/1439968317747880611/screens/7b4e758951664dafbeadaaa319b762b2",
+      "width": 1376,
+      "height": 768,
+      "status": "rejected_reference_only",
+      "reason": "Generated screen included Traveloka trademark text/mark despite prompt. Do not ship or commit screenshot assets."
+    },
+    "travel-commerce-core-results": {
+      "id": "4f373a32f7ef4f1d859c4b2c5e68cb95",
+      "sourceScreen": "projects/1439968317747880611/screens/4f373a32f7ef4f1d859c4b2c5e68cb95",
+      "width": 1376,
+      "height": 768,
+      "status": "rejected_reference_only",
+      "reason": "Generated screen is useful for OTA flow structure only; implementation must remain VietWander-branded and Vietnamese."
+    },
+    "travel-commerce-core-checkout": {
+      "id": "cda57d116d7d409983cd43a740e19614",
+      "sourceScreen": "projects/1439968317747880611/screens/cda57d116d7d409983cd43a740e19614",
+      "width": 1376,
+      "height": 768,
+      "status": "reference_only"
+    },
+    "travel-commerce-core-dashboard": {
+      "id": "1cd1756a5138482bb1a1f7a2a24fa217",
+      "sourceScreen": "projects/1439968317747880611/screens/1cd1756a5138482bb1a1f7a2a24fa217",
+      "width": 1376,
+      "height": 768,
+      "status": "reference_only"
+    }
+  },
+  "metadata": {
+    "userRole": "OWNER",
+    "lastLoop": "travel-commerce-core"
+  }
+}

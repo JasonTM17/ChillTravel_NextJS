@@ -1,79 +1,45 @@
 import Link from "next/link";
-import {
-  BadgePercent,
-  Car,
-  HelpCircle,
-  Hotel,
-  LayoutDashboard,
-  Map,
-  Plane,
-  Route,
-  Sparkles,
-  Ticket
-} from "lucide-react";
+import { BadgePercent, Bell, Bookmark, CalendarCheck2, HelpCircle, LogIn, Menu } from "lucide-react";
 import { BrandLogo } from "@/components/brand-logo";
 
 const utilityNav = [
-  ["Ưu đãi", "/"],
-  ["Hỗ trợ", "/chat"],
-  ["Đặt chỗ", "/booking/demo"]
-] as const;
-
-const productNav = [
-  ["Khách sạn", "/hotels", Hotel],
-  ["Chuyến bay", "/explore?q=flight", Plane],
-  ["Hoạt động", "/experiences", Ticket],
-  ["Thuê xe", "/map", Car],
-  ["Lập lịch trình AI", "/ai-planner", Route],
-  ["Quản trị", "/admin", LayoutDashboard]
+  ["Ưu đãi", "/", BadgePercent],
+  ["Đặt chỗ", "/booking/demo", CalendarCheck2],
+  ["Đã lưu", "/wishlist", Bookmark],
+  ["Hỗ trợ", "/chat", HelpCircle]
 ] as const;
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-[#d9ecfb] bg-white/94 text-[#071827] backdrop-blur-xl">
-      <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-4 py-2 text-xs font-bold text-[#476273] md:px-8">
+    <header className="sticky top-0 z-50 border-b border-[#e4eef6] bg-white text-[#071827]">
+      <div className="mx-auto flex h-16 max-w-[1180px] items-center justify-between gap-4 px-4 md:px-6">
         <BrandLogo />
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Utility navigation">
-          {utilityNav.map(([label, href]) => (
-            <Link key={href} href={href} className="rounded-lg px-3 py-2 transition hover:bg-[#eef7ff] hover:text-[#0277d4]">
+
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Điều hướng chính">
+          {utilityNav.map(([label, href, Icon]) => (
+            <Link key={href} href={href} className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-[#334e60] transition hover:bg-[#eef7ff] hover:text-[#0277d4]">
+              <Icon size={17} aria-hidden="true" />
               {label}
             </Link>
           ))}
-          <Link href="/login" className="inline-flex items-center gap-1 rounded-lg px-3 py-2 transition hover:bg-[#eef7ff] hover:text-[#0277d4]">
-            <HelpCircle size={14} aria-hidden="true" />
+        </nav>
+
+        <div className="flex items-center gap-2">
+          <Link href="/profile" className="hidden rounded-xl border border-[#d9ecfb] p-2 text-[#476273] transition hover:bg-[#eef7ff] hover:text-[#0277d4] md:inline-flex" aria-label="Thông báo">
+            <Bell size={18} aria-hidden="true" />
+          </Link>
+          <Link href="/login" className="hidden items-center gap-2 rounded-xl bg-[#0277d4] px-4 py-2.5 text-sm font-black text-white shadow-[0_10px_24px_rgba(2,119,212,0.22)] transition hover:bg-[#005ea8] md:inline-flex">
+            <LogIn size={17} aria-hidden="true" />
             Đăng nhập
           </Link>
-          <Link href="/register" className="rounded-lg bg-[#0277d4] px-3 py-2 font-black text-white transition hover:bg-[#005ea8]">
+          <Link href="/register" className="hidden rounded-xl border border-[#d9ecfb] px-4 py-2.5 text-sm font-black text-[#0277d4] transition hover:bg-[#eef7ff] md:inline-flex">
             Đăng ký
           </Link>
-        </nav>
+          <button className="inline-flex rounded-xl border border-[#d9ecfb] p-2 text-[#476273] md:hidden" type="button" aria-label="Mở menu">
+            <Menu size={20} aria-hidden="true" />
+          </button>
+        </div>
       </div>
-      <nav className="mx-auto flex max-w-[1440px] items-center gap-2 overflow-x-auto px-4 pb-3 md:px-8" aria-label="Product navigation">
-        {productNav.map(([label, href, Icon]) => (
-          <Link
-            key={href}
-            href={href}
-            className="inline-flex shrink-0 items-center gap-2 rounded-xl border border-[#d9ecfb] bg-[#f7fbff] px-3 py-2 text-sm font-black text-[#16384f] transition hover:border-[#0277d4] hover:bg-white hover:text-[#0277d4] focus:outline-none focus:ring-2 focus:ring-[#0277d4]/30"
-          >
-            <Icon size={17} aria-hidden="true" />
-            {label}
-          </Link>
-        ))}
-        <Link
-          href="/chat"
-          className="ml-auto hidden shrink-0 items-center gap-2 rounded-xl bg-[#071827] px-4 py-2 text-sm font-black text-white transition hover:bg-[#0f2c3f] md:inline-flex"
-        >
-          <Sparkles size={16} aria-hidden="true" />
-          Trợ lý du lịch
-        </Link>
-        <Link
-          href="/booking/demo"
-          className="hidden shrink-0 items-center gap-2 rounded-xl bg-[#fff3e8] px-4 py-2 text-sm font-black text-[#b45309] md:inline-flex"
-        >
-          <BadgePercent size={16} aria-hidden="true" />
-          Ưu đãi demo
-        </Link>
-      </nav>
     </header>
   );
 }

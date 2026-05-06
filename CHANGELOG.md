@@ -36,3 +36,5 @@
 - Aligned API controllers with shared request contracts while keeping validation, envelopes, RBAC, and mock-only payments intact.
 - Completed final Vietnamese route-label QA for personality, wishlist, and trips pages with expanded HTTP smoke coverage.
 - Documented Vietnamese travel-commerce brand rules, CTA vocabulary, payment/AI limits, and route smoke checklist.
+- Ran a Stitch loop pass for Travel Commerce Core, rejected trademarked generated variants, and refactored the web header, landing, and Explore flow into a cleaner Vietnamese OTA-style experience.
+- Regenerated the custom VietWander logo with visible Hoàng Sa and Trường Sa island clusters and wired it into the header/favicon.

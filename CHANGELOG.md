@@ -15,3 +15,4 @@
 - Added FastAPI parity endpoints for local personality detection, destination compare, and mood-search.
 - Applied Stitch editorial travel redesign to the web shell, landing, Explore page, destination cards, and mood search to reduce the obvious AI-template feel.
 - Extended the editorial redesign to destination detail, trip planner, chat, booking mock payment, and admin overview surfaces.
+- Removed remaining web template repetition and encoding artifacts from secondary, auth, admin, and itinerary surfaces.

@@ -1,12 +1,12 @@
 # CHILLTRAVEL
 
-Vietnam & World Travel Intelligence Platform.
+Vietnam & World Travel Commerce Platform.
 
-CHILLTRAVEL is a portfolio-grade local-first travel platform combining a cinematic Next.js web app, NestJS API, FastAPI local AI RAG service, PostgreSQL/Prisma schema, Qdrant vector architecture, Redis-ready cache, and a Flutter mobile app source tree.
+CHILLTRAVEL is a portfolio-grade local-first travel platform combining a cinematic Next.js web app, NestJS API, FastAPI local assistant/RAG service, PostgreSQL/Prisma schema, Qdrant vector architecture, Redis-ready cache, and a Flutter mobile app source tree.
 
 ## Highlights
 
-- Vietnamese travel-commerce web app with Traveloka-inspired search-first UX, legally distinct ChillTravel branding, landing, explore, destination detail, AI planner, chat, compare, map, booking mock, wishlist, trips, profile, and admin.
+- Vietnamese travel-commerce web app with Traveloka-inspired search-first UX, legally distinct ChillTravel branding, landing, explore, destination detail, smart planner, chat, compare, map, booking mock, wishlist, trips, profile, and admin.
 - Local chatbot runtime design: Ollama + RAG + Qdrant. No OpenAI API key required for runtime chatbot.
 - Rich sample travel data for Vietnam and world destinations.
 - Mock-only booking and payment. Thanh toán demo — không phát sinh giao dịch thật.
@@ -18,7 +18,7 @@ CHILLTRAVEL is a portfolio-grade local-first travel platform combining a cinemat
 - Web: Next.js 16.2.4, TypeScript, TailwindCSS, shadcn-style components, Framer Motion-ready.
 - API: NestJS 11.1.19, Swagger, validation, RBAC-ready services.
 - DB: PostgreSQL, Prisma 7.8.0 schema.
-- AI: FastAPI, Ollama provider assumptions, Qdrant, local markdown knowledge.
+- Local assistant: FastAPI, Ollama provider assumptions, Qdrant, local markdown knowledge.
 - Mobile: Flutter source tree, Riverpod, Dio, go_router, Drift-ready.
 - DevOps: pnpm, Turborepo, Docker Compose, GitHub Actions.
 
@@ -39,7 +39,7 @@ Run API:
 
     pnpm --filter @vietwander/api dev
 
-Run AI service:
+Run local assistant service:
 
     cd apps/ai-service
     pip install -r requirements.txt
@@ -49,14 +49,14 @@ Run Docker services:
 
     docker compose -f infra/docker/docker-compose.yml up
 
-## AI Local
+## Local Assistant
 
 Install Ollama separately, then pull:
 
     ollama pull qwen3:4b
     ollama pull nomic-embed-text
 
-The AI service includes sample RAG and structured tools. It does not claim real-time flight, visa, or weather access.
+The local assistant service includes sample RAG and structured tools. It does not claim real-time flight, visa, or weather access.
 
 ## Mobile
 
@@ -70,10 +70,10 @@ Flutter is not installed on this machine yet. After installing Flutter stable:
 
 ## Demo Accounts
 
-- admin@vietwander.ai / Admin123!
-- user@vietwander.ai / User123!
-- guide@vietwander.ai / Guide123!
-- host@vietwander.ai / Host123!
+- admin@chilltravel.local / Admin123!
+- user@chilltravel.local / User123!
+- guide@chilltravel.local / Guide123!
+- host@chilltravel.local / Host123!
 
 ## Payment Warning
 

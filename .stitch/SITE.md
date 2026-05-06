@@ -2,7 +2,7 @@
 
 ## 1. Vision
 
-ChillTravel is a Vietnamese travel-commerce platform with local-first AI planning. The product should feel like a trustworthy OTA: fast search, clear service tabs, strong listing comparison, transparent price panels, useful admin operations, and explicit demo payment boundaries.
+ChillTravel is a Vietnamese travel-commerce platform with local-first smart planning. The product should feel like a trustworthy OTA: fast search, clear service tabs, strong listing comparison, transparent price panels, useful admin operations, and explicit demo payment boundaries.
 
 ## 2. Stitch Project
 
@@ -60,4 +60,4 @@ Important:
 ## 6. Creative Freedom
 
 - Add compact deal shelves, coupon cards, trust badges, sticky trip cart, admin tables, and Vietnamese microcopy that feels like a real booking product.
-- Preserve local-first AI and mock payment boundaries as visible trust signals.
+- Preserve local-first assistant and mock payment boundaries as visible trust signals.

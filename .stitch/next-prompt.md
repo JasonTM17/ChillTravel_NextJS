@@ -12,7 +12,7 @@ Create a high-fidelity admin operations console for CHILLTRAVEL using the ChillT
 
 **PAGE STRUCTURE:**
 1. Sticky white header with ChillTravel logo and admin actions.
-2. KPI row: đặt chỗ demo, doanh thu mẫu, truy vấn AI, tài liệu RAG.
+2. KPI row: đặt chỗ demo, doanh thu mẫu, truy vấn trợ lý, tài liệu RAG.
 3. Operations columns: booking queue, destination moderation, Knowledge Studio, chatbot guardrail logs.
 4. Data table with Vietnamese status chips and actions.
 5. Right trust panel: thanh toán demo, dữ liệu local/sample, không có live visa/weather/flight prices.

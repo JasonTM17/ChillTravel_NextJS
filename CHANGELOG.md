@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Updated README, Stitch prompts, and Vietnamese UX runbook to reflect the ChillTravel brand, smart planner wording, local-assistant boundary, and non-cloning legal rules.
 - Expanded Vietnamese web smoke tests to cover new commerce primitives, catalog listing surfaces, and ChillTravel brand boundary checks.
 - Applied Vietnamese OTA-style Flutter mobile UI for shell, home, explore, destination detail, trip assistant, itinerary, booking, wishlist, profile, offline cache copy, and widget expectations.
 - Refactored public hotel, experience, login, and register routes into concrete ChillTravel commerce flows with listing rows, demo forms, and Vietnamese booking copy.

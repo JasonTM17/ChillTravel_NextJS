@@ -2,14 +2,14 @@
 
 ## Mục tiêu
 
-ChillTravel dùng cảm hứng travel-commerce hiện đại: tìm kiếm nhanh, danh sách dễ so sánh, giá/CTA rõ ràng, thanh toán demo minh bạch và AI local-first. Sản phẩm không clone Traveloka hay bất kỳ thương hiệu nào khác.
+ChillTravel dùng cảm hứng travel-commerce hiện đại: tìm kiếm nhanh, danh sách dễ so sánh, giá/CTA rõ ràng, thanh toán demo minh bạch và trợ lý local-first. Sản phẩm không clone Traveloka hay bất kỳ thương hiệu nào khác.
 
 ## Nguyên tắc thương hiệu
 
 - Logo ChillTravel phải khác biệt hợp pháp: la bàn, đường bay, gợi ý bản đồ Việt Nam, Hoàng Sa, Trường Sa và nhịp chuyển động riêng.
 - Không dùng chim, wordmark, tỷ lệ biểu tượng, asset, screenshot, hoặc bố cục có thể gây nhầm lẫn với Traveloka.
-- Màu chủ đạo: booking blue đáng tin cậy, teal cho tín hiệu local/AI an toàn, orange cho CTA chuyển đổi, nền trắng/xanh nhạt.
-- Ảnh điểm đến là tín hiệu chính; tránh nền AI sci-fi, orb, neon hoặc glass quá nặng.
+- Màu chủ đạo: booking blue đáng tin cậy, teal cho tín hiệu local/RAG an toàn, orange cho CTA chuyển đổi, nền trắng/xanh nhạt.
+- Ảnh điểm đến là tín hiệu chính; tránh nền sci-fi, orb, neon hoặc glass quá nặng.
 
 ## Copy tiếng Việt
 
@@ -34,11 +34,11 @@ Nhãn route chính:
 
 Không đưa lại các cụm cũ trong user flow: `Mock payment - no real transaction`, `Open dossier`, `Search results`, `Traveler profile`, `Login`, `Wishlist`, `Admin dashboard`.
 
-## Payment và AI boundary
+## Payment và trợ lý local boundary
 
 - Luôn hiển thị: `Thanh toán demo — không phát sinh giao dịch thật`.
 - Không lưu thẻ thật, không charge thật, không bypass luật thanh toán.
-- Chatbot runtime dùng local AI service/Ollama/RAG khi chạy production local; không yêu cầu OpenAI API key.
+- Chatbot runtime dùng local assistant service/Ollama/RAG khi chạy production local; không yêu cầu OpenAI API key.
 - Nếu hỏi vé bay, visa, thời tiết real-time, UI/chatbot phải nói rõ đây là dữ liệu mẫu/local và khuyên kiểm tra nguồn chính thức.
 
 ## QA bắt buộc

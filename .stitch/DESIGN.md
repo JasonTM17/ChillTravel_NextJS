@@ -16,7 +16,7 @@ ChillTravel should feel like a trustworthy Vietnamese online travel agency: fast
 - Do not use the Traveloka bird, wordmark, icon proportions, screenshots, exact color ratios, or third-party brand assets.
 - All user-facing product copy is Vietnamese-first.
 - Payment copy must always say demo/local/mock and never imply real charging.
-- AI copy must state local/sample boundaries when the user asks for live visa, weather, or flight prices.
+- Assistant copy must state local/sample boundaries when the user asks for live visa, weather, or flight prices.
 
 ## Palette
 
@@ -25,7 +25,7 @@ ChillTravel should feel like a trustworthy Vietnamese online travel agency: fast
 - Sky surface: `#EAF7FF` and `#F6FBFF` for page backgrounds and soft panels.
 - White card: `#FFFFFF` for every core booking/comparison surface.
 - Orange CTA: `#FF6D1A` for conversion actions such as `Tìm kiếm`, `Xem ưu đãi`, `Đặt chỗ demo`.
-- Teal trust: `#0F8B7B` for safe/local/AI/RAG badges.
+- Teal trust: `#0F8B7B` for safe/local/RAG badges.
 - Ink: `#071827` for primary text.
 - Muted ink: `#476273` for secondary text.
 - Border: `#D9ECFB` for cards, inputs, and tables.
@@ -54,8 +54,8 @@ ChillTravel should feel like a trustworthy Vietnamese online travel agency: fast
 - Page background is pale sky/white, not dark cinematic.
 - Use white cards with 12-16px radius and subtle blue shadow.
 - Keep one primary orange CTA per decision area.
-- Destination imagery should be direct and recognizable, not abstract AI art.
-- Avoid nested cards, heavy glassmorphism, neon, or generic AI dashboard styling.
+- Destination imagery should be direct and recognizable, not abstract generated art.
+- Avoid nested cards, heavy glassmorphism, neon, or generic assistant-dashboard styling.
 - Mobile surfaces must have stable heights and readable Vietnamese labels.
 
 ## Stitch Reference Screens

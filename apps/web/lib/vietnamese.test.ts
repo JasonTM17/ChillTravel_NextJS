@@ -81,8 +81,9 @@ describe("Vietnamese travel-commerce UX", () => {
     const checks = [
       ["app/budget/page.tsx", "Ngân sách thông minh"],
       ["app/compare/page.tsx", "So sánh bằng AI"],
-      ["app/personality/page.tsx", "Bộ máy tính cách du lịch"],
-      ["app/wishlist/page.tsx", "Danh sách yêu thích"],
+      ["app/personality/page.tsx", "Phong cách du lịch"],
+      ["app/wishlist/page.tsx", "Yêu thích"],
+      ["app/trips/page.tsx", "Chuyến đi"],
       ["app/admin/page.tsx", "Bảng quản trị VietWander"],
       ["app/admin/ai-knowledge/page.tsx", "Knowledge Studio"]
     ] as const;

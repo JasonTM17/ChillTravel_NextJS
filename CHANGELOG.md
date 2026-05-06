@@ -34,3 +34,4 @@
 - Expanded Vietnamese UX smoke tests to cover secondary pages, admin pages, and AI utility components.
 - Finalized shared API and mobile contracts for auth, destinations, booking/payment, AI, budget, comparison, and offline snapshots.
 - Aligned API controllers with shared request contracts while keeping validation, envelopes, RBAC, and mock-only payments intact.
+- Completed final Vietnamese route-label QA for personality, wishlist, and trips pages with expanded HTTP smoke coverage.

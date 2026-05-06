@@ -1,12 +1,13 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, MapPinned, ShieldCheck, Star, WalletCards } from "lucide-react";
-import { buildDemoItinerary, destinations } from "@vietwander/shared";
+import { destinations } from "@vietwander/shared";
 import { ItineraryTimeline } from "@/components/itinerary-timeline";
 import { getDestinationCopy } from "@/lib/destination-copy";
 import { getDestinationImage } from "@/lib/destination-images";
 import { getDestinationBySlug } from "@/lib/travel";
 import { formatVnd } from "@/lib/utils";
+import { buildVietnameseDemoItinerary, demoPaymentWarning, safetyLabel } from "@/lib/vietnamese";
 
 export function generateStaticParams() {
   return destinations.map((destination) => ({ slug: destination.slug }));
@@ -18,32 +19,24 @@ export default async function DestinationDetail({ params }: { params: Promise<{ 
   if (!destination) notFound();
 
   const copy = getDestinationCopy(destination);
-  const rawPlan = buildDemoItinerary(destination, 3);
-  const plan = {
-    ...rawPlan,
-    destination: copy.name,
-    days: rawPlan.days.map((day) => ({
-      ...day,
-      title: day.title.replace(destination.name, copy.name)
-    }))
-  };
+  const plan = buildVietnameseDemoItinerary(destination, 3);
 
   return (
-    <main className="planning-desk text-[#071827]">
-      <section className="grid min-h-[620px] border-b border-[#eadfce] lg:grid-cols-[1.08fr_0.92fr]">
+    <main className="travel-commerce-surface text-[#071827]">
+      <section className="grid min-h-[620px] border-b border-[#d9ecfb] lg:grid-cols-[1.08fr_0.92fr]">
         <div className="flex items-end bg-[#071827] px-4 py-16 text-white md:py-20">
           <div className="mx-auto w-full max-w-3xl lg:mr-0">
             <p className="font-black uppercase tracking-[0.22em] text-[#f7d7b7]">
               {copy.country} / {copy.city}
             </p>
-            <h1 className="font-editorial mt-4 text-6xl font-black leading-[0.96] md:text-8xl">{copy.name}</h1>
+            <h1 className="mt-4 text-6xl font-black leading-[0.98] md:text-8xl">{copy.name}</h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/78">{copy.summary}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href={`/ai-planner?destination=${destination.slug}`} className="rounded-lg bg-[#f97316] px-5 py-3 font-black text-white">
-                Build itinerary
+                Tạo lịch trình
               </Link>
               <Link href="/compare" className="rounded-lg border border-white/18 bg-white/10 px-5 py-3 font-black">
-                Compare places
+                So sánh điểm đến
               </Link>
             </div>
           </div>
@@ -53,29 +46,29 @@ export default async function DestinationDetail({ params }: { params: Promise<{ 
           style={{
             backgroundImage: `linear-gradient(180deg, rgba(7,24,39,0.02), rgba(7,24,39,0.22)), url(${getDestinationImage(destination.slug)})`
           }}
-          aria-label={`${copy.name} editorial travel photo`}
+          aria-label={`Ảnh du lịch ${copy.name}`}
         />
       </section>
 
       <section className="mx-auto grid max-w-7xl gap-8 px-4 py-12 lg:grid-cols-[1fr_360px]">
         <div className="space-y-8">
-          <Panel title="Why visit">{copy.summary}</Panel>
+          <Panel title="Vì sao nên đi">{copy.summary}</Panel>
           <div className="grid gap-4 md:grid-cols-2">
-            <InfoCard icon={CalendarDays} title="Best time" value={destination.bestTimeToVisit} />
-            <InfoCard icon={ShieldCheck} title="Safety level" value={`${destination.safetyLevel} confidence`} />
+            <InfoCard icon={CalendarDays} title="Mùa đẹp" value={copy.bestTimeToVisit} />
+            <InfoCard icon={ShieldCheck} title="Mức an toàn" value={safetyLabel(destination.safetyLevel)} />
           </div>
-          <Panel title="Local food">
+          <Panel title="Ăn gì ở đây">
             <span className="flex flex-wrap gap-2">
-              {destination.foodHighlights.map((food) => (
+              {copy.foodHighlights.map((food) => (
                 <span key={food} className="rounded-full bg-[#f5efe4] px-3 py-1 text-sm font-bold text-[#40515d]">
                   {food}
                 </span>
               ))}
             </span>
           </Panel>
-          <Panel title="Culture guard">
+          <Panel title="Lưu ý văn hóa và an toàn">
             <ul className="space-y-2">
-              {destination.cultureNotes.map((note) => (
+              {copy.cultureNotes.map((note) => (
                 <li key={note} className="leading-7 text-[#40515d]">
                   {note}
                 </li>
@@ -86,22 +79,22 @@ export default async function DestinationDetail({ params }: { params: Promise<{ 
         </div>
 
         <aside className="space-y-4 lg:sticky lg:top-24 lg:h-fit">
-          <div className="rounded-[16px] border border-[#dfd3c1] bg-white p-5 shadow-[0_18px_54px_rgba(7,24,39,0.06)]">
-            <h2 className="text-xl font-black">Planning facts</h2>
+          <div className="rounded-[16px] border border-[#d9ecfb] bg-white p-5 shadow-[0_18px_54px_rgba(2,68,120,0.08)]">
+            <h2 className="text-xl font-black">Thông tin nhanh</h2>
             <div className="mt-5 space-y-4">
-              <Metric icon={Star} label="Rating" value={`${destination.ratingAvg.toFixed(1)} / 5`} />
-              <Metric icon={WalletCards} label="Daily budget" value={`${formatVnd(destination.budgetMin)}+`} />
-              <Metric icon={MapPinned} label="Coordinates" value={`${destination.latitude.toFixed(1)}, ${destination.longitude.toFixed(1)}`} />
+              <Metric icon={Star} label="Đánh giá" value={`${destination.ratingAvg.toFixed(1)} / 5`} />
+              <Metric icon={WalletCards} label="Ngân sách/ngày" value={`${formatVnd(destination.budgetMin)}+`} />
+              <Metric icon={MapPinned} label="Tọa độ" value={`${destination.latitude.toFixed(1)}, ${destination.longitude.toFixed(1)}`} />
             </div>
           </div>
 
           <div className="rounded-[16px] border border-[#dfd3c1] bg-[#071827] p-5 text-white shadow-[0_18px_54px_rgba(7,24,39,0.14)]">
-            <h2 className="text-xl font-black">Suggested stays</h2>
+            <h2 className="text-xl font-black">Nơi lưu trú gợi ý</h2>
             <ul className="mt-4 space-y-3">
-              {destination.hotelsMock.map((hotel) => (
+              {destination.hotelsMock.map((hotel, index) => (
                 <li key={hotel.name} className="rounded-xl border border-white/12 bg-white/8 p-3">
-                  <p className="font-bold">{hotel.name.replace(destination.name, copy.name)}</p>
-                  <p className="mt-1 text-sm text-white/70">{formatVnd(hotel.nightlyPrice)} per night</p>
+                  <p className="font-bold">{index === 0 ? `${copy.name} Boutique Stay` : `${copy.name} Smart Comfort Hotel`}</p>
+                  <p className="mt-1 text-sm text-white/70">{formatVnd(hotel.nightlyPrice)} / đêm</p>
                 </li>
               ))}
             </ul>
@@ -109,9 +102,10 @@ export default async function DestinationDetail({ params }: { params: Promise<{ 
               href={`/booking/${destination.slug}`}
               className="mt-5 inline-flex w-full items-center justify-between rounded-lg bg-white px-4 py-3 font-black text-[#071827]"
             >
-              Start mock booking
+              Bắt đầu đặt chỗ demo
               <ArrowRight size={18} aria-hidden="true" />
             </Link>
+            <p className="mt-3 text-xs font-bold text-white/62">{demoPaymentWarning}</p>
           </div>
         </aside>
       </section>
@@ -121,8 +115,8 @@ export default async function DestinationDetail({ params }: { params: Promise<{ 
 
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-[16px] border border-[#dfd3c1] bg-white p-6 shadow-[0_18px_54px_rgba(7,24,39,0.06)]">
-      <h2 className="font-editorial text-2xl font-black">{title}</h2>
+    <section className="rounded-[16px] border border-[#d9ecfb] bg-white p-6 shadow-[0_18px_54px_rgba(2,68,120,0.08)]">
+      <h2 className="text-2xl font-black">{title}</h2>
       <div className="mt-3 text-[#40515d]">{children}</div>
     </section>
   );
@@ -130,8 +124,8 @@ function Panel({ title, children }: { title: string; children: React.ReactNode }
 
 function InfoCard({ icon: Icon, title, value }: { icon: typeof CalendarDays; title: string; value: string }) {
   return (
-    <div className="rounded-[16px] border border-[#dfd3c1] bg-white p-5">
-      <Icon className="text-[#0f766e]" aria-hidden="true" />
+    <div className="rounded-[16px] border border-[#d9ecfb] bg-white p-5">
+      <Icon className="text-[#0277d4]" aria-hidden="true" />
       <h2 className="mt-4 text-sm font-black uppercase tracking-[0.18em] text-[#687983]">{title}</h2>
       <p className="mt-2 text-xl font-black">{value}</p>
     </div>

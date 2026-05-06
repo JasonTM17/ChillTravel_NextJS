@@ -26,3 +26,4 @@
 - Added shared API/mobile contract types and aligned API DTOs with those contracts.
 - Added a distinct VietWander travel-commerce logo system, favicon metadata, and Vietnamese OTA Design DNA prompt after Stitch generation timed out.
 - Applied Vietnamese travel-commerce copy to the header, landing page, Explore search/results, destination cards, and diacritic-safe web search helpers.
+- Localized destination detail, AI planner, chat, itinerary timeline, budget simulator, and mock booking payment flow with vi-VN warnings.

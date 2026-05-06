@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { destinations, simulateBudget, type BudgetSimulationInput } from "@vietwander/shared";
+import { getDestinationCopy } from "@/lib/destination-copy";
 import { formatVnd } from "@/lib/utils";
 
 type SelectFieldProps<T extends string> = {
@@ -38,68 +39,68 @@ export function BudgetSimulator({ initialDestinationSlug = "da-nang" }: { initia
     <section className="rounded-2xl bg-white p-5 shadow-sm">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-teal">Smart Budget Simulator</p>
-          <h2 className="mt-2 text-3xl font-black text-navy">{budget.destination}</h2>
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-[#0277d4]">Mô phỏng ngân sách thông minh</p>
+          <h2 className="mt-2 text-3xl font-black text-navy">{getDestinationCopy(destinations.find((item) => item.slug === destinationSlug) ?? destinations[0]).name}</h2>
         </div>
         <div className="rounded-2xl bg-navy p-5 text-right text-white">
-          <p className="text-sm text-white/65">Estimated local demo total</p>
+          <p className="text-sm text-white/65">Tổng chi phí demo dự kiến</p>
           <p className="text-3xl font-black">{formatVnd(budget.total)}</p>
-          <p className="text-sm text-white/65">{formatVnd(budget.perPerson)} per person</p>
+          <p className="text-sm text-white/65">{formatVnd(budget.perPerson)} / người</p>
         </div>
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         <label className="block text-sm font-bold text-navy">
-          Destination
+          Điểm đến
           <select value={destinationSlug} onChange={(event) => setDestinationSlug(event.target.value)} className="mt-2 w-full rounded-lg border border-navy/15 px-3 py-3">
             {destinations.map((destination) => (
               <option key={destination.slug} value={destination.slug}>
-                {destination.name}
+                {getDestinationCopy(destination).name}
               </option>
             ))}
           </select>
         </label>
-        <NumberSlider label="Travelers" value={travelers} min={1} max={8} onChange={setTravelers} />
-        <NumberSlider label="Days" value={days} min={2} max={14} onChange={setDays} />
+        <NumberSlider label="Số khách" value={travelers} min={1} max={8} onChange={setTravelers} />
+        <NumberSlider label="Số ngày" value={days} min={2} max={14} onChange={setDays} />
         <SelectField
-          label="Hotel"
+          label="Lưu trú"
           value={hotelLevel}
           onChange={setHotelLevel}
           options={[
-            { value: "hostel", label: "Hostel" },
-            { value: "comfort", label: "Comfort" },
+            { value: "hostel", label: "Tiết kiệm" },
+            { value: "comfort", label: "Thoải mái" },
             { value: "boutique", label: "Boutique" },
-            { value: "luxury", label: "Luxury" }
+            { value: "luxury", label: "Cao cấp" }
           ]}
         />
         <SelectField
-          label="Food"
+          label="Ăn uống"
           value={foodLevel}
           onChange={setFoodLevel}
           options={[
-            { value: "street", label: "Street food" },
-            { value: "balanced", label: "Balanced" },
-            { value: "premium", label: "Premium" }
+            { value: "street", label: "Món địa phương" },
+            { value: "balanced", label: "Cân bằng" },
+            { value: "premium", label: "Cao cấp" }
           ]}
         />
         <SelectField
-          label="Transport"
+          label="Di chuyển"
           value={transportLevel}
           onChange={setTransportLevel}
           options={[
-            { value: "public", label: "Public" },
-            { value: "mixed", label: "Mixed" },
-            { value: "private", label: "Private" }
+            { value: "public", label: "Công cộng" },
+            { value: "mixed", label: "Kết hợp" },
+            { value: "private", label: "Riêng tư" }
           ]}
         />
         <SelectField
-          label="Pace"
+          label="Nhịp đi"
           value={activityLevel}
           onChange={setActivityLevel}
           options={[
-            { value: "slow", label: "Slow" },
-            { value: "balanced", label: "Balanced" },
-            { value: "packed", label: "Packed" }
+            { value: "slow", label: "Thong thả" },
+            { value: "balanced", label: "Cân bằng" },
+            { value: "packed", label: "Dày lịch" }
           ]}
         />
       </div>
@@ -107,21 +108,54 @@ export function BudgetSimulator({ initialDestinationSlug = "da-nang" }: { initia
       <div className="mt-6 grid gap-3 md:grid-cols-4">
         {Object.entries(budget.breakdown).map(([label, value]) => (
           <div key={label} className="rounded-xl bg-ivory p-4">
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-navy/55">{label}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-navy/55">{budgetLabel(label)}</p>
             <p className="mt-2 text-lg font-black text-navy">{formatVnd(value)}</p>
           </div>
         ))}
       </div>
 
       <div className="mt-6 rounded-xl bg-mist p-4">
-        <p className="font-bold text-navy">AI itinerary bias: {budget.itineraryBias}</p>
+        <p className="font-bold text-navy">Gợi ý nhịp lịch trình: {translateBudgetBias(budget.itineraryBias)}</p>
         <ul className="mt-2 space-y-1 text-sm text-navy/70">
           {budget.adjustmentNotes.map((note) => (
-            <li key={note}>{note}</li>
+            <li key={note}>{translateBudgetNote(note)}</li>
           ))}
         </ul>
       </div>
     </section>
+  );
+}
+
+function budgetLabel(label: string) {
+  return (
+    {
+      hotel: "Lưu trú",
+      food: "Ăn uống",
+      transport: "Di chuyển",
+      activities: "Hoạt động"
+    }[label] ?? label
+  );
+}
+
+function translateBudgetBias(value: string) {
+  return value
+    .replace("budget-aware", "tối ưu ngân sách")
+    .replace("balanced", "cân bằng")
+    .replace("comfort", "thoải mái")
+    .replace("premium", "cao cấp")
+    .replace("luxury", "sang trọng");
+}
+
+function translateBudgetNote(value: string) {
+  return (
+    {
+      "Prioritize fewer hotel moves and private transfers.": "Ưu tiên ít đổi khách sạn hơn và dùng xe riêng khi cần.",
+      "Hotel level keeps the trip flexible.": "Mức lưu trú này giữ chuyến đi linh hoạt và dễ điều chỉnh.",
+      "Street food routes increase local texture and lower cost.": "Tuyến món địa phương giúp tăng trải nghiệm bản địa và giảm chi phí.",
+      "Food budget supports curated meals and cafe stops.": "Ngân sách ăn uống đủ cho bữa chọn lọc và các điểm cà phê.",
+      "Packed pacing needs stronger rest windows and transport buffers.": "Lịch dày cần chừa thêm khoảng nghỉ và thời gian di chuyển.",
+      "Pacing leaves room for weather and local discoveries.": "Nhịp đi này còn khoảng trống cho thời tiết và khám phá tại chỗ."
+    }[value] ?? value
   );
 }
 

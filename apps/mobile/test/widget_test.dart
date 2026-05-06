@@ -30,58 +30,58 @@ void main() {
     );
 
     expect(find.text('CHILLTRAVEL'), findsWidgets);
-    expect(find.text('Vietnam-first planning'), findsOneWidget);
+    expect(find.text('Tiếng Việt là mặc định'), findsOneWidget);
   });
 
   testWidgets('home renders offline trip metrics', (tester) async {
     await _pumpMobileWidget(tester, const HomeScreen());
 
-    expect(find.text('Itinerary days'), findsOneWidget);
-    expect(find.text('Saved items'), findsOneWidget);
-    expect(find.text('Sandbox bookings'), findsOneWidget);
+    expect(find.text('Ngày lịch trình'), findsOneWidget);
+    expect(find.text('Đã lưu'), findsOneWidget);
+    expect(find.text('Đặt chỗ demo'), findsOneWidget);
   });
 
   testWidgets('explore renders cached destinations', (tester) async {
     await _pumpMobileWidget(tester, const ExploreScreen());
 
-    expect(find.text('Ha Long Bay'), findsOneWidget);
-    expect(find.text('Hue Imperial City'), findsOneWidget);
+    expect(find.text('Vịnh Hạ Long'), findsOneWidget);
+    expect(find.text('Kinh thành Huế'), findsOneWidget);
   });
 
   testWidgets('planner renders cached itinerary days', (tester) async {
     await _pumpMobileWidget(tester, const ItineraryScreen());
 
-    expect(find.text('Day 1: Hanoi arrival'), findsOneWidget);
-    expect(find.text('Day 2: Ninh Binh day trip'), findsOneWidget);
+    expect(find.text('Ngày 1: Đến Hà Nội'), findsOneWidget);
+    expect(find.text('Ngày 2: Đi Ninh Bình trong ngày'), findsOneWidget);
   });
 
-  testWidgets('chat renders local AI guidance without OpenAI key', (
+  testWidgets('chat renders local guidance without cloud runtime key', (
     tester,
   ) async {
     await _pumpMobileWidget(tester, const AiChatScreen());
 
-    expect(find.text('Food near me'), findsOneWidget);
-    expect(find.text('assistant'), findsOneWidget);
-    expect(find.textContaining('offline packing'), findsOneWidget);
+    expect(find.text('Ăn gì ở gần đây?'), findsOneWidget);
+    expect(find.text('Trợ lý'), findsOneWidget);
+    expect(find.textContaining('gói offline'), findsOneWidget);
   });
 
   testWidgets('booking creates sandbox holds locally', (tester) async {
     await _pumpMobileWidget(tester, const BookingScreen());
 
-    expect(find.text('Ha Long overnight cruise'), findsOneWidget);
+    expect(find.text('Du thuyền Hạ Long qua đêm'), findsOneWidget);
 
-    await tester.tap(find.text('Create mock hold'));
+    await tester.tap(find.text('Tạo giữ chỗ demo'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Vietnam essentials pack'), findsOneWidget);
-    expect(find.textContaining('No real charge'), findsOneWidget);
+    expect(find.text('Gói thiết yếu Việt Nam'), findsOneWidget);
+    expect(find.textContaining('Không charge thật'), findsWidgets);
   });
 
   testWidgets('wishlist renders cached saved items', (tester) async {
     await _pumpMobileWidget(tester, const WishlistScreen());
 
-    expect(find.text('Hoi An lantern night'), findsOneWidget);
-    expect(find.text('Sapa terrace trek'), findsOneWidget);
+    expect(find.text('Đêm đèn lồng Hội An'), findsOneWidget);
+    expect(find.text('Trekking ruộng bậc thang Sapa'), findsOneWidget);
   });
 
   test('travel repository falls back to offline cache', () async {
@@ -94,7 +94,7 @@ void main() {
     final days = await repository.getItineraryDays();
     final wishlist = await repository.getWishlistItems();
 
-    expect(destinations.map((item) => item.name), contains('Ha Long Bay'));
+    expect(destinations.map((item) => item.name), contains('Vịnh Hạ Long'));
     expect(days, hasLength(2));
     expect(wishlist, hasLength(2));
   });
@@ -134,7 +134,7 @@ void main() {
     );
 
     expect(booking.sandboxOnly, isTrue);
-    expect(booking.amountLabel, 'No real charge');
+    expect(booking.amountLabel, 'Không charge thật');
   });
 
   test('chat repository uses local fallback when service is offline', () async {
@@ -148,7 +148,7 @@ void main() {
     final cachedMessages = await cache.getChatMessages();
 
     expect(response.role, 'assistant');
-    expect(response.content, contains('Local guide fallback'));
+    expect(response.content, contains('Gợi ý local'));
     expect(cachedMessages, hasLength(2));
   });
 }

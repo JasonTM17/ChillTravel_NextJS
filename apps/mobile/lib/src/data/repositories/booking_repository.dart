@@ -18,8 +18,8 @@ class BookingRepository {
     final booking = BookingSummary(
       id: 'mock-${timestamp.millisecondsSinceEpoch}',
       label: label,
-      status: 'Sandbox hold',
-      amountLabel: 'No real charge',
+      status: 'Giữ chỗ demo',
+      amountLabel: 'Không charge thật',
       sandboxOnly: true,
       updatedAt: timestamp,
     );

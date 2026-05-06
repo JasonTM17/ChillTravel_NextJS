@@ -12,17 +12,18 @@ class AiChatScreen extends ConsumerWidget {
     final messages = ref.watch(chatMessagesProvider);
 
     return TravelPageShell(
-      title: 'AI Chat',
-      subtitle: 'Streaming-ready local AI assistant with suggested questions',
+      title: 'Trợ lý chuyến đi',
+      subtitle:
+          'Hỏi món ăn, lịch trình, nhịp di chuyển và gói offline. Nếu cần dữ liệu thời gian thực, ứng dụng sẽ nhắc kiểm tra nguồn chính thức.',
       nextRoute: '/itinerary',
       children: [
         const Wrap(
           spacing: 8,
           runSpacing: 8,
           children: [
-            Chip(label: Text('Food near me')),
-            Chip(label: Text('Rain plan')),
-            Chip(label: Text('Offline pack')),
+            Chip(label: Text('Ăn gì ở gần đây?')),
+            Chip(label: Text('Kế hoạch ngày mưa')),
+            Chip(label: Text('Chuẩn bị gói offline')),
           ],
         ),
         const SizedBox(height: 12),
@@ -31,15 +32,20 @@ class AiChatScreen extends ConsumerWidget {
             children: [
               for (final message in items)
                 Card(
+                  color: Colors.white,
                   child: ListTile(
-                    title: Text(message.role),
+                    title: Text(
+                      message.role == 'assistant' ? 'Trợ lý' : 'Bạn',
+                      style: const TextStyle(fontWeight: FontWeight.w900),
+                    ),
                     subtitle: Text(message.content),
                   ),
                 ),
             ],
           ),
           loading: () => const LinearProgressIndicator(),
-          error: (_, __) => const Text('Local AI preview unavailable'),
+          error: (_, __) =>
+              const Text('Bản xem trước trợ lý local chưa sẵn sàng'),
         ),
       ],
     );

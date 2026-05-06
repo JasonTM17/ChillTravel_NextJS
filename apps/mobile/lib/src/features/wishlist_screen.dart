@@ -12,8 +12,8 @@ class WishlistScreen extends ConsumerWidget {
     final wishlist = ref.watch(wishlistItemsProvider);
 
     return TravelPageShell(
-      title: 'Wishlist',
-      subtitle: 'Saved places, hotels, and experiences grouped by trip',
+      title: 'Yêu thích',
+      subtitle: 'Điểm đến, khách sạn và trải nghiệm đã lưu theo từng chuyến.',
       nextRoute: '/profile',
       children: [
         wishlist.when(
@@ -21,18 +21,25 @@ class WishlistScreen extends ConsumerWidget {
             children: [
               for (final item in items)
                 Card(
+                  color: Colors.white,
                   child: ListTile(
-                    title: Text(item.title),
-                    subtitle: Text('${item.type} - ${item.location}'),
+                    title: Text(
+                      item.title,
+                      style: const TextStyle(fontWeight: FontWeight.w900),
+                    ),
+                    subtitle: Text('${item.type} · ${item.location}'),
                     trailing: item.offlineAvailable
-                        ? const Icon(Icons.offline_pin_outlined)
+                        ? const Icon(
+                            Icons.offline_pin_outlined,
+                            color: chillTeal,
+                          )
                         : null,
                   ),
                 ),
             ],
           ),
           loading: () => const LinearProgressIndicator(),
-          error: (_, __) => const Text('Offline wishlist unavailable'),
+          error: (_, __) => const Text('Yêu thích offline chưa sẵn sàng'),
         ),
       ],
     );

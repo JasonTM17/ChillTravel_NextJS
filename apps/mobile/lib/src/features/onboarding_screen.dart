@@ -9,14 +9,27 @@ class OnboardingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const TravelPageShell(
       title: 'CHILLTRAVEL',
-      subtitle: 'Choose language and travel style',
+      subtitle:
+          'Chọn ngôn ngữ, phong cách đi và bắt đầu một chuyến du lịch Việt hóa, rõ giá, rõ ranh giới demo.',
       nextRoute: '/home',
       children: [
         Card(
+          color: Colors.white,
           child: ListTile(
-            title: Text('Vietnam-first planning'),
+            leading: Icon(Icons.language_outlined, color: chillBlue),
+            title: Text('Tiếng Việt là mặc định'),
             subtitle: Text(
-              'Local tips, pacing, and offline-first trip essentials.',
+              'Luồng tìm kiếm, đặt chỗ, offline pack và cảnh báo thanh toán đều được Việt hóa.',
+            ),
+          ),
+        ),
+        Card(
+          color: Colors.white,
+          child: ListTile(
+            leading: Icon(Icons.favorite_border, color: chillOrange),
+            title: Text('Phong cách du lịch'),
+            subtitle: Text(
+              'Ẩm thực, biển, văn hóa, gia đình, tiết kiệm hoặc nghỉ dưỡng.',
             ),
           ),
         ),

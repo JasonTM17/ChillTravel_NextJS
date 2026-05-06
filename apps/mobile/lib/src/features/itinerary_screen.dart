@@ -12,9 +12,9 @@ class ItineraryScreen extends ConsumerWidget {
     final days = ref.watch(itineraryDaysProvider);
 
     return TravelPageShell(
-      title: 'Itinerary',
+      title: 'Lịch trình',
       subtitle:
-          'Day-by-day cards, checklist, budget, map preview, offline pack',
+          'Timeline theo ngày, checklist, ngân sách và bản đồ preview có thể lưu offline.',
       nextRoute: '/booking',
       children: [
         days.when(
@@ -22,19 +22,28 @@ class ItineraryScreen extends ConsumerWidget {
             children: [
               for (final day in items)
                 Card(
+                  color: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                    side: const BorderSide(color: Color(0xFFD9ECFB)),
+                  ),
                   child: CheckboxListTile(
                     value: day.offlineReady,
                     onChanged: null,
-                    title: Text('Day ${day.day}: ${day.title}'),
+                    title: Text(
+                      'Ngày ${day.day}: ${day.title}',
+                      style: const TextStyle(fontWeight: FontWeight.w900),
+                    ),
                     subtitle: Text(
-                      '${day.area} - ${day.activities.join(', ')}',
+                      '${day.area} · ${day.activities.join(', ')}',
                     ),
                   ),
                 ),
             ],
           ),
           loading: () => const LinearProgressIndicator(),
-          error: (_, __) => const Text('Offline itinerary unavailable'),
+          error: (_, __) => const Text('Lịch trình offline chưa sẵn sàng'),
         ),
       ],
     );

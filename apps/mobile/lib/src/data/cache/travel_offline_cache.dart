@@ -95,27 +95,26 @@ class InMemoryTravelOfflineCache implements TravelOfflineCache {
 const _seedDestinations = [
   Destination(
     id: 'ha-long',
-    name: 'Ha Long Bay',
-    region: 'Quang Ninh',
-    summary: 'Limestone karsts, overnight cruises, and calm morning kayaking.',
-    tags: ['UNESCO', 'Cruise', 'Nature'],
+    name: 'Vịnh Hạ Long',
+    region: 'Quảng Ninh',
+    summary: 'Đảo đá vôi, du thuyền qua đêm và chèo kayak buổi sáng.',
+    tags: ['UNESCO', 'Du thuyền', 'Thiên nhiên'],
     rating: 4.9,
   ),
   Destination(
     id: 'hue',
-    name: 'Hue Imperial City',
-    region: 'Thua Thien Hue',
-    summary: 'Citadel walks, royal tombs, garden houses, and central cuisine.',
-    tags: ['History', 'Food', 'Culture'],
+    name: 'Kinh thành Huế',
+    region: 'Thừa Thiên Huế',
+    summary: 'Đại Nội, lăng tẩm, nhà vườn và ẩm thực miền Trung.',
+    tags: ['Lịch sử', 'Ẩm thực', 'Văn hóa'],
     rating: 4.8,
   ),
   Destination(
     id: 'phu-quoc',
-    name: 'Phu Quoc',
-    region: 'Kien Giang',
-    summary:
-        'Beach days, island hopping, night markets, and easy resort stays.',
-    tags: ['Beach', 'Family', 'Island'],
+    name: 'Phú Quốc',
+    region: 'Kiên Giang',
+    summary: 'Ngày biển nhẹ, đảo nhỏ, chợ đêm và resort dễ đi cho gia đình.',
+    tags: ['Biển', 'Gia đình', 'Đảo'],
     rating: 4.7,
   ),
 ];
@@ -123,16 +122,16 @@ const _seedDestinations = [
 const _seedItineraryDays = [
   ItineraryDay(
     day: 1,
-    title: 'Hanoi arrival',
-    area: 'Old Quarter',
-    activities: ['Hoan Kiem Lake', 'Street food walk', 'Water puppet show'],
+    title: 'Đến Hà Nội',
+    area: 'Phố cổ',
+    activities: ['Hồ Hoàn Kiếm', 'Đi bộ ăn vặt', 'Múa rối nước'],
     offlineReady: true,
   ),
   ItineraryDay(
     day: 2,
-    title: 'Ninh Binh day trip',
+    title: 'Đi Ninh Bình trong ngày',
     area: 'Trang An',
-    activities: ['Boat route', 'Mua Cave viewpoint', 'Tam Coc dinner'],
+    activities: ['Tuyến thuyền', 'Hang Múa', 'Ăn tối Tam Cốc'],
     offlineReady: true,
   ),
 ];
@@ -140,17 +139,17 @@ const _seedItineraryDays = [
 final _seedWishlistItems = [
   WishlistItem(
     id: 'hoi-an-lanterns',
-    title: 'Hoi An lantern night',
-    type: 'experience',
-    location: 'Quang Nam',
+    title: 'Đêm đèn lồng Hội An',
+    type: 'trải nghiệm',
+    location: 'Quảng Nam',
     savedAt: DateTime(2026, 5),
     offlineAvailable: true,
   ),
   WishlistItem(
     id: 'sapa-trek',
-    title: 'Sapa terrace trek',
+    title: 'Trekking ruộng bậc thang Sapa',
     type: 'tour',
-    location: 'Lao Cai',
+    location: 'Lào Cai',
     savedAt: DateTime(2026, 5, 1),
     offlineAvailable: true,
   ),
@@ -159,9 +158,9 @@ final _seedWishlistItems = [
 final _seedBookings = [
   BookingSummary(
     id: 'sandbox-cruise',
-    label: 'Ha Long overnight cruise',
-    status: 'Sandbox hold',
-    amountLabel: 'Mock total only',
+    label: 'Du thuyền Hạ Long qua đêm',
+    status: 'Giữ chỗ demo',
+    amountLabel: 'Không charge thật',
     sandboxOnly: true,
     updatedAt: DateTime(2026, 5),
   ),
@@ -170,7 +169,8 @@ final _seedBookings = [
 final _seedMessages = [
   ChatMessage(
     role: 'assistant',
-    content: 'Ask for food, routes, weather-aware pacing, or offline packing.',
+    content:
+        'Bạn có thể hỏi món ăn, tuyến đi, nhịp di chuyển hoặc gói offline.',
     createdAt: DateTime(2026, 5),
   ),
 ];

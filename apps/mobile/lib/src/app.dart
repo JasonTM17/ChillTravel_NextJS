@@ -15,7 +15,10 @@ final router = GoRouter(
     GoRoute(path: '/', builder: (_, __) => const OnboardingScreen()),
     GoRoute(path: '/home', builder: (_, __) => const HomeScreen()),
     GoRoute(path: '/explore', builder: (_, __) => const ExploreScreen()),
-    GoRoute(path: '/destination', builder: (_, __) => const DestinationDetailScreen()),
+    GoRoute(
+      path: '/destination',
+      builder: (_, __) => const DestinationDetailScreen(),
+    ),
     GoRoute(path: '/chat', builder: (_, __) => const AiChatScreen()),
     GoRoute(path: '/itinerary', builder: (_, __) => const ItineraryScreen()),
     GoRoute(path: '/booking', builder: (_, __) => const BookingScreen()),

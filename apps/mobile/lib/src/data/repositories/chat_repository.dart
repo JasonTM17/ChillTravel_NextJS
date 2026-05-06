@@ -40,7 +40,7 @@ class ChatRepository {
       final fallback = ChatMessage(
         role: 'assistant',
         content:
-            'Local guide fallback: save maps, pace travel days, and keep bookings sandboxed.',
+            'Gợi ý local: lưu bản đồ, đi vừa nhịp, chuẩn bị gói offline và chỉ dùng đặt chỗ demo.',
         createdAt: timestamp,
       );
       await _cache.addChatMessages([userMessage, fallback]);

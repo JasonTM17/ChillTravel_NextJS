@@ -11,9 +11,9 @@ class Destination {
   factory Destination.fromJson(Map<String, dynamic> json) {
     return Destination(
       id: _string(json['id'], fallback: 'destination'),
-      name: _string(json['name'], fallback: 'Vietnam destination'),
-      region: _string(json['region'], fallback: 'Vietnam'),
-      summary: _string(json['summary'], fallback: 'Local travel highlight'),
+      name: _string(json['name'], fallback: 'Điểm đến Việt Nam'),
+      region: _string(json['region'], fallback: 'Việt Nam'),
+      summary: _string(json['summary'], fallback: 'Điểm nổi bật du lịch local'),
       tags: _stringList(json['tags']),
       rating: _double(json['rating'], fallback: 4.7),
     );
@@ -39,8 +39,8 @@ class ItineraryDay {
   factory ItineraryDay.fromJson(Map<String, dynamic> json) {
     return ItineraryDay(
       day: _int(json['day'], fallback: 1),
-      title: _string(json['title'], fallback: 'Trip day'),
-      area: _string(json['area'], fallback: 'Vietnam'),
+      title: _string(json['title'], fallback: 'Ngày trong chuyến đi'),
+      area: _string(json['area'], fallback: 'Việt Nam'),
       activities: _stringList(json['activities']),
       offlineReady: _bool(json['offlineReady'], fallback: true),
     );
@@ -66,9 +66,9 @@ class WishlistItem {
   factory WishlistItem.fromJson(Map<String, dynamic> json) {
     return WishlistItem(
       id: _string(json['id'], fallback: 'wishlist-item'),
-      title: _string(json['title'], fallback: 'Saved place'),
-      type: _string(json['type'], fallback: 'place'),
-      location: _string(json['location'], fallback: 'Vietnam'),
+      title: _string(json['title'], fallback: 'Địa điểm đã lưu'),
+      type: _string(json['type'], fallback: 'địa điểm'),
+      location: _string(json['location'], fallback: 'Việt Nam'),
       savedAt: _dateTime(json['savedAt']),
       offlineAvailable: _bool(json['offlineAvailable'], fallback: true),
     );
@@ -95,9 +95,9 @@ class BookingSummary {
   factory BookingSummary.fromJson(Map<String, dynamic> json) {
     return BookingSummary(
       id: _string(json['id'], fallback: 'booking'),
-      label: _string(json['label'], fallback: 'Travel booking'),
-      status: _string(json['status'], fallback: 'Local hold'),
-      amountLabel: _string(json['amountLabel'], fallback: 'Sandbox'),
+      label: _string(json['label'], fallback: 'Đặt chỗ du lịch'),
+      status: _string(json['status'], fallback: 'Giữ chỗ local'),
+      amountLabel: _string(json['amountLabel'], fallback: 'Demo'),
       sandboxOnly: _bool(json['sandboxOnly'], fallback: true),
       updatedAt: _dateTime(json['updatedAt']),
     );
@@ -123,7 +123,7 @@ class ChatMessage {
       role: _string(json['role'], fallback: 'assistant'),
       content: _string(
         json['content'],
-        fallback: 'How can I help with Vietnam?',
+        fallback: 'Mình có thể giúp gì cho chuyến đi Việt Nam của bạn?',
       ),
       createdAt: _dateTime(json['createdAt']),
     );

@@ -1,0 +1,70 @@
+# VietWander AI Vietnamese UX & Brand Runbook
+
+## Mục tiêu
+
+VietWander AI dùng cảm hứng travel-commerce hiện đại: tìm kiếm nhanh, danh sách dễ so sánh, giá/CTA rõ ràng, thanh toán demo minh bạch. Sản phẩm không clone Traveloka hay bất kỳ thương hiệu nào khác.
+
+## Nguyên tắc thương hiệu
+
+- Logo VietWander AI phải khác biệt hợp pháp: la bàn, đường bay, gợi ý bản đồ Việt Nam và nhịp chuyển động riêng.
+- Không dùng chim, wordmark, tỷ lệ biểu tượng, asset, hoặc bố cục có thể gây nhầm lẫn với Traveloka.
+- Màu chủ đạo: xanh booking đáng tin cậy, teal cho tín hiệu local/AI an toàn, cam cho CTA chuyển đổi, nền trắng/xanh nhạt.
+- Ảnh điểm đến là tín hiệu chính; tránh nền AI sci-fi, orb, neon, glass quá nặng.
+
+## Copy tiếng Việt
+
+CTA chuẩn:
+
+- `Tìm kiếm`
+- `Xem ưu đãi`
+- `Lập lịch trình AI`
+- `Lưu vào yêu thích`
+- `Đặt chỗ demo`
+- `Xem chi tiết`
+
+Nhãn route chính:
+
+- `/budget`: `Ngân sách thông minh`
+- `/compare`: `So sánh bằng AI`
+- `/personality`: `Phong cách du lịch`
+- `/wishlist`: `Yêu thích`
+- `/trips`: `Chuyến đi`
+- `/profile`: `Hồ sơ`
+- `/admin`: `Bảng quản trị`
+
+Không đưa lại các cụm cũ trong user flow: `Mock payment - no real transaction`, `Open dossier`, `Search results`, `Traveler profile`, `Login`, `Wishlist`, `Admin dashboard`.
+
+## Payment và AI boundary
+
+- Luôn hiển thị: `Thanh toán demo — không phát sinh giao dịch thật`.
+- Không lưu thẻ thật, không charge thật, không bypass luật thanh toán.
+- Chatbot runtime dùng local AI service/Ollama/RAG khi chạy production local; không yêu cầu OpenAI API key.
+- Nếu hỏi vé bay, visa, thời tiết real-time, UI/chatbot phải nói rõ đây là dữ liệu mẫu/local và khuyên kiểm tra nguồn chính thức.
+
+## QA bắt buộc
+
+Trước commit UI:
+
+```powershell
+pnpm --filter @vietwander/web lint
+pnpm --filter @vietwander/web test
+pnpm --filter @vietwander/web build
+```
+
+Smoke routes:
+
+- `/`
+- `/explore?q=Da+Nang`
+- `/destinations/da-nang`
+- `/ai-planner`
+- `/chat`
+- `/booking/demo`
+- `/budget`
+- `/compare`
+- `/personality`
+- `/wishlist`
+- `/trips`
+- `/profile`
+- `/admin`
+- `/admin/ai-knowledge`
+

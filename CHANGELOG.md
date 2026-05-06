@@ -35,3 +35,4 @@
 - Finalized shared API and mobile contracts for auth, destinations, booking/payment, AI, budget, comparison, and offline snapshots.
 - Aligned API controllers with shared request contracts while keeping validation, envelopes, RBAC, and mock-only payments intact.
 - Completed final Vietnamese route-label QA for personality, wishlist, and trips pages with expanded HTTP smoke coverage.
+- Documented Vietnamese travel-commerce brand rules, CTA vocabulary, payment/AI limits, and route smoke checklist.

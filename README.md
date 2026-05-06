@@ -6,12 +6,12 @@ VIETWANDER AI is a portfolio-grade local-first travel platform combining a cinem
 
 ## Highlights
 
-- Premium travel web app with landing, explore, destination detail, AI planner, chat, compare, map, booking mock, wishlist, trips, profile, and admin.
+- Vietnamese travel-commerce web app with Traveloka-inspired search-first UX, legally distinct VietWander branding, landing, explore, destination detail, AI planner, chat, compare, map, booking mock, wishlist, trips, profile, and admin.
 - Local chatbot runtime design: Ollama + RAG + Qdrant. No OpenAI API key required for runtime chatbot.
 - Rich sample travel data for Vietnam and world destinations.
-- Mock-only booking and payment. Demo payment — no real transaction.
+- Mock-only booking and payment. Thanh toán demo — không phát sinh giao dịch thật.
 - Flutter mobile app structure with Riverpod, Dio, Drift-ready offline cache, secure token storage, local notification mock, vi/en-ready UX.
-- Stitch Design DNA and prompts included.
+- Stitch Design DNA and prompts included. See `docs/vietnamese-ux-brand.md` for Vietnamese UX, brand, payment, and QA rules.
 
 ## Tech Stack
 

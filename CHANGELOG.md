@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Refactored public hotel, experience, login, and register routes into concrete ChillTravel commerce flows with listing rows, demo forms, and Vietnamese booking copy.
 - Added shared travel-commerce primitives and refactored admin surfaces into operations metrics, tables, queues, and Knowledge Studio panels.
 - Renamed the user-facing product brand to ChillTravel, removed the old AI suffix from brand surfaces, and dropped stale Stitch command-center artifacts.
 - Phase 1: Initialized pnpm/Turborepo monorepo workspace.

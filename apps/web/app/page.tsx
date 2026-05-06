@@ -231,7 +231,7 @@ function DealRows({ title, items }: { title: string; items: Destination[] }) {
                 <p className="text-xs font-black text-[#0277d4]">Có thể đặt chỗ demo</p>
                 <h3 className="mt-1 text-xl font-black">{copy.name}</h3>
                 <p className="mt-1 line-clamp-2 text-sm leading-6 text-[#476273]">{copy.summary}</p>
-                <p className="mt-2 text-xs font-bold text-[#0f8b7b]">Hủy demo miễn phí · Gói offline · tro ly lap lich local</p>
+                <p className="mt-2 text-xs font-bold text-[#0f8b7b]">Hủy demo miễn phí · Gói offline · trợ lý lập lịch local</p>
               </div>
               <div className="flex flex-col justify-between border-t border-[#edf4fa] bg-[#fbfdff] p-4 md:border-l md:border-t-0">
                 <div>

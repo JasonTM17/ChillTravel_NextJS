@@ -7,7 +7,7 @@ import { formatVnd } from "@/lib/utils";
 import { comparisonVerdictLabel, travelStyleLabel } from "@/lib/vietnamese";
 
 const styles: TravelStyle[] = ["Culture Seeker", "Food Hunter", "Beach Lover", "Family Planner", "Luxury Escaper", "Budget Backpacker"];
-const headings = ["Điểm đến", "Ngân sách", "Mùa đẹp", "Ẩm thực", "Gia đình", "Đêm vui", "An toàn", "Điểm AI", "Kết luận"];
+const headings = ["Điểm đến", "Ngân sách", "Mùa đẹp", "Ẩm thực", "Gia đình", "Đêm vui", "An toàn", "Điểm gợi ý", "Kết luận"];
 
 export function CompareConsole() {
   const [selected, setSelected] = useState(["da-nang", "bali", "paris"]);

@@ -1,12 +1,27 @@
-import { FeatureOverview } from "@/components/feature-overview";
+import { BarChart3, PieChart, Search, Users } from "lucide-react";
+import { CommerceMetric, CommerceSurface, ServiceActionCard } from "@/components/commerce-primitives";
+import { PageShell } from "@/components/page-shell";
 
 export default function Page() {
   return (
-    <FeatureOverview
-      eyebrow="Quản trị analytics"
-      title="Tìm kiếm, booking và nhóm câu hỏi AI"
-      summary="Analytics hiển thị top điểm đến được tìm, funnel chuyển đổi mô phỏng, xu hướng đặt chỗ, nhóm câu hỏi chatbot và phong cách du lịch phổ biến."
-      destinationOffset={9}
-    />
+    <PageShell eyebrow="Quản trị analytics" title="Tìm kiếm, booking và nhóm câu hỏi trợ lý">
+      <div className="space-y-6">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <CommerceMetric label="Top search" value="Đà Nẵng" helper="Biển, ẩm thực, Hội An là cụm từ đi kèm." />
+          <CommerceMetric label="Funnel demo" value="18%" helper="Từ xem ưu đãi sang đặt chỗ mock." tone="orange" />
+          <CommerceMetric label="Travel style" value="Food" helper="Nhóm người dùng mê ẩm thực cao nhất." tone="teal" />
+          <CommerceMetric label="Guardrail" value="97%" helper="Câu hỏi real-time được cảnh báo đúng." />
+        </div>
+        <CommerceSurface>
+          <h2 className="text-2xl font-black">Bảng đọc nhanh</h2>
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            <ServiceActionCard icon={Search} title="Từ khóa nổi bật" description="Đà Nẵng, Phú Quốc, Hội An, Tokyo, gia đình, biển yên bình." href="/explore" />
+            <ServiceActionCard icon={BarChart3} title="Xu hướng đặt chỗ" description="Luồng checkout demo có tỷ lệ tiếp tục cao nhất khi giá và cảnh báo rõ." href="/admin/bookings" tone="orange" />
+            <ServiceActionCard icon={Users} title="Nhóm du khách" description="Food Hunter và Family Planner tạo nhiều lịch trình mẫu nhất." href="/personality" tone="teal" />
+            <ServiceActionCard icon={PieChart} title="Câu hỏi trợ lý" description="Ẩm thực, ngân sách, thời tiết, visa và đường đi là các nhóm chính." href="/admin/ai-knowledge" />
+          </div>
+        </CommerceSurface>
+      </div>
+    </PageShell>
   );
 }

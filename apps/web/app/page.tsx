@@ -291,7 +291,7 @@ function TrustBand() {
       <div className="mx-auto grid max-w-[1180px] gap-4 md:grid-cols-3">
         {[
           ["Thanh toán demo", "Không phát sinh giao dịch thật, không lưu thẻ thật."],
-          ["AI local-first", "Chatbot runtime dùng local service/RAG, không yêu cầu OpenAI key."],
+          ["Trợ lý local-first", "Chatbot runtime dùng local service/RAG, không yêu cầu khóa cloud."],
           ["Dữ liệu mẫu", "Không khẳng định vé bay, visa hoặc thời tiết real-time."]
         ].map(([title, text]) => (
           <div key={title} className="flex gap-3 rounded-2xl bg-[#f7fbff] p-4">

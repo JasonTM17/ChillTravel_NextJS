@@ -84,7 +84,7 @@ describe("Vietnamese travel-commerce UX", () => {
       ["app/personality/page.tsx", "Phong cách du lịch"],
       ["app/wishlist/page.tsx", "Yêu thích"],
       ["app/trips/page.tsx", "Chuyến đi"],
-      ["app/admin/page.tsx", "Bảng quản trị ChillTravel"],
+      ["app/admin/page.tsx", "Bảng vận hành ChillTravel"],
       ["app/admin/ai-knowledge/page.tsx", "Knowledge Studio"]
     ] as const;
 

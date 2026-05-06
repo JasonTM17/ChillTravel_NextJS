@@ -2,14 +2,14 @@
 
 ## Mục tiêu
 
-VietWander AI dùng cảm hứng travel-commerce hiện đại: tìm kiếm nhanh, danh sách dễ so sánh, giá/CTA rõ ràng, thanh toán demo minh bạch. Sản phẩm không clone Traveloka hay bất kỳ thương hiệu nào khác.
+VietWander AI dùng cảm hứng travel-commerce hiện đại: tìm kiếm nhanh, danh sách dễ so sánh, giá/CTA rõ ràng, thanh toán demo minh bạch và AI local-first. Sản phẩm không clone Traveloka hay bất kỳ thương hiệu nào khác.
 
 ## Nguyên tắc thương hiệu
 
-- Logo VietWander AI phải khác biệt hợp pháp: la bàn, đường bay, gợi ý bản đồ Việt Nam và nhịp chuyển động riêng.
-- Không dùng chim, wordmark, tỷ lệ biểu tượng, asset, hoặc bố cục có thể gây nhầm lẫn với Traveloka.
-- Màu chủ đạo: xanh booking đáng tin cậy, teal cho tín hiệu local/AI an toàn, cam cho CTA chuyển đổi, nền trắng/xanh nhạt.
-- Ảnh điểm đến là tín hiệu chính; tránh nền AI sci-fi, orb, neon, glass quá nặng.
+- Logo VietWander AI phải khác biệt hợp pháp: la bàn, đường bay, gợi ý bản đồ Việt Nam, Hoàng Sa, Trường Sa và nhịp chuyển động riêng.
+- Không dùng chim, wordmark, tỷ lệ biểu tượng, asset, screenshot, hoặc bố cục có thể gây nhầm lẫn với Traveloka.
+- Màu chủ đạo: booking blue đáng tin cậy, teal cho tín hiệu local/AI an toàn, orange cho CTA chuyển đổi, nền trắng/xanh nhạt.
+- Ảnh điểm đến là tín hiệu chính; tránh nền AI sci-fi, orb, neon hoặc glass quá nặng.
 
 ## Copy tiếng Việt
 
@@ -30,7 +30,7 @@ Nhãn route chính:
 - `/wishlist`: `Yêu thích`
 - `/trips`: `Chuyến đi`
 - `/profile`: `Hồ sơ`
-- `/admin`: `Bảng quản trị`
+- `/admin`: `Bảng vận hành`
 
 Không đưa lại các cụm cũ trong user flow: `Mock payment - no real transaction`, `Open dossier`, `Search results`, `Traveler profile`, `Login`, `Wishlist`, `Admin dashboard`.
 
@@ -56,9 +56,12 @@ Smoke routes:
 - `/`
 - `/explore?q=Da+Nang`
 - `/destinations/da-nang`
+- `/hotels`
+- `/experiences`
 - `/ai-planner`
 - `/chat`
 - `/booking/demo`
+- `/booking/da-nang`
 - `/budget`
 - `/compare`
 - `/personality`
@@ -67,4 +70,3 @@ Smoke routes:
 - `/profile`
 - `/admin`
 - `/admin/ai-knowledge`
-

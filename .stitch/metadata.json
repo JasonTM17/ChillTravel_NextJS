@@ -1,53 +1,67 @@
 {
   "name": "projects/1439968317747880611",
   "projectId": "1439968317747880611",
-  "title": "VIETWANDER AI — Travel Intelligence Platform",
+  "title": "VIETWANDER AI — Travel Commerce Platform",
   "visibility": "PRIVATE",
   "projectType": "PROJECT_DESIGN",
   "origin": "STITCH",
   "deviceType": "DESKTOP",
+  "designSystem": "VietWander Travel Commerce",
   "screens": {
-    "travel-commerce-core-home": {
-      "id": "7b4e758951664dafbeadaaa319b762b2",
-      "sourceScreen": "projects/1439968317747880611/screens/7b4e758951664dafbeadaaa319b762b2",
-      "width": 1376,
-      "height": 768,
-      "status": "rejected_reference_only",
-      "reason": "Generated screen included Traveloka trademark text/mark despite prompt. Do not ship or commit screenshot assets."
+    "desktop-home-commerce": {
+      "id": "e4104b17d3324dc6b160d57e2adfd9fb",
+      "sourceScreen": "projects/1439968317747880611/screens/e4104b17d3324dc6b160d57e2adfd9fb",
+      "width": 2560,
+      "height": 4320,
+      "status": "reference_only",
+      "note": "Use OTA structure only; replace any third-party marks/copy with VietWander."
     },
-    "travel-commerce-core-results": {
-      "id": "4f373a32f7ef4f1d859c4b2c5e68cb95",
-      "sourceScreen": "projects/1439968317747880611/screens/4f373a32f7ef4f1d859c4b2c5e68cb95",
-      "width": 1376,
-      "height": 768,
-      "status": "rejected_reference_only",
-      "reason": "Generated screen is useful for OTA flow structure only; implementation must remain VietWander-branded and Vietnamese."
-    },
-    "travel-commerce-core-checkout": {
-      "id": "cda57d116d7d409983cd43a740e19614",
-      "sourceScreen": "projects/1439968317747880611/screens/cda57d116d7d409983cd43a740e19614",
-      "width": 1376,
-      "height": 768,
-      "status": "reference_only"
-    },
-    "travel-commerce-core-dashboard": {
-      "id": "1cd1756a5138482bb1a1f7a2a24fa217",
-      "sourceScreen": "projects/1439968317747880611/screens/1cd1756a5138482bb1a1f7a2a24fa217",
-      "width": 1376,
-      "height": 768,
-      "status": "reference_only"
-    },
-    "booking-checkout-commerce": {
-      "id": "e1df86599f204fa19b4348216a4abb03",
-      "sourceScreen": "projects/1439968317747880611/screens/e1df86599f204fa19b4348216a4abb03",
+    "desktop-results-commerce": {
+      "id": "ce144c71fc2f40e29f60d37be33adef8",
+      "sourceScreen": "projects/1439968317747880611/screens/ce144c71fc2f40e29f60d37be33adef8",
       "width": 2560,
       "height": 2048,
-      "status": "implemented_reference_only",
-      "reason": "Stitch screen structure was used, but local screenshot/html artifacts were not committed because a nested reference image included third-party Traveloka text."
+      "status": "reference_only"
+    },
+    "desktop-hotel-detail-commerce": {
+      "id": "849d9ac75da448eebccd9e21ad2564b0",
+      "sourceScreen": "projects/1439968317747880611/screens/849d9ac75da448eebccd9e21ad2564b0",
+      "width": 2560,
+      "height": 3732,
+      "status": "reference_only"
+    },
+    "desktop-checkout-commerce": {
+      "id": "3e6d1020c1d5469cb0f2ea232b176beb",
+      "sourceScreen": "projects/1439968317747880611/screens/3e6d1020c1d5469cb0f2ea232b176beb",
+      "width": 2560,
+      "height": 2048,
+      "status": "reference_only"
+    },
+    "mobile-home-commerce": {
+      "id": "77188acdbcf14ff2a7d68dbf9ce90d34",
+      "sourceScreen": "projects/1439968317747880611/screens/77188acdbcf14ff2a7d68dbf9ce90d34",
+      "width": 780,
+      "height": 3272,
+      "status": "reference_only"
+    },
+    "mobile-detail-commerce": {
+      "id": "c24a8f5d938a48c5bab2bbb23993f8bf",
+      "sourceScreen": "projects/1439968317747880611/screens/c24a8f5d938a48c5bab2bbb23993f8bf",
+      "width": 780,
+      "height": 4472,
+      "status": "reference_only"
+    },
+    "mobile-checkout-commerce": {
+      "id": "b52e4ad7cfef4308bd185b6b56d7c8b4",
+      "sourceScreen": "projects/1439968317747880611/screens/b52e4ad7cfef4308bd185b6b56d7c8b4",
+      "width": 780,
+      "height": 2032,
+      "status": "reference_only"
     }
   },
   "metadata": {
     "userRole": "OWNER",
-    "lastLoop": "booking-checkout-commerce"
+    "lastLoop": "admin-ops-console",
+    "legalBoundary": "Reference-only Stitch screens; do not ship Traveloka text, logos, or screenshots."
   }
 }

@@ -1,54 +1,71 @@
-# Design System: VIETWANDER AI
+---
+name: VietWander Travel Commerce
+source: Stitch project 1439968317747880611
+updated: 2026-05-06
+---
 
-Project ID: 1439968317747880611
+# VietWander Travel Commerce Design DNA
 
-## Visual Theme
-Premium editorial travel product with Vietnamese warmth, global destination photography, practical planning density, and local-first intelligence kept in the background. The UI should feel closer to a high-end travel magazine and planning desk than an AI dashboard.
+## Product Mood
 
-Latest Stitch redesign:
-- Stitch loop Booking Checkout pass:
-  - Screen: `projects/1439968317747880611/screens/e1df86599f204fa19b4348216a4abb03`
-  - Local artifacts were intentionally not committed because the generated screen included a nested third-party Traveloka reference image. Use only the implemented VietWander layout in `apps/web/app/booking/[id]/page.tsx`.
-  - Direction: Vietnamese OTA Commerce System. Use a pale sky background, white three-column checkout, stepper, prominent mock payment warning, traveler information, local payment method cards, sticky price summary, and QR ticket preview.
-- Stitch loop Travel Commerce Core pass:
-  - Baton added in `.stitch/next-prompt.md` and project metadata persisted in `.stitch/metadata.json`.
-  - Stitch generated OTA-style variants on 2026-05-06, but two screenshots included Traveloka trademark text/mark despite explicit constraints. Those screenshots were rejected as reference-only and not committed as shipped assets.
-  - Implementation uses the useful UX structure only: compact white header, centered blue search widget, service tabs, coupon strip, destination cards, listing rows, price panels, sticky trip planner, Vietnamese labels, and VietWander-only brand assets.
-- Follow-up Travel Commerce pass:
-  - Prompted Stitch on 2026-05-06 for a Vietnamese OTA-style redesign. The generation timed out after 120s, so the enhanced prompt is preserved in `docs/stitch-prompts.md` and implemented manually from the Design DNA.
-  - Direction: Vietnamese Travel Commerce. Search-first booking UX, service tabs, white cards on pale sky surfaces, blue active states, orange conversion CTAs, teal trust badges, compact Vietnamese copy, and no third-party logo or confusingly similar Traveloka brand assets.
-  - Logo rule: VietWander mark must be distinct, using compass/route/Vietnam cues. Do not copy Traveloka's bird, curves, color proportions, wordmark, or brand layout.
-- Project: `1439968317747880611`
-- Screen: `projects/1439968317747880611/screens/8debca2537a8486babd0b255f4325657`
-- Design system asset: `assets/c7ffbbb949ed442593f88c43f590c4e4`
-- Direction: Editorial Intelligence. The interface should read as a premium travel command center: first viewport split between a high-impact destination image and a precise planning panel; Explore is a three-column workspace with filters, destination cards, and a sticky route dossier.
-- Local artifacts: `.stitch/designs/command-center.html`, `.stitch/designs/command-center.png`
+VietWander AI should feel like a trustworthy Vietnamese online travel agency: fast to search, easy to compare, transparent about demo payments, and warm enough for trip planning. The product can borrow the usability patterns of mature OTA products, but it must remain legally distinct and unmistakably VietWander.
 
-Previous Stitch redesign:
-- Project: `1439968317747880611`
-- Screen: `projects/1439968317747880611/screens/426473646106452a9762dc8088047f54`
-- Design system asset: `assets/d13576e313ba4aabb320e622cd550758`
-- Direction: VietWander Editorial. The page should feel like a premium Vietnamese travel dossier laid on a warm planning desk: tactile paper surfaces, image-led hero, route board, culture guardrails, budget notes, and restrained AI language.
+## Brand Guardrails
 
-Earlier Stitch redesign:
-- Project: `1439968317747880611`
-- Screen: `projects/1439968317747880611/screens/f99fe7819f5f41a994cc11a32bf6156a`
-- Design system asset: `assets/4f9aea6b433b46fb95c4507ad14b6319`
-- Direction: Editorial Travel. Image-led cards, ivory paper surfaces, low-contrast outlines, restrained shadows, practical filter rail, and reduced AI/glass/neon visual language.
+- Use the custom VietWander compass, flight path, Vietnam map, Hoang Sa, and Truong Sa identity.
+- Do not use the Traveloka bird, wordmark, icon proportions, screenshots, exact color ratios, or third-party brand assets.
+- All user-facing product copy is Vietnamese-first.
+- Payment copy must always say demo/local/mock and never imply real charging.
+- AI copy must state local/sample boundaries when the user asks for live visa, weather, or flight prices.
 
-## Color Palette
-- Deep Navy #071827: app shell, hero overlays, admin surfaces.
-- Emerald Teal #0F8B7B: primary action, AI confidence, active filters.
-- Sunset Orange #F97316: CTA, booking emphasis, route highlights.
-- Ivory Sand #FDF9F0 / #F8F3EA: calm page background and mobile surfaces.
-- Mist Blue #DCEFF3: map cards, secondary panels, quiet tags.
-- Warm Border #E6DFD3: editorial card borders and filter panels.
+## Palette
+
+- Booking blue: `#0277D4` for active tabs, primary navigation, and search affordances.
+- Deep blue: `#005EA8` for hover and high-trust states.
+- Sky surface: `#EAF7FF` and `#F6FBFF` for page backgrounds and soft panels.
+- White card: `#FFFFFF` for every core booking/comparison surface.
+- Orange CTA: `#FF6D1A` for conversion actions such as `Tìm kiếm`, `Xem ưu đãi`, `Đặt chỗ demo`.
+- Teal trust: `#0F8B7B` for safe/local/AI/RAG badges.
+- Ink: `#071827` for primary text.
+- Muted ink: `#476273` for secondary text.
+- Border: `#D9ECFB` for cards, inputs, and tables.
 
 ## Typography
-Web uses a Vietnamese-friendly grotesk rhythm inspired by Be Vietnam Pro for body/UI and an editorial serif inspired by Noto Serif for major headlines and destination titles. Mobile uses platform system font. Headline letter spacing stays at `0`; dashboards use compact readable labels and tabular numbers.
+
+- Web UI font: Be Vietnam Pro, Inter, system sans-serif.
+- Mobile UI font: Flutter system font.
+- Use compact, high-legibility headings. Avoid oversized hero typography inside panels, cards, admin tables, and mobile screens.
+- Letter spacing stays `0` except small uppercase metadata labels.
 
 ## Components
-Hero search command bar, live route dossier, image-led travel cards, filter rail, editorial list strips, itinerary timeline, budget simulator, comparison table, booking cards, admin data tables, and AI Knowledge Studio panels. AI assistant surfaces should be named as concierge, planner, route desk, or dossier where possible and avoid sci-fi chrome.
 
-## Motion and Accessibility
-Subtle reveal, hover lift, shimmer loading, keyboard focus states, strong contrast, and reduced-motion fallback.
+- Header: white sticky OTA header, logo at left, service/support/account actions at right.
+- Service tabs: icon + Vietnamese label, blue active state, white selected tab, stable tap targets.
+- Search panel: destination, dates, guests/rooms, orange search button; never hide the primary search action.
+- Listing row: image, rating/reviews, badges, concise summary, food/tags, price panel, two CTAs.
+- Deal/coupon card: code chip, short Vietnamese title, demo/sample status.
+- Trip cart: sticky on desktop, compact bottom summary on mobile.
+- Payment banner: visible orange/cream warning with `Thanh toán demo — không phát sinh giao dịch thật`.
+- Admin table blocks: stats cards, filters, rows, status chips, action buttons; avoid destination-card filler.
+- Mobile shell: top app bar, service grid, search card, promo cards, saved trip/offline pack, bottom navigation.
+
+## Layout Rules
+
+- Page background is pale sky/white, not dark cinematic.
+- Use white cards with 12-16px radius and subtle blue shadow.
+- Keep one primary orange CTA per decision area.
+- Destination imagery should be direct and recognizable, not abstract AI art.
+- Avoid nested cards, heavy glassmorphism, neon, or generic AI dashboard styling.
+- Mobile surfaces must have stable heights and readable Vietnamese labels.
+
+## Stitch Reference Screens
+
+- Desktop home: `projects/1439968317747880611/screens/e4104b17d3324dc6b160d57e2adfd9fb`
+- Desktop results: `projects/1439968317747880611/screens/ce144c71fc2f40e29f60d37be33adef8`
+- Desktop hotel detail: `projects/1439968317747880611/screens/849d9ac75da448eebccd9e21ad2564b0`
+- Desktop checkout: `projects/1439968317747880611/screens/3e6d1020c1d5469cb0f2ea232b176beb`
+- Mobile home: `projects/1439968317747880611/screens/77188acdbcf14ff2a7d68dbf9ce90d34`
+- Mobile hotel detail: `projects/1439968317747880611/screens/c24a8f5d938a48c5bab2bbb23993f8bf`
+- Mobile checkout: `projects/1439968317747880611/screens/b52e4ad7cfef4308bd185b6b56d7c8b4`
+
+These screens are reference-only. If any exported artifact contains Traveloka text, logos, or marks, do not commit that artifact.

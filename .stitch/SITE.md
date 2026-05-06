@@ -26,6 +26,7 @@ Important:
 - [x] `/explore`
 - [x] `/destinations/[slug]`
 - [x] `/booking/demo`
+- [x] `/booking/[id]`
 - [x] `/ai-planner`
 - [x] `/chat`
 - [x] `/admin`
@@ -33,7 +34,7 @@ Important:
 ## 5. Roadmap
 
 - [x] Travel Commerce Core screen: landing + explore search-first OTA UX.
-- [ ] Booking checkout detail screen with demo payment trust panel.
+- [x] Booking checkout detail screen with demo payment trust panel.
 - [ ] Mobile-first OTA home screen.
 
 ## 6. Creative Freedom

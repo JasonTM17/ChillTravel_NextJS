@@ -1,23 +1,22 @@
 ---
-page: booking-checkout-commerce
+page: mobile-ota-home
 ---
-Create a high-fidelity desktop checkout screen for VIETWANDER AI that makes the mock booking flow feel like a trustworthy Vietnamese OTA checkout, inspired by familiar travel-commerce UX patterns but legally distinct and not copied.
+Create a high-fidelity mobile home screen for VIETWANDER AI that feels like a polished Vietnamese OTA app, inspired by familiar travel booking patterns but legally distinct and not copied.
 
 **DESIGN SYSTEM (REQUIRED):**
-- Brand: VietWander AI, distinct compass + route + Vietnam hint identity. Do not use Traveloka bird, mark, logo proportions, wordmark, or exact brand assets.
-- Visual style: clean OTA product, not an AI-template dashboard. White cards, pale sky surfaces, compact information density, strong destination photography, blue active states, teal local trust badges, orange conversion CTA.
-- Palette: booking blue #0277D4, deep navy #071827, pale sky #EAF7FF, action orange #FF6D1A, teal #0F8B7B, white cards.
-- Typography: Vietnamese-friendly UI font similar to Be Vietnam Pro or Inter. No negative letter spacing.
-- Shapes: 10-12px controls, 14-16px cards, stable listing rows, clear focus states.
+- Brand: VietWander AI with the custom compass/route/Vietnam identity. Do not use Traveloka bird, mark, wordmark, exact color proportions, or third-party assets.
+- Visual style: clean mobile travel-commerce app, compact cards, pale sky background, white surfaces, booking blue active states, orange conversion CTA, teal trust badges.
+- Typography: Vietnamese-friendly system/UI font. Keep labels short and readable on small screens.
+- Shapes: 12px controls, 16px cards, bottom navigation, stable tappable areas.
 
 **PAGE STRUCTURE:**
-1. Header with VietWander logo and Vietnamese nav.
-2. Checkout progress stepper: Chọn gói, Thông tin khách, Thanh toán demo, Vé QR.
-3. Left column booking detail card with destination image, dates, guests, cancellation demo policy.
-4. Middle column traveler information and mock payment method cards: Thẻ demo, Momo demo, VNPay demo, ZaloPay demo, PayPal demo, Chuyển khoản demo, Tiền mặt.
-5. Right column sticky price summary with taxes/fees marked sample and CTA “Xác nhận đặt chỗ demo”.
-6. Strong warning banner: “Thanh toán demo — không phát sinh giao dịch thật. Không nhập hoặc lưu thẻ thật.”
-7. QR ticket preview after confirmation.
+1. Top app bar with VietWander logo, location chip, notification icon.
+2. Service grid: Khách sạn, Chuyến bay, Hoạt động, Xe đưa đón, Lịch trình AI, Yêu thích.
+3. Search card: “Bạn muốn đi đâu?”, dates, guests, primary CTA “Tìm kiếm”.
+4. Promo cards: Đà Nẵng, Phú Quốc, Hội An; all marked demo/sample.
+5. Saved trip card with offline pack and AI planner CTA.
+6. Bottom nav: Trang chủ, Khám phá, Chuyến đi, Chat AI, Hồ sơ.
+7. Small boundary note: Thanh toán demo, dữ liệu local/sample, không có live visa/weather/flight prices.
 
 **OUTPUT GOAL:**
-Make it look like a polished Vietnamese OTA checkout: trustworthy, compact, conversion-ready, and clearly mock-only.
+Make the mobile app feel production-grade and Vietnamese-first, ready to guide the Flutter implementation next.

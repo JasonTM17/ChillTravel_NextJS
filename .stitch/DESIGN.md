@@ -6,6 +6,10 @@ Project ID: 1439968317747880611
 Premium editorial travel product with Vietnamese warmth, global destination photography, practical planning density, and local-first intelligence kept in the background. The UI should feel closer to a high-end travel magazine and planning desk than an AI dashboard.
 
 Latest Stitch redesign:
+- Stitch loop Booking Checkout pass:
+  - Screen: `projects/1439968317747880611/screens/e1df86599f204fa19b4348216a4abb03`
+  - Local artifacts were intentionally not committed because the generated screen included a nested third-party Traveloka reference image. Use only the implemented VietWander layout in `apps/web/app/booking/[id]/page.tsx`.
+  - Direction: Vietnamese OTA Commerce System. Use a pale sky background, white three-column checkout, stepper, prominent mock payment warning, traveler information, local payment method cards, sticky price summary, and QR ticket preview.
 - Stitch loop Travel Commerce Core pass:
   - Baton added in `.stitch/next-prompt.md` and project metadata persisted in `.stitch/metadata.json`.
   - Stitch generated OTA-style variants on 2026-05-06, but two screenshots included Traveloka trademark text/mark despite explicit constraints. Those screenshots were rejected as reference-only and not committed as shipped assets.

@@ -36,10 +36,18 @@
       "width": 1376,
       "height": 768,
       "status": "reference_only"
+    },
+    "booking-checkout-commerce": {
+      "id": "e1df86599f204fa19b4348216a4abb03",
+      "sourceScreen": "projects/1439968317747880611/screens/e1df86599f204fa19b4348216a4abb03",
+      "width": 2560,
+      "height": 2048,
+      "status": "implemented_reference_only",
+      "reason": "Stitch screen structure was used, but local screenshot/html artifacts were not committed because a nested reference image included third-party Traveloka text."
     }
   },
   "metadata": {
     "userRole": "OWNER",
-    "lastLoop": "travel-commerce-core"
+    "lastLoop": "booking-checkout-commerce"
   }
 }

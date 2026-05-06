@@ -38,3 +38,4 @@
 - Documented Vietnamese travel-commerce brand rules, CTA vocabulary, payment/AI limits, and route smoke checklist.
 - Ran a Stitch loop pass for Travel Commerce Core, rejected trademarked generated variants, and refactored the web header, landing, and Explore flow into a cleaner Vietnamese OTA-style experience.
 - Regenerated the custom VietWander logo with visible Hoàng Sa and Trường Sa island clusters and wired it into the header/favicon.
+- Implemented the Stitch loop booking checkout screen with OTA-style stepper, traveler details, mock payment methods, sticky price summary, and QR preview.

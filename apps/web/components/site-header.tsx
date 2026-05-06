@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {
   BadgePercent,
-  BookCheck,
   Car,
   HelpCircle,
   Hotel,

@@ -22,4 +22,5 @@
 - Refactored the web UI with Stitch Editorial Travel DNA, a generated Vietnam hero asset, route dossier language, and stronger visual smoke checks.
 - Reworked the web landing and Explore UX into a Stitch-designed Editorial Intelligence command center with planner controls, three-column search workspace, and route dossier actions.
 - Added image-generated travel booking assets and shifted the web UX toward Traveloka-inspired service tabs, search-first booking flow, deal cards, and trust sections without copying brand assets.
+- Refined the Traveloka-inspired UX with promo coupons, service-first header cleanup, and a booking-results Explore page with filters, sorting, price panels, and mock booking CTAs.
 - Added shared API/mobile contract types and aligned API DTOs with those contracts.

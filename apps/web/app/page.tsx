@@ -7,7 +7,7 @@ import {
   CheckCircle2,
   Clock3,
   Hotel,
-  MapPinned,
+  Gift,
   Plane,
   Search,
   ShieldCheck,
@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { destinations } from "@vietwander/shared";
 import { DestinationCard } from "@/components/destination-card";
-import { getDestinationCopy } from "@/lib/destination-copy";
 import { getEditorialHeroImage, getExperienceDealImage, getStayDealImage } from "@/lib/destination-images";
 import { formatVnd } from "@/lib/utils";
 
@@ -40,6 +39,7 @@ export default function HomePage() {
     <main className="booking-canvas min-h-screen text-[#071827]">
       <HeroSearch />
       <DealSection />
+      <PromoStrip />
       <EnhanceTrip />
       <DestinationShelf title="Top Vietnam stays and routes" eyebrow="Popular in Vietnam" items={vietnam} href="/explore?q=Vietnam" />
       <DestinationShelf title="World picks with local planning logic" eyebrow="World short list" items={world} href="/explore?q=World" />
@@ -175,7 +175,7 @@ function DealSection() {
   return (
     <section className="px-4 py-12 md:px-8">
       <div className="mx-auto max-w-[1440px]">
-        <SectionHeader eyebrow="Deals and ideas" title="Traveloka-style discovery, VietWander intelligence." href="/booking/demo" />
+        <SectionHeader eyebrow="Deals and ideas" title="Fast deals, stays, and local experiences." href="/booking/demo" />
         <div className="mt-6 grid gap-5 lg:grid-cols-3">
           {deals.map((deal) => (
             <Link key={deal.title} href={deal.href} className="group overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white booking-card-shadow">
@@ -197,6 +197,37 @@ function DealSection() {
               </div>
             </Link>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PromoStrip() {
+  const promos = [
+    ["VWD-HOTEL", "Hotel demo coupon", "Save 12% on mock stays"],
+    ["LOCALFOOD", "Experience bundle", "Food walks and culture routes"],
+    ["AIPLAN", "AI route boost", "Turn search into itinerary"]
+  ] as const;
+
+  return (
+    <section className="px-4 pb-12 md:px-8">
+      <div className="mx-auto max-w-[1440px]">
+        <div className="grid gap-4 lg:grid-cols-[280px_1fr] lg:items-stretch">
+          <div className="rounded-2xl bg-[#0277d4] p-5 text-white shadow-[0_18px_44px_rgba(2,68,120,0.18)]">
+            <Gift size={26} aria-hidden="true" />
+            <h2 className="mt-4 text-2xl font-black">Promo codes for portfolio demo</h2>
+            <p className="mt-2 text-sm leading-6 text-white/75">No real discount, no real payment, just a safe booking-flow simulation.</p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {promos.map(([code, title, description]) => (
+              <Link key={code} href="/booking/demo" className="rounded-2xl border border-[#d9ecfb] bg-white p-5 transition hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(2,68,120,0.12)]">
+                <p className="w-fit rounded-lg bg-[#fff3e8] px-3 py-1 text-xs font-black text-[#b45309]">{code}</p>
+                <h3 className="mt-4 font-black">{title}</h3>
+                <p className="mt-2 text-sm leading-6 text-[#476273]">{description}</p>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </section>

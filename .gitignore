@@ -17,5 +17,7 @@ build
 android/.gradle
 ios/Pods
 apps/ai-service/.venv
+__pycache__
+*.pyc
 assets/generated/*.png
 assets/generated/*.jpg

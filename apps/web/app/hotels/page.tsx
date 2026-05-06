@@ -3,9 +3,9 @@ import { FeatureOverview } from "@/components/feature-overview";
 export default function Page() {
   return (
     <FeatureOverview
-      eyebrow="Stay search"
-      title="Hotels mock"
-      summary="Search sample stays with cancellation notes, local mock prices, room cards, and booking flows that never charge real money."
+      eyebrow="Tìm nơi lưu trú"
+      title="Khách sạn demo"
+      summary="Tìm nơi ở mẫu với ghi chú hủy phòng, giá mô phỏng local, thẻ phòng và luồng đặt chỗ không bao giờ charge tiền thật."
       destinationOffset={12}
     />
   );

@@ -3,22 +3,23 @@
 import { useMemo, useState } from "react";
 import { destinations, detectTravelStyle, type TravelQuizAnswer } from "@vietwander/shared";
 import { DestinationCard } from "@/components/destination-card";
+import { traitLabel, travelStyleDescription, travelStyleLabel } from "@/lib/vietnamese";
 
 const questions = [
   {
     id: "pace",
-    label: "Trip rhythm",
-    options: ["slow culture mornings", "packed viewpoints and activities", "safe family pacing"]
+    label: "Nhịp chuyến đi",
+    options: ["buổi sáng văn hóa đi chậm", "nhiều điểm ngắm cảnh và hoạt động", "nhịp an toàn cho gia đình"]
   },
   {
     id: "anchor",
-    label: "Main anchor",
-    options: ["street food markets cafes", "beach island sunset", "museums temples heritage"]
+    label: "Điều bạn ưu tiên",
+    options: ["ẩm thực đường phố chợ quán cà phê", "biển đảo hoàng hôn", "bảo tàng đền chùa di sản"]
   },
   {
     id: "comfort",
-    label: "Comfort level",
-    options: ["budget public transport hostel", "boutique comfort local", "luxury resort private spa"]
+    label: "Mức thoải mái",
+    options: ["tiết kiệm phương tiện công cộng hostel", "boutique thoải mái địa phương", "resort cao cấp xe riêng spa"]
   }
 ];
 
@@ -37,12 +38,12 @@ export function PersonalityQuiz() {
 
   return (
     <section className="grid gap-8 lg:grid-cols-[420px_1fr]">
-      <div className="rounded-2xl bg-white p-5 shadow-sm">
-        <p className="text-sm font-bold uppercase tracking-[0.16em] text-teal">Travel Personality Engine</p>
-        <h2 className="mt-2 text-3xl font-black text-navy">{result.style}</h2>
-        <p className="mt-3 text-navy/70">{result.description}</p>
+      <div className="rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_18px_54px_rgba(2,68,120,0.08)]">
+        <p className="text-sm font-bold uppercase tracking-[0.16em] text-[#0277d4]">Tính cách du lịch</p>
+        <h2 className="mt-2 text-3xl font-black text-navy">{travelStyleLabel(result.style)}</h2>
+        <p className="mt-3 text-navy/70">{travelStyleDescription(result.style, result.description)}</p>
         <div className="mt-5 rounded-2xl bg-navy p-5 text-white">
-          <p className="text-sm text-white/65">AI style confidence</p>
+          <p className="text-sm text-white/65">Độ tự tin của AI</p>
           <p className="text-4xl font-black">{result.score}%</p>
           <div className="mt-4 h-2 rounded-full bg-white/15">
             <div className="h-2 rounded-full bg-sunset" style={{ width: `${result.score}%` }} />
@@ -51,7 +52,7 @@ export function PersonalityQuiz() {
         <div className="mt-5 flex flex-wrap gap-2">
           {result.traits.map((trait) => (
             <span key={trait} className="rounded-full bg-mist px-3 py-1 text-sm font-semibold text-navy">
-              {trait}
+              {traitLabel(trait)}
             </span>
           ))}
         </div>
@@ -59,7 +60,7 @@ export function PersonalityQuiz() {
 
       <div className="space-y-5">
         {questions.map((question) => (
-          <fieldset key={question.id} className="rounded-2xl bg-white p-5 shadow-sm">
+          <fieldset key={question.id} className="rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_18px_54px_rgba(2,68,120,0.08)]">
             <legend className="font-bold text-navy">{question.label}</legend>
             <div className="mt-4 grid gap-3 md:grid-cols-3">
               {question.options.map((option) => {

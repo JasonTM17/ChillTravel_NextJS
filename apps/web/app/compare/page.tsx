@@ -3,7 +3,7 @@ import { PageShell } from "@/components/page-shell";
 
 export default function ComparePage() {
   return (
-    <PageShell eyebrow="AI Compare" title="Compare destinations with budget, season, safety, food, and AI fit">
+    <PageShell eyebrow="So sánh bằng AI" title="So sánh điểm đến theo ngân sách, mùa đẹp, an toàn, ẩm thực và độ phù hợp">
       <CompareConsole />
     </PageShell>
   );

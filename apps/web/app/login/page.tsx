@@ -3,9 +3,9 @@ import { FeatureOverview } from "@/components/feature-overview";
 export default function Page() {
   return (
     <FeatureOverview
-      eyebrow="Demo access"
-      title="Login"
-      summary="Use demo accounts for admin, traveler, host, and guide roles while keeping authentication flows local and portfolio-safe."
+      eyebrow="Truy cập demo"
+      title="Đăng nhập"
+      summary="Dùng tài khoản demo cho quản trị viên, du khách, chủ nhà và hướng dẫn viên trong khi toàn bộ luồng xác thực vẫn chạy local và an toàn cho portfolio."
       details={[
         "admin@vietwander.ai / Admin123!",
         "user@vietwander.ai / User123!",

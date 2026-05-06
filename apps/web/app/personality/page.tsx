@@ -3,7 +3,7 @@ import { PageShell } from "@/components/page-shell";
 
 export default function PersonalityPage() {
   return (
-    <PageShell eyebrow="Travel Personality Engine" title="Let VietWander AI learn how you actually travel">
+    <PageShell eyebrow="Bộ máy tính cách du lịch" title="Để VietWander hiểu cách bạn thật sự muốn đi">
       <PersonalityQuiz />
     </PageShell>
   );

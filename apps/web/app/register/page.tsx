@@ -3,9 +3,9 @@ import { FeatureOverview } from "@/components/feature-overview";
 export default function Page() {
   return (
     <FeatureOverview
-      eyebrow="Demo onboarding"
-      title="Create a local travel profile"
-      summary="Registration is shaped around demo account creation, preferred language, and the travel personality engine used for recommendations."
+      eyebrow="Tạo hồ sơ demo"
+      title="Tạo hồ sơ du lịch local"
+      summary="Đăng ký tập trung vào tài khoản demo, ngôn ngữ ưu tiên và Travel Personality Engine dùng cho đề xuất điểm đến."
       destinationOffset={1}
     />
   );

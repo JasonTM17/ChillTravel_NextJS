@@ -3,9 +3,9 @@ import { FeatureOverview } from "@/components/feature-overview";
 export default function Page() {
   return (
     <FeatureOverview
-      eyebrow="Trip timeline"
-      title="Public-share trip stories"
-      summary="Saved itineraries are organized by morning, afternoon, and evening so a plan can read like a travel story rather than a spreadsheet."
+      eyebrow="Timeline chuyến đi"
+      title="Câu chuyện chuyến đi có thể chia sẻ"
+      summary="Lịch trình đã lưu được chia theo buổi sáng, chiều và tối để kế hoạch đọc như một câu chuyện du lịch thay vì bảng tính."
       destinationOffset={4}
     />
   );

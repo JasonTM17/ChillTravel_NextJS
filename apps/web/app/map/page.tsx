@@ -3,9 +3,9 @@ import { FeatureOverview } from "@/components/feature-overview";
 export default function Page() {
   return (
     <FeatureOverview
-      eyebrow="Map discovery"
-      title="Route-first destination browsing"
-      summary="Map discovery uses clustered sample markers, travel-style filters, route previews, and a polished fallback when no map provider is configured."
+      eyebrow="Khám phá bản đồ"
+      title="Duyệt điểm đến theo tuyến đường"
+      summary="Bản đồ dùng marker mẫu dạng cụm, bộ lọc phong cách du lịch, xem trước tuyến và fallback đẹp khi chưa cấu hình map provider."
       destinationOffset={8}
     />
   );

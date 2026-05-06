@@ -3,7 +3,7 @@ import { PageShell } from "@/components/page-shell";
 
 export default function BudgetPage() {
   return (
-    <PageShell eyebrow="Smart Budget" title="Simulate hotel, food, transport, and activity tradeoffs">
+    <PageShell eyebrow="Ngân sách thông minh" title="Mô phỏng chi phí lưu trú, ăn uống, di chuyển và hoạt động">
       <BudgetSimulator initialDestinationSlug="da-nang" />
     </PageShell>
   );

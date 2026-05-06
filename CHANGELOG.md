@@ -30,3 +30,4 @@
 - Added Vietnamese UX smoke tests for logo assets, localized destination search, itinerary copy, payment warning, and removed English template phrases.
 - Polished remaining user-facing copy to reduce English product jargon in the Vietnamese travel-commerce flow.
 - Localized secondary web pages and AI utility components, including budget, compare, mood search, personality, auth, map, trips, wishlist, profile, hotels, and experiences.
+- Localized admin overview, destination operations, bookings, analytics, and AI Knowledge Studio copy while keeping production-safe demo boundaries visible.

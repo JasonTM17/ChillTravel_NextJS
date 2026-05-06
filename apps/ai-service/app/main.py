@@ -7,6 +7,7 @@ from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
+from .providers import OllamaChatProvider, provider_health
 from .rag import reindex_summary, retrieve
 from .travel_tools import answer_from_knowledge_base, build_itinerary, compare_destinations, estimate_budget, mood_search, suggest_destination, travel_personality
 
@@ -42,13 +43,7 @@ class MoodSearchRequest(BaseModel):
 def health() -> dict[str, Any]:
     return {
         "success": True,
-        "data": {
-            "status": "ok",
-            "runtime": "local",
-            "ollama_base_url": "http://localhost:11434",
-            "chat_model": "qwen3:4b",
-            "embed_model": "nomic-embed-text",
-        },
+        "data": {"status": "ok", **provider_health()},
         "message": "AI service healthy",
     }
 
@@ -59,6 +54,15 @@ def chat(request: ChatRequest) -> dict[str, Any]:
     docs = retrieve(query)
     answer = answer_from_knowledge_base(query)
     answer["retrieved_documents"] = [doc["source_id"] for doc in docs]
+    provider_result = OllamaChatProvider().generate(query) if _use_ollama_chat() else None
+    answer["provider"] = {
+        "chat": "ollama" if provider_result and provider_result.available else "sample",
+        "model": provider_result.model if provider_result else "local-tools",
+        "available": bool(provider_result and provider_result.available),
+        "fallback": not bool(provider_result and provider_result.available),
+    }
+    if provider_result and provider_result.text:
+        answer["provider_answer"] = provider_result.text
     return {"success": True, "data": answer, "message": "Local RAG answer"}
 
 
@@ -109,3 +113,9 @@ def reindex() -> dict[str, Any]:
 @app.post("/dataset/import")
 def dataset_import() -> dict[str, Any]:
     return {"success": True, "data": {"status": "accepted", "mode": "local/sample"}, "message": "Dataset import accepted"}
+
+
+def _use_ollama_chat() -> bool:
+    import os
+
+    return os.getenv("VIETWANDER_USE_OLLAMA_CHAT", "").lower() in {"1", "true", "yes"}

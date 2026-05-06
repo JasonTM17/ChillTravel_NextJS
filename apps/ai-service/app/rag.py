@@ -1,6 +1,16 @@
 from __future__ import annotations
 
+import hashlib
+import os
 from pathlib import Path
+from typing import Any
+
+from .providers import (
+    DEFAULT_EMBED_MODEL,
+    DEFAULT_QDRANT_COLLECTION,
+    DEFAULT_QDRANT_URL,
+    OllamaEmbeddingProvider,
+)
 
 
 def knowledge_root() -> Path:
@@ -15,7 +25,97 @@ def load_markdown_documents() -> list[dict[str, str]]:
     return docs
 
 
-def retrieve(query: str, limit: int = 4) -> list[dict[str, str]]:
+class QdrantRagAdapter:
+    def __init__(
+        self,
+        url: str = DEFAULT_QDRANT_URL,
+        collection: str = DEFAULT_QDRANT_COLLECTION,
+        enabled: bool | None = None,
+    ):
+        self.url = url
+        self.collection = collection
+        self.enabled = enabled if enabled is not None else os.getenv("VIETWANDER_USE_QDRANT", "").lower() in {"1", "true", "yes"}
+        self.embedder = OllamaEmbeddingProvider()
+
+    def status(self) -> dict[str, Any]:
+        return {
+            "backend": "qdrant" if self.enabled else "sample",
+            "url": self.url,
+            "collection": self.collection,
+            "embedding_model": DEFAULT_EMBED_MODEL,
+            "enabled": self.enabled,
+        }
+
+    def reindex(self, docs: list[dict[str, str]]) -> dict[str, Any]:
+        if not self.enabled:
+            return {**self.status(), "status": "ready", "indexed_documents": 0, "fallback_documents": len(docs), "fallback_reason": "qdrant disabled"}
+
+        try:
+            from qdrant_client import QdrantClient
+            from qdrant_client.models import Distance, PointStruct, VectorParams
+
+            embeddings = [(doc, self.embedder.embed(doc["content"])) for doc in docs]
+            first_vector = next((embedding.vector for _, embedding in embeddings if embedding.vector), None)
+            if not first_vector:
+                return {**self.status(), "status": "fallback", "indexed_documents": 0, "fallback_documents": len(docs), "fallback_reason": "no embeddings"}
+
+            client = QdrantClient(url=self.url, timeout=2)
+            if not client.collection_exists(self.collection):
+                client.create_collection(
+                    collection_name=self.collection,
+                    vectors_config=VectorParams(size=len(first_vector), distance=Distance.COSINE),
+                )
+            points = [
+                PointStruct(
+                    id=_stable_point_id(doc["source_id"]),
+                    vector=embedding.vector,
+                    payload={"source_id": doc["source_id"], "content": doc["content"]},
+                )
+                for doc, embedding in embeddings
+            ]
+            client.upsert(collection_name=self.collection, points=points)
+            provider = "ollama" if all(embedding.available for _, embedding in embeddings) else "sample"
+            return {**self.status(), "status": "ready", "indexed_documents": len(points), "fallback_documents": 0, "embedding_provider": provider}
+        except Exception as exc:
+            return {
+                **self.status(),
+                "status": "fallback",
+                "indexed_documents": 0,
+                "fallback_documents": len(docs),
+                "fallback_reason": exc.__class__.__name__,
+            }
+
+    def search(self, query: str, limit: int = 4) -> list[dict[str, Any]]:
+        if not self.enabled:
+            return []
+        try:
+            from qdrant_client import QdrantClient
+
+            embedding = self.embedder.embed(query)
+            client = QdrantClient(url=self.url, timeout=2)
+            hits = client.query_points(collection_name=self.collection, query=embedding.vector, limit=limit).points
+            return [
+                {
+                    "source_id": str(hit.payload.get("source_id", "unknown")),
+                    "content": str(hit.payload.get("content", "")),
+                    "score": float(hit.score or 0),
+                    "backend": "qdrant",
+                }
+                for hit in hits
+                if hit.payload
+            ]
+        except Exception:
+            return []
+
+
+def retrieve(query: str, limit: int = 4) -> list[dict[str, Any]]:
+    vector_docs = QdrantRagAdapter().search(query, limit)
+    if vector_docs:
+        return vector_docs
+    return sample_retrieve(query, limit)
+
+
+def sample_retrieve(query: str, limit: int = 4) -> list[dict[str, Any]]:
     terms = [term.lower() for term in query.split() if len(term) > 2]
     scored = []
     for doc in load_markdown_documents():
@@ -24,15 +124,25 @@ def retrieve(query: str, limit: int = 4) -> list[dict[str, str]]:
         if score:
             scored.append((score, doc))
     scored.sort(key=lambda item: item[0], reverse=True)
-    return [doc for _, doc in scored[:limit]]
+    return [{**doc, "score": score, "backend": "sample"} for score, doc in scored[:limit]]
 
 
 def reindex_summary() -> dict[str, object]:
     docs = load_markdown_documents()
+    index_result = QdrantRagAdapter().reindex(docs)
     return {
-        "status": "ready",
+        "status": index_result["status"],
         "vector_db": "qdrant",
-        "embedding_model": "nomic-embed-text",
+        "retrieval_backend": index_result["backend"],
+        "collection": index_result["collection"],
+        "embedding_model": index_result["embedding_model"],
         "documents": len(docs),
-        "note": "This local scaffold uses markdown retrieval in tests; Docker runtime can push chunks to Qdrant.",
+        "indexed_documents": index_result["indexed_documents"],
+        "fallback_documents": index_result["fallback_documents"],
+        "fallback_reason": index_result.get("fallback_reason"),
+        "note": "Qdrant is used when enabled and reachable; otherwise local markdown sample retrieval remains active.",
     }
+
+
+def _stable_point_id(source_id: str) -> int:
+    return int(hashlib.sha256(source_id.encode("utf-8")).hexdigest()[:16], 16)

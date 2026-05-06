@@ -24,3 +24,4 @@
 - Added image-generated travel booking assets and shifted the web UX toward Traveloka-inspired service tabs, search-first booking flow, deal cards, and trust sections without copying brand assets.
 - Refined the Traveloka-inspired UX with promo coupons, service-first header cleanup, and a booking-results Explore page with filters, sorting, price panels, and mock booking CTAs.
 - Added shared API/mobile contract types and aligned API DTOs with those contracts.
+- Added a distinct VietWander travel-commerce logo system, favicon metadata, and Vietnamese OTA Design DNA prompt after Stitch generation timed out.

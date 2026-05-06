@@ -6,6 +6,10 @@ Project ID: 1439968317747880611
 Premium editorial travel product with Vietnamese warmth, global destination photography, practical planning density, and local-first intelligence kept in the background. The UI should feel closer to a high-end travel magazine and planning desk than an AI dashboard.
 
 Latest Stitch redesign:
+- Follow-up Travel Commerce pass:
+  - Prompted Stitch on 2026-05-06 for a Vietnamese OTA-style redesign. The generation timed out after 120s, so the enhanced prompt is preserved in `docs/stitch-prompts.md` and implemented manually from the Design DNA.
+  - Direction: Vietnamese Travel Commerce. Search-first booking UX, service tabs, white cards on pale sky surfaces, blue active states, orange conversion CTAs, teal trust badges, compact Vietnamese copy, and no third-party logo or confusingly similar Traveloka brand assets.
+  - Logo rule: VietWander mark must be distinct, using compass/route/Vietnam cues. Do not copy Traveloka's bird, curves, color proportions, wordmark, or brand layout.
 - Project: `1439968317747880611`
 - Screen: `projects/1439968317747880611/screens/8debca2537a8486babd0b255f4325657`
 - Design system asset: `assets/c7ffbbb949ed442593f88c43f590c4e4`

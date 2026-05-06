@@ -4,6 +4,28 @@ Stitch project created: 1439968317747880611.
 
 The first screen generation timed out in the tool after 120 seconds, so these prompts are preserved for manual or follow-up generation.
 
+## Vietnamese Travel Commerce redesign
+Create a high-fidelity desktop web design for VIETWANDER AI using a Vietnamese OTA / travel-commerce UX inspired by familiar booking platforms, but legally distinct and not copying any third-party logo, icon, layout pixel-for-pixel, typography, or brand assets.
+
+**DESIGN SYSTEM (REQUIRED):**
+- Platform: Web desktop-first with responsive mobile behavior.
+- Palette: booking blue #0277D4 for active navigation and trust, deep navy #071827 for text, pale sky #EAF7FF and white surfaces, action orange #FF6D1A for primary conversion CTAs, teal #0F8B7B for safe/local AI trust badges.
+- Typography: Be Vietnam Pro or Inter-style UI font; no negative letter spacing; compact Vietnamese labels.
+- Shapes: 12px controls, 16px cards, image-led deal cards, stable listing rows.
+- Style: clean, trustworthy, practical travel-commerce product; fewer AI buzzwords, no neon, no sci-fi glass, no decorative orbs.
+
+**PAGE STRUCTURE:**
+1. Header: distinct VietWander logo mark using compass + route line + Vietnam map hint, wordmark VietWander AI, utility nav in Vietnamese: Ưu đãi, Hỗ trợ, Đặt chỗ, Đăng nhập, Đăng ký.
+2. Service navigation: icon tabs in Vietnamese: Khách sạn, Chuyến bay, Hoạt động, Xe đưa đón, Thuê xe, Lập lịch trình AI.
+3. Hero search: large white booking card over pale sky / destination photo. Fields: Bạn muốn đi đâu?, Nhận phòng, Trả phòng, Khách và phòng, Ngân sách. Primary CTA: Tìm kiếm.
+4. Promo area: Vietnamese coupon cards and deal banners for Đà Nẵng, Phú Quốc, Hội An, Sapa; clearly marked demo/sample.
+5. Explore preview: travel-commerce listing rows with image, rating, amenities, price panel, actions Xem ưu đãi and Lập lịch trình AI.
+6. Booking trust: quiet banner: Thanh toán demo — không phát sinh giao dịch thật. Không lưu thẻ thật.
+7. AI planner: warm helper module in Vietnamese: gợi ý lịch trình, ngân sách, văn hóa, ẩm thực; state that live flight/visa/weather data is not available.
+
+**OUTPUT GOAL:**
+Make this feel like a production Vietnamese travel booking product, not an AI template. Use real destination photography placeholders and precise Vietnamese microcopy throughout.
+
 ## Web landing
 Create a premium cinematic travel intelligence web app landing page for VIETWANDER AI, a Vietnam and world travel platform. Visual identity: emerald teal #0F8B7B, sunset orange #F97316, deep navy #071827, ivory sand #F8F3EA. Include a full-bleed cinematic hero, hero search bar labeled Ban muon di dau, AI trip planner CTA, Vietnam destinations, world bucket list, local experiences, budget simulator, chatbot assistant, mobile app preview, glassmorphism cards, map-inspired layout, responsive desktop and mobile behavior, modern luxury travel aesthetic. No third-party logos.
 

@@ -20,3 +20,15 @@ Create a Flutter mobile app UI for VIETWANDER AI, a premium AI travel planner. I
   - Use ivory sand backgrounds, deep navy text, emerald active states, and sunset orange only for primary CTAs.
   - Replace neon gradients and heavy glass cards with low-contrast borders, paper surfaces, and restrained shadows.
   - Explore page should have a top search block, practical filter rail, destination grid, and editorial recommendation strips.
+
+## Editorial landing redesign generated in Stitch
+- Screen: `projects/1439968317747880611/screens/426473646106452a9762dc8088047f54`
+- Design system asset: `assets/d13576e313ba4aabb320e622cd550758`
+- Direction: VietWander Editorial, a premium Vietnamese travel intelligence landing page that feels more like a human-curated planning desk than an AI template.
+- Implementation rules:
+  - Lead with a generated photographic Vietnam hero and keep the search command in the first viewport.
+  - Use route dossier, planning desk, culture guard, budget dial, and offline pack language before generic AI wording.
+  - Use Noto Serif-style editorial headings and Be Vietnam Pro-style body/UI rhythm.
+  - Keep deep navy panels grounded and sparse; sunset orange is reserved for the main action, while emerald marks confidence and filters.
+  - Do not use neon, floating gradient orbs, generic chatbot illustrations, or visible instructions about how to use the page.
+  - Preserve explicit product boundaries: local sample data, no live visa/weather/flight claims, and mock-only payments.

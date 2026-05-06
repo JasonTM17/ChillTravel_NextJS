@@ -13,3 +13,12 @@ Friendly AI travel concierge holographic map interface, itinerary cards, budget 
 
 ## Mobile onboarding
 Vietnamese traveler using a mobile AI travel app while viewing a cinematic world map, warm modern illustration, premium product style, no text.
+
+## Generated assets
+
+### vietwander-hero-editorial.png
+- Date: 2026-05-06
+- File: `apps/web/public/generated/vietwander-hero-editorial.png`
+- Usage: Web landing hero and cinematic editorial background.
+- Tool: Codex image generation / GPT Image-style raster generation.
+- Prompt: Photorealistic premium editorial travel website hero background for VIETWANDER AI, Vietnam and world travel intelligence platform, cinematic Vietnam collage blending Ha Long Bay limestone islands, Hoi An lantern street, Sapa rice terraces, Da Nang beach, Phu Quoc sunset, warm golden hour, emerald teal and sunset orange color grade, high-end travel magazine composition, natural realistic lighting, no text, no logo, no watermark, no fake brand marks.

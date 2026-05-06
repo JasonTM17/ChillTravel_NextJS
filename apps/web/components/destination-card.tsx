@@ -32,7 +32,7 @@ export function DestinationCard({ destination }: { destination: Destination }) {
             <MapPin size={15} aria-hidden="true" />
             {copy.city}
           </div>
-          <h3 className="mt-1 text-3xl font-black leading-none tracking-normal">{copy.name}</h3>
+          <h3 className="font-editorial mt-1 text-3xl font-black leading-none">{copy.name}</h3>
         </div>
       </div>
 

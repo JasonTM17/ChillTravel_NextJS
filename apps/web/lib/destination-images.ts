@@ -2,7 +2,7 @@ const fallbackImage =
   "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80";
 
 const heroImage =
-  "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=2200&q=85";
+  "/generated/vietwander-hero-editorial.png";
 
 const destinationImages: Record<string, string> = {
   "ha-noi": "https://images.unsplash.com/photo-1509030450996-dd1a26dda07a?auto=format&fit=crop&w=1400&q=80",

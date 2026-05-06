@@ -29,14 +29,14 @@ export default async function DestinationDetail({ params }: { params: Promise<{ 
   };
 
   return (
-    <main className="bg-[#fdf9f0] text-[#071827]">
+    <main className="planning-desk text-[#071827]">
       <section className="grid min-h-[620px] border-b border-[#eadfce] lg:grid-cols-[1.08fr_0.92fr]">
         <div className="flex items-end bg-[#071827] px-4 py-16 text-white md:py-20">
           <div className="mx-auto w-full max-w-3xl lg:mr-0">
             <p className="font-black uppercase tracking-[0.22em] text-[#f7d7b7]">
               {copy.country} / {copy.city}
             </p>
-            <h1 className="mt-4 text-6xl font-black leading-[0.92] tracking-normal md:text-8xl">{copy.name}</h1>
+            <h1 className="font-editorial mt-4 text-6xl font-black leading-[0.96] md:text-8xl">{copy.name}</h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/78">{copy.summary}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href={`/ai-planner?destination=${destination.slug}`} className="rounded-lg bg-[#f97316] px-5 py-3 font-black text-white">
@@ -122,7 +122,7 @@ export default async function DestinationDetail({ params }: { params: Promise<{ 
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="rounded-[16px] border border-[#dfd3c1] bg-white p-6 shadow-[0_18px_54px_rgba(7,24,39,0.06)]">
-      <h2 className="text-2xl font-black">{title}</h2>
+      <h2 className="font-editorial text-2xl font-black">{title}</h2>
       <div className="mt-3 text-[#40515d]">{children}</div>
     </section>
   );

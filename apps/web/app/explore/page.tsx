@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, CalendarDays, MapPinned, Search, SlidersHorizontal, Star, WalletCards } from "lucide-react";
+import { ArrowRight, MapPinned, Search, SlidersHorizontal, Star, WalletCards } from "lucide-react";
 import { destinations, normalizeTravelText } from "@vietwander/shared";
 import type { Destination } from "@vietwander/shared";
 import { MoodSearchPanel } from "@/components/ai/mood-search-panel";
@@ -37,12 +37,12 @@ export default function ExplorePage({ searchParams }: { searchParams: Promise<{ 
     const worldPicks = destinations.filter((destination) => destination.tags.includes("World")).slice(0, 3);
 
     return (
-      <main className="min-h-screen bg-[#fdf9f0] text-[#071827]">
-        <section className="border-b border-[#eadfce] bg-[#f8f1e6] px-4 py-12 md:py-16">
+      <main className="planning-desk min-h-screen text-[#071827]">
+        <section className="editorial-paper border-b border-[#eadfce] px-4 py-12 md:py-16">
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_380px] lg:items-end">
             <div>
               <p className="text-sm font-black uppercase tracking-[0.24em] text-[#0f766e]">Explore dossier</p>
-              <h1 className="mt-4 max-w-4xl text-5xl font-black leading-[0.95] tracking-normal md:text-7xl">
+              <h1 className="font-editorial mt-4 max-w-4xl text-5xl font-black leading-[0.98] md:text-7xl">
                 Find the right trip, not just a place.
               </h1>
               <p className="mt-5 max-w-2xl text-lg leading-8 text-[#40515d]">
@@ -78,13 +78,14 @@ export default function ExplorePage({ searchParams }: { searchParams: Promise<{ 
                   ))}
                 </select>
                 <button className="rounded-xl bg-[#f97316] px-4 py-3 font-black text-white transition hover:bg-[#ea580c] focus:outline-none focus:ring-2 focus:ring-[#071827]">
-                  Search
+                  Curate
                 </button>
               </form>
             </div>
 
             <aside className="rounded-[18px] border border-[#dfd3c1] bg-[#071827] p-5 text-white shadow-[0_24px_80px_rgba(7,24,39,0.22)]">
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#f97316]">Selected route</p>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#f97316]">Route board</p>
+              <h2 className="font-editorial mt-2 text-3xl font-black">Vietnam coastal dossier</h2>
               <div className="mt-5 space-y-4">
                 {vietnamPicks.map((destination, index) => {
                   const copy = getDestinationCopy(destination);
@@ -115,7 +116,7 @@ export default function ExplorePage({ searchParams }: { searchParams: Promise<{ 
               <div className="flex flex-col gap-4 border-b border-[#e7ddcf] pb-6 md:flex-row md:items-end md:justify-between">
                 <div>
                   <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#0f766e]">Destination library</p>
-                  <h2 className="mt-2 text-3xl font-black md:text-5xl">{filtered.length} curated places</h2>
+                  <h2 className="font-editorial mt-2 text-3xl font-black md:text-5xl">{filtered.length} curated places</h2>
                 </div>
                 <p className="max-w-md text-sm leading-6 text-[#687983]">
                   Local sample data only. Real-time flights, visa rules, and weather should be checked with official

@@ -19,3 +19,5 @@
 - Hardened API validation, global response/error envelopes, bearer-token RBAC, deterministic mock payments, and HTTP integration tests.
 - Added Ollama and Qdrant provider adapters with sample fallback, local guardrails, and expanded AI retrieval tests.
 - Wired Flutter repositories, Dio defaults, repository-backed screens, and an offline cache stub with expanded mobile tests.
+- Refactored the web UI with Stitch Editorial Travel DNA, a generated Vietnam hero asset, route dossier language, and stronger visual smoke checks.
+- Added shared API/mobile contract types and aligned API DTOs with those contracts.

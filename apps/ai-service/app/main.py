@@ -8,7 +8,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from .rag import reindex_summary, retrieve
-from .travel_tools import answer_from_knowledge_base, build_itinerary, estimate_budget, suggest_destination
+from .travel_tools import answer_from_knowledge_base, build_itinerary, compare_destinations, estimate_budget, mood_search, suggest_destination, travel_personality
 
 
 app = FastAPI(title="VIETWANDER AI Local Service", version="0.1.0")
@@ -24,6 +24,18 @@ class ItineraryRequest(BaseModel):
     duration_days: int = 3
     travelers: int = 2
     style: str = "Culture Seeker"
+
+
+class PersonalityRequest(BaseModel):
+    text: str
+
+
+class CompareRequest(BaseModel):
+    slugs: list[str]
+
+
+class MoodSearchRequest(BaseModel):
+    query: str
 
 
 @app.get("/health")
@@ -72,6 +84,21 @@ def itinerary(request: ItineraryRequest) -> dict[str, Any]:
 def budget(request: ItineraryRequest) -> dict[str, Any]:
     destination = suggest_destination(request.destination)
     return {"success": True, "data": estimate_budget(destination, request.duration_days, request.travelers), "message": "Budget estimated"}
+
+
+@app.post("/personality/detect")
+def personality(request: PersonalityRequest) -> dict[str, Any]:
+    return {"success": True, "data": travel_personality(request.text), "message": "Travel personality detected"}
+
+
+@app.post("/compare")
+def compare(request: CompareRequest) -> dict[str, Any]:
+    return {"success": True, "data": compare_destinations(request.slugs), "message": "Destinations compared"}
+
+
+@app.post("/mood-search")
+def mood(request: MoodSearchRequest) -> dict[str, Any]:
+    return {"success": True, "data": mood_search(request.query), "message": "Mood converted to local filters"}
 
 
 @app.post("/rag/reindex")

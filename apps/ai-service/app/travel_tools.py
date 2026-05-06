@@ -37,6 +37,46 @@ def detect_travel_style(text: str) -> str:
     return "Culture Seeker"
 
 
+def travel_personality(text: str) -> dict[str, Any]:
+    style = detect_travel_style(text)
+    profile = {
+        "Food Hunter": {
+            "description": "Plans around markets, street food, cafes, and local dishes.",
+            "traits": ["Street food curiosity", "Neighborhood-first routes", "Flexible mealtimes"],
+        },
+        "Beach Lover": {
+            "description": "Looks for coast, islands, seafood, and sunset pacing.",
+            "traits": ["Coastal stays", "Sunset windows", "Light packing"],
+        },
+        "Family Planner": {
+            "description": "Needs lower-risk pacing, reliable stays, and offline checklists.",
+            "traits": ["Safety-first", "Offline checklist", "Shorter transfers"],
+        },
+        "Budget Backpacker": {
+            "description": "Optimizes for local transport, affordable stays, and high-value experiences.",
+            "traits": ["Cost control", "Public transport", "Flexible lodging"],
+        },
+        "Culture Seeker": {
+            "description": "Cares about stories, etiquette, heritage, and the deeper rhythm of a place.",
+            "traits": ["Context-rich days", "Local etiquette", "Slow discovery"],
+        },
+    }.get(style, {"description": "Balanced discovery style.", "traits": ["Balanced route", "Local context"]})
+    recommended = [destination.slug for destination in DESTINATIONS if destination.name in answer_from_style(style)][:4]
+    if not recommended:
+        recommended = [destination.slug for destination in DESTINATIONS[:3]]
+    return {"style": style, "score": 88, "description": profile["description"], "traits": profile["traits"], "recommended_destination_slugs": recommended}
+
+
+def answer_from_style(style: str) -> list[str]:
+    if style == "Food Hunter":
+        return ["Đà Nẵng", "Tokyo", "Paris"]
+    if style == "Beach Lover":
+        return ["Đà Nẵng", "Phú Quốc"]
+    if style == "Family Planner":
+        return ["Phú Quốc", "Đà Nẵng"]
+    return ["Đà Nẵng", "Paris", "Tokyo"]
+
+
 def suggest_destination(text: str) -> LocalDestination:
     lowered = text.lower()
     for destination in DESTINATIONS:
@@ -125,6 +165,36 @@ def compare_destinations(slugs: list[str]) -> list[dict[str, Any]]:
             }
         )
     return results
+
+
+def mood_search(query: str) -> dict[str, Any]:
+    lowered = query.lower()
+    tags = []
+    if "beach" in lowered or "bien" in lowered or "biển" in lowered:
+        tags.append("beach")
+    if "food" in lowered or "an ngon" in lowered or "ăn ngon" in lowered:
+        tags.append("food")
+    if "quiet" in lowered or "yen binh" in lowered or "yên bình" in lowered:
+        tags.append("quiet")
+    style = detect_travel_style(query)
+    matched = [
+        destination
+        for destination in DESTINATIONS
+        if not tags
+        or any(tag in " ".join([destination.slug, destination.name, destination.country, *destination.foods]).lower() for tag in tags)
+    ]
+    if not matched:
+        matched = DESTINATIONS[:3]
+    return {
+        "query": query,
+        "inferred_filters": {
+            "tags": tags,
+            "styles": [style],
+            "pace": "chill" if "quiet" in tags else "balanced",
+            "budget": "mid-range",
+        },
+        "destinations": [{"slug": item.slug, "name": item.name, "country": item.country, "best_time": item.best_time} for item in matched[:6]],
+    }
 
 
 def generate_packing_list(destination: LocalDestination) -> list[str]:

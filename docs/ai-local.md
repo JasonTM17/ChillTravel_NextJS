@@ -11,3 +11,11 @@
    - POST http://localhost:8010/chat with message: Đà Nẵng đi 3 ngày ăn gì?
 
 The service includes RAG endpoints and local tools. It warns when users ask for real-time flight prices, visa policy, or current weather.
+
+Additional local intelligence endpoints:
+
+- POST `/personality/detect`
+- POST `/compare`
+- POST `/mood-search`
+
+These mirror the deterministic shared intelligence layer so local AI demos can run without a cloud LLM.

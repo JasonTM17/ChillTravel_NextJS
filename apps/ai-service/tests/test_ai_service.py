@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from app.travel_tools import answer_from_knowledge_base, build_itinerary, suggest_destination
+from app.travel_tools import answer_from_knowledge_base, build_itinerary, compare_destinations, mood_search, suggest_destination, travel_personality
 
 
 class TravelToolsTest(unittest.TestCase):
@@ -27,6 +27,14 @@ class TravelToolsTest(unittest.TestCase):
         plan = build_itinerary(destination, 3, "Family Planner")
         self.assertIn("budget_breakdown", plan)
         self.assertEqual(len(plan["days"]), 3)
+
+    def test_personality_compare_and_mood_search(self):
+        personality = travel_personality("street food markets and local cafes")
+        self.assertEqual(personality["style"], "Food Hunter")
+        comparison = compare_destinations(["da-nang", "paris"])
+        self.assertEqual(len(comparison), 2)
+        mood = mood_search("yen binh co bien an ngon")
+        self.assertIn("inferred_filters", mood)
 
 
 if __name__ == "__main__":

@@ -16,3 +16,6 @@
 - Applied Stitch editorial travel redesign to the web shell, landing, Explore page, destination cards, and mood search to reduce the obvious AI-template feel.
 - Extended the editorial redesign to destination detail, trip planner, chat, booking mock payment, and admin overview surfaces.
 - Removed remaining web template repetition and encoding artifacts from secondary, auth, admin, and itinerary surfaces.
+- Hardened API validation, global response/error envelopes, bearer-token RBAC, deterministic mock payments, and HTTP integration tests.
+- Added Ollama and Qdrant provider adapters with sample fallback, local guardrails, and expanded AI retrieval tests.
+- Wired Flutter repositories, Dio defaults, repository-backed screens, and an offline cache stub with expanded mobile tests.

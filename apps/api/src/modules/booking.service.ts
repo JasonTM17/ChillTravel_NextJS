@@ -3,19 +3,23 @@ import { demoPaymentMethods } from "@vietwander/shared";
 
 @Injectable()
 export class BookingService {
+  private sequence = 0;
+
   create(input: { itemName: string; amount: number; method: string }) {
     const method = demoPaymentMethods.includes(input.method as never) ? input.method : "MOCK_CARD";
+    this.sequence += 1;
+    const suffix = this.sequence.toString().padStart(6, "0");
     return {
-      id: "book_" + Date.now(),
-      bookingCode: "VW-" + Math.random().toString(36).slice(2, 8).toUpperCase(),
+      id: "book_" + suffix,
+      bookingCode: "VW-" + suffix,
       status: "confirmed",
       totalAmount: input.amount,
       currency: "VND",
       paymentStatus: "confirmed_mock",
       paymentMethod: method,
       isDemo: true,
-      warning: "Demo payment — no real transaction",
-      qrTicket: "VW-QR-MOCK-" + Date.now()
+      warning: "Demo payment only - no real transaction",
+      qrTicket: "VW-QR-MOCK-" + suffix
     };
   }
 
@@ -25,7 +29,7 @@ export class BookingService {
       status: "confirmed",
       paymentStatus: "confirmed_mock",
       isDemo: true,
-      warning: "Demo payment — no real transaction"
+      warning: "Demo payment only - no real transaction"
     };
   }
 

@@ -1,17 +1,29 @@
 import { Body, Controller, Get, Param, Post } from "@nestjs/common";
-import { IsNumber, IsString } from "class-validator";
-import { envelope } from "@vietwander/shared";
+import { Type } from "class-transformer";
+import { IsIn, IsNumber, IsOptional, IsString, Max, MaxLength, Min } from "class-validator";
+import { demoPaymentMethods, envelope } from "@vietwander/shared";
 import { BookingService } from "./booking.service";
 
 class BookingDto {
   @IsString()
+  @MaxLength(120)
   itemName!: string;
 
+  @Type(() => Number)
   @IsNumber()
+  @Min(1)
+  @Max(1000000000)
   amount!: number;
 
+  @IsIn(demoPaymentMethods)
+  method!: (typeof demoPaymentMethods)[number];
+}
+
+class PaymentConfirmDto {
+  @IsOptional()
   @IsString()
-  method!: string;
+  @MaxLength(40)
+  bookingCode?: string;
 }
 
 @Controller()
@@ -34,8 +46,8 @@ export class BookingController {
   }
 
   @Post("payments/mock/confirm")
-  confirm() {
-    return envelope({ status: "confirmed_mock", warning: "Demo payment — no real transaction" }, "Mock payment confirmed");
+  confirm(@Body() body: PaymentConfirmDto = {}) {
+    return envelope({ bookingCode: body.bookingCode ?? "VW-MOCK", status: "confirmed_mock", warning: "Demo payment only - no real transaction" }, "Mock payment confirmed");
   }
 
   @Post("bookings/:id/cancel")

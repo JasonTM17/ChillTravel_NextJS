@@ -11,9 +11,10 @@ import { AuthService } from "./auth.service";
 import { BookingService } from "./booking.service";
 import { DestinationsService } from "./destinations.service";
 import { TripsService } from "./trips.service";
+import { JwtAuthGuard, RolesGuard } from "./security";
 
 @Module({
   controllers: [HealthController, AuthController, DestinationsController, AiController, BookingController, TripsController, AdminController],
-  providers: [AuthService, DestinationsService, AiService, BookingService, TripsService]
+  providers: [AuthService, DestinationsService, AiService, BookingService, TripsService, JwtAuthGuard, RolesGuard]
 })
 export class AppModule {}

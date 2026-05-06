@@ -1,14 +1,43 @@
 import { Controller, Get, Param, Query } from "@nestjs/common";
+import { IsIn, IsOptional, IsString, MaxLength } from "class-validator";
 import { envelope } from "@vietwander/shared";
 import { DestinationsService } from "./destinations.service";
+
+class DestinationListQueryDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(80)
+  q?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(40)
+  style?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(40)
+  country?: string;
+
+  @IsOptional()
+  @IsIn(["cheapest", "popular"])
+  sort?: string;
+}
+
+class SearchQueryDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(80)
+  q?: string;
+}
 
 @Controller()
 export class DestinationsController {
   constructor(private readonly destinations: DestinationsService) {}
 
   @Get("destinations")
-  list(@Query("q") q?: string, @Query("style") style?: string, @Query("country") country?: string, @Query("sort") sort?: string) {
-    const data = this.destinations.list({ q, style, country, sort });
+  list(@Query() query: DestinationListQueryDto) {
+    const data = this.destinations.list(query);
     return envelope(data, "Destinations loaded", { total: data.length });
   }
 
@@ -28,8 +57,8 @@ export class DestinationsController {
   }
 
   @Get("search")
-  search(@Query("q") q = "") {
-    return envelope(this.destinations.search(q), "Search complete");
+  search(@Query() query: SearchQueryDto) {
+    return envelope(this.destinations.search(query.q ?? ""), "Search complete");
   }
 
   @Get("reviews")

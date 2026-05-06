@@ -1,7 +1,17 @@
-import { Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
+import { IsBoolean, IsOptional } from "class-validator";
 import { destinations, envelope } from "@vietwander/shared";
+import { JwtAuthGuard, Roles, RolesGuard } from "./security";
+
+class AdminReindexDto {
+  @IsOptional()
+  @IsBoolean()
+  force?: boolean;
+}
 
 @Controller("admin")
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles("ADMIN")
 export class AdminController {
   @Get("analytics")
   analytics() {
@@ -20,7 +30,7 @@ export class AdminController {
   }
 
   @Post("ai-knowledge/reindex")
-  reindex() {
-    return envelope({ jobId: "admin-reindex-local", status: "queued" }, "Knowledge reindex queued");
+  reindex(@Body() body: AdminReindexDto = {}) {
+    return envelope({ jobId: "admin-reindex-local", status: "queued", forced: body.force === true }, "Knowledge reindex queued");
   }
 }

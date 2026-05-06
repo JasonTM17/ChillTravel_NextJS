@@ -1,33 +1,44 @@
 import { Body, Controller, Post } from "@nestjs/common";
-import { IsArray, IsIn, IsNumber, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { ArrayMinSize, IsArray, IsBoolean, IsIn, IsInt, IsOptional, IsString, Max, MaxLength, Min, MinLength } from "class-validator";
 import { envelope, type BudgetSimulationInput, type TravelQuizAnswer, type TravelStyle } from "@vietwander/shared";
 import { AiService } from "./ai.service";
 
 class ChatDto {
   @IsString()
+  @MinLength(1)
+  @MaxLength(1000)
   message!: string;
 
   @IsOptional()
   @IsString()
+  @MaxLength(80)
   contextSlug?: string;
 }
 
 class ItineraryDto {
   @IsOptional()
   @IsString()
+  @MaxLength(80)
   destination?: string;
 
   @IsOptional()
-  @IsNumber()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(30)
   durationDays?: number;
 
   @IsOptional()
   @IsString()
+  @MaxLength(60)
   style?: string;
 }
 
 class CompareDto {
   @IsArray()
+  @ArrayMinSize(1)
+  @IsString({ each: true })
   slugs!: string[];
 
   @IsOptional()
@@ -35,14 +46,35 @@ class CompareDto {
   style?: TravelStyle;
 }
 
+class BudgetEstimateDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(80)
+  destinationSlug?: string;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(20)
+  travelers?: number;
+}
+
 class BudgetDto implements BudgetSimulationInput {
   @IsString()
+  @MaxLength(80)
   destinationSlug!: string;
 
-  @IsNumber()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(20)
   travelers!: number;
 
-  @IsNumber()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(60)
   days!: number;
 
   @IsIn(["hostel", "comfort", "boutique", "luxury"])
@@ -60,12 +92,21 @@ class BudgetDto implements BudgetSimulationInput {
 
 class PersonalityDto {
   @IsArray()
+  @ArrayMinSize(1)
   answers!: TravelQuizAnswer[];
 }
 
 class MoodSearchDto {
   @IsString()
+  @MinLength(1)
+  @MaxLength(160)
   query!: string;
+}
+
+class ReindexDto {
+  @IsOptional()
+  @IsBoolean()
+  force?: boolean;
 }
 
 @Controller("ai")
@@ -88,7 +129,7 @@ export class AiController {
   }
 
   @Post("budget")
-  budget(@Body() body: { destinationSlug?: string; travelers?: number }) {
+  budget(@Body() body: BudgetEstimateDto = {}) {
     return envelope(this.ai.budget(body.destinationSlug, body.travelers), "Budget estimated");
   }
 
@@ -113,7 +154,7 @@ export class AiController {
   }
 
   @Post("reindex")
-  reindex() {
-    return envelope({ jobId: "mock-reindex-job", vectorDb: "qdrant", status: "queued" }, "AI reindex queued");
+  reindex(@Body() body: ReindexDto = {}) {
+    return envelope({ jobId: "mock-reindex-job", vectorDb: "qdrant", status: "queued", forced: body.force === true }, "AI reindex queued");
   }
 }

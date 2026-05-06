@@ -1,0 +1,19 @@
+{
+  "name": "@vietwander/db",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "prisma validate --schema prisma/schema.prisma",
+    "lint": "prisma validate --schema prisma/schema.prisma",
+    "test": "node -e \"console.log('db schema validation delegated to build')\"",
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@vietwander/shared": "workspace:*",
+    "@prisma/client": "7.8.0"
+  },
+  "devDependencies": {
+    "prisma": "7.8.0",
+    "tsx": "^4.20.6"
+  }
+}

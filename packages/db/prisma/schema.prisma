@@ -1,0 +1,298 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum RoleName {
+  USER
+  HOST
+  GUIDE
+  ADMIN
+}
+
+enum BookingStatus {
+  pending
+  confirmed
+  cancelled
+  refunded_mock
+}
+
+enum PaymentStatus {
+  pending
+  confirmed_mock
+  failed_mock
+  refunded_mock
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      RoleName @default(USER)
+  profile   UserProfile?
+  bookings  Booking[]
+  trips     Trip[]
+  reviews   Review[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserProfile {
+  id          String @id @default(cuid())
+  userId      String @unique
+  displayName String
+  language    String @default("vi")
+  travelStyle String @default("Culture Seeker")
+  user        User   @relation(fields: [userId], references: [id])
+}
+
+model Country {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  cities       City[]
+  destinations Destination[]
+}
+
+model City {
+  id           String        @id @default(cuid())
+  name         String
+  countryId    String
+  country      Country       @relation(fields: [countryId], references: [id])
+  destinations Destination[]
+  @@unique([name, countryId])
+}
+
+model Destination {
+  id                String              @id @default(cuid())
+  slug              String              @unique
+  name              String
+  countryId         String
+  cityId            String?
+  description       String
+  longDescription   String
+  bestTimeToVisit   String
+  budgetMin         Int
+  budgetMax         Int
+  currency          String              @default("VND")
+  travelStyles      String[]
+  latitude          Float
+  longitude         Float
+  safetyLevel       String
+  cultureNotes      String[]
+  foodHighlights    String[]
+  ratingAvg         Float               @default(0)
+  reviewCount       Int                 @default(0)
+  isFeatured        Boolean             @default(false)
+  country           Country             @relation(fields: [countryId], references: [id])
+  city              City?               @relation(fields: [cityId], references: [id])
+  images            DestinationImage[]
+  tags              DestinationTag[]
+  experiences       Experience[]
+  hotels            HotelMock[]
+  reviews           Review[]
+  itineraryItems    ItineraryItem[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+}
+
+model DestinationImage {
+  id            String      @id @default(cuid())
+  destinationId String
+  url           String
+  prompt        String
+  alt           String
+  destination   Destination @relation(fields: [destinationId], references: [id])
+}
+
+model DestinationTag {
+  id            String      @id @default(cuid())
+  destinationId String
+  name          String
+  destination   Destination @relation(fields: [destinationId], references: [id])
+  @@unique([destinationId, name])
+}
+
+model Experience {
+  id            String      @id @default(cuid())
+  destinationId String
+  title         String
+  description   String
+  priceMock     Int
+  destination   Destination @relation(fields: [destinationId], references: [id])
+}
+
+model HotelMock {
+  id            String      @id @default(cuid())
+  destinationId String
+  name          String
+  nightlyPrice  Int
+  rating        Float
+  rooms         RoomMock[]
+  destination   Destination @relation(fields: [destinationId], references: [id])
+}
+
+model RoomMock {
+  id        String    @id @default(cuid())
+  hotelId   String
+  name      String
+  capacity  Int
+  priceMock Int
+  hotel     HotelMock @relation(fields: [hotelId], references: [id])
+}
+
+model Review {
+  id            String       @id @default(cuid())
+  userId        String?
+  destinationId String?
+  rating        Int
+  content       String
+  user          User?        @relation(fields: [userId], references: [id])
+  destination   Destination? @relation(fields: [destinationId], references: [id])
+  createdAt     DateTime     @default(now())
+}
+
+model Wishlist {
+  id        String         @id @default(cuid())
+  userId    String
+  name      String
+  items     WishlistItem[]
+  createdAt DateTime       @default(now())
+}
+
+model WishlistItem {
+  id         String   @id @default(cuid())
+  wishlistId String
+  itemType   String
+  itemId     String
+  wishlist   Wishlist @relation(fields: [wishlistId], references: [id])
+}
+
+model Trip {
+  id        String    @id @default(cuid())
+  userId    String
+  title     String
+  shareSlug String?   @unique
+  user      User      @relation(fields: [userId], references: [id])
+  days      TripDay[]
+  createdAt DateTime  @default(now())
+}
+
+model TripDay {
+  id     String          @id @default(cuid())
+  tripId String
+  day    Int
+  title  String
+  trip   Trip            @relation(fields: [tripId], references: [id])
+  items  ItineraryItem[]
+}
+
+model ItineraryItem {
+  id            String       @id @default(cuid())
+  tripDayId     String
+  destinationId String?
+  period        String
+  title         String
+  estimatedCost Int
+  tripDay       TripDay      @relation(fields: [tripDayId], references: [id])
+  destination   Destination? @relation(fields: [destinationId], references: [id])
+}
+
+model Booking {
+  id            String        @id @default(cuid())
+  userId        String
+  bookingCode   String        @unique
+  status        BookingStatus @default(pending)
+  totalAmount   Int
+  currency      String        @default("VND")
+  paymentStatus PaymentStatus @default(pending)
+  paymentMethod String
+  isDemo        Boolean       @default(true)
+  user          User          @relation(fields: [userId], references: [id])
+  items         BookingItem[]
+  payment       PaymentMock?
+  createdAt     DateTime      @default(now())
+}
+
+model BookingItem {
+  id        String  @id @default(cuid())
+  bookingId String
+  itemType  String
+  itemName  String
+  amount    Int
+  booking   Booking @relation(fields: [bookingId], references: [id])
+}
+
+model PaymentMock {
+  id            String        @id @default(cuid())
+  bookingId     String        @unique
+  provider      String
+  token         String
+  status        PaymentStatus @default(confirmed_mock)
+  warning       String        @default("Demo payment — no real transaction")
+  booking       Booking       @relation(fields: [bookingId], references: [id])
+}
+
+model ChatbotSession {
+  id        String           @id @default(cuid())
+  userId    String?
+  pageSlug  String?
+  messages  ChatbotMessage[]
+  createdAt DateTime         @default(now())
+}
+
+model ChatbotMessage {
+  id        String         @id @default(cuid())
+  sessionId String
+  role      String
+  content   String
+  session   ChatbotSession @relation(fields: [sessionId], references: [id])
+  createdAt DateTime       @default(now())
+}
+
+model AiKnowledgeDocument {
+  id        String   @id @default(cuid())
+  sourceId  String   @unique
+  title     String
+  content   String
+  language  String
+  trustTier String   @default("sample")
+  createdAt DateTime @default(now())
+}
+
+model AiRetrievalLog {
+  id          String   @id @default(cuid())
+  query       String
+  chunkIds    String[]
+  model       String
+  confidence  String
+  createdAt   DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  entity    String
+  createdAt DateTime @default(now())
+}
+
+model AdminAction {
+  id        String   @id @default(cuid())
+  actorId   String
+  action    String
+  payload   Json
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  body      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

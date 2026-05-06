@@ -16,7 +16,7 @@ export default async function AiPlannerPage({ searchParams }: { searchParams: Pr
           <p className="text-xs font-black uppercase tracking-[0.2em] text-[#0277d4]">Thông tin chuyến đi</p>
           <h2 className="mt-2 text-3xl font-black text-[#071827]">Bạn muốn đi như thế nào?</h2>
           <p className="mt-2 text-sm leading-6 text-[#584237]">
-            Dịch vụ AI local-first dùng knowledge base mẫu và sẽ nói rõ khi câu hỏi cần dữ liệu chính thức theo thời gian thực.
+            Dịch vụ AI ưu tiên chạy local dùng knowledge base mẫu và sẽ nói rõ khi câu hỏi cần dữ liệu chính thức theo thời gian thực.
           </p>
           <div className="mt-5 border-t border-[#eee6da] pt-5">
           <label className="text-sm font-black text-[#071827]" htmlFor="destination">Điểm đến</label>

@@ -28,3 +28,4 @@
 - Applied Vietnamese travel-commerce copy to the header, landing page, Explore search/results, destination cards, and diacritic-safe web search helpers.
 - Localized destination detail, AI planner, chat, itinerary timeline, budget simulator, and mock booking payment flow with vi-VN warnings.
 - Added Vietnamese UX smoke tests for logo assets, localized destination search, itinerary copy, payment warning, and removed English template phrases.
+- Polished remaining user-facing copy to reduce English product jargon in the Vietnamese travel-commerce flow.

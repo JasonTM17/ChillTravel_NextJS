@@ -101,7 +101,7 @@ function ResultsToolbar({ count, q }: { count: number; q: string }) {
         <div>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-[#0277d4]">Kết quả tìm kiếm</p>
           <h1 className="mt-1 text-2xl font-black md:text-3xl">{count} điểm đến cho {q || "chuyến đi của bạn"}</h1>
-          <p className="mt-1 text-sm text-[#476273]">Dữ liệu mẫu local. Không khẳng định giá live, chuyến bay, thời tiết hoặc visa thời gian thực.</p>
+          <p className="mt-1 text-sm text-[#476273]">Dữ liệu mẫu local. Không khẳng định giá, chuyến bay, thời tiết hoặc visa theo thời gian thực.</p>
         </div>
         <div className="flex flex-wrap gap-2">
           {sortOptions.map((option, index) => (

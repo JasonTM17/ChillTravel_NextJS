@@ -67,7 +67,7 @@ function HeroSearch() {
               Tìm, lên lịch trình và đặt chuyến đi trong vài phút.
             </h1>
             <p className="mt-4 max-w-lg text-base leading-7 text-[#34566f]">
-              VietWander gom khách sạn, hoạt động, ngân sách và lịch trình AI local-first vào một trải nghiệm booking tiếng Việt, rõ ràng và an toàn.
+              VietWander gom khách sạn, hoạt động, ngân sách và lịch trình AI ưu tiên chạy local vào một trải nghiệm đặt chuyến tiếng Việt, rõ ràng và an toàn.
             </p>
           </div>
         </div>
@@ -217,7 +217,7 @@ function PromoStrip() {
         <div className="grid gap-4 lg:grid-cols-[280px_1fr] lg:items-stretch">
           <div className="rounded-2xl bg-[#0277d4] p-5 text-white shadow-[0_18px_44px_rgba(2,68,120,0.18)]">
             <Gift size={26} aria-hidden="true" />
-            <h2 className="mt-4 text-2xl font-black">Mã ưu đãi cho bản demo portfolio</h2>
+            <h2 className="mt-4 text-2xl font-black">Mã ưu đãi cho bản demo hồ sơ năng lực</h2>
             <p className="mt-2 text-sm leading-6 text-white/75">Không giảm giá thật, không thanh toán thật, chỉ mô phỏng luồng đặt chỗ an toàn.</p>
           </div>
           <div className="grid gap-4 md:grid-cols-3">
@@ -240,7 +240,7 @@ function EnhanceTrip() {
     [Ticket, "Tour và điểm tham quan", "Vé, hướng dẫn địa phương và tour ẩm thực đi bộ."],
     [Car, "Xe đưa đón sân bay", "Tuyến xe demo với giá mô phỏng cố định."],
     [Sparkles, "Lịch trình AI", "Trình lập lịch trình chạy local, không cần OpenAI key khi dùng chatbot."],
-    [BadgePercent, "Đặt trước, trả sau", "Chỉ là demo portfolio, không phát sinh giao dịch."]
+    [BadgePercent, "Đặt trước, trả sau", "Chỉ là demo hồ sơ năng lực, không phát sinh giao dịch."]
   ] as const;
 
   return (
@@ -293,10 +293,10 @@ function SectionHeader({ eyebrow, title, href }: { eyebrow: string; title: strin
 
 function TrustSection() {
   const trust = [
-    [CheckCircle2, "Dữ liệu mẫu local", "Seed data Việt Nam và thế giới đủ giàu, có giới hạn real-time rõ ràng."],
-    [ShieldCheck, "Thanh toán mock an toàn", "Thẻ, Momo, VNPay, ZaloPay, PayPal, ngân hàng và tiền mặt đều chỉ là demo."],
-    [Sparkles, "Trợ lý AI local", "Chatbot runtime dùng provider local và RAG, không phụ thuộc OpenAI key."],
-    [Clock3, "Luồng đi nhanh", "Tìm kiếm, lên kế hoạch, lưu yêu thích, đặt chỗ mock và xuất lịch trình."]
+    [CheckCircle2, "Dữ liệu mẫu local", "Dữ liệu Việt Nam và thế giới đủ giàu, có giới hạn thời gian thực rõ ràng."],
+    [ShieldCheck, "Thanh toán mô phỏng an toàn", "Thẻ, Momo, VNPay, ZaloPay, PayPal, ngân hàng và tiền mặt đều chỉ là demo."],
+    [Sparkles, "Trợ lý AI local", "Chatbot dùng dịch vụ local và RAG khi chạy, không phụ thuộc OpenAI key."],
+    [Clock3, "Luồng đi nhanh", "Tìm kiếm, lên kế hoạch, lưu yêu thích, đặt chỗ mô phỏng và xuất lịch trình."]
   ] as const;
 
   return (

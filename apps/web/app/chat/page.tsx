@@ -41,7 +41,7 @@ export default function ChatPage() {
             </button>
           ))}
           <p className="mt-5 rounded-xl bg-[#fff3e8] p-4 text-sm font-bold leading-6 text-[#b45309]">
-            VietWander không bịa giá vé bay, visa hoặc thời tiết live nếu knowledge base local không có dữ liệu đó.
+            VietWander không bịa giá vé bay, visa hoặc thời tiết theo thời gian thực nếu knowledge base local không có dữ liệu đó.
           </p>
         </aside>
       </div>

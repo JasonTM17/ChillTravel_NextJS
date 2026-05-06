@@ -11,3 +11,4 @@
 - Phase 19: Added web/API/shared/AI/mobile test scaffolds and fixed diacritic-insensitive search.
 - Phase 20-21: Added Docker Compose and GitHub Actions CI pipelines.
 - Phase 22-25: Added README, architecture docs, AI/payment runbooks, Stitch/image prompts, release checklist, and final portfolio-hardening notes.
+- Continued product depth: Added shared Travel Personality Engine, Smart Budget Simulator, AI Compare scoring, mood-based search, API endpoints, interactive web surfaces, and expanded tests.

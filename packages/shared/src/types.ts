@@ -98,3 +98,66 @@ export interface AiAnswer {
   toolCalls: Array<{ name: string; status: "ok" | "error"; summary: string }>;
   safety: { grounded: boolean; confidence: "low" | "medium" | "high" };
 }
+
+export interface TravelQuizAnswer {
+  id: string;
+  value: string;
+}
+
+export interface TravelPersonalityResult {
+  style: TravelStyle;
+  score: number;
+  description: string;
+  traits: string[];
+  recommendedDestinationSlugs: string[];
+}
+
+export interface BudgetSimulationInput {
+  destinationSlug: string;
+  travelers: number;
+  days: number;
+  hotelLevel: "hostel" | "comfort" | "boutique" | "luxury";
+  foodLevel: "street" | "balanced" | "premium";
+  transportLevel: "public" | "mixed" | "private";
+  activityLevel: "slow" | "balanced" | "packed";
+}
+
+export interface BudgetSimulationResult {
+  destination: string;
+  total: number;
+  perPerson: number;
+  currency: "VND";
+  breakdown: {
+    hotel: number;
+    food: number;
+    transport: number;
+    activities: number;
+  };
+  adjustmentNotes: string[];
+  itineraryBias: string;
+}
+
+export interface DestinationComparison {
+  slug: string;
+  destination: string;
+  budgetRange: string;
+  bestSeason: string;
+  activityFit: number;
+  foodFit: number;
+  familyFit: number;
+  nightlifeFit: number;
+  safetyFit: number;
+  aiScore: number;
+  verdict: string;
+}
+
+export interface MoodSearchResult {
+  query: string;
+  inferredFilters: {
+    tags: string[];
+    styles: string[];
+    pace: "chill" | "balanced" | "packed";
+    budget: "budget" | "mid-range" | "luxury";
+  };
+  destinations: Destination[];
+}

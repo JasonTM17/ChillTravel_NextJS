@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from "@nestjs/common";
-import { IsArray, IsNumber, IsOptional, IsString } from "class-validator";
-import { envelope } from "@vietwander/shared";
+import { IsArray, IsIn, IsNumber, IsOptional, IsString } from "class-validator";
+import { envelope, type BudgetSimulationInput, type TravelQuizAnswer, type TravelStyle } from "@vietwander/shared";
 import { AiService } from "./ai.service";
 
 class ChatDto {
@@ -29,6 +29,43 @@ class ItineraryDto {
 class CompareDto {
   @IsArray()
   slugs!: string[];
+
+  @IsOptional()
+  @IsIn(["Food Hunter", "Culture Seeker", "Beach Lover", "Mountain Adventurer", "Luxury Escaper", "Budget Backpacker", "Family Planner", "World Wanderer"])
+  style?: TravelStyle;
+}
+
+class BudgetDto implements BudgetSimulationInput {
+  @IsString()
+  destinationSlug!: string;
+
+  @IsNumber()
+  travelers!: number;
+
+  @IsNumber()
+  days!: number;
+
+  @IsIn(["hostel", "comfort", "boutique", "luxury"])
+  hotelLevel!: BudgetSimulationInput["hotelLevel"];
+
+  @IsIn(["street", "balanced", "premium"])
+  foodLevel!: BudgetSimulationInput["foodLevel"];
+
+  @IsIn(["public", "mixed", "private"])
+  transportLevel!: BudgetSimulationInput["transportLevel"];
+
+  @IsIn(["slow", "balanced", "packed"])
+  activityLevel!: BudgetSimulationInput["activityLevel"];
+}
+
+class PersonalityDto {
+  @IsArray()
+  answers!: TravelQuizAnswer[];
+}
+
+class MoodSearchDto {
+  @IsString()
+  query!: string;
 }
 
 @Controller("ai")
@@ -55,9 +92,24 @@ export class AiController {
     return envelope(this.ai.budget(body.destinationSlug, body.travelers), "Budget estimated");
   }
 
+  @Post("budget/simulate")
+  simulateBudget(@Body() body: BudgetDto) {
+    return envelope(this.ai.simulateBudget(body), "Budget simulation updated");
+  }
+
   @Post("compare")
   compare(@Body() body: CompareDto) {
-    return envelope(this.ai.compare(body.slugs), "Destinations compared");
+    return envelope(this.ai.compare(body.slugs, body.style), "Destinations compared");
+  }
+
+  @Post("personality")
+  personality(@Body() body: PersonalityDto) {
+    return envelope(this.ai.personality(body.answers), "Travel personality detected");
+  }
+
+  @Post("mood-search")
+  moodSearch(@Body() body: MoodSearchDto) {
+    return envelope(this.ai.moodSearch(body.query), "Mood search converted into filters");
   }
 
   @Post("reindex")

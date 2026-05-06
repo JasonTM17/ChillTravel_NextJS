@@ -8,6 +8,7 @@ VIETWANDER AI now includes:
 - Prisma 7 schema covering identity, destinations, hotels, experiences, reviews, trips, bookings, mock payments, chatbot logs, knowledge docs, audit logs, admin actions, and notifications.
 - Flutter source tree with real navigation screens and mobile architecture dependencies.
 - Docker Compose, GitHub Actions, README, runbooks, Stitch Design DNA, and image generation prompts.
+- Shared travel intelligence logic for personality detection, budget simulation, destination comparison, and mood-search filters, with interactive web routes at `/personality`, `/budget`, `/compare`, and enhanced `/explore`.
 
 Known limits:
 

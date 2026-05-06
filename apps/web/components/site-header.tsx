@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { Bot, Compass, LayoutDashboard, Map, Plane } from "lucide-react";
+import { Bot, Compass, LayoutDashboard, Map, Plane, Sparkles, WalletCards } from "lucide-react";
 
 const nav = [
   ["Explore", "/explore", Compass],
   ["AI Planner", "/ai-planner", Bot],
+  ["Personality", "/personality", Sparkles],
+  ["Budget", "/budget", WalletCards],
   ["Map", "/map", Map],
   ["Booking", "/booking/demo", Plane],
   ["Admin", "/admin", LayoutDashboard]

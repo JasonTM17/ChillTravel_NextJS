@@ -1,4 +1,5 @@
 import { buildDemoItinerary, destinations } from "@vietwander/shared";
+import { BudgetSimulator } from "@/components/ai/budget-simulator";
 import { ItineraryTimeline } from "@/components/itinerary-timeline";
 import { PageShell } from "@/components/page-shell";
 
@@ -25,6 +26,9 @@ export default async function AiPlannerPage({ searchParams }: { searchParams: Pr
         <div>
           <ItineraryTimeline plan={plan} />
         </div>
+      </div>
+      <div className="mt-8">
+        <BudgetSimulator initialDestinationSlug={selected.slug} />
       </div>
     </PageShell>
   );

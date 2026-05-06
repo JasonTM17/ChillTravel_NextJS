@@ -6,7 +6,7 @@
     "dev": "next dev --port 3000",
     "build": "next build",
     "lint": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run lib"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.1.2",

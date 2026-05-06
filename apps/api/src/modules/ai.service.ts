@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { buildDemoItinerary, destinations, localAiAnswer } from "@vietwander/shared";
+import { buildDemoItinerary, compareDestinations, destinations, localAiAnswer, moodSearch, simulateBudget, detectTravelStyle, type BudgetSimulationInput, type TravelQuizAnswer, type TravelStyle } from "@vietwander/shared";
 
 @Injectable()
 export class AiService {
@@ -14,28 +14,30 @@ export class AiService {
   }
 
   budget(destinationSlug = "da-nang", travelers = 2) {
-    const destination = destinations.find((item) => item.slug === destinationSlug) ?? destinations[5];
-    return {
-      destination: destination.name,
+    return simulateBudget({
+      destinationSlug,
       travelers,
-      low: destination.budgetMin * travelers,
-      high: destination.budgetMax * travelers,
-      currency: "VND",
-      note: "Mock/local estimate. No real-time flight, hotel, or visa data."
-    };
+      days: 4,
+      hotelLevel: "comfort",
+      foodLevel: "balanced",
+      transportLevel: "mixed",
+      activityLevel: "balanced"
+    });
   }
 
-  compare(slugs: string[]) {
-    return slugs.map((slug) => {
-      const item = destinations.find((destination) => destination.slug === slug) ?? destinations[0];
-      return {
-        destination: item.name,
-        budget: item.budgetMin + "-" + item.budgetMax + " VND",
-        bestTime: item.bestTimeToVisit,
-        food: item.foodHighlights.join(", "),
-        safety: item.safetyLevel,
-        aiScore: Math.round(item.ratingAvg * 18)
-      };
-    });
+  simulateBudget(input: BudgetSimulationInput) {
+    return simulateBudget(input);
+  }
+
+  compare(slugs: string[], style?: TravelStyle) {
+    return compareDestinations(slugs, style);
+  }
+
+  personality(answers: TravelQuizAnswer[] | string) {
+    return detectTravelStyle(answers);
+  }
+
+  moodSearch(query: string) {
+    return moodSearch(query);
   }
 }

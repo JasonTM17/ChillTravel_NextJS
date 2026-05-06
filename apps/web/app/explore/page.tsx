@@ -1,4 +1,5 @@
 import { destinations } from "@vietwander/shared";
+import { MoodSearchPanel } from "@/components/ai/mood-search-panel";
 import { DestinationCard } from "@/components/destination-card";
 
 export default function ExplorePage({ searchParams }: { searchParams: Promise<{ q?: string; style?: string }> }) {
@@ -22,6 +23,9 @@ export default function ExplorePage({ searchParams }: { searchParams: Promise<{ 
             </select>
             <button className="rounded-lg bg-teal px-4 py-3 font-bold text-white">Filter</button>
           </form>
+          <div className="mt-8">
+            <MoodSearchPanel />
+          </div>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             {filtered.map((destination) => <DestinationCard key={destination.slug} destination={destination} />)}
           </div>

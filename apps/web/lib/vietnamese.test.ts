@@ -47,11 +47,48 @@ describe("Vietnamese travel-commerce UX", () => {
       "app/ai-planner/page.tsx",
       "app/chat/page.tsx",
       "app/booking/[id]/page.tsx",
+      "app/budget/page.tsx",
+      "app/compare/page.tsx",
+      "app/experiences/page.tsx",
+      "app/hotels/page.tsx",
+      "app/login/page.tsx",
+      "app/register/page.tsx",
+      "app/map/page.tsx",
+      "app/personality/page.tsx",
+      "app/profile/page.tsx",
+      "app/trips/page.tsx",
+      "app/wishlist/page.tsx",
+      "app/admin/page.tsx",
+      "app/admin/destinations/page.tsx",
+      "app/admin/bookings/page.tsx",
+      "app/admin/analytics/page.tsx",
+      "app/admin/ai-knowledge/page.tsx",
       "components/destination-card.tsx",
-      "components/itinerary-timeline.tsx"
+      "components/itinerary-timeline.tsx",
+      "components/feature-overview.tsx",
+      "components/ai/compare-console.tsx",
+      "components/ai/mood-search-panel.tsx",
+      "components/ai/personality-quiz.tsx"
     ];
     const source = files.map((file) => readFileSync(`${root}/${file}`, "utf8")).join("\n");
 
-    expect(source).not.toMatch(/Demo payment - no real transaction|Open dossier|Mock booking|Search results|Your trip cart|Build itinerary|Starting from/);
+    expect(source).not.toMatch(
+      /Demo payment - no real transaction|Open dossier|Mock booking|Search results|Your trip cart|Build itinerary|Starting from|Admin dashboard|Traveler profile|Wishlist|Login|Register|Travel Personality Engine|Map discovery|Hotels mock|AI Compare/
+    );
+  });
+
+  it("keeps Vietnamese route labels for the expanded web surface", () => {
+    const checks = [
+      ["app/budget/page.tsx", "Ngân sách thông minh"],
+      ["app/compare/page.tsx", "So sánh bằng AI"],
+      ["app/personality/page.tsx", "Bộ máy tính cách du lịch"],
+      ["app/wishlist/page.tsx", "Danh sách yêu thích"],
+      ["app/admin/page.tsx", "Bảng quản trị VietWander"],
+      ["app/admin/ai-knowledge/page.tsx", "Knowledge Studio"]
+    ] as const;
+
+    for (const [file, phrase] of checks) {
+      expect(readFileSync(`${root}/${file}`, "utf8")).toContain(phrase);
+    }
   });
 });

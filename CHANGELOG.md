@@ -31,3 +31,4 @@
 - Polished remaining user-facing copy to reduce English product jargon in the Vietnamese travel-commerce flow.
 - Localized secondary web pages and AI utility components, including budget, compare, mood search, personality, auth, map, trips, wishlist, profile, hotels, and experiences.
 - Localized admin overview, destination operations, bookings, analytics, and AI Knowledge Studio copy while keeping production-safe demo boundaries visible.
+- Expanded Vietnamese UX smoke tests to cover secondary pages, admin pages, and AI utility components.

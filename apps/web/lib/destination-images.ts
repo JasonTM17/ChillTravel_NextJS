@@ -2,7 +2,10 @@ const fallbackImage =
   "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80";
 
 const heroImage =
-  "/generated/vietwander-hero-editorial.png";
+  "/generated/vietwander-traveloka-hero.png";
+
+const stayDealImage = "/generated/vietwander-stay-deal.png";
+const experienceDealImage = "/generated/vietwander-experience-deal.png";
 
 const destinationImages: Record<string, string> = {
   "ha-noi": "https://images.unsplash.com/photo-1509030450996-dd1a26dda07a?auto=format&fit=crop&w=1400&q=80",
@@ -39,4 +42,12 @@ export function getDestinationImage(slug: string) {
 
 export function getEditorialHeroImage() {
   return heroImage;
+}
+
+export function getStayDealImage() {
+  return stayDealImage;
+}
+
+export function getExperienceDealImage() {
+  return experienceDealImage;
 }

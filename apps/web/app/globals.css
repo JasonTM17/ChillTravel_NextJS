@@ -10,6 +10,8 @@
   --line: #e7ddcf;
   --teal: #0f766e;
   --sunset: #f97316;
+  --booking-blue: #0277d4;
+  --booking-sky: #eaf7ff;
   --ink: #071827;
   --muted-ink: #584237;
   --warm-border: #e0c0b1;
@@ -86,6 +88,23 @@ a {
   background:
     linear-gradient(180deg, rgba(253, 249, 240, 0.92), rgba(248, 241, 230, 0.96)),
     repeating-linear-gradient(90deg, rgba(7, 24, 39, 0.018) 0 1px, transparent 1px 48px);
+}
+
+.booking-canvas {
+  background:
+    linear-gradient(180deg, #eaf7ff 0%, #f7fbff 28%, #ffffff 56%, #f8fbff 100%);
+}
+
+.booking-hero {
+  background:
+    linear-gradient(180deg, rgba(2, 119, 212, 0.03), rgba(2, 119, 212, 0.16)),
+    url("/generated/vietwander-traveloka-hero.png");
+  background-position: center;
+  background-size: cover;
+}
+
+.booking-card-shadow {
+  box-shadow: 0 18px 50px rgba(2, 68, 120, 0.14);
 }
 
 ::selection {

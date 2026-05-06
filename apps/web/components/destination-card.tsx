@@ -9,7 +9,7 @@ export function DestinationCard({ destination }: { destination: Destination }) {
   const copy = getDestinationCopy(destination);
 
   return (
-    <article className="group overflow-hidden rounded-[14px] border border-[#e6dfd3] bg-white shadow-[0_18px_44px_rgba(7,24,39,0.06)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(7,24,39,0.12)]">
+    <article className="group overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_18px_44px_rgba(2,68,120,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(2,68,120,0.14)]">
       <div
         className="relative h-56 bg-cover bg-center"
         style={{
@@ -17,7 +17,7 @@ export function DestinationCard({ destination }: { destination: Destination }) {
         }}
       >
         <div className="absolute inset-x-4 top-4 flex items-center justify-between">
-          <span className="rounded-full bg-white/88 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-[#071827] backdrop-blur">
+          <span className="rounded-full bg-white/92 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-[#0277d4] backdrop-blur">
             {copy.country}
           </span>
           <button
@@ -32,7 +32,7 @@ export function DestinationCard({ destination }: { destination: Destination }) {
             <MapPin size={15} aria-hidden="true" />
             {copy.city}
           </div>
-          <h3 className="font-editorial mt-1 text-3xl font-black leading-none">{copy.name}</h3>
+          <h3 className="mt-1 text-3xl font-black leading-none">{copy.name}</h3>
         </div>
       </div>
 
@@ -43,7 +43,7 @@ export function DestinationCard({ destination }: { destination: Destination }) {
             {destination.ratingAvg.toFixed(1)}
             <span className="font-medium text-[#5c6b73]">({destination.reviewCount} reviews)</span>
           </div>
-          <span className="rounded-full border border-[#d8cfbf] px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-[#0f766e]">
+          <span className="rounded-full border border-[#d9ecfb] bg-[#f3f9ff] px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-[#0277d4]">
             {destination.safetyLevel} safety
           </span>
         </div>
@@ -78,14 +78,14 @@ export function DestinationCard({ destination }: { destination: Destination }) {
         <div className="mt-5 grid grid-cols-[1fr_auto] gap-2">
           <Link
             href={`/destinations/${destination.slug}`}
-            className="inline-flex min-w-0 items-center justify-between rounded-lg bg-[#071827] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#0f2c3f] focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:ring-offset-2"
+            className="inline-flex min-w-0 items-center justify-between rounded-lg bg-[#0277d4] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#005ea8] focus:outline-none focus:ring-2 focus:ring-[#0277d4]/30 focus:ring-offset-2"
           >
             <span className="truncate">Open dossier</span>
             <ArrowUpRight size={17} aria-hidden="true" />
           </Link>
           <Link
             href={`/ai-planner?destination=${destination.slug}`}
-            className="inline-flex items-center rounded-lg border border-[#d8cfbf] px-3 py-3 text-sm font-black text-[#071827] transition hover:border-[#0f766e] hover:text-[#0f766e] focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:ring-offset-2"
+            className="inline-flex items-center rounded-lg border border-[#ffd5bd] bg-[#fff7f0] px-3 py-3 text-sm font-black text-[#c24f05] transition hover:border-[#ff6d1a] hover:text-[#a84304] focus:outline-none focus:ring-2 focus:ring-[#ff6d1a]/30 focus:ring-offset-2"
           >
             Plan
           </Link>

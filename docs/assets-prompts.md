@@ -22,3 +22,24 @@ Vietnamese traveler using a mobile AI travel app while viewing a cinematic world
 - Usage: Web landing hero and cinematic editorial background.
 - Tool: Codex image generation / GPT Image-style raster generation.
 - Prompt: Photorealistic premium editorial travel website hero background for VIETWANDER AI, Vietnam and world travel intelligence platform, cinematic Vietnam collage blending Ha Long Bay limestone islands, Hoi An lantern street, Sapa rice terraces, Da Nang beach, Phu Quoc sunset, warm golden hour, emerald teal and sunset orange color grade, high-end travel magazine composition, natural realistic lighting, no text, no logo, no watermark, no fake brand marks.
+
+### vietwander-traveloka-hero.png
+- Date: 2026-05-06
+- File: `apps/web/public/generated/vietwander-traveloka-hero.png`
+- Usage: Travel booking inspired homepage hero behind the search card.
+- Tool: Built-in image generation.
+- Prompt: Bright Southeast Asia travel booking hero image for VietWander AI with Da Nang beach, Hoi An lantern street, Ha Long Bay, a hotel lobby, and travelers using a phone; photorealistic editorial travel photography, fresh blue/teal/orange palette, no text, no logo, no watermark, no brand marks.
+
+### vietwander-stay-deal.png
+- Date: 2026-05-06
+- File: `apps/web/public/generated/vietwander-stay-deal.png`
+- Usage: Hotel/stay deal card background.
+- Tool: Built-in image generation.
+- Prompt: Boutique beachfront resort in Vietnam with bright pool, room balcony, breakfast table, and warm welcome ambience; photorealistic hospitality card image, no text, no logo, no watermark, no fake labels.
+
+### vietwander-experience-deal.png
+- Date: 2026-05-06
+- File: `apps/web/public/generated/vietwander-experience-deal.png`
+- Usage: Things-to-do and local experience card background.
+- Tool: Built-in image generation.
+- Prompt: Hoi An lanterns, street food tasting, guided walking tour, local craft market details, warm evening atmosphere; realistic activity marketplace image, no text, no logo, no watermark, no brand marks.

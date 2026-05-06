@@ -5,7 +5,7 @@ Stitch project created: 1439968317747880611.
 The first screen generation timed out in the tool after 120 seconds, so these prompts are preserved for manual or follow-up generation.
 
 ## Vietnamese Travel Commerce redesign
-Create a high-fidelity desktop web design for VIETWANDER AI using a Vietnamese OTA / travel-commerce UX inspired by familiar booking platforms, but legally distinct and not copying any third-party logo, icon, layout pixel-for-pixel, typography, or brand assets.
+Create a high-fidelity desktop web design for CHILLTRAVEL using a Vietnamese OTA / travel-commerce UX inspired by familiar booking platforms, but legally distinct and not copying any third-party logo, icon, layout pixel-for-pixel, typography, or brand assets.
 
 **DESIGN SYSTEM (REQUIRED):**
 - Platform: Web desktop-first with responsive mobile behavior.
@@ -15,11 +15,11 @@ Create a high-fidelity desktop web design for VIETWANDER AI using a Vietnamese O
 - Style: clean, trustworthy, practical travel-commerce product; fewer AI buzzwords, no neon, no sci-fi glass, no decorative orbs.
 
 **PAGE STRUCTURE:**
-1. Header: distinct VietWander logo mark using compass + route line + Vietnam map hint, wordmark VietWander AI, utility nav in Vietnamese: Ưu đãi, Hỗ trợ, Đặt chỗ, Đăng nhập, Đăng ký.
-2. Service navigation: icon tabs in Vietnamese: Khách sạn, Chuyến bay, Hoạt động, Xe đưa đón, Thuê xe, Lập lịch trình AI.
+1. Header: distinct ChillTravel logo mark using compass + route line + Vietnam map hint, wordmark ChillTravel, utility nav in Vietnamese: Ưu đãi, Hỗ trợ, Đặt chỗ, Đăng nhập, Đăng ký.
+2. Service navigation: icon tabs in Vietnamese: Khách sạn, Chuyến bay, Hoạt động, Xe đưa đón, Thuê xe, Lập lịch trình thông minh.
 3. Hero search: large white booking card over pale sky / destination photo. Fields: Bạn muốn đi đâu?, Nhận phòng, Trả phòng, Khách và phòng, Ngân sách. Primary CTA: Tìm kiếm.
 4. Promo area: Vietnamese coupon cards and deal banners for Đà Nẵng, Phú Quốc, Hội An, Sapa; clearly marked demo/sample.
-5. Explore preview: travel-commerce listing rows with image, rating, amenities, price panel, actions Xem ưu đãi and Lập lịch trình AI.
+5. Explore preview: travel-commerce listing rows with image, rating, amenities, price panel, actions Xem ưu đãi and Lập lịch trình thông minh.
 6. Booking trust: quiet banner: Thanh toán demo — không phát sinh giao dịch thật. Không lưu thẻ thật.
 7. AI planner: warm helper module in Vietnamese: gợi ý lịch trình, ngân sách, văn hóa, ẩm thực; state that live flight/visa/weather data is not available.
 
@@ -27,10 +27,10 @@ Create a high-fidelity desktop web design for VIETWANDER AI using a Vietnamese O
 Make this feel like a production Vietnamese travel booking product, not an AI template. Use real destination photography placeholders and precise Vietnamese microcopy throughout.
 
 ## Web landing
-Create a premium cinematic travel intelligence web app landing page for VIETWANDER AI, a Vietnam and world travel platform. Visual identity: emerald teal #0F8B7B, sunset orange #F97316, deep navy #071827, ivory sand #F8F3EA. Include a full-bleed cinematic hero, hero search bar labeled Ban muon di dau, AI trip planner CTA, Vietnam destinations, world bucket list, local experiences, budget simulator, chatbot assistant, mobile app preview, glassmorphism cards, map-inspired layout, responsive desktop and mobile behavior, modern luxury travel aesthetic. No third-party logos.
+Create a premium cinematic travel intelligence web app landing page for CHILLTRAVEL, a Vietnam and world travel platform. Visual identity: emerald teal #0F8B7B, sunset orange #F97316, deep navy #071827, ivory sand #F8F3EA. Include a full-bleed cinematic hero, hero search bar labeled Ban muon di dau, AI trip planner CTA, Vietnam destinations, world bucket list, local experiences, budget simulator, chatbot assistant, mobile app preview, glassmorphism cards, map-inspired layout, responsive desktop and mobile behavior, modern luxury travel aesthetic. No third-party logos.
 
 ## Mobile
-Create a Flutter mobile app UI for VIETWANDER AI, a premium AI travel planner. Include onboarding, home, explore, destination detail, AI chat planner, itinerary timeline, booking mock payment, wishlist, profile. Style: cinematic travel, clean cards, emerald teal, sunset orange, deep navy, rounded cards, beautiful imagery, high-end product design.
+Create a Flutter mobile app UI for CHILLTRAVEL, a premium AI travel planner. Include onboarding, home, explore, destination detail, AI chat planner, itinerary timeline, booking mock payment, wishlist, profile. Style: cinematic travel, clean cards, emerald teal, sunset orange, deep navy, rounded cards, beautiful imagery, high-end product design.
 
 ## Explore redesign generated in Stitch
 - Screen: `projects/1439968317747880611/screens/f99fe7819f5f41a994cc11a32bf6156a`
@@ -46,7 +46,7 @@ Create a Flutter mobile app UI for VIETWANDER AI, a premium AI travel planner. I
 ## Editorial landing redesign generated in Stitch
 - Screen: `projects/1439968317747880611/screens/426473646106452a9762dc8088047f54`
 - Design system asset: `assets/d13576e313ba4aabb320e622cd550758`
-- Direction: VietWander Editorial, a premium Vietnamese travel intelligence landing page that feels more like a human-curated planning desk than an AI template.
+- Direction: ChillTravel Editorial, a premium Vietnamese travel intelligence landing page that feels more like a human-curated planning desk than an AI template.
 - Implementation rules:
   - Lead with a generated photographic Vietnam hero and keep the search command in the first viewport.
   - Use route dossier, planning desk, culture guard, budget dial, and offline pack language before generic AI wording.

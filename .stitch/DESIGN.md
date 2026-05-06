@@ -1,18 +1,18 @@
 ---
-name: VietWander Travel Commerce
+name: ChillTravel Travel Commerce
 source: Stitch project 1439968317747880611
 updated: 2026-05-06
 ---
 
-# VietWander Travel Commerce Design DNA
+# ChillTravel Travel Commerce Design DNA
 
 ## Product Mood
 
-VietWander AI should feel like a trustworthy Vietnamese online travel agency: fast to search, easy to compare, transparent about demo payments, and warm enough for trip planning. The product can borrow the usability patterns of mature OTA products, but it must remain legally distinct and unmistakably VietWander.
+ChillTravel should feel like a trustworthy Vietnamese online travel agency: fast to search, easy to compare, transparent about demo payments, and warm enough for trip planning. The product can borrow the usability patterns of mature OTA products, but it must remain legally distinct and unmistakably ChillTravel.
 
 ## Brand Guardrails
 
-- Use the custom VietWander compass, flight path, Vietnam map, Hoang Sa, and Truong Sa identity.
+- Use the custom ChillTravel compass, flight path, Vietnam map, Hoang Sa, and Truong Sa identity.
 - Do not use the Traveloka bird, wordmark, icon proportions, screenshots, exact color ratios, or third-party brand assets.
 - All user-facing product copy is Vietnamese-first.
 - Payment copy must always say demo/local/mock and never imply real charging.

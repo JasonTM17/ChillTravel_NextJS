@@ -3,5 +3,5 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'src/app.dart';
 
 void main() {
-  runApp(const ProviderScope(child: VietWanderApp()));
+  runApp(const ProviderScope(child: ChillTravelApp()));
 }

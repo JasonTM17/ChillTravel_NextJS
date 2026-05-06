@@ -1,12 +1,12 @@
 <svg width="314" height="80" viewBox="0 0 314 80" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">VietWander AI</title>
-  <desc id="desc">VietWander AI wordmark with a distinct compass route logo.</desc>
+  <title id="title">ChillTravel</title>
+  <desc id="desc">ChillTravel wordmark with a distinct compass route logo.</desc>
   <rect width="80" height="80" rx="20" fill="#0277D4"/>
   <path d="M17.5 48C25.2 32.8 35.7 22.8 52.4 17.3C47.9 31.6 39.8 43.1 26.3 51.9C24.4 53.2 21.8 53 20.1 51.5L17.5 48Z" fill="#EAF7FF"/>
   <path d="M30.9 57C39.1 42.6 49.9 32.6 66.3 27.3C62.3 41.6 53.8 53.2 40.1 62.2C38 63.6 35.2 63.4 33.3 61.6L30.9 57Z" fill="#0F8B7B"/>
   <path d="M22.1 49.6C34.4 46.5 46.5 39.6 61.1 23.2" stroke="#FFFFFF" stroke-width="4.6" stroke-linecap="round"/>
   <path d="M48.4 27.1L61.3 22.8L57.7 35.9" stroke="#FFFFFF" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
   <circle cx="20.8" cy="50" r="4.6" fill="#FF6D1A" stroke="#FFFFFF" stroke-width="2.5"/>
-  <text x="98" y="35" fill="#071827" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="900" letter-spacing="0">VietWander</text>
-  <text x="99" y="58" fill="#476273" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="0">AI Travel Commerce</text>
+  <text x="98" y="35" fill="#071827" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="900" letter-spacing="0">ChillTravel</text>
+  <text x="99" y="58" fill="#476273" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="0">Du lịch thông minh</text>
 </svg>

@@ -7,7 +7,7 @@ export default function ChatPage() {
   const answer = localAiAnswer(sampleQuestion);
 
   return (
-    <PageShell eyebrow="Trợ lý du lịch local" title="Hỏi VietWander để nhận câu trả lời có nguồn và ranh giới rõ ràng">
+    <PageShell eyebrow="Trợ lý du lịch local" title="Hỏi ChillTravel để nhận câu trả lời có nguồn và ranh giới rõ ràng">
       <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
         <section className="rounded-[16px] border border-[#d9ecfb] bg-white p-5 shadow-[0_18px_54px_rgba(2,68,120,0.08)]">
           <div className="rounded-2xl border border-[#d9ecfb] bg-[#f7fbff] p-4">
@@ -15,7 +15,7 @@ export default function ChatPage() {
             <p className="mt-2 text-[#40515d]">{sampleQuestion}</p>
           </div>
           <div className="mt-4 rounded-2xl bg-[#071827] p-5 text-white">
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#8ed6ff]">VietWander trả lời</p>
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#8ed6ff]">ChillTravel trả lời</p>
             <h2 className="mt-2 text-3xl font-black">Lịch trình cân bằng, ưu tiên ẩm thực</h2>
             <p className="mt-3 leading-7 text-white/82">
               Bắt đầu bằng bữa hải sản gần Mỹ Khê, dành sáng hôm sau cho Sơn Trà hoặc Ngũ Hành Sơn, rồi giữ nửa ngày cho
@@ -41,7 +41,7 @@ export default function ChatPage() {
             </button>
           ))}
           <p className="mt-5 rounded-xl bg-[#fff3e8] p-4 text-sm font-bold leading-6 text-[#b45309]">
-            VietWander không bịa giá vé bay, visa hoặc thời tiết theo thời gian thực nếu knowledge base local không có dữ liệu đó.
+            ChillTravel không bịa giá vé bay, visa hoặc thời tiết theo thời gian thực nếu knowledge base local không có dữ liệu đó.
           </p>
         </aside>
       </div>

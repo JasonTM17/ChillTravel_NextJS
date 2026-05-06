@@ -9,7 +9,7 @@ import { buildVietnameseDemoItinerary, demoPaymentWarning, formatDateVi } from "
 const root = fileURLToPath(new URL("..", import.meta.url));
 
 describe("Vietnamese travel-commerce UX", () => {
-  it("keeps the distinct VietWander logo assets available", () => {
+  it("keeps the distinct ChillTravel logo assets available", () => {
     const markPath = new URL("../public/brand/logo-mark.svg", import.meta.url);
     const lockupPath = new URL("../public/brand/logo-lockup.svg", import.meta.url);
 
@@ -73,18 +73,18 @@ describe("Vietnamese travel-commerce UX", () => {
     const source = files.map((file) => readFileSync(`${root}/${file}`, "utf8")).join("\n");
 
     expect(source).not.toMatch(
-      /Demo payment - no real transaction|Open dossier|Mock booking|Search results|Your trip cart|Build itinerary|Starting from|Admin dashboard|Traveler profile|Wishlist|Login|Register|Travel Personality Engine|Map discovery|Hotels mock|AI Compare/
+      /Demo payment - no real transaction|Open dossier|Mock booking|Search results|Your trip cart|Build itinerary|Starting from|Admin dashboard|Traveler profile|Wishlist|Login|Register|Bo nhan dien phong cach du lich|Map discovery|Hotels mock|So sanh thong minh/
     );
   });
 
   it("keeps Vietnamese route labels for the expanded web surface", () => {
     const checks = [
       ["app/budget/page.tsx", "Ngân sách thông minh"],
-      ["app/compare/page.tsx", "So sánh bằng AI"],
+      ["app/compare/page.tsx", "So sánh thông minh"],
       ["app/personality/page.tsx", "Phong cách du lịch"],
       ["app/wishlist/page.tsx", "Yêu thích"],
       ["app/trips/page.tsx", "Chuyến đi"],
-      ["app/admin/page.tsx", "Bảng quản trị VietWander"],
+      ["app/admin/page.tsx", "Bảng quản trị ChillTravel"],
       ["app/admin/ai-knowledge/page.tsx", "Knowledge Studio"]
     ] as const;
 

@@ -24,13 +24,13 @@ final router = GoRouter(
   ],
 );
 
-class VietWanderApp extends StatelessWidget {
-  const VietWanderApp({super.key});
+class ChillTravelApp extends StatelessWidget {
+  const ChillTravelApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'VIETWANDER AI',
+      title: 'CHILLTRAVEL',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF0F8B7B)),
         useMaterial3: true,

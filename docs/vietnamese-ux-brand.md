@@ -1,12 +1,12 @@
-# VietWander AI Vietnamese UX & Brand Runbook
+# ChillTravel Vietnamese UX & Brand Runbook
 
 ## Mục tiêu
 
-VietWander AI dùng cảm hứng travel-commerce hiện đại: tìm kiếm nhanh, danh sách dễ so sánh, giá/CTA rõ ràng, thanh toán demo minh bạch và AI local-first. Sản phẩm không clone Traveloka hay bất kỳ thương hiệu nào khác.
+ChillTravel dùng cảm hứng travel-commerce hiện đại: tìm kiếm nhanh, danh sách dễ so sánh, giá/CTA rõ ràng, thanh toán demo minh bạch và AI local-first. Sản phẩm không clone Traveloka hay bất kỳ thương hiệu nào khác.
 
 ## Nguyên tắc thương hiệu
 
-- Logo VietWander AI phải khác biệt hợp pháp: la bàn, đường bay, gợi ý bản đồ Việt Nam, Hoàng Sa, Trường Sa và nhịp chuyển động riêng.
+- Logo ChillTravel phải khác biệt hợp pháp: la bàn, đường bay, gợi ý bản đồ Việt Nam, Hoàng Sa, Trường Sa và nhịp chuyển động riêng.
 - Không dùng chim, wordmark, tỷ lệ biểu tượng, asset, screenshot, hoặc bố cục có thể gây nhầm lẫn với Traveloka.
 - Màu chủ đạo: booking blue đáng tin cậy, teal cho tín hiệu local/AI an toàn, orange cho CTA chuyển đổi, nền trắng/xanh nhạt.
 - Ảnh điểm đến là tín hiệu chính; tránh nền AI sci-fi, orb, neon hoặc glass quá nặng.
@@ -17,7 +17,7 @@ CTA chuẩn:
 
 - `Tìm kiếm`
 - `Xem ưu đãi`
-- `Lập lịch trình AI`
+- `Lập lịch trình thông minh`
 - `Lưu vào yêu thích`
 - `Đặt chỗ demo`
 - `Xem chi tiết`
@@ -25,7 +25,7 @@ CTA chuẩn:
 Nhãn route chính:
 
 - `/budget`: `Ngân sách thông minh`
-- `/compare`: `So sánh bằng AI`
+- `/compare`: `So sánh thông minh`
 - `/personality`: `Phong cách du lịch`
 - `/wishlist`: `Yêu thích`
 - `/trips`: `Chuyến đi`

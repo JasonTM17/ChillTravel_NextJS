@@ -1,6 +1,6 @@
 # Architecture
 
-VIETWANDER AI is a local-first travel intelligence monorepo.
+CHILLTRAVEL is a local-first travel intelligence monorepo.
 
 - apps/web: Next.js portfolio and product web app.
 - apps/api: NestJS REST API with Swagger, RBAC, mock payment, travel data, trips, bookings, admin.
@@ -15,7 +15,7 @@ Chatbot runtime does not require an OpenAI API key. The default path is Ollama p
 
 The shared package owns deterministic product intelligence used by web and API:
 
-- Travel Personality Engine maps quiz answers or natural language into Food Hunter, Culture Seeker, Beach Lover, Mountain Adventurer, Luxury Escaper, Budget Backpacker, Family Planner, or World Wanderer.
+- Bo nhan dien phong cach du lich maps quiz answers or natural language into Food Hunter, Culture Seeker, Beach Lover, Mountain Adventurer, Luxury Escaper, Budget Backpacker, Family Planner, or World Wanderer.
 - Smart Budget Simulator adjusts hotel, food, transport, activity, travelers, and duration into a local/sample VND budget breakdown.
-- AI Compare scores 2-4 destinations for food, family fit, nightlife, safety, activity fit, and budget tradeoffs.
+- So sanh thong minh scores 2-4 destinations for food, family fit, nightlife, safety, activity fit, and budget tradeoffs.
 - Mood Search converts natural language such as `yen binh co bien an ngon` into inferred filters and matching destinations.

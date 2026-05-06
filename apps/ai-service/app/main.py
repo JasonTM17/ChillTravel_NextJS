@@ -12,7 +12,7 @@ from .rag import reindex_summary, retrieve
 from .travel_tools import answer_from_knowledge_base, build_itinerary, compare_destinations, estimate_budget, mood_search, suggest_destination, travel_personality
 
 
-app = FastAPI(title="VIETWANDER AI Local Service", version="0.1.0")
+app = FastAPI(title="CHILLTRAVEL Local Service", version="0.1.0")
 
 
 class ChatRequest(BaseModel):
@@ -118,4 +118,4 @@ def dataset_import() -> dict[str, Any]:
 def _use_ollama_chat() -> bool:
     import os
 
-    return os.getenv("VIETWANDER_USE_OLLAMA_CHAT", "").lower() in {"1", "true", "yes"}
+    return os.getenv("CHILLTRAVEL_USE_OLLAMA_CHAT", "").lower() in {"1", "true", "yes"}

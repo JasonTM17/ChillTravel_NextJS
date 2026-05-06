@@ -5,7 +5,7 @@ import { demoPaymentWarning } from "@/lib/vietnamese";
 
 export default function Page() {
   return (
-    <PageShell eyebrow="Vận hành hệ thống" title="Bảng quản trị VietWander">
+    <PageShell eyebrow="Vận hành hệ thống" title="Bảng quản trị ChillTravel">
       <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
         <section className="rounded-[16px] border border-[#d9ecfb] bg-white p-6 shadow-[0_18px_54px_rgba(2,68,120,0.08)]">
           <p className="text-lg leading-8 text-[#40515d]">

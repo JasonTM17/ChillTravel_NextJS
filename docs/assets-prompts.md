@@ -21,14 +21,14 @@ Vietnamese traveler using a mobile AI travel app while viewing a cinematic world
 - File: `apps/web/public/generated/vietwander-hero-editorial.png`
 - Usage: Web landing hero and cinematic editorial background.
 - Tool: Codex image generation / GPT Image-style raster generation.
-- Prompt: Photorealistic premium editorial travel website hero background for VIETWANDER AI, Vietnam and world travel intelligence platform, cinematic Vietnam collage blending Ha Long Bay limestone islands, Hoi An lantern street, Sapa rice terraces, Da Nang beach, Phu Quoc sunset, warm golden hour, emerald teal and sunset orange color grade, high-end travel magazine composition, natural realistic lighting, no text, no logo, no watermark, no fake brand marks.
+- Prompt: Photorealistic premium editorial travel website hero background for CHILLTRAVEL, Vietnam and world travel intelligence platform, cinematic Vietnam collage blending Ha Long Bay limestone islands, Hoi An lantern street, Sapa rice terraces, Da Nang beach, Phu Quoc sunset, warm golden hour, emerald teal and sunset orange color grade, high-end travel magazine composition, natural realistic lighting, no text, no logo, no watermark, no fake brand marks.
 
 ### vietwander-traveloka-hero.png
 - Date: 2026-05-06
 - File: `apps/web/public/generated/vietwander-traveloka-hero.png`
 - Usage: Travel booking inspired homepage hero behind the search card.
 - Tool: Built-in image generation.
-- Prompt: Bright Southeast Asia travel booking hero image for VietWander AI with Da Nang beach, Hoi An lantern street, Ha Long Bay, a hotel lobby, and travelers using a phone; photorealistic editorial travel photography, fresh blue/teal/orange palette, no text, no logo, no watermark, no brand marks.
+- Prompt: Bright Southeast Asia travel booking hero image for ChillTravel with Da Nang beach, Hoi An lantern street, Ha Long Bay, a hotel lobby, and travelers using a phone; photorealistic editorial travel photography, fresh blue/teal/orange palette, no text, no logo, no watermark, no brand marks.
 
 ### vietwander-stay-deal.png
 - Date: 2026-05-06
@@ -49,4 +49,4 @@ Vietnamese traveler using a mobile AI travel app while viewing a cinematic world
 - File: `apps/web/public/brand/logo-mark-ai-islands.png`
 - Usage: Header logo mark and favicon.
 - Tool: Built-in image generation plus local chroma-key background removal.
-- Prompt: Regenerate the visible VietWander AI compass-pin travel logo as a clean vector-friendly raster mark, but correct the Vietnam geography by including both Hoang Sa and Truong Sa archipelagos as two subtle small island-dot clusters in the East Sea: Hoang Sa to the east of central Vietnam, Truong Sa farther southeast. Keep them visible but minimal, integrated inside the inner map circle. No text, no labels, no Traveloka logo, no bird silhouette, no copied third-party mark, no watermark.
+- Prompt: Regenerate the visible ChillTravel compass-pin travel logo as a clean vector-friendly raster mark, but correct the Vietnam geography by including both Hoang Sa and Truong Sa archipelagos as two subtle small island-dot clusters in the East Sea: Hoang Sa to the east of central Vietnam, Truong Sa farther southeast. Keep them visible but minimal, integrated inside the inner map circle. No text, no labels, no Traveloka logo, no bird silhouette, no copied third-party mark, no watermark.

@@ -8,7 +8,7 @@ class OnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const TravelPageShell(
-      title: 'VIETWANDER AI',
+      title: 'CHILLTRAVEL',
       subtitle: 'Choose language and travel style',
       nextRoute: '/home',
       children: [

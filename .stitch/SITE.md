@@ -1,8 +1,8 @@
-# VietWander AI Stitch Loop Site Plan
+# ChillTravel Stitch Loop Site Plan
 
 ## 1. Vision
 
-VietWander AI is a Vietnamese travel-commerce platform with local-first AI planning. The product should feel like a trustworthy OTA: fast search, clear service tabs, strong listing comparison, transparent price panels, useful admin operations, and explicit demo payment boundaries.
+ChillTravel is a Vietnamese travel-commerce platform with local-first AI planning. The product should feel like a trustworthy OTA: fast search, clear service tabs, strong listing comparison, transparent price panels, useful admin operations, and explicit demo payment boundaries.
 
 ## 2. Stitch Project
 
@@ -18,7 +18,7 @@ Use `.stitch/DESIGN.md` as the source of truth.
 Important:
 
 - Use Traveloka-style booking usability only as inspiration; do not copy trademarks, logos, exact layouts, color proportions, screenshots, or third-party assets.
-- VietWander logo remains a custom compass/route/Vietnam-map identity with Hoang Sa and Truong Sa.
+- ChillTravel logo remains a custom compass/route/Vietnam-map identity with Hoang Sa and Truong Sa.
 - All user-facing copy must be Vietnamese-first.
 - Every payment surface must clearly say it is demo/local/mock.
 

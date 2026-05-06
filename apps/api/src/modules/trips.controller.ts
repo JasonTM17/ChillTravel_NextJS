@@ -50,7 +50,7 @@ export class TripsController {
 
   @Get("profile")
   profile() {
-    return envelope({ displayName: "VietWander Demo User", travelStyle: "Culture Seeker", language: "vi" });
+    return envelope({ displayName: "ChillTravel Demo User", travelStyle: "Culture Seeker", language: "vi" });
   }
 
   @Patch("profile")

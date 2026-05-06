@@ -1,4 +1,4 @@
-# VIETWANDER AI Agent Rules
+# CHILLTRAVEL Agent Rules
 
 - Use the Design DNA in docs/stitch-prompts.md and .stitch/DESIGN.md for all UI work.
 - Never implement real payment processing. All payment code must be local, mock, or sandbox only.

@@ -1,12 +1,12 @@
-# VIETWANDER AI
+# CHILLTRAVEL
 
 Vietnam & World Travel Intelligence Platform.
 
-VIETWANDER AI is a portfolio-grade local-first travel platform combining a cinematic Next.js web app, NestJS API, FastAPI local AI RAG service, PostgreSQL/Prisma schema, Qdrant vector architecture, Redis-ready cache, and a Flutter mobile app source tree.
+CHILLTRAVEL is a portfolio-grade local-first travel platform combining a cinematic Next.js web app, NestJS API, FastAPI local AI RAG service, PostgreSQL/Prisma schema, Qdrant vector architecture, Redis-ready cache, and a Flutter mobile app source tree.
 
 ## Highlights
 
-- Vietnamese travel-commerce web app with Traveloka-inspired search-first UX, legally distinct VietWander branding, landing, explore, destination detail, AI planner, chat, compare, map, booking mock, wishlist, trips, profile, and admin.
+- Vietnamese travel-commerce web app with Traveloka-inspired search-first UX, legally distinct ChillTravel branding, landing, explore, destination detail, AI planner, chat, compare, map, booking mock, wishlist, trips, profile, and admin.
 - Local chatbot runtime design: Ollama + RAG + Qdrant. No OpenAI API key required for runtime chatbot.
 - Rich sample travel data for Vietnam and world destinations.
 - Mock-only booking and payment. Thanh toán demo — không phát sinh giao dịch thật.

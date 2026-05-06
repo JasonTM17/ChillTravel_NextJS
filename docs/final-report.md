@@ -1,6 +1,6 @@
 # Final Portfolio Report
 
-VIETWANDER AI now includes:
+CHILLTRAVEL now includes:
 
 - Next.js web app with cinematic landing, explore, destination detail, AI planner, chat, booking, trips, profile, compare, map, and admin routes.
 - NestJS API with auth demo, destinations/search, AI gateway, trips/wishlist/profile, booking, mock payment, admin analytics, Swagger setup, and unified envelopes.

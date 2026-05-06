@@ -3,11 +3,11 @@ import Link from "next/link";
 
 export function BrandLogo({ compact = false }: { compact?: boolean }) {
   return (
-    <Link href="/" className="flex min-w-fit items-center gap-3" aria-label="Về trang chủ VietWander AI">
+    <Link href="/" className="flex min-w-fit items-center gap-3" aria-label="Về trang chủ ChillTravel">
       <Image src="/brand/logo-mark-ai-islands.png" width={44} height={44} alt="" priority className="h-11 w-11 object-contain" />
       {!compact ? (
         <span className="leading-tight">
-          <span className="block text-base font-black text-[#071827]">VietWander AI</span>
+          <span className="block text-base font-black text-[#071827]">ChillTravel</span>
           <span className="block text-[11px] font-bold text-[#476273]">Du lịch thông minh</span>
         </span>
       ) : null}

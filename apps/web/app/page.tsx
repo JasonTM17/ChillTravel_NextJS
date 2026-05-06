@@ -31,7 +31,7 @@ const serviceTabs = [
   ["Hoạt động", "/experiences", Ticket, false],
   ["Xe đưa đón", "/map", Bus, false],
   ["Thuê xe", "/map", Car, false],
-  ["Lập lịch trình AI", "/ai-planner", Sparkles, false]
+  ["Lập lịch trình thông minh", "/ai-planner", Sparkles, false]
 ] as const;
 
 const coupons = [
@@ -77,7 +77,7 @@ function BookingHero() {
               Tìm chuyến đi, so sánh lựa chọn và đặt chỗ demo trong một luồng rõ ràng.
             </h1>
             <p className="mt-3 max-w-2xl text-base leading-7 text-[#476273]">
-              VietWander gom điểm đến, khách sạn mẫu, hoạt động, ngân sách và lịch trình AI local vào một giao diện đặt chuyến quen tay cho người Việt.
+              ChillTravel gom điểm đến, khách sạn mẫu, hoạt động, ngân sách và lịch trình thông minh local vào một giao diện đặt chuyến quen tay cho người Việt.
             </p>
           </div>
           <div className="hidden rounded-[28px] bg-[#eaf7ff] p-3 lg:block">
@@ -231,7 +231,7 @@ function DealRows({ title, items }: { title: string; items: Destination[] }) {
                 <p className="text-xs font-black text-[#0277d4]">Có thể đặt chỗ demo</p>
                 <h3 className="mt-1 text-xl font-black">{copy.name}</h3>
                 <p className="mt-1 line-clamp-2 text-sm leading-6 text-[#476273]">{copy.summary}</p>
-                <p className="mt-2 text-xs font-bold text-[#0f8b7b]">Hủy demo miễn phí · Gói offline · AI planner local</p>
+                <p className="mt-2 text-xs font-bold text-[#0f8b7b]">Hủy demo miễn phí · Gói offline · tro ly lap lich local</p>
               </div>
               <div className="flex flex-col justify-between border-t border-[#edf4fa] bg-[#fbfdff] p-4 md:border-l md:border-t-0">
                 <div>
@@ -268,7 +268,7 @@ function TripPlannerPanel() {
         <PanelRow label="Thanh toán" value="Demo local" />
       </div>
       <Link href="/ai-planner?destination=da-nang" className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#0277d4] px-4 py-3 font-black text-white">
-        Lập lịch trình AI
+        Lập lịch trình thông minh
         <ChevronRight size={18} aria-hidden="true" />
       </Link>
       <p className="mt-3 rounded-2xl bg-[#fff3e8] p-3 text-xs font-bold leading-5 text-[#b45309]">{demoPaymentWarning}</p>

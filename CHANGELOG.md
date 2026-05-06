@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Renamed the user-facing product brand to ChillTravel, removed the old AI suffix from brand surfaces, and dropped stale Stitch command-center artifacts.
 - Phase 1: Initialized pnpm/Turborepo monorepo workspace.
 - Phase 2: Added shared config, environment templates, agent rules, and Design DNA fallback.
 - Phase 3: Added Prisma 7 schema and rich local seed data for Vietnam/world destinations.
@@ -11,7 +12,7 @@
 - Phase 19: Added web/API/shared/AI/mobile test scaffolds and fixed diacritic-insensitive search.
 - Phase 20-21: Added Docker Compose and GitHub Actions CI pipelines.
 - Phase 22-25: Added README, architecture docs, AI/payment runbooks, Stitch/image prompts, release checklist, and final portfolio-hardening notes.
-- Continued product depth: Added shared Travel Personality Engine, Smart Budget Simulator, AI Compare scoring, mood-based search, API endpoints, interactive web surfaces, and expanded tests.
+- Continued product depth: Added shared Bo nhan dien phong cach du lich, Smart Budget Simulator, So sanh thong minh scoring, mood-based search, API endpoints, interactive web surfaces, and expanded tests.
 - Added FastAPI parity endpoints for local personality detection, destination compare, and mood-search.
 - Applied Stitch editorial travel redesign to the web shell, landing, Explore page, destination cards, and mood search to reduce the obvious AI-template feel.
 - Extended the editorial redesign to destination detail, trip planner, chat, booking mock payment, and admin overview surfaces.
@@ -24,7 +25,7 @@
 - Added image-generated travel booking assets and shifted the web UX toward Traveloka-inspired service tabs, search-first booking flow, deal cards, and trust sections without copying brand assets.
 - Refined the Traveloka-inspired UX with promo coupons, service-first header cleanup, and a booking-results Explore page with filters, sorting, price panels, and mock booking CTAs.
 - Added shared API/mobile contract types and aligned API DTOs with those contracts.
-- Added a distinct VietWander travel-commerce logo system, favicon metadata, and Vietnamese OTA Design DNA prompt after Stitch generation timed out.
+- Added a distinct ChillTravel travel-commerce logo system, favicon metadata, and Vietnamese OTA Design DNA prompt after Stitch generation timed out.
 - Applied Vietnamese travel-commerce copy to the header, landing page, Explore search/results, destination cards, and diacritic-safe web search helpers.
 - Localized destination detail, AI planner, chat, itinerary timeline, budget simulator, and mock booking payment flow with vi-VN warnings.
 - Added Vietnamese UX smoke tests for logo assets, localized destination search, itinerary copy, payment warning, and removed English template phrases.
@@ -37,5 +38,5 @@
 - Completed final Vietnamese route-label QA for personality, wishlist, and trips pages with expanded HTTP smoke coverage.
 - Documented Vietnamese travel-commerce brand rules, CTA vocabulary, payment/AI limits, and route smoke checklist.
 - Ran a Stitch loop pass for Travel Commerce Core, rejected trademarked generated variants, and refactored the web header, landing, and Explore flow into a cleaner Vietnamese OTA-style experience.
-- Regenerated the custom VietWander logo with visible Hoàng Sa and Trường Sa island clusters and wired it into the header/favicon.
+- Regenerated the custom ChillTravel logo with visible Hoàng Sa and Trường Sa island clusters and wired it into the header/favicon.
 - Implemented the Stitch loop booking checkout screen with OTA-style stepper, traveler details, mock payment methods, sticky price summary, and QR preview.

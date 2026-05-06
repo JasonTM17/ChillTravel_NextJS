@@ -12,7 +12,7 @@ async function bootstrap() {
   app.enableCors({ origin: true, credentials: true });
 
   const config = new DocumentBuilder()
-    .setTitle("VIETWANDER AI API")
+    .setTitle("CHILLTRAVEL API")
     .setDescription("Vietnam and world travel intelligence API with mock payments and local AI gateway.")
     .setVersion("0.1.0")
     .addBearerAuth()

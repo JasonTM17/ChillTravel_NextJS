@@ -43,7 +43,7 @@ export function PersonalityQuiz() {
         <h2 className="mt-2 text-3xl font-black text-navy">{travelStyleLabel(result.style)}</h2>
         <p className="mt-3 text-navy/70">{travelStyleDescription(result.style, result.description)}</p>
         <div className="mt-5 rounded-2xl bg-navy p-5 text-white">
-          <p className="text-sm text-white/65">Độ tự tin của AI</p>
+          <p className="text-sm text-white/65">Độ tự tin gợi ý</p>
           <p className="text-4xl font-black">{result.score}%</p>
           <div className="mt-4 h-2 rounded-full bg-white/15">
             <div className="h-2 rounded-full bg-sunset" style={{ width: `${result.score}%` }} />

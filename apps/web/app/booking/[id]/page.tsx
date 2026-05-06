@@ -51,7 +51,7 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
       <section className="border-b border-[#d9ecfb] bg-white">
         <div className="mx-auto flex max-w-[1180px] items-center justify-between gap-4 px-4 py-5">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">Checkout VietWander</p>
+            <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">Checkout ChillTravel</p>
             <h1 className="mt-1 text-2xl font-black md:text-3xl">Thanh toán & xác nhận đặt chỗ demo</h1>
           </div>
           <div className="hidden items-center gap-2 rounded-full bg-[#eef7ff] px-4 py-2 text-sm font-black text-[#0277d4] md:inline-flex">

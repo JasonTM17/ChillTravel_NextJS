@@ -25,11 +25,11 @@ void main() {
         overrides: [
           travelApiGatewayProvider.overrideWith((ref) => _ThrowingApiGateway()),
         ],
-        child: const VietWanderApp(),
+        child: const ChillTravelApp(),
       ),
     );
 
-    expect(find.text('VIETWANDER AI'), findsWidgets);
+    expect(find.text('CHILLTRAVEL'), findsWidgets);
     expect(find.text('Vietnam-first planning'), findsOneWidget);
   });
 

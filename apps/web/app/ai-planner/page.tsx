@@ -10,7 +10,7 @@ export default async function AiPlannerPage({ searchParams }: { searchParams: Pr
   const selected = destinations.find((item) => item.slug === destination) ?? destinations[5];
   const plan = buildVietnameseDemoItinerary(selected, 4);
   return (
-    <PageShell eyebrow="Lập lịch trình AI" title="Tạo kế hoạch chuyến đi theo ngân sách, văn hóa, ẩm thực và nhịp di chuyển">
+    <PageShell eyebrow="Lập lịch trình thông minh" title="Tạo kế hoạch chuyến đi theo ngân sách, văn hóa, ẩm thực và nhịp di chuyển">
       <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
         <form className="rounded-[16px] border border-[#d9ecfb] bg-white p-5 shadow-[0_18px_54px_rgba(2,68,120,0.08)]">
           <p className="text-xs font-black uppercase tracking-[0.2em] text-[#0277d4]">Thông tin chuyến đi</p>

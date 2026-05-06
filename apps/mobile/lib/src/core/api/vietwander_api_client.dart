@@ -14,7 +14,7 @@ final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(
     BaseOptions(
       baseUrl: const String.fromEnvironment(
-        'VIETWANDER_API_BASE_URL',
+        'CHILLTRAVEL_API_BASE_URL',
         defaultValue: 'http://localhost:3000/api',
       ),
       connectTimeout: const Duration(seconds: 5),
@@ -23,7 +23,7 @@ final dioProvider = Provider<Dio>((ref) {
       headers: const {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'X-VietWander-Client': 'mobile',
+        'X-ChillTravel-Client': 'mobile',
       },
     ),
   );

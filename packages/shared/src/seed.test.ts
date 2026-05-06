@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { destinations } from "./seed";
 import { compareDestinations, detectTravelStyle, localAiAnswer, moodSearch, simulateBudget } from "./ai-tools";
-import type { AiChatRequest, BookingCreateRequest, DestinationListQuery, MobileOfflineSnapshot, VietWanderApiContract } from "./contracts";
+import type { AiChatRequest, BookingCreateRequest, DestinationListQuery, MobileOfflineSnapshot, ChillTravelApiContract } from "./contracts";
 
 describe("seed data and travel intelligence", () => {
   it("contains rich Vietnam and world destinations", () => {
@@ -50,7 +50,7 @@ describe("seed data and travel intelligence", () => {
     const bookingRequest = { itemName: "Demo tour", amount: 1000000, method: "MOCK_MOMO" } satisfies BookingCreateRequest;
     const chatRequest = { message: "Da Nang food itinerary", contextSlug: "da-nang" } satisfies AiChatRequest;
     const snapshot = { itineraries: [], wishlist: [], bookings: [], cachedAt: new Date(0).toISOString() } satisfies MobileOfflineSnapshot;
-    const contract = "ai" satisfies keyof VietWanderApiContract;
+    const contract = "ai" satisfies keyof ChillTravelApiContract;
 
     expect(destinationQuery.sort).toBe("popular");
     expect(bookingRequest.method).toBe("MOCK_MOMO");

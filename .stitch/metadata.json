@@ -1,12 +1,12 @@
 {
   "name": "projects/1439968317747880611",
   "projectId": "1439968317747880611",
-  "title": "VIETWANDER AI — Travel Commerce Platform",
+  "title": "CHILLTRAVEL — Travel Commerce Platform",
   "visibility": "PRIVATE",
   "projectType": "PROJECT_DESIGN",
   "origin": "STITCH",
   "deviceType": "DESKTOP",
-  "designSystem": "VietWander Travel Commerce",
+  "designSystem": "ChillTravel Travel Commerce",
   "screens": {
     "desktop-home-commerce": {
       "id": "e4104b17d3324dc6b160d57e2adfd9fb",
@@ -14,7 +14,7 @@
       "width": 2560,
       "height": 4320,
       "status": "reference_only",
-      "note": "Use OTA structure only; replace any third-party marks/copy with VietWander."
+      "note": "Use OTA structure only; replace any third-party marks/copy with ChillTravel."
     },
     "desktop-results-commerce": {
       "id": "ce144c71fc2f40e29f60d37be33adef8",

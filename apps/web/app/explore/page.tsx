@@ -197,7 +197,7 @@ function SearchResultCard({ destination }: { destination: Destination }) {
             <ArrowRight size={16} aria-hidden="true" />
           </Link>
           <Link href={`/ai-planner?destination=${destination.slug}`} className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#d9ecfb] bg-white px-4 py-3 text-sm font-black text-[#0277d4] hover:bg-[#eef7ff]">
-            Lập lịch trình AI
+            Lập lịch trình thông minh
             <Sparkles size={16} aria-hidden="true" />
           </Link>
         </div>
@@ -224,7 +224,7 @@ function TripSidePanel({ destination }: { destination: Destination }) {
       <div className="mt-5 space-y-3 text-sm">
         <CartRow label="Lưu trú" value={`${formatVnd(destination.budgetMin)}+`} />
         <CartRow label="Trải nghiệm" value={copy.foodHighlights[0] ?? "Ẩm thực địa phương"} />
-        <CartRow label="Lịch trình AI" value="4 ngày cân bằng" />
+        <CartRow label="Lịch trình thông minh" value="4 ngày cân bằng" />
       </div>
       <div className="mt-5 rounded-2xl bg-[#f7fbff] p-4">
         <p className="text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">Lưu ý văn hóa</p>

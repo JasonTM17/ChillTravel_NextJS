@@ -75,13 +75,21 @@ export function DestinationCard({ destination }: { destination: Destination }) {
           ))}
         </div>
 
-        <Link
-          href={`/destinations/${destination.slug}`}
-          className="mt-5 inline-flex w-full items-center justify-between rounded-lg bg-[#071827] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#0f2c3f] focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:ring-offset-2"
-        >
-          Open travel dossier
-          <ArrowUpRight size={17} aria-hidden="true" />
-        </Link>
+        <div className="mt-5 grid grid-cols-[1fr_auto] gap-2">
+          <Link
+            href={`/destinations/${destination.slug}`}
+            className="inline-flex min-w-0 items-center justify-between rounded-lg bg-[#071827] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#0f2c3f] focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:ring-offset-2"
+          >
+            <span className="truncate">Open dossier</span>
+            <ArrowUpRight size={17} aria-hidden="true" />
+          </Link>
+          <Link
+            href={`/ai-planner?destination=${destination.slug}`}
+            className="inline-flex items-center rounded-lg border border-[#d8cfbf] px-3 py-3 text-sm font-black text-[#071827] transition hover:border-[#0f766e] hover:text-[#0f766e] focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:ring-offset-2"
+          >
+            Plan
+          </Link>
+        </div>
       </div>
     </article>
   );

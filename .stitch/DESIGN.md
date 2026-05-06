@@ -7,11 +7,18 @@ Premium editorial travel product with Vietnamese warmth, global destination phot
 
 Latest Stitch redesign:
 - Project: `1439968317747880611`
+- Screen: `projects/1439968317747880611/screens/8debca2537a8486babd0b255f4325657`
+- Design system asset: `assets/c7ffbbb949ed442593f88c43f590c4e4`
+- Direction: Editorial Intelligence. The interface should read as a premium travel command center: first viewport split between a high-impact destination image and a precise planning panel; Explore is a three-column workspace with filters, destination cards, and a sticky route dossier.
+- Local artifacts: `.stitch/designs/command-center.html`, `.stitch/designs/command-center.png`
+
+Previous Stitch redesign:
+- Project: `1439968317747880611`
 - Screen: `projects/1439968317747880611/screens/426473646106452a9762dc8088047f54`
 - Design system asset: `assets/d13576e313ba4aabb320e622cd550758`
 - Direction: VietWander Editorial. The page should feel like a premium Vietnamese travel dossier laid on a warm planning desk: tactile paper surfaces, image-led hero, route board, culture guardrails, budget notes, and restrained AI language.
 
-Previous Stitch redesign:
+Earlier Stitch redesign:
 - Project: `1439968317747880611`
 - Screen: `projects/1439968317747880611/screens/f99fe7819f5f41a994cc11a32bf6156a`
 - Design system asset: `assets/4f9aea6b433b46fb95c4507ad14b6319`

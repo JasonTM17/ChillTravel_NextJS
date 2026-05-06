@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VIETWANDER AI - Premium Desktop Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;family=Noto+Serif:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "secondary-container": "#8ff5e1",
+                "tertiary": "#000000",
+                "on-primary-fixed-variant": "#394859",
+                "primary-fixed": "#d4e4f9",
+                "surface-container-low": "#faf3e6",
+                "on-secondary-container": "#007164",
+                "primary-container": "#0c1d2c",
+                "outline": "#74777d",
+                "on-tertiary-container": "#d95f00",
+                "on-tertiary-fixed-variant": "#783200",
+                "on-primary": "#ffffff",
+                "background": "#fff8ef",
+                "primary": "#000000",
+                "on-primary-container": "#758598",
+                "on-error-container": "#93000a",
+                "secondary-fixed-dim": "#72d8c5",
+                "on-tertiary": "#ffffff",
+                "inverse-primary": "#b8c8dd",
+                "surface-container-lowest": "#ffffff",
+                "on-tertiary-fixed": "#341100",
+                "tertiary-fixed-dim": "#ffb690",
+                "on-secondary-fixed": "#00201b",
+                "inverse-on-surface": "#f7f0e4",
+                "on-secondary-fixed-variant": "#005046",
+                "secondary-fixed": "#8ff5e1",
+                "surface-container": "#f4ede1",
+                "tertiary-container": "#341100",
+                "on-secondary": "#ffffff",
+                "on-surface-variant": "#44474c",
+                "outline-variant": "#c4c6cc",
+                "tertiary-fixed": "#ffdbca",
+                "surface-container-high": "#eee7db",
+                "secondary": "#006b5e",
+                "primary-fixed-dim": "#b8c8dd",
+                "surface-container-highest": "#e9e2d6",
+                "surface-dim": "#e0d9cd",
+                "on-background": "#1e1b14",
+                "surface-bright": "#fff8ef",
+                "surface": "#fff8ef",
+                "surface-variant": "#e9e2d6",
+                "surface-tint": "#506072",
+                "on-surface": "#1e1b14",
+                "on-primary-fixed": "#0c1d2c",
+                "error": "#ba1a1a",
+                "on-error": "#ffffff",
+                "inverse-surface": "#333028",
+                "error-container": "#ffdad6"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "md": "24px",
+                "sm": "16px",
+                "margin": "32px",
+                "gutter": "24px",
+                "base": "4px",
+                "xs": "8px",
+                "lg": "40px",
+                "xl": "64px"
+        },
+        "fontFamily": {
+                "body-lg": [
+                        "Be Vietnam Pro"
+                ],
+                "h2": [
+                        "Noto Serif"
+                ],
+                "display": [
+                        "Noto Serif"
+                ],
+                "caption": [
+                        "Be Vietnam Pro"
+                ],
+                "h3": [
+                        "Noto Serif"
+                ],
+                "h1": [
+                        "Noto Serif"
+                ],
+                "ui-label": [
+                        "Be Vietnam Pro"
+                ],
+                "body-md": [
+                        "Be Vietnam Pro"
+                ]
+        },
+        "fontSize": {
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "1.6",
+                                "letterSpacing": "0",
+                                "fontWeight": "400"
+                        }
+                ],
+                "h2": [
+                        "24px",
+                        {
+                                "lineHeight": "1.3",
+                                "letterSpacing": "0.02em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display": [
+                        "48px",
+                        {
+                                "lineHeight": "1.1",
+                                "letterSpacing": "0",
+                                "fontWeight": "700"
+                        }
+                ],
+                "caption": [
+                        "12px",
+                        {
+                                "lineHeight": "1.4",
+                                "letterSpacing": "0",
+                                "fontWeight": "400"
+                        }
+                ],
+                "h3": [
+                        "20px",
+                        {
+                                "lineHeight": "1.4",
+                                "letterSpacing": "0",
+                                "fontWeight": "500"
+                        }
+                ],
+                "h1": [
+                        "32px",
+                        {
+                                "lineHeight": "1.2",
+                                "letterSpacing": "0",
+                                "fontWeight": "600"
+                        }
+                ],
+                "ui-label": [
+                        "14px",
+                        {
+                                "lineHeight": "1.2",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "1.5",
+                                "letterSpacing": "0",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+    body {
+        background-color: theme('colors.background');
+        color: theme('colors.on-background');
+    }
+
+    /* Subtle custom shadow for cards as per guidelines */
+    .tactile-shadow {
+        box-shadow: 0 4px 20px rgba(12, 29, 44, 0.05); /* 5% primary-container */
+    }
+    .tactile-shadow-hover:hover {
+        box-shadow: 0 8px 30px rgba(12, 29, 44, 0.08);
+        transform: translateY(-2px);
+    }
+    .tactile-active:active {
+        box-shadow: none;
+        transform: translateY(1px);
+    }
+
+    /* Sunset Orange Button Override - strictly enforcing brand token */
+    .btn-sunset {
+        background-color: #F97316;
+        color: white;
+    }
+
+    /* Emerald Teal accents */
+    .text-emerald-teal {
+        color: #10B981;
+    }
+    .bg-emerald-teal-10 {
+        background-color: rgba(16, 185, 129, 0.1);
+    }
+
+    /* Deep Ink Navy Typography */
+    .text-deep-ink {
+        color: #0F172A;
+    }
+
+    /* Hide scrollbar for clean horizontal scrolling */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
+</head>
+<body class="antialiased font-body-lg text-body-lg overflow-x-hidden selection:bg-secondary-container selection:text-tertiary min-h-screen flex flex-col">
+<!-- Top NavBar Component -->
+<header class="fixed top-0 w-full z-50 bg-background/90 backdrop-blur-md border-b border-outline-variant/30 transition-all duration-300 h-[72px]">
+<div class="flex justify-between items-center px-margin py-xs max-w-[1440px] mx-auto h-full">
+<div class="flex items-center gap-md">
+<span class="font-h2 text-h2 font-bold tracking-tighter text-primary">VIETWANDER AI</span>
+</div>
+<nav class="hidden md:flex gap-lg items-center">
+<a class="font-ui-label text-ui-label uppercase tracking-widest text-primary border-b border-primary pb-1 hover:opacity-80 transition-opacity active:scale-95 transition-transform duration-150" href="#">
+                    Explore
+                </a>
+<a class="font-ui-label text-ui-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-200 hover:opacity-80 transition-opacity active:scale-95 transition-transform duration-150" href="#">
+                    Planner
+                </a>
+<a class="font-ui-label text-ui-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-200 hover:opacity-80 transition-opacity active:scale-95 transition-transform duration-150" href="#">
+                    Trips
+                </a>
+<a class="font-ui-label text-ui-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-200 hover:opacity-80 transition-opacity active:scale-95 transition-transform duration-150" href="#">
+                    Map
+                </a>
+<a class="font-ui-label text-ui-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-200 hover:opacity-80 transition-opacity active:scale-95 transition-transform duration-150" href="#">
+                    Admin
+                </a>
+</nav>
+<div class="flex items-center gap-sm">
+<button class="font-ui-label text-ui-label uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-200 active:scale-95 flex items-center gap-xs">
+                Concierge
+                <span class="material-symbols-outlined text-[18px]">support_agent</span>
+</button>
+</div>
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined text-[24px]">menu</span>
+</button>
+</div>
+</header>
+<main class="flex-grow pt-[72px]">
+<!-- Hero Split Layout -->
+<section class="w-full max-w-[1440px] mx-auto min-h-[calc(100vh-72px)] flex flex-col lg:flex-row relative z-10 border-b border-outline-variant/20">
+<!-- Left: Editorial Photo -->
+<div class="lg:w-[60%] relative bg-surface-variant min-h-[50vh] lg:min-h-full">
+<img alt="A stunning, high-fidelity aerial photograph of the Da Nang coast transitioning into the historic lantern-lit streets of Hoi An. The lighting suggests early autumn dusk, casting long, elegant shadows and bathing the scene in warm, premium cinematic tones. The composition feels like a spread from a luxury travel magazine, designed to evoke wanderlust and sophistication, perfectly complementing a high-end AI command center interface." class="absolute inset-0 w-full h-full object-cover grayscale-[10%] contrast-[1.05]" data-alt="A stunning, high-fidelity aerial photograph of the Da Nang coast transitioning into the historic lantern-lit streets of Hoi An. The lighting suggests early autumn dusk, casting long, elegant shadows and bathing the scene in warm, premium cinematic tones. The composition feels like a spread from a luxury travel magazine, designed to evoke wanderlust and sophistication, perfectly complementing a high-end AI command center interface." src="https://lh3.googleusercontent.com/aida/ADBb0uhnDauBEDF9bZ2Bh1xGj5uO1aInVFgioFlTSPtCTuAuZ-gSq2krdxm88hxjAB6AMxhcPKubg9ODH6pg4ZBJlVGxgD8a5y275jAZ2WN5uF9W6jdl-E-2orKRp_ubH8MdncHssXz_XrrpcVyxfWOjzt4eHGtLot0T0hwsJo0rfJPrVaupHnohd0f08mpQZ0xqKRzwJYdteZ504R8LpsqdESOcDYXmkoXg402X30tF4plLnvLzIIAuQBXGRw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-margin lg:p-xl w-full flex flex-col gap-sm">
+<div class="flex flex-wrap gap-xs mb-xs">
+<span class="bg-surface/20 backdrop-blur-sm border border-surface/30 text-on-primary px-3 py-1 rounded-full font-caption text-caption uppercase tracking-wider">Autumn</span>
+<span class="bg-surface/20 backdrop-blur-sm border border-surface/30 text-on-primary px-3 py-1 rounded-full font-caption text-caption uppercase tracking-wider">Safety: High</span>
+<span class="bg-surface/20 backdrop-blur-sm border border-surface/30 text-on-primary px-3 py-1 rounded-full font-caption text-caption uppercase tracking-wider flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">diamond</span> Premium</span>
+</div>
+<h1 class="font-display text-display text-on-primary max-w-2xl leading-tight text-shadow-sm">Da Nang — Hoi An</h1>
+<div class="flex items-center gap-2 mt-xs">
+<span class="w-8 h-[1px] bg-secondary-fixed"></span>
+<span class="font-ui-label text-ui-label text-secondary-fixed uppercase tracking-widest">Heritage Trail</span>
+</div>
+</div>
+</div>
+<!-- Right: Functional Command Panel -->
+<div class="lg:w-[40%] bg-[#F8F3EA] p-margin lg:p-xl flex flex-col justify-center border-l border-outline-variant/20 z-20">
+<div class="max-w-md mx-auto w-full">
+<div class="mb-xl">
+<h2 class="font-h2 text-h2 text-primary mb-sm">Command Center</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Design your optimal itinerary with AI precision.</p>
+</div>
+<div class="space-y-lg">
+<!-- Search Input -->
+<div class="relative group">
+<label class="block font-ui-label text-ui-label uppercase tracking-widest text-on-surface-variant mb-2">Destination</label>
+<div class="flex items-center border-b border-outline/30 focus-within:border-primary transition-colors pb-2">
+<span class="material-symbols-outlined text-outline group-focus-within:text-primary mr-3 transition-colors">travel_explore</span>
+<input class="w-full bg-transparent border-none p-0 font-body-lg text-body-lg text-primary placeholder-outline focus:ring-0" placeholder="Where to next?" type="text"/>
+</div>
+</div>
+<!-- Style Segmented Control -->
+<div>
+<label class="block font-ui-label text-ui-label uppercase tracking-widest text-on-surface-variant mb-3">Travel Style</label>
+<div class="grid grid-cols-2 gap-2">
+<button class="py-2 px-3 border border-outline-variant rounded-DEFAULT text-center font-caption text-caption uppercase tracking-wider text-on-surface hover:bg-surface transition-colors">Adventure</button>
+<button class="py-2 px-3 border border-primary bg-primary text-on-primary rounded-DEFAULT text-center font-caption text-caption uppercase tracking-wider transition-colors tactile-shadow">Luxury</button>
+<button class="py-2 px-3 border border-outline-variant rounded-DEFAULT text-center font-caption text-caption uppercase tracking-wider text-on-surface hover:bg-surface transition-colors">Culinary</button>
+<button class="py-2 px-3 border border-outline-variant rounded-DEFAULT text-center font-caption text-caption uppercase tracking-wider text-on-surface hover:bg-surface transition-colors">Cultural</button>
+</div>
+</div>
+<!-- Stepper & Slider Grid -->
+<div class="grid grid-cols-2 gap-gutter">
+<!-- Duration Stepper -->
+<div>
+<label class="block font-ui-label text-ui-label uppercase tracking-widest text-on-surface-variant mb-3">Duration</label>
+<div class="flex items-center justify-between border-b border-outline/30 pb-2">
+<button class="text-outline hover:text-primary"><span class="material-symbols-outlined">remove</span></button>
+<span class="font-body-lg text-body-lg text-primary font-medium">10 Days</span>
+<button class="text-outline hover:text-primary"><span class="material-symbols-outlined">add</span></button>
+</div>
+</div>
+<!-- Budget Range -->
+<div>
+<label class="block font-ui-label text-ui-label uppercase tracking-widest text-on-surface-variant mb-3">Budget Est.</label>
+<div class="flex flex-col border-b border-outline/30 pb-2">
+<div class="flex justify-between items-end">
+<span class="font-body-lg text-body-lg text-primary font-medium">$4.5k</span>
+<span class="font-caption text-caption text-outline">USD</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Action -->
+<div class="pt-sm mt-sm border-t border-outline-variant/20">
+<button class="w-full py-4 rounded-lg btn-sunset font-ui-label text-ui-label uppercase tracking-widest tactile-shadow tactile-shadow-hover tactile-active flex justify-center items-center gap-2">
+                             Build Route
+                             <span class="material-symbols-outlined text-[18px]">route</span>
+</button>
+<div class="text-center mt-3">
+<span class="font-caption text-caption text-emerald-teal flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[14px]">bolt</span> High confidence prediction
+                             </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Scroll Indicator -->
+<div class="absolute bottom-margin left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center animate-bounce opacity-50">
+<span class="font-caption text-caption uppercase tracking-widest mb-1 text-on-surface-variant">Explore</span>
+<span class="material-symbols-outlined text-on-surface-variant">arrow_downward</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Component -->
+<footer class="w-full py-xl bg-surface-container border-t border-outline-variant/20 mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-start px-margin gap-lg max-w-[1440px] mx-auto">
+<div class="flex flex-col gap-sm">
+<span class="font-h3 text-h3 font-semibold text-primary">VIETWANDER AI</span>
+<span class="font-body-md text-body-md text-on-surface-variant max-w-xs">Travel with precision and soul.</span>
+</div>
+<div class="flex flex-col gap-md">
+<nav class="flex flex-col md:flex-row gap-gutter">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Sitemap</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Editorial Guidelines</a>
+</nav>
+<span class="font-caption text-caption text-on-surface-variant opacity-70">© 2024 VIETWANDER AI. Travel with precision and soul.</span>
+</div>
+</div>
+</footer>
+</body></html>

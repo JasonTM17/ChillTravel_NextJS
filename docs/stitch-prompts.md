@@ -32,3 +32,16 @@ Create a Flutter mobile app UI for VIETWANDER AI, a premium AI travel planner. I
   - Keep deep navy panels grounded and sparse; sunset orange is reserved for the main action, while emerald marks confidence and filters.
   - Do not use neon, floating gradient orbs, generic chatbot illustrations, or visible instructions about how to use the page.
   - Preserve explicit product boundaries: local sample data, no live visa/weather/flight claims, and mock-only payments.
+
+## Command center redesign generated in Stitch
+- Screen: `projects/1439968317747880611/screens/8debca2537a8486babd0b255f4325657`
+- Design system asset: `assets/c7ffbbb949ed442593f88c43f590c4e4`
+- Local artifacts: `.stitch/designs/command-center.html`, `.stitch/designs/command-center.png`
+- Direction: Editorial Intelligence, a desktop-first travel command center that balances editorial inspiration with immediate planning utility.
+- Implementation rules:
+  - First viewport is a split screen: destination photograph on the left, precise planner controls on the right.
+  - Replace marketing copy with functional controls: search input, segmented style control, duration stepper, budget slider, and one primary CTA.
+  - Explore is a three-column workspace: filter rail, destination result grid, sticky route dossier.
+  - Cards use 8-14px radius, 1px warm borders, real imagery, and clear actions for open dossier, plan, compare, and mock booking.
+  - Tool modules behave like product utilities: Smart Budget Simulator, Mood Search, Local Culture Guard, Offline Travel Pack.
+  - Keep explicit trust boundaries visible but quiet: local sample knowledge, local RAG runtime, mock payments only, no live flight/visa/weather claims.

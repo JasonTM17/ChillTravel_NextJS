@@ -1,0 +1,84 @@
+from __future__ import annotations
+
+import json
+from typing import Any
+
+from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
+
+from .rag import reindex_summary, retrieve
+from .travel_tools import answer_from_knowledge_base, build_itinerary, estimate_budget, suggest_destination
+
+
+app = FastAPI(title="VIETWANDER AI Local Service", version="0.1.0")
+
+
+class ChatRequest(BaseModel):
+    message: str
+    context_slug: str | None = None
+
+
+class ItineraryRequest(BaseModel):
+    destination: str = "da-nang"
+    duration_days: int = 3
+    travelers: int = 2
+    style: str = "Culture Seeker"
+
+
+@app.get("/health")
+def health() -> dict[str, Any]:
+    return {
+        "success": True,
+        "data": {
+            "status": "ok",
+            "runtime": "local",
+            "ollama_base_url": "http://localhost:11434",
+            "chat_model": "qwen3:4b",
+            "embed_model": "nomic-embed-text",
+        },
+        "message": "AI service healthy",
+    }
+
+
+@app.post("/chat")
+def chat(request: ChatRequest) -> dict[str, Any]:
+    query = f"{request.message} {request.context_slug or ''}".strip()
+    docs = retrieve(query)
+    answer = answer_from_knowledge_base(query)
+    answer["retrieved_documents"] = [doc["source_id"] for doc in docs]
+    return {"success": True, "data": answer, "message": "Local RAG answer"}
+
+
+@app.post("/chat/stream")
+def chat_stream(request: ChatRequest) -> StreamingResponse:
+    payload = chat(request)["data"]
+
+    def event_stream():
+        for key in ["summary", "answer"]:
+            yield "data: " + json.dumps({"type": key, "value": payload.get(key)}, ensure_ascii=False) + "\n\n"
+        yield "data: " + json.dumps({"type": "done", "value": payload}, ensure_ascii=False) + "\n\n"
+
+    return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+
+@app.post("/itinerary/generate")
+def itinerary(request: ItineraryRequest) -> dict[str, Any]:
+    destination = suggest_destination(request.destination)
+    return {"success": True, "data": build_itinerary(destination, request.duration_days, request.style), "message": "Itinerary generated"}
+
+
+@app.post("/budget/estimate")
+def budget(request: ItineraryRequest) -> dict[str, Any]:
+    destination = suggest_destination(request.destination)
+    return {"success": True, "data": estimate_budget(destination, request.duration_days, request.travelers), "message": "Budget estimated"}
+
+
+@app.post("/rag/reindex")
+def reindex() -> dict[str, Any]:
+    return {"success": True, "data": reindex_summary(), "message": "Reindex summary created"}
+
+
+@app.post("/dataset/import")
+def dataset_import() -> dict[str, Any]:
+    return {"success": True, "data": {"status": "accepted", "mode": "local/sample"}, "message": "Dataset import accepted"}

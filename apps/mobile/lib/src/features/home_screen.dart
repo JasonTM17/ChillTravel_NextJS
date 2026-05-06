@@ -1,38 +1,67 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeScreen extends StatelessWidget {
+import '../application/travel_providers.dart';
+import '../presentation/widgets/travel_page_shell.dart';
+
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              gradient: const LinearGradient(colors: [Color(0xFF071827), Color(0xFF0F8B7B)]),
-            ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Home', style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w800)),
-                SizedBox(height: 12),
-                Text('Search, AI planner, Top Vietnam, World picks, saved trips', style: TextStyle(color: Colors.white70, fontSize: 16)),
-              ],
-            ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final snapshot = ref.watch(homeSnapshotProvider);
+
+    return TravelPageShell(
+      title: 'Home',
+      subtitle: 'Search, AI planner, Top Vietnam, World picks, saved trips',
+      nextRoute: '/explore',
+      children: [
+        snapshot.when(
+          data: (data) => Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: [
+              _MetricTile(
+                label: 'Itinerary days',
+                value: '${data.itineraryDays}',
+              ),
+              _MetricTile(label: 'Saved items', value: '${data.savedItems}'),
+              _MetricTile(
+                label: 'Sandbox bookings',
+                value: '${data.sandboxBookings}',
+              ),
+            ],
           ),
-          const SizedBox(height: 20),
-          const Card(child: ListTile(title: Text('Offline cache ready'), subtitle: Text('Itinerary, wishlist, booking and emergency info can be cached locally.'))),
-          const Card(child: ListTile(title: Text('Local AI runtime'), subtitle: Text('Chatbot uses API/AI-service adapters, not an OpenAI runtime key.'))),
-          const Card(child: ListTile(title: Text('Payment safety'), subtitle: Text('Mock/sandbox/local only. No real card storage or charge.'))),
-          const SizedBox(height: 20),
-          FilledButton(onPressed: () => context.go('/explore'), child: const Text('Continue')),
-        ],
+          loading: () => const LinearProgressIndicator(),
+          error: (_, __) => const Text('Offline trip board unavailable'),
+        ),
+      ],
+    );
+  }
+}
+
+class _MetricTile extends StatelessWidget {
+  const _MetricTile({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 160,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(value, style: Theme.of(context).textTheme.headlineSmall),
+              const SizedBox(height: 4),
+              Text(label),
+            ],
+          ),
+        ),
       ),
     );
   }

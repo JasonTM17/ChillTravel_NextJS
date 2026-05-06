@@ -1,39 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BookingScreen extends StatelessWidget {
+import '../application/travel_providers.dart';
+import '../presentation/widgets/travel_page_shell.dart';
+
+class BookingScreen extends ConsumerWidget {
   const BookingScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Booking')),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              gradient: const LinearGradient(colors: [Color(0xFF071827), Color(0xFF0F8B7B)]),
-            ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Booking', style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w800)),
-                SizedBox(height: 12),
-                Text('Mock payment only. Demo payment — no real transaction.', style: TextStyle(color: Colors.white70, fontSize: 16)),
-              ],
-            ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bookings = ref.watch(bookingSummariesProvider);
+
+    return TravelPageShell(
+      title: 'Booking',
+      subtitle: 'Mock payment only. Demo payment - no real transaction.',
+      nextRoute: '/wishlist',
+      children: [
+        FilledButton.tonal(
+          onPressed: () async {
+            await ref
+                .read(bookingRepositoryProvider)
+                .createMockHold(label: 'Vietnam essentials pack');
+            ref.invalidate(bookingSummariesProvider);
+          },
+          child: const Text('Create mock hold'),
+        ),
+        const SizedBox(height: 12),
+        bookings.when(
+          data: (items) => Column(
+            children: [
+              for (final booking in items)
+                Card(
+                  child: ListTile(
+                    title: Text(booking.label),
+                    subtitle: Text(
+                      '${booking.status} - ${booking.amountLabel}',
+                    ),
+                    trailing: booking.sandboxOnly
+                        ? const Icon(Icons.verified_user_outlined)
+                        : null,
+                  ),
+                ),
+            ],
           ),
-          const SizedBox(height: 20),
-          const Card(child: ListTile(title: Text('Offline cache ready'), subtitle: Text('Itinerary, wishlist, booking and emergency info can be cached locally.'))),
-          const Card(child: ListTile(title: Text('Local AI runtime'), subtitle: Text('Chatbot uses API/AI-service adapters, not an OpenAI runtime key.'))),
-          const Card(child: ListTile(title: Text('Payment safety'), subtitle: Text('Mock/sandbox/local only. No real card storage or charge.'))),
-          const SizedBox(height: 20),
-          FilledButton(onPressed: () => context.go('/wishlist'), child: const Text('Continue')),
-        ],
-      ),
+          loading: () => const LinearProgressIndicator(),
+          error: (_, __) => const Text('Offline bookings unavailable'),
+        ),
+      ],
     );
   }
 }

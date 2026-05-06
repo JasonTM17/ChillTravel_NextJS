@@ -1,39 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AiChatScreen extends StatelessWidget {
+import '../application/travel_providers.dart';
+import '../presentation/widgets/travel_page_shell.dart';
+
+class AiChatScreen extends ConsumerWidget {
   const AiChatScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('AI Chat')),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              gradient: const LinearGradient(colors: [Color(0xFF071827), Color(0xFF0F8B7B)]),
-            ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('AI Chat', style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w800)),
-                SizedBox(height: 12),
-                Text('Streaming-ready local AI assistant with suggested questions', style: TextStyle(color: Colors.white70, fontSize: 16)),
-              ],
-            ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final messages = ref.watch(chatMessagesProvider);
+
+    return TravelPageShell(
+      title: 'AI Chat',
+      subtitle: 'Streaming-ready local AI assistant with suggested questions',
+      nextRoute: '/itinerary',
+      children: [
+        const Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            Chip(label: Text('Food near me')),
+            Chip(label: Text('Rain plan')),
+            Chip(label: Text('Offline pack')),
+          ],
+        ),
+        const SizedBox(height: 12),
+        messages.when(
+          data: (items) => Column(
+            children: [
+              for (final message in items)
+                Card(
+                  child: ListTile(
+                    title: Text(message.role),
+                    subtitle: Text(message.content),
+                  ),
+                ),
+            ],
           ),
-          const SizedBox(height: 20),
-          const Card(child: ListTile(title: Text('Offline cache ready'), subtitle: Text('Itinerary, wishlist, booking and emergency info can be cached locally.'))),
-          const Card(child: ListTile(title: Text('Local AI runtime'), subtitle: Text('Chatbot uses API/AI-service adapters, not an OpenAI runtime key.'))),
-          const Card(child: ListTile(title: Text('Payment safety'), subtitle: Text('Mock/sandbox/local only. No real card storage or charge.'))),
-          const SizedBox(height: 20),
-          FilledButton(onPressed: () => context.go('/itinerary'), child: const Text('Continue')),
-        ],
-      ),
+          loading: () => const LinearProgressIndicator(),
+          error: (_, __) => const Text('Local AI preview unavailable'),
+        ),
+      ],
     );
   }
 }

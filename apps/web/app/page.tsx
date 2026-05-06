@@ -1,68 +1,99 @@
 import Link from "next/link";
-import { Bot, Globe2, MapPinned, Search, ShieldCheck, WalletCards } from "lucide-react";
+import { ArrowRight, Globe2, MapPinned, Route, Search, ShieldCheck, WalletCards } from "lucide-react";
 import { destinations } from "@vietwander/shared";
 import { DestinationCard } from "@/components/destination-card";
+import { getDestinationCopy } from "@/lib/destination-copy";
 
 export default function HomePage() {
-  const featuredVietnam = destinations.filter((item) => item.country === "Việt Nam").slice(0, 6);
-  const world = destinations.filter((item) => item.country !== "Việt Nam").slice(0, 6);
+  const featuredVietnam = destinations.filter((item) => item.tags.includes("Vietnam")).slice(0, 6);
+  const world = destinations.filter((item) => item.tags.includes("World")).slice(0, 6);
+  const lead = getDestinationCopy(featuredVietnam[5] ?? featuredVietnam[0] ?? destinations[0]);
+
   return (
     <main>
-      <section className="cinematic relative overflow-hidden px-4 py-24 text-white md:py-32">
-        <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.1fr_0.9fr] md:items-end">
+      <section className="cinematic relative overflow-hidden px-4 py-20 text-white md:py-28">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#071827] via-[#071827]/32 to-transparent" aria-hidden="true" />
+        <div className="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
           <div>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-mist">Vietnam & World Travel Intelligence</p>
-            <h1 className="mt-5 text-5xl font-black leading-tight md:text-7xl">VIETWANDER AI</h1>
-            <p className="mt-5 max-w-2xl text-lg text-white/82">A local-first AI travel concierge for Vietnam and the world: itinerary builder, mood search, budget simulator, culture guard, mock booking, and offline-ready mobile app.</p>
-            <form className="glass mt-8 flex max-w-3xl flex-col gap-3 rounded-2xl p-3 md:flex-row" action="/explore">
-              <label className="sr-only" htmlFor="hero-search">Bạn muốn đi đâu?</label>
-              <div className="flex flex-1 items-center gap-3 rounded-xl bg-white px-4 py-3 text-navy">
-                <Search size={20} />
-                <input id="hero-search" name="q" placeholder="Bạn muốn đi đâu? Đà Nẵng, Paris, Tokyo..." className="w-full bg-transparent outline-none" />
-              </div>
-              <button className="rounded-xl bg-sunset px-6 py-3 font-bold text-white">Tạo lịch trình bằng AI</button>
+            <p className="text-sm font-black uppercase tracking-[0.24em] text-[#f7d7b7]">Vietnam and world travel dossiers</p>
+            <h1 className="mt-5 max-w-4xl text-5xl font-black leading-[0.94] tracking-normal md:text-7xl">
+              Plan trips that feel researched, local, and beautifully paced.
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/84">
+              VietWander blends curated destination data, local culture notes, budget simulation, mock booking, and a
+              local-first travel concierge into one portfolio-grade platform.
+            </p>
+            <form className="mt-8 grid max-w-3xl gap-3 rounded-[16px] border border-white/18 bg-white/12 p-3 backdrop-blur-md md:grid-cols-[1fr_auto]" action="/explore">
+              <label className="flex items-center gap-3 rounded-xl bg-white px-4 py-3 text-[#071827]">
+                <Search size={20} className="text-[#0f766e]" aria-hidden="true" />
+                <span className="sr-only">Search destination</span>
+                <input
+                  id="hero-search"
+                  name="q"
+                  placeholder="Da Nang, Paris, quiet coast, family food trip..."
+                  className="w-full bg-transparent outline-none"
+                />
+              </label>
+              <button className="rounded-xl bg-[#f97316] px-6 py-3 font-black text-white transition hover:bg-[#ea580c]">
+                Explore routes
+              </button>
             </form>
           </div>
-          <div className="glass rounded-2xl p-5 text-navy">
-            <div className="grid gap-3">
+
+          <div className="rounded-[18px] border border-white/16 bg-white/12 p-5 backdrop-blur-md">
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#f7d7b7]">Featured dossier</p>
+            <h2 className="mt-4 text-4xl font-black">{lead.name}</h2>
+            <p className="mt-3 leading-7 text-white/82">{lead.summary}</p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
               {[
-                ["Travel Personality Engine", "Food Hunter, Culture Seeker, Beach Lover"],
-                ["Smart Budget Simulator", "Hotel, food, transport, activities"],
-                ["Local Culture Guard", "Etiquette, safety, offline checklist"]
-              ].map(([title, text]) => (
-                <div key={title} className="rounded-xl bg-white/70 p-4">
-                  <h2 className="font-bold">{title}</h2>
-                  <p className="text-sm text-navy/70">{text}</p>
+                ["Best for", "Food + beach"],
+                ["Budget", "Mid range"],
+                ["Pace", "Balanced"]
+              ].map(([label, value]) => (
+                <div key={label} className="rounded-xl border border-white/14 bg-white/10 p-3">
+                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/58">{label}</p>
+                  <p className="mt-2 font-black">{value}</p>
                 </div>
               ))}
             </div>
+            <Link href="/destinations/da-nang" className="mt-6 inline-flex items-center gap-2 font-black text-[#f7d7b7]">
+              Open dossier <ArrowRight size={18} aria-hidden="true" />
+            </Link>
           </div>
         </div>
       </section>
 
       <FeatureBand />
 
-      <section className="bg-ivory px-4 py-16">
+      <section className="bg-[#fdf9f0] px-4 py-16">
         <div className="mx-auto max-w-7xl">
-          <div className="flex items-end justify-between gap-4">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="font-bold uppercase tracking-[0.18em] text-teal">Top Vietnam</p>
-              <h2 className="text-3xl font-black text-navy md:text-5xl">Curated Vietnam routes</h2>
+              <p className="font-black uppercase tracking-[0.18em] text-[#0f766e]">Top Vietnam</p>
+              <h2 className="mt-2 text-4xl font-black text-[#071827] md:text-5xl">Routes with a Vietnamese lens</h2>
             </div>
-            <Link href="/explore" className="font-bold text-sunset">Explore all</Link>
+            <Link href="/explore?q=Vietnam" className="inline-flex items-center gap-2 font-black text-[#b45309]">
+              Explore all <ArrowRight size={18} aria-hidden="true" />
+            </Link>
           </div>
-          <div className="mt-8 grid gap-6 md:grid-cols-3">
-            {featuredVietnam.map((destination) => <DestinationCard key={destination.slug} destination={destination} />)}
+          <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {featuredVietnam.map((destination) => (
+              <DestinationCard key={destination.slug} destination={destination} />
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="bg-navy px-4 py-16 text-white">
+      <section className="bg-white px-4 py-16">
         <div className="mx-auto max-w-7xl">
-          <p className="font-bold uppercase tracking-[0.18em] text-sunset">World Bucket List</p>
-          <h2 className="mt-3 text-3xl font-black md:text-5xl">From Tokyo neon to Swiss Alps calm</h2>
-          <div className="mt-8 grid gap-6 md:grid-cols-3">
-            {world.map((destination) => <DestinationCard key={destination.slug} destination={destination} />)}
+          <p className="font-black uppercase tracking-[0.18em] text-[#0f766e]">World bucket list</p>
+          <h2 className="mt-3 max-w-3xl text-4xl font-black text-[#071827] md:text-5xl">
+            Global trips with the same practical detail.
+          </h2>
+          <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {world.map((destination) => (
+              <DestinationCard key={destination.slug} destination={destination} />
+            ))}
           </div>
         </div>
       </section>
@@ -72,20 +103,20 @@ export default function HomePage() {
 
 function FeatureBand() {
   const features = [
-    [Bot, "AI Trip Planner", "Structured day-by-day plans with citations and save actions."],
-    [WalletCards, "Mock Booking", "Sandbox-only payment paths with no real transaction."],
-    [MapPinned, "Map Discovery", "Clustered markers and route previews with offline fallback."],
-    [ShieldCheck, "Culture Guard", "Local etiquette, safety notes, and packing reminders."],
-    [Globe2, "Vietnam + World", "A distinctive Vietnamese lens for global travel planning."]
+    [Route, "Itinerary builder", "Day-by-day routes with morning, afternoon, evening, cost, and culture notes."],
+    [WalletCards, "Budget simulator", "Tune hotel, food, transport, and activities before saving a trip."],
+    [MapPinned, "Map discovery", "Destination markers, route previews, and offline-friendly fallback data."],
+    [ShieldCheck, "Culture guard", "Etiquette, safety reminders, packing lists, and local sample citations."],
+    [Globe2, "Local-first AI", "Runtime chat uses local provider interfaces, RAG, and no OpenAI key dependency."]
   ];
   return (
-    <section className="bg-white px-4 py-14">
+    <section className="border-y border-[#eadfce] bg-white px-4 py-10">
       <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-5">
         {features.map(([Icon, title, text]) => (
-          <div key={String(title)} className="rounded-2xl border border-navy/10 p-5">
-            <Icon className="text-teal" aria-hidden="true" />
-            <h2 className="mt-4 font-bold text-navy">{title as string}</h2>
-            <p className="mt-2 text-sm text-navy/70">{text as string}</p>
+          <div key={String(title)} className="rounded-[14px] border border-[#e6dfd3] bg-[#fdf9f0] p-5">
+            <Icon className="text-[#0f766e]" aria-hidden="true" />
+            <h2 className="mt-4 font-black text-[#071827]">{title as string}</h2>
+            <p className="mt-2 text-sm leading-6 text-[#687983]">{text as string}</p>
           </div>
         ))}
       </div>

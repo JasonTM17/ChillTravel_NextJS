@@ -3,8 +3,8 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 
 export const metadata: Metadata = {
-  title: "VIETWANDER AI — Vietnam & World Travel Intelligence",
-  description: "Local-first AI travel intelligence platform for Vietnam and world itineraries.",
+  title: "VIETWANDER AI - Vietnam & World Travel Intelligence",
+  description: "Local-first travel intelligence platform for Vietnam and world itineraries.",
   metadataBase: new URL("https://vietwander.local")
 };
 

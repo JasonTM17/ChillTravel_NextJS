@@ -9,3 +9,14 @@ Create a premium cinematic travel intelligence web app landing page for VIETWAND
 
 ## Mobile
 Create a Flutter mobile app UI for VIETWANDER AI, a premium AI travel planner. Include onboarding, home, explore, destination detail, AI chat planner, itinerary timeline, booking mock payment, wishlist, profile. Style: cinematic travel, clean cards, emerald teal, sunset orange, deep navy, rounded cards, beautiful imagery, high-end product design.
+
+## Explore redesign generated in Stitch
+- Screen: `projects/1439968317747880611/screens/f99fe7819f5f41a994cc11a32bf6156a`
+- Design system asset: `assets/4f9aea6b433b46fb95c4507ad14b6319`
+- Direction: Premium editorial travel, not an obvious AI dashboard.
+- Implementation rules:
+  - Use real destination photography and strong editorial hierarchy.
+  - Keep AI language secondary; prefer planner, concierge, dossier, route, and mood.
+  - Use ivory sand backgrounds, deep navy text, emerald active states, and sunset orange only for primary CTAs.
+  - Replace neon gradients and heavy glass cards with low-contrast borders, paper surfaces, and restrained shadows.
+  - Explore page should have a top search block, practical filter rail, destination grid, and editorial recommendation strips.

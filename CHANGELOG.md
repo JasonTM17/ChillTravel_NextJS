@@ -13,3 +13,4 @@
 - Phase 22-25: Added README, architecture docs, AI/payment runbooks, Stitch/image prompts, release checklist, and final portfolio-hardening notes.
 - Continued product depth: Added shared Travel Personality Engine, Smart Budget Simulator, AI Compare scoring, mood-based search, API endpoints, interactive web surfaces, and expanded tests.
 - Added FastAPI parity endpoints for local personality detection, destination compare, and mood-search.
+- Applied Stitch editorial travel redesign to the web shell, landing, Explore page, destination cards, and mood search to reduce the obvious AI-template feel.

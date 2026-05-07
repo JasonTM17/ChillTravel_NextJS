@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Connected the NestJS AI gateway to the local FastAPI service with structured fallback, itinerary/reindex proxy normalization, and API regression coverage.
 - Upgraded the FastAPI local AI service with structured concierge answers, richer RAG chunk payloads, provider/fallback status, and expanded hallucination-guard tests.
 - Added structured local concierge contracts and deterministic shared answer builder for chat, planner, provider status, citations, quick actions, and RAG reindex results.
 - Updated the Stitch full-app baton, route map, and quality notes after implementing the flight, hotel detail, support, loyalty, and mobile account surfaces.

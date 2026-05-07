@@ -20,9 +20,11 @@ describe("api services", () => {
     expect(booking.warning).toContain("không phát sinh giao dịch thật");
   });
 
-  it("returns hallucination guard for realtime queries", () => {
-    const answer = new AiService().chat("current weather and flight price to Paris");
+  it("returns hallucination guard for realtime queries", async () => {
+    const answer = await new AiService().chat("current weather and flight price to Paris");
     expect(answer.answer).toContain("do not have live");
+    expect(answer.provider.requiresOpenAiApiKey).toBe(false);
+    expect(answer.quickActions.map((action) => action.id)).toContain("convert_to_itinerary");
   });
 
   it("runs personality, budget and compare intelligence", () => {
@@ -142,10 +144,23 @@ describe("api http hardening", () => {
 
     expect(chat.status).toBe(201);
     expect(chat.body.data.answer).toContain("do not have live");
+    expect(chat.body.data.provider.requiresOpenAiApiKey).toBe(false);
+    expect(chat.body.data.quickActions.some((action: { id: string }) => action.id === "estimate_budget")).toBe(true);
     expect(budget.status).toBe(201);
     expect(budget.body.data.total).toBeGreaterThan(0);
     expect(mood.status).toBe(201);
     expect(mood.body.data.inferredFilters.tags).toContain("beach");
+  });
+
+  it("returns local AI reindex status with sample fallback when the service is offline", async () => {
+    const reindex = await api("POST", "/ai/reindex", { force: true });
+
+    expect(reindex.status).toBe(201);
+    expect(reindex.body.data).toMatchObject({
+      vectorDb: "qdrant",
+      retrievalBackend: "sample",
+      requiresOpenAiApiKey: false
+    });
   });
 
   it("returns the standardized exception envelope for validation failures", async () => {

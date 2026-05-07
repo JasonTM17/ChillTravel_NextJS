@@ -126,18 +126,18 @@ export class AiController {
   constructor(private readonly ai: AiService) {}
 
   @Post("chat")
-  chat(@Body() body: ChatDto) {
-    return envelope(this.ai.chat(body.message, body.contextSlug), "Local AI gateway response");
+  async chat(@Body() body: ChatDto) {
+    return envelope(await this.ai.chat(body.message, body.contextSlug), "Local AI gateway response");
   }
 
   @Post("chat/stream")
-  stream(@Body() body: ChatDto) {
-    return envelope(this.ai.chat(body.message, body.contextSlug), "Streaming is mocked by the API; web can consume ai-service SSE for local runtime.");
+  async stream(@Body() body: ChatDto) {
+    return envelope(await this.ai.chat(body.message, body.contextSlug), "Streaming is mocked by the API; web can consume ai-service SSE for local runtime.");
   }
 
   @Post("itinerary")
-  itinerary(@Body() body: ItineraryDto) {
-    return envelope(this.ai.itinerary(body), "Itinerary generated");
+  async itinerary(@Body() body: ItineraryDto) {
+    return envelope(await this.ai.itinerary(body), "Itinerary generated");
   }
 
   @Post("budget")
@@ -166,7 +166,7 @@ export class AiController {
   }
 
   @Post("reindex")
-  reindex(@Body() body: ReindexDto = {}) {
-    return envelope({ jobId: "mock-reindex-job", vectorDb: "qdrant", status: "queued", forced: body.force === true }, "AI reindex queued");
+  async reindex(@Body() body: ReindexDto = {}) {
+    return envelope(await this.ai.reindex(body.force === true), "AI reindex queued");
   }
 }

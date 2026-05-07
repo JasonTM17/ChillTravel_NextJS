@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Finalized the Stitch Loop handoff baton, root package metadata, and README pointers for Browser E2E evidence and Flutter toolchain limits.
 - Added a browser E2E evidence report and strengthened route smoke coverage for Explore style filters and CT-QR booking previews.
 - Tightened Flutter mobile OTA surfaces with actionable home/support navigation, richer Explore listing cards, destination booking summary/gallery chips, QR checkout preview, and ChillTravel package metadata.
 - Aligned Stitch utility and booking UX by refreshing budget/compare/personality surfaces, fixing Explore style filters, diversifying destination galleries, and tightening exact demo-payment copy.

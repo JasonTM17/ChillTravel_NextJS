@@ -39,6 +39,8 @@ Run Vietnamese web smoke checks:
 
     pnpm web:smoke
 
+Browser E2E evidence from the in-app browser is recorded in `docs/browser-e2e-report.md`.
+
 Run API:
 
     pnpm --filter @vietwander/api dev
@@ -71,6 +73,8 @@ Flutter is not installed on this machine yet. After installing Flutter stable:
     flutter analyze
     flutter test
     flutter run
+
+The Flutter package metadata is `chilltravel`; older VietWander/AI names are no longer used for the mobile app package.
 
 ## Demo Accounts
 

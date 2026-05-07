@@ -61,7 +61,7 @@
   },
   "metadata": {
     "userRole": "OWNER",
-    "lastLoop": "post-qa-release-check",
+    "lastLoop": "release-ready-handoff",
     "legalBoundary": "Reference-only Stitch screens; do not ship Traveloka text, logos, or screenshots."
   }
 }

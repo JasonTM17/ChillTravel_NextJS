@@ -61,7 +61,7 @@
   },
   "metadata": {
     "userRole": "OWNER",
-    "lastLoop": "release-ready-handoff",
+    "lastLoop": "full-app-stitch-implementation",
     "legalBoundary": "Reference-only Stitch screens; do not ship Traveloka text, logos, or screenshots."
   }
 }

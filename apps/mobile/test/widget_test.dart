@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vietwander_ai/src/application/travel_providers.dart';
-import 'package:vietwander_ai/src/core/api/vietwander_api_client.dart';
-import 'package:vietwander_ai/src/data/cache/travel_offline_cache.dart';
-import 'package:vietwander_ai/src/data/repositories/booking_repository.dart';
-import 'package:vietwander_ai/src/data/repositories/chat_repository.dart';
-import 'package:vietwander_ai/src/data/repositories/travel_repository.dart';
-import 'package:vietwander_ai/src/domain/travel_models.dart';
-import 'package:vietwander_ai/src/features/ai_chat_screen.dart';
-import 'package:vietwander_ai/src/features/booking_screen.dart';
-import 'package:vietwander_ai/src/features/destination_detail_screen.dart';
-import 'package:vietwander_ai/src/features/explore_screen.dart';
-import 'package:vietwander_ai/src/features/home_screen.dart';
-import 'package:vietwander_ai/src/features/itinerary_screen.dart';
-import 'package:vietwander_ai/src/features/onboarding_screen.dart';
-import 'package:vietwander_ai/src/features/wishlist_screen.dart';
+import 'package:chilltravel/src/application/travel_providers.dart';
+import 'package:chilltravel/src/core/api/vietwander_api_client.dart';
+import 'package:chilltravel/src/data/cache/travel_offline_cache.dart';
+import 'package:chilltravel/src/data/repositories/booking_repository.dart';
+import 'package:chilltravel/src/data/repositories/chat_repository.dart';
+import 'package:chilltravel/src/data/repositories/travel_repository.dart';
+import 'package:chilltravel/src/domain/travel_models.dart';
+import 'package:chilltravel/src/features/ai_chat_screen.dart';
+import 'package:chilltravel/src/features/booking_screen.dart';
+import 'package:chilltravel/src/features/destination_detail_screen.dart';
+import 'package:chilltravel/src/features/explore_screen.dart';
+import 'package:chilltravel/src/features/home_screen.dart';
+import 'package:chilltravel/src/features/itinerary_screen.dart';
+import 'package:chilltravel/src/features/onboarding_screen.dart';
+import 'package:chilltravel/src/features/wishlist_screen.dart';
 
-import 'package:vietwander_ai/src/app.dart';
+import 'package:chilltravel/src/app.dart';
 
 void main() {
   testWidgets('app renders onboarding', (tester) async {
@@ -48,6 +48,8 @@ void main() {
 
     expect(find.text('Vịnh Hạ Long'), findsOneWidget);
     expect(find.text('Kinh thành Huế'), findsOneWidget);
+    expect(find.text('Xem ưu đãi'), findsWidgets);
+    expect(find.text('1,8 triệu/ngày'), findsWidgets);
   });
 
   testWidgets('planner renders cached itinerary days', (tester) async {
@@ -61,6 +63,8 @@ void main() {
     await _pumpMobileWidget(tester, const DestinationDetailScreen());
 
     expect(find.text('Đà Nẵng · Sơn Trà · Hội An'), findsOneWidget);
+    expect(find.text('Tóm tắt đặt chỗ demo'), findsOneWidget);
+    expect(find.text('Khách sạn'), findsWidgets);
     expect(find.text('Ăn gì và chơi gì'), findsOneWidget);
     expect(find.textContaining('lịch trình'), findsWidgets);
   });
@@ -79,6 +83,8 @@ void main() {
     await _pumpMobileWidget(tester, const BookingScreen());
 
     expect(find.text('Phương thức thanh toán demo'), findsOneWidget);
+    expect(find.text('Xem trước vé QR demo'), findsOneWidget);
+    expect(find.textContaining('CT-QR-MOBILE'), findsOneWidget);
     expect(find.text('Du thuyền Hạ Long qua đêm'), findsOneWidget);
 
     await tester.tap(find.text('Tạo giữ chỗ demo'));

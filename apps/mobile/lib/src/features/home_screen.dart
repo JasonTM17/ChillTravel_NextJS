@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../application/travel_providers.dart';
 import '../presentation/widgets/travel_page_shell.dart';
@@ -90,7 +91,7 @@ class _SearchCard extends StatelessWidget {
                 backgroundColor: chillOrange,
                 minimumSize: const Size.fromHeight(48),
               ),
-              onPressed: () {},
+              onPressed: () => context.go('/explore'),
               child: const Text('Tìm kiếm'),
             ),
           ],

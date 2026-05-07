@@ -36,7 +36,7 @@ class TravelPageShell extends StatelessWidget {
         actions: [
           IconButton(
             tooltip: 'Hỗ trợ',
-            onPressed: () {},
+            onPressed: () => context.go('/chat'),
             icon: const Icon(Icons.support_agent_outlined),
           ),
         ],

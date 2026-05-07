@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../presentation/widgets/travel_page_shell.dart';
 
@@ -16,6 +17,8 @@ class DestinationDetailScreen extends StatelessWidget {
         _HeroGalleryCard(),
         SizedBox(height: 12),
         _QuickFacts(),
+        SizedBox(height: 12),
+        _PriceActionCard(),
         SizedBox(height: 12),
         _ExperiencePanel(),
         SizedBox(height: 12),
@@ -55,6 +58,10 @@ class _HeroGalleryCard extends StatelessWidget {
             ),
           ),
           const Padding(
+            padding: EdgeInsets.fromLTRB(16, 14, 16, 0),
+            child: _MiniGalleryStrip(),
+          ),
+          const Padding(
             padding: EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,6 +88,45 @@ class _HeroGalleryCard extends StatelessWidget {
   }
 }
 
+class _MiniGalleryStrip extends StatelessWidget {
+  const _MiniGalleryStrip();
+
+  static const items = [
+    (Icons.hotel_outlined, 'Khách sạn'),
+    (Icons.restaurant_outlined, 'Ẩm thực'),
+    (Icons.confirmation_num_outlined, 'Hoạt động'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        for (final item in items) ...[
+          Expanded(
+            child: Container(
+              height: 62,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: const Color(0xFFF3FAFF),
+                border: Border.all(color: const Color(0xFFD9ECFB)),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(item.$1, color: chillBlue, size: 20),
+                  const SizedBox(height: 4),
+                  Text(item.$2, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900)),
+                ],
+              ),
+            ),
+          ),
+          if (item != items.last) const SizedBox(width: 8),
+        ],
+      ],
+    );
+  }
+}
+
 class _QuickFacts extends StatelessWidget {
   const _QuickFacts();
 
@@ -94,6 +140,44 @@ class _QuickFacts extends StatelessWidget {
         _FactChip(icon: Icons.payments_outlined, label: 'Ngân sách', value: 'Từ 1,8 triệu/ngày'),
         _FactChip(icon: Icons.verified_user_outlined, label: 'An toàn', value: 'Cao'),
       ],
+    );
+  }
+}
+
+class _PriceActionCard extends StatelessWidget {
+  const _PriceActionCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.white,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(22),
+        side: const BorderSide(color: Color(0xFFD9ECFB)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Tóm tắt đặt chỗ demo', style: TextStyle(fontWeight: FontWeight.w900)),
+                  SizedBox(height: 4),
+                  Text('Từ 1,8 triệu/ngày · 4 ngày cân bằng', style: TextStyle(color: Color(0xFF476273), fontWeight: FontWeight.w700)),
+                ],
+              ),
+            ),
+            FilledButton(
+              style: FilledButton.styleFrom(backgroundColor: chillOrange, foregroundColor: Colors.white),
+              onPressed: () => context.go('/booking'),
+              child: const Text('Đặt chỗ'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

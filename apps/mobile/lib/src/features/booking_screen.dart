@@ -26,6 +26,8 @@ class BookingScreen extends ConsumerWidget {
         const SizedBox(height: 12),
         const _PaymentMethodPanel(),
         const SizedBox(height: 12),
+        const _QrPreviewCard(),
+        const SizedBox(height: 12),
         FilledButton(
           style: FilledButton.styleFrom(
             backgroundColor: chillOrange,
@@ -259,6 +261,53 @@ class _PaymentMethodPanel extends StatelessWidget {
   }
 }
 
+class _QrPreviewCard extends StatelessWidget {
+  const _QrPreviewCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: const Color(0xFFEAF6FF),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(22),
+        side: const BorderSide(color: Color(0xFFD9ECFB)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Container(
+              height: 88,
+              width: 88,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: const Color(0xFFD9ECFB)),
+              ),
+              child: const Icon(Icons.qr_code_2_outlined, color: chillBlue, size: 58),
+            ),
+            const SizedBox(width: 14),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Xem trước vé QR demo', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w900)),
+                  SizedBox(height: 6),
+                  Text(
+                    'Mã mẫu CT-QR-MOBILE, chỉ dùng để kiểm thử checkout và gói offline.',
+                    style: TextStyle(color: Color(0xFF476273), fontWeight: FontWeight.w700, height: 1.35),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _BookingCard extends StatelessWidget {
   const _BookingCard({required this.booking});
 
@@ -274,7 +323,15 @@ class _BookingCard extends StatelessWidget {
         side: const BorderSide(color: Color(0xFFD9ECFB)),
       ),
       child: ListTile(
-        leading: const Icon(Icons.qr_code_2_outlined, color: chillBlue),
+        leading: Container(
+          height: 42,
+          width: 42,
+          decoration: BoxDecoration(
+            color: const Color(0xFFEAF6FF),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: const Icon(Icons.qr_code_2_outlined, color: chillBlue),
+        ),
         title: Text(
           booking.label,
           style: const TextStyle(fontWeight: FontWeight.w900),

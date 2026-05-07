@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BadgePercent, Bell, Bookmark, CalendarCheck2, HelpCircle, LogIn, Menu } from "lucide-react";
+import { BadgePercent, Bookmark, CalendarCheck2, HelpCircle, LogIn, Menu, UserRound } from "lucide-react";
 import { BrandLogo } from "@/components/brand-logo";
 
 const utilityNav = [
@@ -25,8 +25,8 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link href="/profile" className="hidden rounded-xl border border-[#d9ecfb] p-2 text-[#476273] transition hover:bg-[#eef7ff] hover:text-[#0277d4] md:inline-flex" aria-label="Thông báo">
-            <Bell size={18} aria-hidden="true" />
+          <Link href="/profile" className="hidden rounded-xl border border-[#d9ecfb] p-2 text-[#476273] transition hover:bg-[#eef7ff] hover:text-[#0277d4] md:inline-flex" aria-label="Mở hồ sơ du lịch">
+            <UserRound size={18} aria-hidden="true" />
           </Link>
           <Link href="/login" className="hidden items-center gap-2 rounded-xl bg-[#0277d4] px-4 py-2.5 text-sm font-black text-white shadow-[0_10px_24px_rgba(2,119,212,0.22)] transition hover:bg-[#005ea8] md:inline-flex">
             <LogIn size={17} aria-hidden="true" />

@@ -215,7 +215,7 @@ function PriceSummary({ destination, roomTotal, fees, discount, total }: { desti
         </Link>
         <div className="mt-4 flex items-center justify-center gap-2 rounded-full bg-[#e7f8f5] px-3 py-2 text-sm font-black text-[#0f8b7b]">
           <ShieldCheck size={18} aria-hidden="true" />
-          Thanh toán demo an toàn
+          Thanh toán demo — không phát sinh giao dịch thật
         </div>
       </div>
 

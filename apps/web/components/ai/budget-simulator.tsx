@@ -36,13 +36,13 @@ export function BudgetSimulator({ initialDestinationSlug = "da-nang" }: { initia
   );
 
   return (
-    <section className="rounded-2xl bg-white p-5 shadow-sm">
+    <section className="rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_18px_48px_rgba(2,68,120,0.08)]">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.16em] text-[#0277d4]">Mô phỏng ngân sách thông minh</p>
-          <h2 className="mt-2 text-3xl font-black text-navy">{getDestinationCopy(destinations.find((item) => item.slug === destinationSlug) ?? destinations[0]).name}</h2>
+          <h2 className="mt-2 text-3xl font-black text-[#071827]">{getDestinationCopy(destinations.find((item) => item.slug === destinationSlug) ?? destinations[0]).name}</h2>
         </div>
-        <div className="rounded-2xl bg-navy p-5 text-right text-white">
+        <div className="rounded-2xl bg-[#0277d4] p-5 text-right text-white shadow-[0_14px_32px_rgba(2,119,212,0.18)]">
           <p className="text-sm text-white/65">Tổng chi phí demo dự kiến</p>
           <p className="text-3xl font-black">{formatVnd(budget.total)}</p>
           <p className="text-sm text-white/65">{formatVnd(budget.perPerson)} / người</p>
@@ -50,9 +50,9 @@ export function BudgetSimulator({ initialDestinationSlug = "da-nang" }: { initia
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
-        <label className="block text-sm font-bold text-navy">
+        <label className="block text-sm font-bold text-[#071827]">
           Điểm đến
-          <select value={destinationSlug} onChange={(event) => setDestinationSlug(event.target.value)} className="mt-2 w-full rounded-lg border border-navy/15 px-3 py-3">
+          <select value={destinationSlug} onChange={(event) => setDestinationSlug(event.target.value)} className="mt-2 w-full rounded-lg border border-[#d9ecfb] bg-[#f7fbff] px-3 py-3">
             {destinations.map((destination) => (
               <option key={destination.slug} value={destination.slug}>
                 {getDestinationCopy(destination).name}
@@ -107,16 +107,16 @@ export function BudgetSimulator({ initialDestinationSlug = "da-nang" }: { initia
 
       <div className="mt-6 grid gap-3 md:grid-cols-4">
         {Object.entries(budget.breakdown).map(([label, value]) => (
-          <div key={label} className="rounded-xl bg-ivory p-4">
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-navy/55">{budgetLabel(label)}</p>
-            <p className="mt-2 text-lg font-black text-navy">{formatVnd(value)}</p>
+          <div key={label} className="rounded-xl border border-[#d9ecfb] bg-[#f7fbff] p-4">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#6f8594]">{budgetLabel(label)}</p>
+            <p className="mt-2 text-lg font-black text-[#071827]">{formatVnd(value)}</p>
           </div>
         ))}
       </div>
 
-      <div className="mt-6 rounded-xl bg-mist p-4">
-        <p className="font-bold text-navy">Gợi ý nhịp lịch trình: {translateBudgetBias(budget.itineraryBias)}</p>
-        <ul className="mt-2 space-y-1 text-sm text-navy/70">
+      <div className="mt-6 rounded-xl border border-[#d9ecfb] bg-[#eef7ff] p-4">
+        <p className="font-bold text-[#071827]">Gợi ý nhịp lịch trình: {translateBudgetBias(budget.itineraryBias)}</p>
+        <ul className="mt-2 space-y-1 text-sm text-[#476273]">
           {budget.adjustmentNotes.map((note) => (
             <li key={note}>{translateBudgetNote(note)}</li>
           ))}
@@ -161,18 +161,18 @@ function translateBudgetNote(value: string) {
 
 function NumberSlider({ label, value, min, max, onChange }: { label: string; value: number; min: number; max: number; onChange: (value: number) => void }) {
   return (
-    <label className="block text-sm font-bold text-navy">
+    <label className="block text-sm font-bold text-[#071827]">
       {label}: {value}
-      <input type="range" min={min} max={max} value={value} onChange={(event) => onChange(Number(event.target.value))} className="mt-4 w-full accent-teal" />
+      <input type="range" min={min} max={max} value={value} onChange={(event) => onChange(Number(event.target.value))} className="mt-4 w-full accent-[#0277d4]" />
     </label>
   );
 }
 
 function SelectField<T extends string>({ label, value, options, onChange }: SelectFieldProps<T>) {
   return (
-    <label className="block text-sm font-bold text-navy">
+    <label className="block text-sm font-bold text-[#071827]">
       {label}
-      <select value={value} onChange={(event) => onChange(event.target.value as T)} className="mt-2 w-full rounded-lg border border-navy/15 px-3 py-3">
+      <select value={value} onChange={(event) => onChange(event.target.value as T)} className="mt-2 w-full rounded-lg border border-[#d9ecfb] bg-[#f7fbff] px-3 py-3">
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}

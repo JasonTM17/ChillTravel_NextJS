@@ -33,15 +33,16 @@ const sortOptions = ["Phù hợp nhất", "Đánh giá cao", "Giá thấp trư�
 
 export default async function ExplorePage({ searchParams }: { searchParams: Promise<{ q?: string; style?: string }> }) {
   const { q = "Đà Nẵng", style = "" } = await searchParams;
-  const normalizedQuery = normalizeTravelText(`${q} ${style}`.trim());
-  const filtered = normalizedQuery ? destinations.filter((destination) => matchesQuery(destination, normalizedQuery)) : destinations;
+  const normalizedQuery = normalizeTravelText(q.trim());
+  const normalizedStyle = normalizeTravelText(style.trim());
+  const filtered = destinations.filter((destination) => matchesQuery(destination, normalizedQuery, normalizedStyle));
   const active = filtered[0] ?? destinations.find((destination) => destination.slug === "da-nang") ?? destinations[0];
 
   return (
     <main className="min-h-screen bg-[#f6fbff] text-[#071827]">
       <ExploreSearch q={q} />
       <section className="mx-auto grid max-w-[1180px] gap-5 px-4 py-6 lg:grid-cols-[260px_minmax(0,1fr)_300px]">
-        <FilterRail selectedStyle={style} />
+        <FilterRail selectedStyle={style} q={q} />
         <section className="min-w-0">
           <ResultsToolbar count={filtered.length} q={q} />
           <div className="mt-4 space-y-4">
@@ -113,7 +114,7 @@ function ResultsToolbar({ count, q }: { count: number; q: string }) {
   );
 }
 
-function FilterRail({ selectedStyle }: { selectedStyle: string }) {
+function FilterRail({ selectedStyle, q }: { selectedStyle: string; q: string }) {
   return (
     <aside className="h-fit rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_12px_30px_rgba(2,68,120,0.06)] lg:sticky lg:top-24">
       <div className="flex items-center justify-between border-b border-[#edf4fa] pb-4">
@@ -121,7 +122,7 @@ function FilterRail({ selectedStyle }: { selectedStyle: string }) {
         <SlidersHorizontal className="text-[#0277d4]" size={18} aria-hidden="true" />
       </div>
       {filterGroups.map(([title, values]) => (
-        <FilterGroup key={title} title={title} values={values} selected={selectedStyle} />
+        <FilterGroup key={title} title={title} values={values} selected={selectedStyle} q={q} />
       ))}
       <div className="mt-6 rounded-2xl bg-[#f7fbff] p-4">
         <div className="flex items-center gap-2 text-sm font-black">
@@ -140,7 +141,7 @@ function FilterRail({ selectedStyle }: { selectedStyle: string }) {
   );
 }
 
-function FilterGroup({ title, values, selected = "" }: { title: string; values: readonly string[]; selected?: string }) {
+function FilterGroup({ title, values, selected = "", q }: { title: string; values: readonly string[]; selected?: string; q: string }) {
   return (
     <div className="mt-5">
       <h3 className="text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">{title}</h3>
@@ -148,7 +149,7 @@ function FilterGroup({ title, values, selected = "" }: { title: string; values: 
         {values.map((value) => {
           const active = normalizeTravelText(selected) === normalizeTravelText(value);
           return (
-            <Link key={value} href={`/explore?q=${encodeURIComponent(value)}`} className={`flex items-center justify-between rounded-xl border px-3 py-2 text-sm font-bold transition ${active ? "border-[#0277d4] bg-[#eef7ff] text-[#0277d4]" : "border-[#edf4fa] bg-white text-[#476273] hover:border-[#0277d4] hover:text-[#0277d4]"}`}>
+            <Link key={value} href={`/explore?q=${encodeURIComponent(q)}&style=${encodeURIComponent(value)}`} className={`flex items-center justify-between rounded-xl border px-3 py-2 text-sm font-bold transition ${active ? "border-[#0277d4] bg-[#eef7ff] text-[#0277d4]" : "border-[#edf4fa] bg-white text-[#476273] hover:border-[#0277d4] hover:text-[#0277d4]"}`}>
               <span>{value}</span>
               {active ? <CheckCircle2 size={16} aria-hidden="true" /> : null}
             </Link>
@@ -261,8 +262,27 @@ function EmptyResults() {
   );
 }
 
-function matchesQuery(destination: Destination, normalizedQuery: string) {
+const filterTerms: Record<string, string[]> = {
+  "huy demo mien phi": ["demo"],
+  "phu hop gia dinh": ["family", "gia dinh"],
+  "gan bien": ["beach", "bien"],
+  "co goi offline": ["offline"],
+  bien: ["beach", "bien"],
+  "van hoa": ["culture", "van hoa"],
+  "am thuc": ["food", "am thuc"],
+  nui: ["mountain", "nui"],
+  "nghi duong": ["luxury", "resort", "boutique"],
+  "trung tam": ["city", "central", "trung tam"],
+  "pho co": ["heritage", "old quarter", "pho co"],
+  "view bien": ["beach", "bien"],
+  "view nui": ["mountain", "nui"]
+};
+
+function matchesQuery(destination: Destination, normalizedQuery: string, normalizedStyle: string) {
   const copy = getDestinationCopy(destination);
   const haystack = normalizeTravelText([copy.name, copy.country, copy.city, copy.summary, destination.slug, destination.bestTimeToVisit, destination.tags.join(" "), destination.travelStyles.join(" "), destination.foodHighlights.join(" ")].join(" "));
-  return haystack.includes(normalizedQuery) || normalizedQuery.includes(destination.slug);
+  const queryMatches = !normalizedQuery || haystack.includes(normalizedQuery) || normalizedQuery.includes(destination.slug);
+  const styleTerms = filterTerms[normalizedStyle] ?? (normalizedStyle ? [normalizedStyle] : []);
+  const styleMatches = styleTerms.length === 0 || styleTerms.some((term) => haystack.includes(term));
+  return queryMatches && styleMatches;
 }

@@ -6,7 +6,7 @@ import { destinations } from "@vietwander/shared";
 import { BoundaryList, CommerceSurface, StatusPill, TrustBanner } from "@/components/commerce-primitives";
 import { ItineraryTimeline } from "@/components/itinerary-timeline";
 import { getDestinationCopy } from "@/lib/destination-copy";
-import { getDestinationImage } from "@/lib/destination-images";
+import { getDestinationImage, getExperienceDealImage, getStayDealImage } from "@/lib/destination-images";
 import { getDestinationBySlug } from "@/lib/travel";
 import { formatVnd } from "@/lib/utils";
 import { buildVietnameseDemoItinerary, demoPaymentWarning, safetyLabel } from "@/lib/vietnamese";
@@ -23,6 +23,7 @@ export default async function DestinationDetail({ params }: { params: Promise<{ 
   const copy = getDestinationCopy(destination);
   const plan = buildVietnameseDemoItinerary(destination, 3);
   const heroImage = getDestinationImage(destination.slug);
+  const galleryImages = [heroImage, getStayDealImage(), getExperienceDealImage()];
 
   return (
     <main className="min-h-screen bg-[#f6fbff] text-[#071827]">
@@ -51,10 +52,10 @@ export default async function DestinationDetail({ params }: { params: Promise<{ 
           </div>
 
           <div className="mt-6 grid gap-3 lg:grid-cols-[1.45fr_0.75fr]">
-            <div className="min-h-[320px] rounded-[28px] bg-cover bg-center shadow-[0_18px_48px_rgba(2,68,120,0.14)]" style={{ backgroundImage: `linear-gradient(180deg, rgba(7,24,39,0.02), rgba(7,24,39,0.18)), url(${heroImage})` }} aria-label={`Ảnh du lịch ${copy.name}`} />
+            <div className="min-h-[320px] rounded-[28px] bg-cover bg-center shadow-[0_18px_48px_rgba(2,68,120,0.14)]" style={{ backgroundImage: `linear-gradient(180deg, rgba(7,24,39,0.02), rgba(7,24,39,0.18)), url(${galleryImages[0]})` }} aria-label={`Ảnh du lịch ${copy.name}`} />
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-              {[0, 1].map((index) => (
-                <div key={index} className="min-h-[154px] rounded-[24px] bg-cover bg-center shadow-[0_12px_30px_rgba(2,68,120,0.1)]" style={{ backgroundImage: `url(${heroImage})` }} />
+              {galleryImages.slice(1).map((image, index) => (
+                <div key={image} className="min-h-[154px] rounded-[24px] bg-cover bg-center shadow-[0_12px_30px_rgba(2,68,120,0.1)]" style={{ backgroundImage: `linear-gradient(180deg, rgba(7,24,39,0.02), rgba(7,24,39,0.12)), url(${image})` }} aria-label={index === 0 ? `Gợi ý lưu trú tại ${copy.name}` : `Gợi ý trải nghiệm tại ${copy.name}`} />
               ))}
             </div>
           </div>

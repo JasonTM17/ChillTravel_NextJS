@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Aligned Stitch utility and booking UX by refreshing budget/compare/personality surfaces, fixing Explore style filters, diversifying destination galleries, and tightening exact demo-payment copy.
 - Removed remaining legacy brand/asset filenames from the ChillTravel booking hero, island logo mark, QR ticket samples, and mock payment API wording.
 - Advanced the Stitch loop baton to `post-qa-release-check` and documented completion of the final responsive QA pass.
 - Strengthened the web smoke gate with Stitch QA markers for home, explore, destination detail, checkout, and stricter forbidden payment wording.

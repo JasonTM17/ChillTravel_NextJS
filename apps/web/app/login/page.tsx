@@ -37,7 +37,7 @@ export default function Page() {
               Đăng nhập demo
             </button>
           </form>
-          <p className="mt-4 text-sm leading-6 text-[#476273]">Đây là giao diện portfolio dùng mock/local session, không gửi email thật.</p>
+          <p className="mt-4 text-sm leading-6 text-[#476273]">Đây là giao diện hồ sơ trình diễn dùng phiên local/mô phỏng, không gửi email thật.</p>
         </CommerceSurface>
         <aside className="space-y-4">
           <TrustBanner compact />

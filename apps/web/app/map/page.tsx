@@ -5,7 +5,7 @@ export default function Page() {
     <FeatureOverview
       eyebrow="Khám phá bản đồ"
       title="Duyệt điểm đến theo tuyến đường"
-      summary="Bản đồ dùng marker mẫu dạng cụm, bộ lọc phong cách du lịch, xem trước tuyến và fallback đẹp khi chưa cấu hình map provider."
+      summary="Bản đồ dùng marker mẫu dạng cụm, bộ lọc phong cách du lịch, xem trước tuyến và hiển thị dự phòng đẹp khi chưa cấu hình bản đồ thật."
       destinationOffset={8}
     />
   );

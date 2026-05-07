@@ -76,7 +76,7 @@ describe("Vietnamese travel-commerce UX", () => {
     const source = files.map((file) => readFileSync(`${root}/${file}`, "utf8")).join("\n");
 
     expect(source).not.toMatch(
-      /Demo payment - no real transaction|Open dossier|Mock booking|Search results|Your trip cart|Build itinerary|Starting from|Admin dashboard|Traveler profile|Wishlist|Login|Register|Bo nhan dien phong cach du lich|Map discovery|Hotels mock|So sanh thong minh/
+      /Demo payment - no real transaction|Open dossier|Mock booking|Search results|Your trip cart|Build itinerary|Starting from|Admin dashboard|Traveler profile|Wishlist|Login|Register|Bo nhan dien phong cach du lich|Map discovery|Hotels mock|So sanh thong minh|Booking demo|Card mock|VNPay mock|PayPal sandbox|Indexed|Ready|Hallucination guard|real-time|Production-safe|Top search|Funnel demo|Travel style|Guardrail|không charge|Checkout ChillTravel|provider demo|provider thật|Thuế & phí \(sample\)|flow booking|asset placeholder|fallback đẹp|landing\/search/
     );
   });
 

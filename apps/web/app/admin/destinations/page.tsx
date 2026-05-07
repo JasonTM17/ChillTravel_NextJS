@@ -8,7 +8,7 @@ const rows = destinations.slice(0, 6).map((destination) => {
   return {
     name: copy.name,
     detail: `${copy.city} · ${copy.bestTimeToVisit} · ${destination.hotelsMock.length} nơi ở mẫu`,
-    status: destination.isFeatured ? "Featured" : "Draft",
+    status: destination.isFeatured ? "Đang nổi bật" : "Bản nháp",
     owner: destination.tags.includes("Vietnam") ? "Việt Nam" : "Quốc tế",
     tone: destination.isFeatured ? ("teal" as const) : ("gray" as const)
   };
@@ -16,13 +16,13 @@ const rows = destinations.slice(0, 6).map((destination) => {
 
 export default function Page() {
   return (
-    <PageShell eyebrow="Quản trị điểm đến" title="Vận hành dữ liệu destination">
+    <PageShell eyebrow="Quản trị điểm đến" title="Vận hành dữ liệu điểm đến">
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <CommerceSurface>
           <div className="grid gap-4 md:grid-cols-3">
             <CommerceMetric label="Điểm đến" value={`${destinations.length}`} helper="Việt Nam và quốc tế trong seed local." />
-            <CommerceMetric label="Featured" value={`${destinations.filter((item) => item.isFeatured).length}`} helper="Đang hiển thị ở landing/search." tone="teal" />
-            <CommerceMetric label="Ảnh/prompt" value="Ready" helper="Có prompt hoặc asset placeholder." tone="orange" />
+            <CommerceMetric label="Đang nổi bật" value={`${destinations.filter((item) => item.isFeatured).length}`} helper="Đang hiển thị ở trang chủ/tìm kiếm." tone="teal" />
+            <CommerceMetric label="Ảnh/tư liệu" value="Sẵn sàng" helper="Có prompt hoặc ảnh tạm hợp lệ." tone="orange" />
           </div>
           <div className="mt-6">
             <OpsTable rows={rows} />

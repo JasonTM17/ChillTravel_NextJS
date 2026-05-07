@@ -52,7 +52,7 @@ export default function HomePage() {
       <CouponStrip />
       <section className="mx-auto grid max-w-[1180px] gap-6 px-4 py-8 lg:grid-cols-[1fr_330px]">
         <div className="space-y-8">
-          <DestinationGrid title="Điểm đến đang thịnh hành" subtitle="Ảnh thật, thông tin mẫu local, phù hợp để demo flow booking." items={vietnam.slice(0, 3)} />
+          <DestinationGrid title="Điểm đến đang thịnh hành" subtitle="Ảnh thật, thông tin mẫu local, phù hợp để demo luồng đặt chỗ." items={vietnam.slice(0, 3)} />
           <DealRows title="Gợi ý lưu trú và trải nghiệm" items={featured} />
           <DestinationGrid title="Bạn có thể thích" subtitle="Các tuyến quốc tế dùng dữ liệu mẫu, không thay thế nguồn chính thức." items={world} compact />
         </div>
@@ -292,7 +292,7 @@ function TrustBand() {
         {[
           ["Thanh toán demo", "Không phát sinh giao dịch thật, không lưu thẻ thật."],
           ["Trợ lý local-first", "Chatbot runtime dùng local service/RAG, không yêu cầu khóa cloud."],
-          ["Dữ liệu mẫu", "Không khẳng định vé bay, visa hoặc thời tiết real-time."]
+          ["Dữ liệu mẫu", "Không khẳng định vé bay, visa hoặc thời tiết theo thời gian thực."]
         ].map(([title, text]) => (
           <div key={title} className="flex gap-3 rounded-2xl bg-[#f7fbff] p-4">
             <CheckCircle2 className="mt-0.5 shrink-0 text-[#0f8b7b]" size={20} aria-hidden="true" />

@@ -29,7 +29,7 @@ class ProfileScreen extends StatelessWidget {
             leading: Icon(Icons.settings_outlined, color: chillTeal),
             title: Text('Thiết lập an toàn'),
             subtitle: Text(
-              'Không dùng thanh toán thật; dữ liệu real-time cần kiểm tra nguồn chính thức.',
+              'Không dùng thanh toán thật; dữ liệu theo thời gian thực cần kiểm tra nguồn chính thức.',
             ),
           ),
         ),

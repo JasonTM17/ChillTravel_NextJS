@@ -36,14 +36,14 @@ const actions = [
   {
     icon: Ticket,
     title: "Đặt chỗ demo",
-    description: "Giữ chỗ mẫu, chọn phương thức thanh toán local/mock và nhận vé QR mô phỏng.",
+    description: "Giữ chỗ mẫu, chọn phương thức thanh toán local/mô phỏng và nhận vé QR mô phỏng.",
     href: "/booking/demo",
     tone: "teal" as const
   },
   {
     icon: Map,
     title: "Khám phá bản đồ",
-    description: "Xem marker điểm đến, route preview và fallback đẹp khi chưa có map provider thật.",
+    description: "Xem marker điểm đến, route preview và hiển thị dự phòng đẹp khi chưa có bản đồ thật.",
     href: "/map",
     tone: "blue" as const
   }
@@ -58,8 +58,8 @@ export function FeatureOverview({ eyebrow, title, summary, details = defaultDeta
             <p className="max-w-3xl text-lg leading-8 text-[#40515d]">{summary}</p>
             <div className="mt-6 grid gap-4 md:grid-cols-3">
               <CommerceMetric label="Tốc độ quyết định" value="3 bước" helper="Tìm kiếm, so sánh, lưu hoặc đặt chỗ demo." />
-              <CommerceMetric label="Dữ liệu" value="Local" helper="Seed sample và knowledge base nội bộ." tone="teal" />
-              <CommerceMetric label="Thanh toán" value="Mock" helper="Không phát sinh giao dịch thật." tone="orange" />
+              <CommerceMetric label="Dữ liệu" value="Local" helper="Seed mẫu và knowledge base nội bộ." tone="teal" />
+              <CommerceMetric label="Thanh toán" value="Demo" helper="Không phát sinh giao dịch thật." tone="orange" />
             </div>
           </CommerceSurface>
           <div className="grid gap-4 md:grid-cols-2">
@@ -91,7 +91,7 @@ export function FeatureOverview({ eyebrow, title, summary, details = defaultDeta
               </div>
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">Nguồn local</p>
-                <p className="font-black">RAG, seed data, mock provider</p>
+                <p className="font-black">RAG, seed data, nguồn mô phỏng</p>
               </div>
             </div>
             <p className="mt-4 text-sm leading-6 text-[#476273]">

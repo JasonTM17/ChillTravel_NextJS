@@ -5,10 +5,10 @@ import { PageShell } from "@/components/page-shell";
 import { demoPaymentWarning } from "@/lib/vietnamese";
 
 const opsRows = [
-  { name: "Booking Đà Nẵng cuối tuần", detail: "2 khách, 1 phòng, thanh toán card mock", status: "Chờ xác nhận", owner: "Ops", tone: "orange" as const },
-  { name: "Import knowledge Hội An", detail: "Markdown local, 18 chunk, cần reindex", status: "Cần rà soát", owner: "Knowledge", tone: "blue" as const },
-  { name: "Review tour ẩm thực Huế", detail: "Báo cáo nội dung nhạy cảm từ demo community", status: "Moderation", owner: "Admin", tone: "gray" as const },
-  { name: "Guardrail vé bay real-time", detail: "Trợ lý đã trả lời đúng giới hạn dữ liệu mẫu", status: "An toàn", owner: "RAG", tone: "teal" as const }
+  { name: "Đặt chỗ Đà Nẵng cuối tuần", detail: "2 khách, 1 phòng, thanh toán thẻ mô phỏng", status: "Chờ xác nhận", owner: "Vận hành", tone: "orange" as const },
+  { name: "Nhập nguồn Hội An", detail: "Markdown local, 18 chunk, cần reindex", status: "Cần rà soát", owner: "Knowledge", tone: "blue" as const },
+  { name: "Rà soát tour ẩm thực Huế", detail: "Báo cáo nội dung nhạy cảm từ cộng đồng demo", status: "Kiểm duyệt", owner: "Admin", tone: "gray" as const },
+  { name: "Cảnh báo vé bay theo thời gian thực", detail: "Trợ lý đã trả lời đúng giới hạn dữ liệu mẫu", status: "An toàn", owner: "RAG", tone: "teal" as const }
 ];
 
 export default function Page() {
@@ -40,10 +40,10 @@ export default function Page() {
             </CommerceSurface>
 
             <div className="grid gap-4 md:grid-cols-2">
-              <ServiceActionCard icon={CalendarCheck2} title="Quản lý booking" description="Theo dõi trạng thái pending, confirmed, cancelled và refunded mock." href="/admin/bookings" tone="orange" />
-              <ServiceActionCard icon={BookOpenCheck} title="Điểm đến & trải nghiệm" description="Rà soát destination, hotel mock, tour, review và tag hiển thị." href="/admin/destinations" />
-              <ServiceActionCard icon={DatabaseZap} title="Knowledge Studio" description="Import markdown/JSON local, rebuild index và xem retrieval log." href="/admin/ai-knowledge" tone="teal" />
-              <ServiceActionCard icon={BarChart3} title="Analytics mẫu" description="Top search, funnel booking, xu hướng chuyến đi và nhóm câu hỏi." href="/admin/analytics" />
+              <ServiceActionCard icon={CalendarCheck2} title="Quản lý đặt chỗ" description="Theo dõi trạng thái chờ xử lý, đã xác nhận, đã hủy và hoàn tiền demo." href="/admin/bookings" tone="orange" />
+              <ServiceActionCard icon={BookOpenCheck} title="Điểm đến & trải nghiệm" description="Rà soát điểm đến, khách sạn mô phỏng, tour, đánh giá và tag hiển thị." href="/admin/destinations" />
+              <ServiceActionCard icon={DatabaseZap} title="Knowledge Studio" description="Nhập markdown/JSON local, rebuild index và xem nhật ký truy xuất." href="/admin/ai-knowledge" tone="teal" />
+              <ServiceActionCard icon={BarChart3} title="Thống kê mẫu" description="Top tìm kiếm, phễu đặt chỗ, xu hướng chuyến đi và nhóm câu hỏi." href="/admin/analytics" />
             </div>
           </div>
 
@@ -55,7 +55,7 @@ export default function Page() {
                   <ShieldCheck size={22} aria-hidden="true" />
                 </div>
                 <div>
-                  <p className="text-xs font-black uppercase tracking-[0.14em] text-[#8ed6ff]">Production-safe</p>
+                  <p className="text-xs font-black uppercase tracking-[0.14em] text-[#8ed6ff]">An toàn demo</p>
                   <h2 className="text-xl font-black">Không vận hành tiền thật</h2>
                 </div>
               </div>
@@ -76,7 +76,7 @@ export default function Page() {
                   <MessageSquareWarning size={22} aria-hidden="true" />
                 </div>
                 <div>
-                  <p className="text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">Guardrail</p>
+                  <p className="text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">Cảnh báo</p>
                   <h2 className="font-black">3 cảnh báo đã xử lý</h2>
                 </div>
               </div>

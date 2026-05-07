@@ -74,7 +74,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Gói thiết yếu Việt Nam'), findsOneWidget);
-    expect(find.textContaining('Không charge thật'), findsWidgets);
+    expect(find.textContaining('Không thu tiền thật'), findsWidgets);
   });
 
   testWidgets('wishlist renders cached saved items', (tester) async {
@@ -134,7 +134,7 @@ void main() {
     );
 
     expect(booking.sandboxOnly, isTrue);
-    expect(booking.amountLabel, 'Không charge thật');
+    expect(booking.amountLabel, 'Không thu tiền thật');
   });
 
   test('chat repository uses local fallback when service is offline', () async {

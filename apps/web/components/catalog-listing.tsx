@@ -10,7 +10,7 @@ import { formatVnd } from "@/lib/utils";
 export function CatalogListing({ kind }: { kind: "hotel" | "experience" }) {
   const items = (kind === "hotel" ? destinations.slice(12, 18) : destinations.slice(6, 12)).slice(0, 6);
   const title = kind === "hotel" ? "Nơi lưu trú nổi bật" : "Trải nghiệm được đặt nhiều";
-  const helper = kind === "hotel" ? "Giá phòng là dữ liệu mẫu local, có ghi chú hủy demo." : "Tour, vé và trải nghiệm đều dùng QR/mock booking.";
+  const helper = kind === "hotel" ? "Giá phòng là dữ liệu mẫu local, có ghi chú hủy demo." : "Tour, vé và trải nghiệm đều dùng QR và đặt chỗ mô phỏng.";
 
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">

@@ -29,10 +29,10 @@ const checkoutSteps = ["Chọn gói", "Thông tin khách", "Thanh toán demo", "
 
 const paymentMethods = [
   ["Thẻ demo", "Token giả lập, không nhập số thẻ thật", CreditCard, true],
-  ["Momo demo", "Ví điện tử local/mock", Smartphone, false],
-  ["VNPay demo", "Cổng thanh toán sandbox giả lập", WalletCards, false],
-  ["ZaloPay demo", "Không gọi provider thật", QrCode, false],
-  ["PayPal demo", "Xác nhận mẫu cho portfolio", WalletCards, false],
+  ["Momo demo", "Ví điện tử local/mô phỏng", Smartphone, false],
+  ["VNPay demo", "Cổng thanh toán thử nghiệm giả lập", WalletCards, false],
+  ["ZaloPay demo", "Không gọi nhà cung cấp thật", QrCode, false],
+  ["PayPal demo", "Xác nhận mẫu cho hồ sơ trình diễn", WalletCards, false],
   ["Chuyển khoản demo", "Không tạo giao dịch ngân hàng", Building2, false],
   ["Tiền mặt khi đến", "Trạng thái xác nhận mẫu", Landmark, false]
 ] as const;
@@ -51,7 +51,7 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
       <section className="border-b border-[#d9ecfb] bg-white">
         <div className="mx-auto flex max-w-[1180px] items-center justify-between gap-4 px-4 py-5">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">Checkout ChillTravel</p>
+            <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">Thanh toán ChillTravel</p>
             <h1 className="mt-1 text-2xl font-black md:text-3xl">Thanh toán & xác nhận đặt chỗ demo</h1>
           </div>
           <div className="hidden items-center gap-2 rounded-full bg-[#eef7ff] px-4 py-2 text-sm font-black text-[#0277d4] md:inline-flex">
@@ -82,7 +82,7 @@ function WarningBanner() {
         <ShieldAlert className="mt-0.5 shrink-0" size={24} aria-hidden="true" />
         <div>
           <p className="text-lg font-black">{demoPaymentWarning}. Không nhập hoặc lưu thẻ thật.</p>
-          <p className="mt-1 text-sm font-bold text-[#9f1239]/78">Mọi provider trong trang này là local/mock/sandbox. Không charge tiền thật, không lưu số thẻ, không bypass luật thanh toán.</p>
+          <p className="mt-1 text-sm font-bold text-[#9f1239]/78">Mọi nhà cung cấp trong trang này là local/mô phỏng/thử nghiệm. Không thu tiền thật, không lưu số thẻ, không vượt rào luật thanh toán.</p>
         </div>
       </div>
     </div>
@@ -156,9 +156,9 @@ function CheckoutForm() {
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
             <h2 className="text-2xl font-black">Phương thức thanh toán</h2>
-            <p className="mt-1 text-sm text-[#476273]">Chọn provider demo. Không nhập số thẻ thật.</p>
+            <p className="mt-1 text-sm text-[#476273]">Chọn phương thức demo. Không nhập số thẻ thật.</p>
           </div>
-          <span className="rounded-full bg-[#e7f8f5] px-3 py-1 text-xs font-black text-[#0f8b7b]">Local/Sandbox/Mock</span>
+          <span className="rounded-full bg-[#e7f8f5] px-3 py-1 text-xs font-black text-[#0f8b7b]">Local / mô phỏng / thử nghiệm</span>
         </div>
         <div className="mt-5 grid gap-3">
           {paymentMethods.map(([name, description, Icon, active]) => (
@@ -198,7 +198,7 @@ function PriceSummary({ destination, roomTotal, fees, discount, total }: { desti
         <h2 className="text-2xl font-black">Tóm tắt giá</h2>
         <div className="mt-5 space-y-3 text-sm">
           <SummaryRow label="Giá phòng (4 đêm)" value={formatVnd(roomTotal)} />
-          <SummaryRow label="Thuế & phí (sample)" value={formatVnd(fees)} />
+          <SummaryRow label="Thuế & phí (mẫu)" value={formatVnd(fees)} />
           <SummaryRow label="Giảm giá hội viên demo" value={`- ${formatVnd(discount)}`} positive />
         </div>
         <div className="mt-5 border-t border-[#d9ecfb] pt-5">
@@ -208,7 +208,7 @@ function PriceSummary({ destination, roomTotal, fees, discount, total }: { desti
           </div>
           <p className="mt-1 text-xs font-bold text-[#6f8594]">Mọi con số là dữ liệu mẫu local.</p>
         </div>
-        <Link href={`/booking/${destination.slug}?confirmed=mock`} className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#ff6d1a] px-4 py-4 font-black text-white shadow-[0_14px_28px_rgba(255,109,26,0.22)] transition hover:bg-[#e95c0a]">
+        <Link href={`/booking/${destination.slug}?confirmed=demo`} className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#ff6d1a] px-4 py-4 font-black text-white shadow-[0_14px_28px_rgba(255,109,26,0.22)] transition hover:bg-[#e95c0a]">
           <LockKeyhole size={19} aria-hidden="true" />
           Xác nhận đặt chỗ demo
           <ChevronRight size={18} aria-hidden="true" />

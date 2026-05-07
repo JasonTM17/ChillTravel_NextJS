@@ -29,7 +29,7 @@ class DestinationDetailScreen extends StatelessWidget {
             leading: Icon(Icons.restaurant_outlined, color: chillOrange),
             title: Text('Ăn gì và chơi gì'),
             subtitle: Text(
-              'Mì Quảng, hải sản, Bà Nà mock, phố cổ, cà phê ven sông.',
+              'Mì Quảng, hải sản, Bà Nà demo, phố cổ, cà phê ven sông.',
             ),
           ),
         ),

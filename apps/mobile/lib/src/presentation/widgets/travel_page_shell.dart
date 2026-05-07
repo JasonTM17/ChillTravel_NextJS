@@ -94,7 +94,7 @@ class TravelPageShell extends StatelessWidget {
             icon: Icons.offline_pin_outlined,
             title: 'Gói offline đã sẵn sàng',
             subtitle:
-                'Lịch trình, yêu thích và đặt chỗ demo có fallback local khi mất mạng.',
+                'Lịch trình, yêu thích và đặt chỗ demo có bản lưu local khi mất mạng.',
           ),
           const _TrustTile(
             icon: Icons.shield_outlined,

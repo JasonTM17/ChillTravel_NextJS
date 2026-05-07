@@ -14,7 +14,7 @@ class BookingScreen extends ConsumerWidget {
     return TravelPageShell(
       title: 'Đặt chỗ',
       subtitle:
-          'Thanh toán demo — không phát sinh giao dịch thật. Chọn phương thức mock và nhận vé QR mô phỏng.',
+          'Thanh toán demo — không phát sinh giao dịch thật. Chọn phương thức mô phỏng và nhận vé QR.',
       nextRoute: '/wishlist',
       children: [
         Container(
@@ -43,11 +43,11 @@ class BookingScreen extends ConsumerWidget {
           spacing: 8,
           runSpacing: 8,
           children: const [
-            Chip(label: Text('Thẻ mock')),
+            Chip(label: Text('Thẻ mô phỏng')),
             Chip(label: Text('Momo demo')),
             Chip(label: Text('VNPay demo')),
             Chip(label: Text('ZaloPay demo')),
-            Chip(label: Text('PayPal sandbox')),
+            Chip(label: Text('PayPal thử nghiệm')),
             Chip(label: Text('Trả tại nơi đến')),
           ],
         ),

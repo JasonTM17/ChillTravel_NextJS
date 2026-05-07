@@ -15,7 +15,7 @@ export function TrustBanner({ compact = false }: { compact?: boolean }) {
         <ShieldCheck className="mt-0.5 shrink-0" size={compact ? 16 : 20} aria-hidden="true" />
         <div>
           <p className="font-black">{demoPaymentWarning}</p>
-          {!compact ? <p className="mt-1 font-bold leading-6">Không lưu thẻ thật, không charge thật, dữ liệu giá/chỗ trống là mẫu local.</p> : null}
+          {!compact ? <p className="mt-1 font-bold leading-6">Không lưu thẻ thật, không thu tiền thật, dữ liệu giá/chỗ trống là mẫu local.</p> : null}
         </div>
       </div>
     </div>

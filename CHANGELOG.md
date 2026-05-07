@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Added a reusable ChillTravel web smoke script that checks Vietnamese route copy, legal brand boundaries, 404 localization, and demo-payment warnings, then aligned the experiences and chat service labels to the shared taxonomy.
 - Updated Stitch loop metadata and next prompt to reflect completed travel-commerce/admin/mobile refactors and focus the next loop on final responsive QA.
 - Removed the unused generic feature-overview component so secondary pages stay on concrete travel-commerce surfaces.
 - Replaced the generic map overview with a Vietnamese map-discovery workspace, aligned profile route copy, and localized the 404 route copy.

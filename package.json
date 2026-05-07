@@ -11,6 +11,7 @@
     "typecheck": "turbo typecheck",
     "format:check": "prettier --check .",
     "docker:config": "docker compose -f infra/docker/docker-compose.yml config",
+    "web:smoke": "node scripts/smoke-web.mjs",
     "seed": "pnpm --filter @vietwander/db seed",
     "ai:test": "python -m unittest discover apps/ai-service/tests"
   },

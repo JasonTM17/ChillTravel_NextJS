@@ -7,7 +7,7 @@ export default function ChatPage() {
   const answer = localAiAnswer(sampleQuestion);
 
   return (
-    <PageShell eyebrow="Trợ lý du lịch local" title="Hỏi ChillTravel để nhận câu trả lời có nguồn và ranh giới rõ ràng">
+    <PageShell eyebrow="Trợ lý chuyến đi" title="Hỏi ChillTravel để nhận câu trả lời có nguồn và ranh giới rõ ràng">
       <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
         <section className="rounded-[16px] border border-[#d9ecfb] bg-white p-5 shadow-[0_18px_54px_rgba(2,68,120,0.08)]">
           <div className="rounded-2xl border border-[#d9ecfb] bg-[#f7fbff] p-4">

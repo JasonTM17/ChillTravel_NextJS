@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, CalendarDays, MapPinned, ShieldCheck, Star, WalletCards } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { ArrowRight, CalendarDays, MapPinned, MessageCircle, ShieldCheck, Star, Utensils, WalletCards } from "lucide-react";
 import { destinations } from "@vietwander/shared";
+import { BoundaryList, CommerceSurface, StatusPill, TrustBanner } from "@/components/commerce-primitives";
 import { ItineraryTimeline } from "@/components/itinerary-timeline";
 import { getDestinationCopy } from "@/lib/destination-copy";
 import { getDestinationImage } from "@/lib/destination-images";
@@ -20,128 +22,148 @@ export default async function DestinationDetail({ params }: { params: Promise<{ 
 
   const copy = getDestinationCopy(destination);
   const plan = buildVietnameseDemoItinerary(destination, 3);
+  const heroImage = getDestinationImage(destination.slug);
 
   return (
-    <main className="travel-commerce-surface text-[#071827]">
-      <section className="grid min-h-[620px] border-b border-[#d9ecfb] lg:grid-cols-[1.08fr_0.92fr]">
-        <div className="flex items-end bg-[#071827] px-4 py-16 text-white md:py-20">
-          <div className="mx-auto w-full max-w-3xl lg:mr-0">
-            <p className="font-black uppercase tracking-[0.22em] text-[#f7d7b7]">
-              {copy.country} / {copy.city}
-            </p>
-            <h1 className="mt-4 text-6xl font-black leading-[0.98] md:text-8xl">{copy.name}</h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/78">{copy.summary}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href={`/ai-planner?destination=${destination.slug}`} className="rounded-lg bg-[#f97316] px-5 py-3 font-black text-white">
-                Tạo lịch trình
+    <main className="min-h-screen bg-[#f6fbff] text-[#071827]">
+      <section className="border-b border-[#d9ecfb] bg-white">
+        <div className="mx-auto max-w-[1180px] px-4 py-6 md:px-6">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <div className="flex flex-wrap gap-2">
+                <StatusPill>{copy.country}</StatusPill>
+                <StatusPill tone="teal">{copy.city}</StatusPill>
+                <StatusPill tone="orange">Dữ liệu mẫu local</StatusPill>
+              </div>
+              <h1 className="mt-4 text-4xl font-black leading-tight md:text-6xl">{copy.name}</h1>
+              <p className="mt-3 max-w-3xl text-base leading-7 text-[#476273]">{copy.summary}</p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Link href={`/ai-planner?destination=${destination.slug}`} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[#d9ecfb] bg-white px-4 py-3 text-sm font-black text-[#0277d4] transition hover:bg-[#eef7ff]">
+                <MessageCircle size={18} aria-hidden="true" />
+                Hỏi trợ lý chuyến đi
               </Link>
-              <Link href="/compare" className="rounded-lg border border-white/18 bg-white/10 px-5 py-3 font-black">
-                So sánh điểm đến
+              <Link href={`/booking/${destination.slug}`} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#ff6d1a] px-5 py-3 text-sm font-black text-white shadow-[0_12px_26px_rgba(255,109,26,0.2)] transition hover:bg-[#e95c0a]">
+                Đặt chỗ demo
+                <ArrowRight size={18} aria-hidden="true" />
               </Link>
             </div>
           </div>
+
+          <div className="mt-6 grid gap-3 lg:grid-cols-[1.45fr_0.75fr]">
+            <div className="min-h-[320px] rounded-[28px] bg-cover bg-center shadow-[0_18px_48px_rgba(2,68,120,0.14)]" style={{ backgroundImage: `linear-gradient(180deg, rgba(7,24,39,0.02), rgba(7,24,39,0.18)), url(${heroImage})` }} aria-label={`Ảnh du lịch ${copy.name}`} />
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+              {[0, 1].map((index) => (
+                <div key={index} className="min-h-[154px] rounded-[24px] bg-cover bg-center shadow-[0_12px_30px_rgba(2,68,120,0.1)]" style={{ backgroundImage: `url(${heroImage})` }} />
+              ))}
+            </div>
+          </div>
         </div>
-        <div
-          className="min-h-[360px] bg-cover bg-center lg:min-h-full"
-          style={{
-            backgroundImage: `linear-gradient(180deg, rgba(7,24,39,0.02), rgba(7,24,39,0.22)), url(${getDestinationImage(destination.slug)})`
-          }}
-          aria-label={`Ảnh du lịch ${copy.name}`}
-        />
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-8 px-4 py-12 lg:grid-cols-[1fr_360px]">
-        <div className="space-y-8">
-          <Panel title="Vì sao nên đi">{copy.summary}</Panel>
-          <div className="grid gap-4 md:grid-cols-2">
+      <section className="mx-auto grid max-w-[1180px] gap-6 px-4 py-8 md:px-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="space-y-6">
+          <div className="grid gap-4 md:grid-cols-3">
             <InfoCard icon={CalendarDays} title="Mùa đẹp" value={copy.bestTimeToVisit} />
-            <InfoCard icon={ShieldCheck} title="Mức an toàn" value={safetyLabel(destination.safetyLevel)} />
+            <InfoCard icon={ShieldCheck} title="An toàn" value={safetyLabel(destination.safetyLevel)} />
+            <InfoCard icon={WalletCards} title="Ngân sách/ngày" value={`${formatVnd(destination.budgetMin)}+`} />
           </div>
-          <Panel title="Ăn gì ở đây">
-            <span className="flex flex-wrap gap-2">
-              {copy.foodHighlights.map((food) => (
-                <span key={food} className="rounded-full bg-[#f5efe4] px-3 py-1 text-sm font-bold text-[#40515d]">
-                  {food}
-                </span>
+
+          <CommerceSurface>
+            <h2 className="text-2xl font-black">Vì sao nên đi</h2>
+            <p className="mt-3 leading-7 text-[#476273]">{copy.summary}</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {destination.travelStyles.slice(0, 6).map((style) => (
+                <StatusPill key={style} tone="gray">
+                  {style}
+                </StatusPill>
               ))}
-            </span>
-          </Panel>
-          <Panel title="Lưu ý văn hóa và an toàn">
-            <ul className="space-y-2">
-              {copy.cultureNotes.map((note) => (
-                <li key={note} className="leading-7 text-[#40515d]">
-                  {note}
-                </li>
-              ))}
-            </ul>
-          </Panel>
+            </div>
+          </CommerceSurface>
+
+          <CommerceSurface>
+            <h2 className="text-2xl font-black">Ăn gì và chơi gì</h2>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              <FeatureList title="Món nên thử" items={copy.foodHighlights} icon={Utensils} />
+              <FeatureList title="Hoạt động nổi bật" items={destination.experiences.slice(0, 5)} icon={MapPinned} />
+            </div>
+          </CommerceSurface>
+
+          <CommerceSurface>
+            <h2 className="text-2xl font-black">Lưu ý văn hóa và an toàn</h2>
+            <div className="mt-4">
+              <BoundaryList items={copy.cultureNotes} />
+            </div>
+          </CommerceSurface>
+
           <ItineraryTimeline plan={plan} />
         </div>
 
-        <aside className="space-y-4 lg:sticky lg:top-24 lg:h-fit">
-          <div className="rounded-[16px] border border-[#d9ecfb] bg-white p-5 shadow-[0_18px_54px_rgba(2,68,120,0.08)]">
-            <h2 className="text-xl font-black">Thông tin nhanh</h2>
-            <div className="mt-5 space-y-4">
-              <Metric icon={Star} label="Đánh giá" value={`${destination.ratingAvg.toFixed(1)} / 5`} />
-              <Metric icon={WalletCards} label="Ngân sách/ngày" value={`${formatVnd(destination.budgetMin)}+`} />
-              <Metric icon={MapPinned} label="Tọa độ" value={`${destination.latitude.toFixed(1)}, ${destination.longitude.toFixed(1)}`} />
+        <aside className="h-fit space-y-4 lg:sticky lg:top-24">
+          <TrustBanner />
+          <CommerceSurface>
+            <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">Tóm tắt đặt chỗ</p>
+            <h2 className="mt-2 text-2xl font-black">{copy.name}</h2>
+            <div className="mt-5 space-y-3 text-sm">
+              <SideRow label="Lưu trú mẫu" value={`${formatVnd(destination.hotelsMock[0]?.nightlyPrice ?? destination.budgetMin)} / đêm`} />
+              <SideRow label="Gợi ý lịch trình" value="3 ngày cân bằng" />
+              <SideRow label="Đánh giá" value={`${destination.ratingAvg.toFixed(1)} / 5`} />
             </div>
-          </div>
-
-          <div className="rounded-[16px] border border-[#dfd3c1] bg-[#071827] p-5 text-white shadow-[0_18px_54px_rgba(7,24,39,0.14)]">
-            <h2 className="text-xl font-black">Nơi lưu trú gợi ý</h2>
-            <ul className="mt-4 space-y-3">
-              {destination.hotelsMock.map((hotel, index) => (
-                <li key={hotel.name} className="rounded-xl border border-white/12 bg-white/8 p-3">
-                  <p className="font-bold">{index === 0 ? `${copy.name} Boutique Stay` : `${copy.name} Smart Comfort Hotel`}</p>
-                  <p className="mt-1 text-sm text-white/70">{formatVnd(hotel.nightlyPrice)} / đêm</p>
-                </li>
-              ))}
-            </ul>
-            <Link
-              href={`/booking/${destination.slug}`}
-              className="mt-5 inline-flex w-full items-center justify-between rounded-lg bg-white px-4 py-3 font-black text-[#071827]"
-            >
-              Bắt đầu đặt chỗ demo
+            <Link href={`/booking/${destination.slug}`} className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#ff6d1a] px-4 py-4 font-black text-white">
+              Xem ưu đãi demo
               <ArrowRight size={18} aria-hidden="true" />
             </Link>
-            <p className="mt-3 text-xs font-bold text-white/62">{demoPaymentWarning}</p>
-          </div>
+            <p className="mt-3 text-center text-xs font-bold text-[#b45309]">{demoPaymentWarning}</p>
+          </CommerceSurface>
+
+          <CommerceSurface>
+            <h2 className="text-xl font-black">Nơi lưu trú gợi ý</h2>
+            <div className="mt-4 space-y-3">
+              {destination.hotelsMock.slice(0, 3).map((hotel, index) => (
+                <div key={hotel.name} className="rounded-2xl bg-[#f7fbff] p-4">
+                  <p className="font-black">{index === 0 ? `${copy.name} Boutique Stay` : `${copy.name} Smart Comfort Hotel`}</p>
+                  <p className="mt-1 text-sm font-bold text-[#476273]">{formatVnd(hotel.nightlyPrice)} / đêm</p>
+                </div>
+              ))}
+            </div>
+          </CommerceSurface>
         </aside>
       </section>
     </main>
   );
 }
 
-function Panel({ title, children }: { title: string; children: React.ReactNode }) {
+function InfoCard({ icon: Icon, title, value }: { icon: LucideIcon; title: string; value: string }) {
   return (
-    <section className="rounded-[16px] border border-[#d9ecfb] bg-white p-6 shadow-[0_18px_54px_rgba(2,68,120,0.08)]">
-      <h2 className="text-2xl font-black">{title}</h2>
-      <div className="mt-3 text-[#40515d]">{children}</div>
-    </section>
-  );
-}
-
-function InfoCard({ icon: Icon, title, value }: { icon: typeof CalendarDays; title: string; value: string }) {
-  return (
-    <div className="rounded-[16px] border border-[#d9ecfb] bg-white p-5">
+    <div className="rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_12px_30px_rgba(2,68,120,0.06)]">
       <Icon className="text-[#0277d4]" aria-hidden="true" />
-      <h2 className="mt-4 text-sm font-black uppercase tracking-[0.18em] text-[#687983]">{title}</h2>
-      <p className="mt-2 text-xl font-black">{value}</p>
+      <h2 className="mt-4 text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">{title}</h2>
+      <p className="mt-2 text-lg font-black">{value}</p>
     </div>
   );
 }
 
-function Metric({ icon: Icon, label, value }: { icon: typeof Star; label: string; value: string }) {
+function FeatureList({ title, items, icon: Icon }: { title: string; items: string[]; icon: LucideIcon }) {
   return (
-    <div className="flex items-center gap-3">
-      <span className="grid h-10 w-10 place-items-center rounded-full bg-[#ecf7f4] text-[#0f766e]">
-        <Icon size={18} aria-hidden="true" />
-      </span>
-      <span>
-        <span className="block text-xs font-black uppercase tracking-[0.16em] text-[#687983]">{label}</span>
-        <span className="block font-black">{value}</span>
-      </span>
+    <div className="rounded-2xl bg-[#f7fbff] p-4">
+      <h3 className="flex items-center gap-2 font-black">
+        <Icon size={18} className="text-[#0277d4]" aria-hidden="true" />
+        {title}
+      </h3>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {items.map((item) => (
+          <StatusPill key={item}>{item}</StatusPill>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SideRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between gap-4 border-b border-[#edf4fa] pb-3">
+      <span className="font-bold text-[#476273]">{label}</span>
+      <span className="text-right font-black">{value}</span>
     </div>
   );
 }

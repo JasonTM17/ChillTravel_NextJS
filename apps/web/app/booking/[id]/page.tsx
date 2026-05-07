@@ -56,7 +56,7 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
           </div>
           <div className="hidden items-center gap-2 rounded-full bg-[#eef7ff] px-4 py-2 text-sm font-black text-[#0277d4] md:inline-flex">
             <LockKeyhole size={18} aria-hidden="true" />
-            Thanh toán an toàn
+            Thanh toán demo an toàn
           </div>
         </div>
       </section>
@@ -82,7 +82,7 @@ function WarningBanner() {
         <ShieldAlert className="mt-0.5 shrink-0" size={24} aria-hidden="true" />
         <div>
           <p className="text-lg font-black">{demoPaymentWarning}. Không nhập hoặc lưu thẻ thật.</p>
-          <p className="mt-1 text-sm font-bold text-[#9f1239]/78">Mọi nhà cung cấp trong trang này là local/mô phỏng/thử nghiệm. Không thu tiền thật, không lưu số thẻ, không vượt rào luật thanh toán.</p>
+          <p className="mt-1 text-sm font-bold text-[#9f1239]/78">Mọi nhà cung cấp trong trang này là local/mô phỏng/thử nghiệm. Không phát sinh giao dịch thật, không lưu số thẻ, không vượt rào luật thanh toán.</p>
         </div>
       </div>
     </div>
@@ -215,7 +215,7 @@ function PriceSummary({ destination, roomTotal, fees, discount, total }: { desti
         </Link>
         <div className="mt-4 flex items-center justify-center gap-2 rounded-full bg-[#e7f8f5] px-3 py-2 text-sm font-black text-[#0f8b7b]">
           <ShieldCheck size={18} aria-hidden="true" />
-          Thanh toán an toàn
+          Thanh toán demo an toàn
         </div>
       </div>
 

@@ -42,6 +42,8 @@ class HomeScreen extends ConsumerWidget {
           loading: () => const LinearProgressIndicator(),
           error: (_, __) => const Text('Bảng chuyến đi offline chưa sẵn sàng'),
         ),
+        const SizedBox(height: 14),
+        const _OfflinePackCard(),
       ],
     );
   }
@@ -205,6 +207,61 @@ class _MetricTile extends StatelessWidget {
               Text(label, style: const TextStyle(fontWeight: FontWeight.w700)),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _OfflinePackCard extends StatelessWidget {
+  const _OfflinePackCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.white,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(22),
+        side: const BorderSide(color: Color(0xFFD9ECFB)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Row(
+              children: [
+                Icon(Icons.offline_pin_outlined, color: chillTeal),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Gói offline đã lưu',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'Lịch trình, yêu thích, vé QR demo và checklist an toàn luôn có bản local khi mất mạng.',
+              style: TextStyle(
+                color: Color(0xFF476273),
+                fontWeight: FontWeight.w700,
+                height: 1.4,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: const [
+                Chip(label: Text('Lịch trình')),
+                Chip(label: Text('Yêu thích')),
+                Chip(label: Text('Vé QR demo')),
+              ],
+            ),
+          ],
         ),
       ),
     );

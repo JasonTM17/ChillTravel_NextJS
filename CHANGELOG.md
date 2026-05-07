@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Polished Flutter home and destination detail surfaces against the Stitch mobile references with an offline pack card, image-led detail layout, quick facts, food/activity chips, assistant CTA, and documented the local Flutter analyze blocker.
 - Refactored destination detail and booking copy toward the Stitch travel-commerce layout with a bright image-led detail page, sticky demo booking panel, and consistent no-transaction payment wording.
 - Polished shared web primitives against the Stitch QA pass with a real mobile header menu, responsive admin tables, compact OTA page shells, and standardized demo-payment trust copy.
 - Documented the `pnpm web:smoke` verification command and refreshed the quality report with the latest 2026-05-07 gate results.

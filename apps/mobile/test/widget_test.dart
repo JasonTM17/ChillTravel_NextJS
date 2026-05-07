@@ -10,6 +10,7 @@ import 'package:vietwander_ai/src/data/repositories/travel_repository.dart';
 import 'package:vietwander_ai/src/domain/travel_models.dart';
 import 'package:vietwander_ai/src/features/ai_chat_screen.dart';
 import 'package:vietwander_ai/src/features/booking_screen.dart';
+import 'package:vietwander_ai/src/features/destination_detail_screen.dart';
 import 'package:vietwander_ai/src/features/explore_screen.dart';
 import 'package:vietwander_ai/src/features/home_screen.dart';
 import 'package:vietwander_ai/src/features/itinerary_screen.dart';
@@ -39,6 +40,7 @@ void main() {
     expect(find.text('Ngày lịch trình'), findsOneWidget);
     expect(find.text('Đã lưu'), findsOneWidget);
     expect(find.text('Đặt chỗ demo'), findsOneWidget);
+    expect(find.text('Gói offline đã lưu'), findsOneWidget);
   });
 
   testWidgets('explore renders cached destinations', (tester) async {
@@ -53,6 +55,14 @@ void main() {
 
     expect(find.text('Ngày 1: Đến Hà Nội'), findsOneWidget);
     expect(find.text('Ngày 2: Đi Ninh Bình trong ngày'), findsOneWidget);
+  });
+
+  testWidgets('destination detail renders mobile OTA content', (tester) async {
+    await _pumpMobileWidget(tester, const DestinationDetailScreen());
+
+    expect(find.text('Đà Nẵng · Sơn Trà · Hội An'), findsOneWidget);
+    expect(find.text('Ăn gì và chơi gì'), findsOneWidget);
+    expect(find.textContaining('lịch trình'), findsWidgets);
   });
 
   testWidgets('chat renders local guidance without cloud runtime key', (

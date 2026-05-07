@@ -26,12 +26,20 @@ class ChatRepository {
 
     try {
       final response = await _api.postMap(
-        '/ai/chat',
-        body: {'message': prompt, 'provider': 'local'},
+        '/local-ai/chat',
+        body: {'message': prompt},
       );
+      final data = response['data'] is Map<String, dynamic>
+          ? response['data'] as Map<String, dynamic>
+          : response;
+      final provider = data['provider'] is Map<String, dynamic>
+          ? data['provider'] as Map<String, dynamic>
+          : const <String, dynamic>{};
+      final citations = data['citations'] is List ? data['citations'] as List : const [];
       final assistant = ChatMessage.fromJson({
         'role': 'assistant',
-        'content': response['message'] ?? response['content'],
+        'content':
+            '${data['answer'] ?? data['message'] ?? data['content']}\n\nNguồn local: ${citations.length} citation · Provider: ${provider['chatProvider'] ?? provider['chat_provider'] ?? 'sample fallback'}',
         'createdAt': timestamp.toIso8601String(),
       });
       await _cache.addChatMessages([userMessage, assistant]);

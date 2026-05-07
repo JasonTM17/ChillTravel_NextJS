@@ -52,10 +52,11 @@ Important:
 
 - [x] Travel Commerce Core screen: landing + explore search-first OTA UX.
 - [x] Booking checkout detail screen with demo payment trust panel.
-- [ ] Refactor full web surface to shared travel-commerce primitives.
-- [ ] Refactor admin into an operations console instead of repeated destination-card filler.
-- [ ] Apply mobile-first OTA home and booking screens to Flutter.
-- [ ] Expand Vietnamese route smoke tests and visual QA.
+- [x] Refactor full web surface to shared travel-commerce primitives.
+- [x] Refactor admin into an operations console instead of repeated destination-card filler.
+- [x] Apply mobile-first OTA home and booking screens to Flutter.
+- [x] Expand Vietnamese route smoke tests and visual QA.
+- [ ] Final responsive QA pass for desktop, tablet, and mobile browser widths.
 
 ## 6. Creative Freedom
 

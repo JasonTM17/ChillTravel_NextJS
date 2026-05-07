@@ -1,21 +1,28 @@
 ---
-page: admin-ops-console
+page: final-responsive-qa
 ---
 
-Create a high-fidelity admin operations console for CHILLTRAVEL using the ChillTravel Travel Commerce design DNA.
+Create a high-fidelity responsive QA pass for **ChillTravel**, a Vietnamese travel-commerce platform.
 
-**DESIGN SYSTEM (REQUIRED):**
-- Brand: ChillTravel custom compass/route/Vietnam identity with Hoang Sa and Truong Sa. Do not use Traveloka bird, mark, wordmark, exact color proportions, or third-party assets.
-- Visual style: Vietnamese OTA operations console, pale sky background, white cards, booking blue active states, orange conversion/action CTA, teal trust/safe badges.
-- Typography: Vietnamese-friendly UI font, compact labels, readable tables.
-- Shapes: 12px controls, 16px cards, clear focus states.
+**Design DNA**
+- Pale sky background, white booking cards, booking blue active state, orange primary CTA, teal trust badges.
+- Custom ChillTravel compass/route/Vietnam identity with Hoang Sa and Truong Sa; no Traveloka bird, wordmark, screenshots, or third-party brand assets.
+- Vietnamese-first copy for public and admin surfaces.
+- Payment surfaces always say: `Thanh toán demo — không phát sinh giao dịch thật`.
 
-**PAGE STRUCTURE:**
-1. Sticky white header with ChillTravel logo and admin actions.
-2. KPI row: đặt chỗ demo, doanh thu mẫu, truy vấn trợ lý, tài liệu RAG.
-3. Operations columns: booking queue, destination moderation, Knowledge Studio, chatbot guardrail logs.
-4. Data table with Vietnamese status chips and actions.
-5. Right trust panel: thanh toán demo, dữ liệu local/sample, không có live visa/weather/flight prices.
+**Screens to inspect**
+1. Desktop home search, service tabs, deal shelf, destination shelves.
+2. Desktop explore/results row, price panel, sticky trip cart.
+3. Destination detail gallery, information bands, local assistant panel.
+4. Booking checkout/demo payment flow.
+5. Utility pages: planner, chat, budget, compare, map, personality.
+6. Admin operations console and Knowledge Studio.
+7. Mobile widths for home, results, detail, checkout, wishlist, trips, profile.
 
-**OUTPUT GOAL:**
-Make the admin feel like a real travel-commerce back office, not repeated destination cards.
+**QA goals**
+- No overlapping Vietnamese text.
+- Clear CTA hierarchy with one primary orange action per decision area.
+- No old English template phrases.
+- No real-payment wording.
+- No live flight, visa, or weather claims.
+- Admin must feel like an operations console, not destination-card filler.

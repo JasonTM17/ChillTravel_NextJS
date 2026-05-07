@@ -54,6 +54,7 @@ describe("Vietnamese travel-commerce UX", () => {
       "app/login/page.tsx",
       "app/register/page.tsx",
       "app/map/page.tsx",
+      "app/not-found.tsx",
       "app/personality/page.tsx",
       "app/profile/page.tsx",
       "app/trips/page.tsx",
@@ -76,7 +77,7 @@ describe("Vietnamese travel-commerce UX", () => {
     const source = files.map((file) => readFileSync(`${root}/${file}`, "utf8")).join("\n");
 
     expect(source).not.toMatch(
-      /Demo payment - no real transaction|Open dossier|Mock booking|Search results|Your trip cart|Build itinerary|Starting from|Admin dashboard|Traveler profile|Wishlist|Login|Register|Bo nhan dien phong cach du lich|Map discovery|Hotels mock|So sanh thong minh|Booking demo|Card mock|VNPay mock|PayPal sandbox|Indexed|Ready|Hallucination guard|real-time|Production-safe|Top search|Funnel demo|Travel style|Guardrail|không charge|Checkout ChillTravel|provider demo|provider thật|Thuế & phí \(sample\)|flow booking|asset placeholder|fallback đẹp|landing\/search/
+      /Demo payment - no real transaction|Open dossier|Mock booking|Search results|Your trip cart|Build itinerary|Starting from|Admin dashboard|Traveler profile|Wishlist|Login|Register|This route drifted off the itinerary|Back home|Bo nhan dien phong cach du lich|Map discovery|Hotels mock|So sanh thong minh|Booking demo|Card mock|VNPay mock|PayPal sandbox|Indexed|Ready|Hallucination guard|real-time|Production-safe|Top search|Funnel demo|Travel style|Guardrail|không charge|Checkout ChillTravel|provider demo|provider thật|Thuế & phí \(sample\)|flow booking|asset placeholder|fallback đẹp|landing\/search/
     );
   });
 
@@ -101,8 +102,10 @@ describe("Vietnamese travel-commerce UX", () => {
       ["app/budget/page.tsx", "Ngân sách thông minh"],
       ["app/compare/page.tsx", "So sánh thông minh"],
       ["app/personality/page.tsx", "Phong cách du lịch"],
+      ["app/map/page.tsx", "Bản đồ khám phá"],
       ["app/wishlist/page.tsx", "Yêu thích"],
       ["app/trips/page.tsx", "Chuyến đi"],
+      ["app/profile/page.tsx", "Hồ sơ du lịch"],
       ["app/admin/page.tsx", "Bảng vận hành ChillTravel"],
       ["app/admin/ai-knowledge/page.tsx", "Knowledge Studio"]
     ] as const;

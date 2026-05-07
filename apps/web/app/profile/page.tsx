@@ -12,7 +12,7 @@ const bookings = [
 
 export default function Page() {
   return (
-    <PageShell eyebrow="Hồ sơ du khách" title="Sở thích, đặt chỗ demo và thiết lập an toàn">
+    <PageShell eyebrow="Hồ sơ du lịch" title="Sở thích, đặt chỗ demo và thiết lập an toàn">
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <section className="space-y-6">
           <CommerceSurface>

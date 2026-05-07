@@ -15,7 +15,7 @@ export function TrustBanner({ compact = false }: { compact?: boolean }) {
         <ShieldCheck className="mt-0.5 shrink-0" size={compact ? 16 : 20} aria-hidden="true" />
         <div>
           <p className="font-black">{demoPaymentWarning}</p>
-          {!compact ? <p className="mt-1 font-bold leading-6">Không lưu thẻ thật, không thu tiền thật, dữ liệu giá/chỗ trống là mẫu local.</p> : null}
+          {!compact ? <p className="mt-1 font-bold leading-6">Không lưu thẻ thật, không phát sinh giao dịch thật, dữ liệu giá/chỗ trống là mẫu local.</p> : null}
         </div>
       </div>
     </div>
@@ -68,14 +68,14 @@ export function StatusPill({ children, tone = "blue" }: { children: React.ReactN
 export function OpsTable({ rows }: { rows: Array<{ name: string; detail: string; status: string; owner: string; tone?: "blue" | "orange" | "teal" | "gray" }> }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white">
-      <div className="grid grid-cols-[1.4fr_1fr_1fr_0.9fr] gap-3 border-b border-[#edf4fa] bg-[#f7fbff] px-4 py-3 text-xs font-black uppercase tracking-[0.12em] text-[#6f8594]">
+      <div className="hidden grid-cols-[1.4fr_1fr_1fr_0.9fr] gap-3 border-b border-[#edf4fa] bg-[#f7fbff] px-4 py-3 text-xs font-black uppercase tracking-[0.12em] text-[#6f8594] md:grid">
         <span>Hạng mục</span>
         <span>Trạng thái</span>
         <span>Phụ trách</span>
         <span>Hành động</span>
       </div>
       {rows.map((row) => (
-        <div key={row.name} className="grid grid-cols-[1.4fr_1fr_1fr_0.9fr] gap-3 border-b border-[#edf4fa] px-4 py-4 text-sm last:border-b-0">
+        <div key={row.name} className="grid gap-3 border-b border-[#edf4fa] px-4 py-4 text-sm last:border-b-0 md:grid-cols-[1.4fr_1fr_1fr_0.9fr]">
           <div>
             <p className="font-black text-[#071827]">{row.name}</p>
             <p className="mt-1 leading-5 text-[#476273]">{row.detail}</p>
@@ -83,8 +83,11 @@ export function OpsTable({ rows }: { rows: Array<{ name: string; detail: string;
           <div>
             <StatusPill tone={row.tone}>{row.status}</StatusPill>
           </div>
-          <p className="font-bold text-[#476273]">{row.owner}</p>
-          <button type="button" className="rounded-xl border border-[#d9ecfb] bg-white px-3 py-2 text-xs font-black text-[#0277d4] transition hover:bg-[#eef7ff]">
+          <p className="font-bold text-[#476273]">
+            <span className="text-xs uppercase tracking-[0.12em] text-[#6f8594] md:hidden">Phụ trách: </span>
+            {row.owner}
+          </p>
+          <button type="button" className="w-full rounded-xl border border-[#d9ecfb] bg-white px-3 py-2 text-xs font-black text-[#0277d4] transition hover:bg-[#eef7ff] md:w-auto">
             Mở
           </button>
         </div>

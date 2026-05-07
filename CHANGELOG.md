@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Polished shared web primitives against the Stitch QA pass with a real mobile header menu, responsive admin tables, compact OTA page shells, and standardized demo-payment trust copy.
 - Documented the `pnpm web:smoke` verification command and refreshed the quality report with the latest 2026-05-07 gate results.
 - Refined Flutter booking into a fuller OTA-style demo checkout with trip summary, checkout steps, payment method panel, QR-style booking cards, and standardized no-transaction labels.
 - Added a reusable ChillTravel web smoke script that checks Vietnamese route copy, legal brand boundaries, 404 localization, and demo-payment warnings, then aligned the experiences and chat service labels to the shared taxonomy.

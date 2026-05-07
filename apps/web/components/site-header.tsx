@@ -35,9 +35,22 @@ export function SiteHeader() {
           <Link href="/register" className="hidden rounded-xl border border-[#d9ecfb] px-4 py-2.5 text-sm font-black text-[#0277d4] transition hover:bg-[#eef7ff] md:inline-flex">
             Đăng ký
           </Link>
-          <button className="inline-flex rounded-xl border border-[#d9ecfb] p-2 text-[#476273] md:hidden" type="button" aria-label="Mở menu">
-            <Menu size={20} aria-hidden="true" />
-          </button>
+          <details className="group relative md:hidden">
+            <summary className="inline-flex cursor-pointer list-none rounded-xl border border-[#d9ecfb] p-2 text-[#476273] transition hover:bg-[#eef7ff] hover:text-[#0277d4]" aria-label="Mở menu">
+              <Menu size={20} aria-hidden="true" />
+            </summary>
+            <div className="absolute right-0 mt-3 w-[min(86vw,320px)] overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white p-2 shadow-[0_18px_48px_rgba(2,68,120,0.16)]">
+              {[...utilityNav, ["Đăng nhập", "/login", LogIn] as const].map(([label, href, Icon]) => (
+                <Link key={href} href={href} className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-black text-[#334e60] transition hover:bg-[#eef7ff] hover:text-[#0277d4]">
+                  <Icon size={18} aria-hidden="true" />
+                  {label}
+                </Link>
+              ))}
+              <Link href="/register" className="mt-2 flex items-center justify-center rounded-xl bg-[#ff6d1a] px-3 py-3 text-sm font-black text-white">
+                Đăng ký
+              </Link>
+            </div>
+          </details>
         </div>
       </div>
     </header>

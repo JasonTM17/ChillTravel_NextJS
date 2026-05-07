@@ -35,6 +35,10 @@ Run web:
 
     pnpm --filter @vietwander/web dev
 
+Run Vietnamese web smoke checks:
+
+    pnpm web:smoke
+
 Run API:
 
     pnpm --filter @vietwander/api dev
@@ -82,6 +86,15 @@ All payment flows are local/mock/sandbox only. The project never stores real car
 ## Data Limits
 
 Travel data is sample/local. The chatbot does not provide real-time visa, current weather, or flight price truth. Check official sources for live travel decisions.
+
+## Verification
+
+    pnpm lint
+    pnpm test
+    pnpm exec turbo build --no-daemon
+    pnpm web:smoke
+    pnpm ai:test
+    pnpm docker:config
 
 ## Roadmap
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CalendarDays, CheckCircle2, MapPinned, PlaneTakeoff, WalletCards } from "lucide-react";
+import { userBookingSummaries } from "@vietwander/shared";
 import { CommerceMetric, CommerceSurface, StatusPill, TrustBanner } from "@/components/commerce-primitives";
 import { PageShell } from "@/components/page-shell";
 import { formatVnd } from "@/lib/utils";
@@ -50,6 +51,18 @@ export default function Page() {
         </section>
         <aside className="h-fit space-y-4 lg:sticky lg:top-24">
           <TrustBanner compact />
+          <CommerceSurface>
+            <h2 className="text-xl font-black">Booking hub</h2>
+            <div className="mt-4 space-y-3">
+              {userBookingSummaries.map((booking) => (
+                <Link key={booking.id} href="/booking/demo" className="block rounded-2xl bg-[#f7fbff] p-4">
+                  <p className="font-black text-[#0277d4]">{booking.code}</p>
+                  <p className="mt-1 text-sm font-black text-[#071827]">{booking.title}</p>
+                  <p className="mt-1 text-xs font-bold text-[#6f8594]">{booking.paymentWarning}</p>
+                </Link>
+              ))}
+            </div>
+          </CommerceSurface>
           <CommerceSurface>
             <h2 className="text-xl font-black">Gói chuyến đi</h2>
             <div className="mt-4 space-y-3">

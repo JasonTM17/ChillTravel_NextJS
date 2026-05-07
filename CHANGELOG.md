@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Aligned account and trip dashboard surfaces with shared booking and loyalty mock data for the Stitch account/bookings flow.
 - Added Stitch-mapped web routes for mock flight results, hotel property detail, support center, loyalty dashboard, and updated commerce navigation into the new flows.
 - Added shared full-app commerce contracts and mock datasets for flights, hotel properties, support articles, account bookings, loyalty tiers, and demo-payment boundaries.
 - Mapped the full Stitch project screen inventory into the ChillTravel implementation roadmap for flights, hotel detail, support, loyalty, and mobile expansion.

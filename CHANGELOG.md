@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Connected the planner and Knowledge Studio surfaces to local structured answers and RAG reindex status with visible provider/fallback details.
 - Refactored the web chat page into an interactive local concierge with message history, structured itinerary cards, citations, provider fallback badge, and quick actions.
 - Connected the NestJS AI gateway to the local FastAPI service with structured fallback, itinerary/reindex proxy normalization, and API regression coverage.
 - Upgraded the FastAPI local AI service with structured concierge answers, richer RAG chunk payloads, provider/fallback status, and expanded hallucination-guard tests.

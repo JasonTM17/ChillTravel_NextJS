@@ -1,5 +1,6 @@
 import { DatabaseZap, FileJson2, RefreshCw, ShieldAlert } from "lucide-react";
 import { CommerceMetric, CommerceSurface, OpsTable, ServiceActionCard } from "@/components/commerce-primitives";
+import { getReindexStatus } from "@/lib/local-ai";
 import { PageShell } from "@/components/page-shell";
 
 const rows = [
@@ -9,15 +10,22 @@ const rows = [
   { name: "datasets/travel_qa_vi_en.jsonl", detail: "Câu hỏi Việt/Anh cho trợ lý du lịch", status: "Sẵn sàng", owner: "Dataset", tone: "blue" as const }
 ];
 
-export default function Page() {
+export default async function Page() {
+  const reindex = await getReindexStatus();
+  const data = (reindex.data ?? {}) as Record<string, unknown>;
+  const documents = numberLabel(data.documents, "0");
+  const chunks = numberLabel(data.chunks, "0");
+  const retrievalBackend = typeof data.retrieval_backend === "string" ? data.retrieval_backend : "sample";
+  const fallbackReason = typeof data.fallback_reason === "string" && data.fallback_reason ? data.fallback_reason : "Đang dùng fallback local khi service chưa chạy";
+
   return (
     <PageShell eyebrow="Knowledge Studio" title="Quản lý nguồn RAG local">
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="space-y-6">
           <div className="grid gap-4 md:grid-cols-3">
-            <CommerceMetric label="Tài liệu" value="86" helper="Markdown/JSON mẫu local." />
-            <CommerceMetric label="Chunks" value="428" helper="Có payload source/chunk/trust tier." tone="teal" />
-            <CommerceMetric label="Cảnh báo" value="12" helper="Log câu hỏi cần nguồn chính thức." tone="orange" />
+            <CommerceMetric label="Tài liệu" value={documents} helper="Markdown/JSON mẫu local." />
+            <CommerceMetric label="Chunks" value={chunks} helper={`Backend hiện tại: ${retrievalBackend}.`} tone="teal" />
+            <CommerceMetric label="Fallback" value={retrievalBackend === "qdrant" ? "Tắt" : "Bật"} helper={fallbackReason} tone="orange" />
           </div>
           <CommerceSurface>
             <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
@@ -27,7 +35,7 @@ export default function Page() {
               </div>
               <button type="button" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#ff6d1a] px-4 py-3 text-sm font-black text-white">
                 <RefreshCw size={16} aria-hidden="true" />
-                Lập lại chỉ mục demo
+                Lập lại chỉ mục local
               </button>
             </div>
             <div className="mt-5">
@@ -43,4 +51,8 @@ export default function Page() {
       </div>
     </PageShell>
   );
+}
+
+function numberLabel(value: unknown, fallback: string) {
+  return typeof value === "number" ? value.toLocaleString("vi-VN") : fallback;
 }

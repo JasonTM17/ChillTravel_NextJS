@@ -105,12 +105,12 @@ class _ServiceGrid extends StatelessWidget {
   const _ServiceGrid();
 
   static const services = [
-    (Icons.hotel_outlined, 'Khách sạn'),
-    (Icons.flight_takeoff_outlined, 'Chuyến bay'),
-    (Icons.confirmation_num_outlined, 'Hoạt động'),
-    (Icons.directions_car_outlined, 'Xe đưa đón'),
-    (Icons.map_outlined, 'Bản đồ'),
-    (Icons.event_note_outlined, 'Lịch trình'),
+    (Icons.hotel_outlined, 'Khách sạn', '/explore'),
+    (Icons.flight_takeoff_outlined, 'Chuyến bay', '/flights'),
+    (Icons.confirmation_num_outlined, 'Hoạt động', '/explore'),
+    (Icons.directions_car_outlined, 'Xe đưa đón', '/support'),
+    (Icons.workspace_premium_outlined, 'Chill Rewards', '/loyalty'),
+    (Icons.event_note_outlined, 'Lịch trình', '/itinerary'),
   ];
 
   @override
@@ -123,23 +123,27 @@ class _ServiceGrid extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       children: [
         for (final service in services)
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: const Color(0xFFD9ECFB)),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(service.$1, color: chillBlue),
-                const SizedBox(height: 8),
-                Text(
-                  service.$2,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontWeight: FontWeight.w800),
-                ),
-              ],
+          InkWell(
+            borderRadius: BorderRadius.circular(18),
+            onTap: () => context.go(service.$3),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: const Color(0xFFD9ECFB)),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(service.$1, color: chillBlue),
+                  const SizedBox(height: 8),
+                  Text(
+                    service.$2,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontWeight: FontWeight.w800),
+                  ),
+                ],
+              ),
             ),
           ),
       ],

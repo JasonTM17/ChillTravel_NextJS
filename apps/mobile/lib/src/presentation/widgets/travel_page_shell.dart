@@ -36,7 +36,7 @@ class TravelPageShell extends StatelessWidget {
         actions: [
           IconButton(
             tooltip: 'Hỗ trợ',
-            onPressed: () => context.go('/chat'),
+            onPressed: () => context.go('/support'),
             icon: const Icon(Icons.support_agent_outlined),
           ),
         ],
@@ -224,6 +224,6 @@ int _selectedIndex(String title) {
   if (title.contains('Khám phá')) return 1;
   if (title.contains('Lịch trình')) return 2;
   if (title.contains('Đặt chỗ')) return 3;
-  if (title.contains('Hồ sơ')) return 4;
+  if (title.contains('Hồ sơ') || title.contains('Hỗ trợ') || title.contains('Chill Rewards')) return 4;
   return 0;
 }

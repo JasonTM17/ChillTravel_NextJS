@@ -4,10 +4,13 @@ import 'features/ai_chat_screen.dart';
 import 'features/booking_screen.dart';
 import 'features/destination_detail_screen.dart';
 import 'features/explore_screen.dart';
+import 'features/flight_results_screen.dart';
 import 'features/home_screen.dart';
 import 'features/itinerary_screen.dart';
+import 'features/loyalty_screen.dart';
 import 'features/onboarding_screen.dart';
 import 'features/profile_screen.dart';
+import 'features/support_screen.dart';
 import 'features/wishlist_screen.dart';
 
 final router = GoRouter(
@@ -15,6 +18,7 @@ final router = GoRouter(
     GoRoute(path: '/', builder: (_, __) => const OnboardingScreen()),
     GoRoute(path: '/home', builder: (_, __) => const HomeScreen()),
     GoRoute(path: '/explore', builder: (_, __) => const ExploreScreen()),
+    GoRoute(path: '/flights', builder: (_, __) => const FlightResultsScreen()),
     GoRoute(
       path: '/destination',
       builder: (_, __) => const DestinationDetailScreen(),
@@ -24,6 +28,8 @@ final router = GoRouter(
     GoRoute(path: '/booking', builder: (_, __) => const BookingScreen()),
     GoRoute(path: '/wishlist', builder: (_, __) => const WishlistScreen()),
     GoRoute(path: '/profile', builder: (_, __) => const ProfileScreen()),
+    GoRoute(path: '/support', builder: (_, __) => const SupportScreen()),
+    GoRoute(path: '/loyalty', builder: (_, __) => const LoyaltyScreen()),
   ],
 );
 

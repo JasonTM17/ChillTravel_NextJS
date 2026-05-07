@@ -5,15 +5,15 @@ const baseUrl = process.env.WEB_SMOKE_BASE_URL ?? `http://127.0.0.1:${port}`;
 const pnpm = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
 
 const routes = [
-  ["/", "ChillTravel"],
-  ["/explore?q=Da+Nang", "Đà Nẵng"],
-  ["/destinations/da-nang", "Đà Nẵng"],
+  ["/", ["ChillTravel", "Khách sạn", "Ưu đãi mẫu"]],
+  ["/explore?q=Da+Nang", ["Đà Nẵng", "Tóm tắt chuyến đi", "Chỉ thanh toán demo"]],
+  ["/destinations/da-nang", ["Đà Nẵng", "Tóm tắt đặt chỗ", "Hỏi trợ lý chuyến đi"]],
   ["/hotels", "Khách sạn"],
   ["/experiences", "Hoạt động"],
   ["/ai-planner", "Lập lịch trình"],
   ["/chat", "Trợ lý chuyến đi"],
   ["/booking/demo", "Thanh toán demo"],
-  ["/booking/da-nang", "Thanh toán demo"],
+  ["/booking/da-nang", ["Thanh toán demo", "Thanh toán demo an toàn", "Xem trước vé QR"]],
   ["/budget", "Ngân sách thông minh"],
   ["/compare", "So sánh thông minh"],
   ["/map", "Bản đồ khám phá"],
@@ -38,7 +38,9 @@ const forbidden = [
   /Back home/i,
   /Admin dashboard/i,
   /Search results/i,
-  /Traveler profile/i
+  /Traveler profile/i,
+  /không thu tiền thật/i,
+  /Thanh toán an toàn/i
 ];
 
 let server;
@@ -93,8 +95,11 @@ function assertRoute(path, expected, status, body) {
   if (status !== 200) {
     throw new Error(`${path} returned ${status}, expected 200`);
   }
-  if (!body.includes(expected)) {
-    throw new Error(`${path} is missing expected text: ${expected}`);
+  const expectedTexts = Array.isArray(expected) ? expected : [expected];
+  for (const expectedText of expectedTexts) {
+    if (!body.includes(expectedText)) {
+      throw new Error(`${path} is missing expected text: ${expectedText}`);
+    }
   }
   if (!body.includes("ChillTravel")) {
     throw new Error(`${path} is missing ChillTravel brand text`);

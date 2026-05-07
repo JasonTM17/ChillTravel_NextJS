@@ -4,8 +4,12 @@ import { ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { demoPaymentWarning } from "@/lib/vietnamese";
 
-export function CommerceSurface({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <section className={cn("rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_16px_42px_rgba(2,68,120,0.08)]", className)}>{children}</section>;
+export function CommerceSurface({ children, className = "", ...props }: React.ComponentPropsWithoutRef<"section">) {
+  return (
+    <section {...props} className={cn("rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_16px_42px_rgba(2,68,120,0.08)]", className)}>
+      {children}
+    </section>
+  );
 }
 
 export function TrustBanner({ compact = false }: { compact?: boolean }) {

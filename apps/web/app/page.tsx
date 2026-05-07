@@ -27,7 +27,7 @@ import { demoPaymentWarning, formatDateVi } from "@/lib/vietnamese";
 
 const serviceTabs = [
   ["Khách sạn", "/hotels", Hotel, true],
-  ["Chuyến bay", "/explore?q=Chuyen bay", Plane, false],
+  ["Chuyến bay", "/flights", Plane, false],
   ["Hoạt động", "/experiences", Ticket, false],
   ["Xe đưa đón", "/map", Bus, false],
   ["Thuê xe", "/map", Car, false],

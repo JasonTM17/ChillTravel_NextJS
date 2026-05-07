@@ -1,12 +1,14 @@
 import Link from "next/link";
-import { BadgePercent, Bookmark, CalendarCheck2, HelpCircle, LogIn, Menu, UserRound } from "lucide-react";
+import { BadgePercent, Bookmark, CalendarCheck2, Gift, HelpCircle, LogIn, Menu, Plane, UserRound } from "lucide-react";
 import { BrandLogo } from "@/components/brand-logo";
 
 const utilityNav = [
   ["Ưu đãi", "/", BadgePercent],
+  ["Vé máy bay", "/flights", Plane],
   ["Đặt chỗ", "/booking/demo", CalendarCheck2],
   ["Đã lưu", "/wishlist", Bookmark],
-  ["Hỗ trợ", "/chat", HelpCircle]
+  ["Chill Rewards", "/loyalty", Gift],
+  ["Hỗ trợ", "/support", HelpCircle]
 ] as const;
 
 export function SiteHeader() {

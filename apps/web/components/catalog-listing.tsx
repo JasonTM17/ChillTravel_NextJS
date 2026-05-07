@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { CalendarCheck2, MapPin, Star, Ticket, Utensils } from "lucide-react";
-import type { Destination } from "@vietwander/shared";
-import { destinations } from "@vietwander/shared";
+import type { Destination, HotelProperty, RoomOffer } from "@vietwander/shared";
+import { destinations, hotelProperties } from "@vietwander/shared";
 import { CommerceSurface, StatusPill, TrustBanner } from "@/components/commerce-primitives";
 import { getDestinationCopy } from "@/lib/destination-copy";
 import { getDestinationImage } from "@/lib/destination-images";
 import { formatVnd } from "@/lib/utils";
 
 export function CatalogListing({ kind }: { kind: "hotel" | "experience" }) {
-  const items = (kind === "hotel" ? destinations.slice(12, 18) : destinations.slice(6, 12)).slice(0, 6);
+  const items = destinations.slice(6, 12).slice(0, 6);
   const title = kind === "hotel" ? "Nơi lưu trú nổi bật" : "Trải nghiệm được đặt nhiều";
   const helper = kind === "hotel" ? "Giá phòng là dữ liệu mẫu local, có ghi chú hủy demo." : "Tour, vé và trải nghiệm đều dùng QR và đặt chỗ mô phỏng.";
 
@@ -26,9 +26,9 @@ export function CatalogListing({ kind }: { kind: "hotel" | "experience" }) {
             </Link>
           </div>
         </CommerceSurface>
-        {items.map((destination) => (
-          <CatalogRow key={destination.slug} destination={destination} kind={kind} />
-        ))}
+        {kind === "hotel"
+          ? hotelProperties.map((hotel) => <HotelCatalogRow key={hotel.slug} hotel={hotel} />)
+          : items.map((destination) => <CatalogRow key={destination.slug} destination={destination} kind={kind} />)}
       </section>
       <aside className="h-fit space-y-4 lg:sticky lg:top-24">
         <TrustBanner />
@@ -42,6 +42,53 @@ export function CatalogListing({ kind }: { kind: "hotel" | "experience" }) {
         </CommerceSurface>
       </aside>
     </div>
+  );
+}
+
+function HotelCatalogRow({ hotel }: { hotel: HotelProperty }) {
+  const destination = destinations.find((item) => item.slug === hotel.destinationSlug) ?? destinations[0];
+  const copy = getDestinationCopy(destination);
+  const lowestRoom = hotel.rooms.reduce<RoomOffer | undefined>((lowest, room) => (!lowest || room.nightlyPrice < lowest.nightlyPrice ? room : lowest), undefined);
+
+  return (
+    <article className="grid overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_14px_34px_rgba(2,68,120,0.08)] md:grid-cols-[210px_minmax(0,1fr)_210px]">
+      <Link href={`/hotels/${hotel.slug}`} className="min-h-[190px] bg-cover bg-center" style={{ backgroundImage: `url(${getDestinationImage(hotel.destinationSlug)})` }} aria-label={`Xem chi tiết ${hotel.name}`} />
+      <div className="p-5">
+        <div className="flex flex-wrap items-center gap-2">
+          <StatusPill tone="blue">{hotel.district}</StatusPill>
+          <span className="inline-flex items-center gap-1 text-sm font-black text-[#b45309]">
+            <Star size={15} fill="currentColor" aria-hidden="true" />
+            {hotel.rating.toFixed(1)}
+          </span>
+        </div>
+        <Link href={`/hotels/${hotel.slug}`} className="mt-3 block text-xl font-black hover:text-[#0277d4]">
+          {hotel.name}
+        </Link>
+        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#476273]">{hotel.summary}</p>
+        <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-[#476273]">
+          <span className="inline-flex items-center gap-1 rounded-full bg-[#f3f9ff] px-3 py-1">
+            <MapPin size={14} className="text-[#0277d4]" aria-hidden="true" />
+            {copy.city}
+          </span>
+          {hotel.amenities.slice(0, 2).map((amenity) => (
+            <span key={amenity} className="inline-flex items-center gap-1 rounded-full bg-[#f3f9ff] px-3 py-1">
+              {amenity}
+            </span>
+          ))}
+        </div>
+      </div>
+      <aside className="flex flex-col justify-between border-t border-[#edf4fa] bg-[#fbfdff] p-5 md:border-l md:border-t-0">
+        <div>
+          <p className="text-xs font-bold text-[#6f8594]">Giá mẫu từ</p>
+          <p className="mt-1 text-2xl font-black text-[#ff5f12]">{formatVnd(lowestRoom?.nightlyPrice ?? 0)}</p>
+          <p className="mt-1 text-xs font-bold text-[#6f8594]">mỗi đêm</p>
+        </div>
+        <Link href={`/hotels/${hotel.slug}`} className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-[#ff6d1a] px-4 py-3 text-sm font-black text-white">
+          <CalendarCheck2 size={16} aria-hidden="true" />
+          Xem phòng
+        </Link>
+      </aside>
+    </article>
   );
 }
 

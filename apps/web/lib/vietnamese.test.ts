@@ -69,7 +69,6 @@ describe("Vietnamese travel-commerce UX", () => {
       "components/destination-card.tsx",
       "components/itinerary-timeline.tsx",
       "components/page-shell.tsx",
-      "components/feature-overview.tsx",
       "components/ai/compare-console.tsx",
       "components/ai/mood-search-panel.tsx",
       "components/ai/personality-quiz.tsx"

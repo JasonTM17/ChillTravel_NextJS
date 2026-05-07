@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Removed the unused generic feature-overview component so secondary pages stay on concrete travel-commerce surfaces.
 - Replaced the generic map overview with a Vietnamese map-discovery workspace, aligned profile route copy, and localized the 404 route copy.
 - Replaced generic wishlist, trips, and profile pages with richer Vietnamese travel-commerce surfaces for saved collections, trip timelines, demo bookings, and offline settings.
 - Polished remaining Vietnamese UX copy across admin, booking, utility web pages, and mobile payment labels by replacing mixed English terms with clearer local/demo wording.

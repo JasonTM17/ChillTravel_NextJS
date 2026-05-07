@@ -5,6 +5,7 @@ Verified with the Codex in-app browser on 2026-05-07 against `http://127.0.0.1:3
 ## Passed
 
 - `/`, `/explore?q=Da+Nang`, `/destinations/da-nang`, `/booking/da-nang`, `/admin`, and `/admin/ai-knowledge` loaded with expected ChillTravel Vietnamese copy.
+- Extended HTTP route smoke also passed for `/flights`, `/hotels/da-nang-boutique-stay`, `/support`, and `/loyalty`.
 - Explore style filter link was visible and navigated to `/explore?q=Da%20Nang&style=%E1%BA%A8m%20th%E1%BB%B1c`.
 - Destination detail had two booking CTAs to `/booking/da-nang`.
 - Booking detail showed the exact demo warning `Thanh toán demo — không phát sinh giao dịch thật` and a `CT-QR` ticket preview after CTA navigation.

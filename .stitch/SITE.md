@@ -28,8 +28,8 @@ Important:
 - [x] `/explore`
 - [x] `/destinations/[slug]`
 - [x] `/hotels`
-- [ ] `/hotels/[id]`
-- [ ] `/flights`
+- [x] `/hotels/[id]`
+- [x] `/flights`
 - [x] `/experiences`
 - [x] `/booking/demo`
 - [x] `/booking/[id]`
@@ -44,8 +44,8 @@ Important:
 - [x] `/profile`
 - [x] `/login`
 - [x] `/register`
-- [ ] `/support`
-- [ ] `/loyalty`
+- [x] `/support`
+- [x] `/loyalty`
 - [x] `/admin`
 - [x] `/admin/destinations`
 - [x] `/admin/bookings`
@@ -62,7 +62,8 @@ Important:
 - [x] Expand Vietnamese route smoke tests and visual QA.
 - [x] Final responsive QA pass for desktop, tablet, and mobile browser widths.
 - [x] Post-QA release check: run full gates, review docs, and prepare the final portfolio-ready handoff.
-- [ ] Full app Stitch implementation: flights, hotel detail, support, loyalty, and expanded mobile surfaces.
+- [x] Full app Stitch implementation: flights, hotel detail, support, loyalty, and expanded mobile surfaces.
+- [ ] Release hardening: run final gates, refresh screenshots if Browser tooling is available, and prepare final portfolio handoff.
 
 ## 6. Creative Freedom
 

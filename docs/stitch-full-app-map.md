@@ -22,7 +22,13 @@ Use these screens as **layout references only**. Some source titles mention thir
 
 ## Implementation Targets
 
-- Add `/flights`, `/hotels/[id]`, `/support`, and `/loyalty`.
-- Expand shared mock contracts for flights, hotel properties, support, bookings, and loyalty.
-- Polish existing home/results/checkout/account routes to stay consistent with the reference screen families.
-- Expand mobile Flutter with flight/support/account surfaces while keeping local/offline and demo-payment boundaries.
+- [x] Add `/flights`, `/hotels/[id]`, `/support`, and `/loyalty`.
+- [x] Expand shared mock contracts for flights, hotel properties, support, bookings, and loyalty.
+- [x] Polish existing home/results/checkout/account routes to stay consistent with the reference screen families.
+- [x] Expand mobile Flutter with flight/support/account surfaces while keeping local/offline and demo-payment boundaries.
+
+## Implemented Routes And Surfaces
+
+- Web: flights results, hotel property detail, support FAQ, loyalty dashboard, profile booking hub, trip booking hub.
+- Mobile: flight results, support center, Chill Rewards, clickable service grid, profile shortcuts.
+- Smoke: `/`, `/explore?q=Da+Nang`, `/destinations/da-nang`, `/flights`, `/hotels`, `/hotels/da-nang-boutique-stay`, `/experiences`, `/booking/demo`, `/booking/da-nang`, `/support`, `/loyalty`, `/admin`, `/admin/ai-knowledge`.

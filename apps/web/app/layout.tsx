@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Nền tảng du lịch Việt Nam và thế giới với tìm kiếm, lịch trình thông minh ưu tiên chạy local và thanh toán demo an toàn.",
   metadataBase: new URL("https://chilltravel.local"),
   icons: {
-    icon: "/brand/logo-mark-ai-islands.png"
+    icon: "/brand/logo-mark-islands.png"
   }
 };
 

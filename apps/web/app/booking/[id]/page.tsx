@@ -224,7 +224,7 @@ function PriceSummary({ destination, roomTotal, fees, discount, total }: { desti
           <QrCode size={58} aria-hidden="true" />
         </div>
         <h3 className="mt-4 text-lg font-black">Xem trước vé QR</h3>
-        <p className="mt-2 text-sm leading-6 text-[#476273]">Vé điện tử demo sẽ được tạo sau khi xác nhận. Mã đặt chỗ mẫu: VW-QR-{destination.slug.toUpperCase()}.</p>
+        <p className="mt-2 text-sm leading-6 text-[#476273]">Vé điện tử demo sẽ được tạo sau khi xác nhận. Mã đặt chỗ mẫu: CT-QR-{destination.slug.toUpperCase()}.</p>
       </div>
     </aside>
   );

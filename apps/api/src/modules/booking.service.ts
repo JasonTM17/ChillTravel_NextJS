@@ -11,15 +11,15 @@ export class BookingService {
     const suffix = this.sequence.toString().padStart(6, "0");
     return {
       id: "book_" + suffix,
-      bookingCode: "VW-" + suffix,
+      bookingCode: "CT-" + suffix,
       status: "confirmed",
       totalAmount: input.amount,
       currency: "VND",
       paymentStatus: "confirmed_mock",
       paymentMethod: method,
       isDemo: true,
-      warning: "Demo payment only - no real transaction",
-      qrTicket: "VW-QR-MOCK-" + suffix
+      warning: "Thanh toán demo — không phát sinh giao dịch thật",
+      qrTicket: "CT-QR-MOCK-" + suffix
     };
   }
 
@@ -29,7 +29,7 @@ export class BookingService {
       status: "confirmed",
       paymentStatus: "confirmed_mock",
       isDemo: true,
-      warning: "Demo payment only - no real transaction"
+      warning: "Thanh toán demo — không phát sinh giao dịch thật"
     };
   }
 

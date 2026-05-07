@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Removed remaining legacy brand/asset filenames from the ChillTravel booking hero, island logo mark, QR ticket samples, and mock payment API wording.
 - Advanced the Stitch loop baton to `post-qa-release-check` and documented completion of the final responsive QA pass.
 - Strengthened the web smoke gate with Stitch QA markers for home, explore, destination detail, checkout, and stricter forbidden payment wording.
 - Polished Flutter home and destination detail surfaces against the Stitch mobile references with an offline pack card, image-led detail layout, quick facts, food/activity chips, assistant CTA, and documented the local Flutter analyze blocker.

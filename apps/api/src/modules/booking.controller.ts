@@ -32,26 +32,26 @@ export class BookingController {
 
   @Post("bookings")
   create(@Body() body: BookingDto) {
-    return envelope(this.bookings.create(body), "Mock booking confirmed");
+    return envelope(this.bookings.create(body), "Đặt chỗ demo đã được xác nhận");
   }
 
   @Get("bookings/:code")
   find(@Param("code") code: string) {
-    return envelope(this.bookings.find(code), "Booking loaded");
+    return envelope(this.bookings.find(code), "Đã tải đặt chỗ demo");
   }
 
   @Post("payments/mock")
   payment(@Body() body: BookingDto) {
-    return envelope(this.bookings.create(body), "Mock payment token accepted");
+    return envelope(this.bookings.create(body), "Đã nhận phương thức thanh toán demo");
   }
 
   @Post("payments/mock/confirm")
   confirm(@Body() body: PaymentConfirmDto = {}) {
-    return envelope({ bookingCode: body.bookingCode ?? "VW-MOCK", status: "confirmed_mock", warning: "Demo payment only - no real transaction" }, "Mock payment confirmed");
+    return envelope({ bookingCode: body.bookingCode ?? "CT-MOCK", status: "confirmed_mock", warning: "Thanh toán demo — không phát sinh giao dịch thật" }, "Thanh toán demo đã được xác nhận");
   }
 
   @Post("bookings/:id/cancel")
   cancel(@Param("id") id: string) {
-    return envelope(this.bookings.cancel(id), "Mock booking cancelled");
+    return envelope(this.bookings.cancel(id), "Đặt chỗ demo đã được hủy");
   }
 }

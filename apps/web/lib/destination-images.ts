@@ -1,8 +1,7 @@
 const fallbackImage =
   "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80";
 
-const heroImage =
-  "/generated/vietwander-traveloka-hero.png";
+const heroImage = "/generated/chilltravel-booking-hero.png";
 
 const stayDealImage = "/generated/vietwander-stay-deal.png";
 const experienceDealImage = "/generated/vietwander-experience-deal.png";

@@ -100,7 +100,7 @@ a {
 .booking-hero {
   background:
     linear-gradient(180deg, rgba(2, 119, 212, 0.03), rgba(2, 119, 212, 0.16)),
-    url("/generated/vietwander-traveloka-hero.png");
+    url("/generated/chilltravel-booking-hero.png");
   background-position: center;
   background-size: cover;
 }

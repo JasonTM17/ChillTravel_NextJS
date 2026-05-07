@@ -17,7 +17,7 @@ describe("api services", () => {
   it("creates mock-only payments", () => {
     const booking = new BookingService().create({ itemName: "Demo tour", amount: 1000000, method: "MOCK_MOMO" });
     expect(booking.isDemo).toBe(true);
-    expect(booking.warning).toContain("no real transaction");
+    expect(booking.warning).toContain("không phát sinh giao dịch thật");
   });
 
   it("returns hallucination guard for realtime queries", () => {
@@ -118,13 +118,13 @@ describe("api http hardening", () => {
     expect(booking.status).toBe(201);
     expect(booking.body.data).toMatchObject({
       id: "book_000001",
-      bookingCode: "VW-000001",
+      bookingCode: "CT-000001",
       paymentStatus: "confirmed_mock",
       isDemo: true
     });
-    expect(payment.body.data).toMatchObject({ id: "book_000002", bookingCode: "VW-000002" });
-    expect(confirm.body.data).toMatchObject({ bookingCode: "VW-000001", status: "confirmed_mock" });
-    expect(confirm.body.data.warning).toContain("no real transaction");
+    expect(payment.body.data).toMatchObject({ id: "book_000002", bookingCode: "CT-000002" });
+    expect(confirm.body.data).toMatchObject({ bookingCode: "CT-000001", status: "confirmed_mock" });
+    expect(confirm.body.data.warning).toContain("không phát sinh giao dịch thật");
   });
 
   it("serves local AI endpoints without an OpenAI key", async () => {

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { destinations } from "./seed";
+import { demoPaymentWarning, flightOffers, getHotelPropertyBySlug, loyaltyTiers, supportArticles, userBookingSummaries } from "./commerce";
 import { compareDestinations, detectTravelStyle, localAiAnswer, moodSearch, simulateBudget } from "./ai-tools";
 import type { AiChatRequest, BookingCreateRequest, DestinationListQuery, MobileOfflineSnapshot, ChillTravelApiContract } from "./contracts";
 
@@ -57,5 +58,15 @@ describe("seed data and travel intelligence", () => {
     expect(chatRequest.contextSlug).toBe("da-nang");
     expect(snapshot.cachedAt).toBe("1970-01-01T00:00:00.000Z");
     expect(contract).toBe("ai");
+  });
+
+  it("exports full app commerce mock data without real payment claims", () => {
+    expect(flightOffers.length).toBeGreaterThanOrEqual(3);
+    expect(flightOffers.every((offer) => offer.isMock)).toBe(true);
+    expect(getHotelPropertyBySlug("da-nang-boutique-stay")?.rooms.length).toBeGreaterThan(1);
+    expect(supportArticles.some((article) => article.category === "payment")).toBe(true);
+    expect(userBookingSummaries[0]?.code).toContain("CT-QR");
+    expect(userBookingSummaries[0]?.paymentWarning).toBe(demoPaymentWarning);
+    expect(loyaltyTiers[0]?.demoRewards.length).toBeGreaterThan(1);
   });
 });

@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Expanded web smoke coverage for full Stitch app routes, including flights, hotel detail, support, loyalty, and a Windows-safe smoke server launcher.
 - Added Flutter mobile Stitch surfaces for mock flight results, support center, Chill Rewards, actionable service tiles, and profile shortcuts.
 - Aligned account and trip dashboard surfaces with shared booking and loyalty mock data for the Stitch account/bookings flow.
 - Added Stitch-mapped web routes for mock flight results, hotel property detail, support center, loyalty dashboard, and updated commerce navigation into the new flows.

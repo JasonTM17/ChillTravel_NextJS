@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Replaced generic wishlist, trips, and profile pages with richer Vietnamese travel-commerce surfaces for saved collections, trip timelines, demo bookings, and offline settings.
 - Polished remaining Vietnamese UX copy across admin, booking, utility web pages, and mobile payment labels by replacing mixed English terms with clearer local/demo wording.
 - Updated README, Stitch prompts, and Vietnamese UX runbook to reflect the ChillTravel brand, smart planner wording, local-assistant boundary, and non-cloning legal rules.
 - Expanded Vietnamese web smoke tests to cover new commerce primitives, catalog listing surfaces, and ChillTravel brand boundary checks.

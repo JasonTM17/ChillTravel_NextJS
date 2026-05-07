@@ -7,6 +7,7 @@ Verified locally on 2026-05-07:
 - pnpm build: passed with Next.js 16.2.4, NestJS 11.1.19, and Prisma 7.8.0 schema validation
 - pnpm exec turbo build --no-daemon: passed for web, API, shared, config, and DB schema packages
 - pnpm web:smoke: passed for landing, explore, destination detail, hotels, experiences, planner, chat, booking demo, booking detail, budget, compare, map, personality, wishlist, trips, profile, auth, admin, AI knowledge, and localized 404
+- Stitch final responsive QA pass: completed for shared web primitives, public booking/detail flows, strengthened smoke markers, and Flutter mobile home/detail polish
 - python -m unittest discover apps/ai-service/tests: passed
 - docker compose -f infra/docker/docker-compose.yml config: passed
 - Dart format: passed for changed mobile booking, home, and destination detail files, with package-resolution warnings because Flutter SDK is not installed locally

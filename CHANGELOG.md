@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Advanced the Stitch loop baton to `post-qa-release-check` and documented completion of the final responsive QA pass.
 - Strengthened the web smoke gate with Stitch QA markers for home, explore, destination detail, checkout, and stricter forbidden payment wording.
 - Polished Flutter home and destination detail surfaces against the Stitch mobile references with an offline pack card, image-led detail layout, quick facts, food/activity chips, assistant CTA, and documented the local Flutter analyze blocker.
 - Refactored destination detail and booking copy toward the Stitch travel-commerce layout with a bright image-led detail page, sticky demo booking panel, and consistent no-transaction payment wording.

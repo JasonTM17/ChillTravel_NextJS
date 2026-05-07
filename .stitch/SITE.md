@@ -56,7 +56,8 @@ Important:
 - [x] Refactor admin into an operations console instead of repeated destination-card filler.
 - [x] Apply mobile-first OTA home and booking screens to Flutter.
 - [x] Expand Vietnamese route smoke tests and visual QA.
-- [ ] Final responsive QA pass for desktop, tablet, and mobile browser widths.
+- [x] Final responsive QA pass for desktop, tablet, and mobile browser widths.
+- [ ] Post-QA release check: run full gates, review docs, and prepare the final portfolio-ready handoff.
 
 ## 6. Creative Freedom
 

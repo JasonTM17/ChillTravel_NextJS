@@ -68,13 +68,14 @@ void main() {
   testWidgets('booking creates sandbox holds locally', (tester) async {
     await _pumpMobileWidget(tester, const BookingScreen());
 
+    expect(find.text('Phương thức thanh toán demo'), findsOneWidget);
     expect(find.text('Du thuyền Hạ Long qua đêm'), findsOneWidget);
 
     await tester.tap(find.text('Tạo giữ chỗ demo'));
     await tester.pumpAndSettle();
 
     expect(find.text('Gói thiết yếu Việt Nam'), findsOneWidget);
-    expect(find.textContaining('Không thu tiền thật'), findsWidgets);
+    expect(find.textContaining('không phát sinh giao dịch thật'), findsWidgets);
   });
 
   testWidgets('wishlist renders cached saved items', (tester) async {
@@ -134,7 +135,7 @@ void main() {
     );
 
     expect(booking.sandboxOnly, isTrue);
-    expect(booking.amountLabel, 'Không thu tiền thật');
+    expect(booking.amountLabel, 'Không phát sinh giao dịch thật');
   });
 
   test('chat repository uses local fallback when service is offline', () async {

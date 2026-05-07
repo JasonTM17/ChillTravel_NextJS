@@ -19,7 +19,7 @@ class BookingRepository {
       id: 'mock-${timestamp.millisecondsSinceEpoch}',
       label: label,
       status: 'Giữ chỗ demo',
-      amountLabel: 'Không thu tiền thật',
+      amountLabel: 'Không phát sinh giao dịch thật',
       sandboxOnly: true,
       updatedAt: timestamp,
     );

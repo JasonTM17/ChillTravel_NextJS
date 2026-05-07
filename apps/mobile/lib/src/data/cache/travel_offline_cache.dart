@@ -160,7 +160,7 @@ final _seedBookings = [
     id: 'sandbox-cruise',
     label: 'Du thuyền Hạ Long qua đêm',
     status: 'Giữ chỗ demo',
-    amountLabel: 'Không thu tiền thật',
+    amountLabel: 'Không phát sinh giao dịch thật',
     sandboxOnly: true,
     updatedAt: DateTime(2026, 5),
   ),

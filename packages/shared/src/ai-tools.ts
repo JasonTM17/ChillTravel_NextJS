@@ -1,6 +1,8 @@
 import { destinations } from "./seed";
 import type {
   AiAnswer,
+  AiChatStructuredAnswer,
+  AiProviderStatus,
   BudgetSimulationInput,
   BudgetSimulationResult,
   Destination,
@@ -146,6 +148,71 @@ export function buildDemoItinerary(destination: Destination, durationDays = 3): 
   };
 }
 
+export function buildStructuredLocalAiAnswer(query: string, contextSlug?: string, provider?: Partial<AiProviderStatus>): AiChatStructuredAnswer {
+  const enrichedQuery = `${query} ${contextSlug ?? ""}`.trim();
+  const destination = findDestination(enrichedQuery) ?? destinations[5];
+  const baseAnswer = localAiAnswer(enrichedQuery);
+  const style = detectTravelStyle(enrichedQuery).style;
+  const durationDays = /5/.test(enrichedQuery) ? 5 : /4/.test(enrichedQuery) ? 4 : 3;
+  const itinerary = buildDemoItinerary(destination, durationDays);
+  const budget = simulateBudget({
+    destinationSlug: destination.slug,
+    travelers: inferTravelers(enrichedQuery),
+    days: durationDays,
+    hotelLevel: normalizedIncludes(enrichedQuery, ["luxury", "resort", "cao cap"]) ? "boutique" : "comfort",
+    foodLevel: normalizedIncludes(enrichedQuery, ["street", "duong pho", "cho"]) ? "street" : "balanced",
+    transportLevel: normalizedIncludes(enrichedQuery, ["private", "xe rieng"]) ? "private" : "mixed",
+    activityLevel: normalizedIncludes(enrichedQuery, ["packed", "nhieu", "day lich"]) ? "packed" : "balanced"
+  });
+  const defaultProvider: AiProviderStatus = {
+    runtime: "local",
+    chatProvider: "sample",
+    model: "local-tools",
+    embeddingProvider: "sample",
+    vectorDb: "sample",
+    available: false,
+    fallback: true,
+    requiresOpenAiApiKey: false,
+    note: "Sample deterministic travel tools are active until Ollama/Qdrant are reachable."
+  };
+
+  return {
+    summary: baseAnswer.summary,
+    answer: baseAnswer.answer,
+    destination: destination.name,
+    travelStyle: style,
+    clarifyingQuestions: buildClarifyingQuestions(enrichedQuery),
+    itinerary,
+    budget,
+    foods: destination.foodHighlights.slice(0, 5),
+    hotels: destination.hotelsMock.slice(0, 3),
+    experiences: destination.experiences.slice(0, 5),
+    packingList: itinerary.packingList,
+    safetyNotes: itinerary.safetyNotes,
+    culturalNotes: destination.cultureNotes,
+    citations: baseAnswer.citations.map((citation) => ({
+      ...citation,
+      trustTier: "sample",
+      language: destination.country === "Vietnam" ? "vi" : "en"
+    })),
+    toolCalls: [
+      { name: "suggest_destination", status: "ok", summary: `Matched ${destination.name}.` },
+      { name: "detect_travel_style", status: "ok", summary: `Detected ${style}.` },
+      { name: "answer_from_knowledge_base", status: "ok", summary: "Used local sample knowledge and RAG-style citations." },
+      { name: "build_itinerary", status: "ok", summary: `Built ${durationDays} days.` },
+      { name: "estimate_budget", status: "ok", summary: `Estimated ${budget.currency} budget without live prices.` }
+    ],
+    quickActions: [
+      { id: "save_answer", label: "Lưu câu trả lời" },
+      { id: "convert_to_itinerary", label: "Chuyển thành lịch trình", href: `/ai-planner?destination=${destination.slug}` },
+      { id: "add_destination", label: "Thêm điểm đến", href: `/destinations/${destination.slug}` },
+      { id: "estimate_budget", label: "Ước tính ngân sách", href: `/budget?destination=${destination.slug}` }
+    ],
+    provider: { ...defaultProvider, ...provider, requiresOpenAiApiKey: false },
+    realtimeWarning: baseAnswer.safety.grounded ? undefined : "Dữ liệu vé bay, visa và thời tiết hiện tại cần kiểm tra nguồn chính thức."
+  };
+}
+
 export function simulateBudget(input: BudgetSimulationInput): BudgetSimulationResult {
   const destination = destinations.find((item) => item.slug === input.destinationSlug) ?? destinations[5];
   const hotelMultipliers = { hostel: 0.55, comfort: 0.82, boutique: 1.08, luxury: 1.65 };
@@ -255,4 +322,44 @@ export function localAiAnswer(query: string): AiAnswer {
     ],
     safety: { grounded: !limited, confidence: limited ? "medium" : "high" }
   };
+}
+
+function inferTravelers(query: string) {
+  const normalized = normalizeTravelText(query);
+  if (normalized.includes("family") || normalized.includes("gia dinh")) return 4;
+  if (normalized.includes("couple") || normalized.includes("cap doi")) return 2;
+  const match = normalized.match(/(\d+)\s*(nguoi|khach|traveler|people)/);
+  return match ? Math.max(1, Number(match[1])) : 2;
+}
+
+function normalizedIncludes(query: string, needles: string[]) {
+  const normalized = normalizeTravelText(query);
+  return needles.some((needle) => normalized.includes(normalizeTravelText(needle)));
+}
+
+function buildClarifyingQuestions(query: string) {
+  const normalized = normalizeTravelText(query);
+  const questions = [];
+  if (!/\d+\s*(ngay|day)/.test(normalized)) {
+    questions.push({
+      id: "duration",
+      question: "Bạn đi mấy ngày?",
+      options: ["3 ngày", "4 ngày", "5 ngày"]
+    });
+  }
+  if (!normalizedIncludes(query, ["budget", "ngan sach", "trieu", "luxury", "tiet kiem"])) {
+    questions.push({
+      id: "budget",
+      question: "Ngân sách dự kiến của bạn là bao nhiêu?",
+      options: ["Tiết kiệm", "Tầm trung", "Thoải mái"]
+    });
+  }
+  if (!normalizedIncludes(query, ["family", "gia dinh", "couple", "cap doi", "solo", "mot minh"])) {
+    questions.push({
+      id: "travelers",
+      question: "Bạn đi một mình, cặp đôi hay gia đình?",
+      options: ["Một mình", "Cặp đôi", "Gia đình"]
+    });
+  }
+  return questions.slice(0, 3);
 }

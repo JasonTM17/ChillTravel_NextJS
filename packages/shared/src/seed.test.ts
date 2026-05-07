@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { destinations } from "./seed";
 import { demoPaymentWarning, flightOffers, getHotelPropertyBySlug, loyaltyTiers, supportArticles, userBookingSummaries } from "./commerce";
-import { compareDestinations, detectTravelStyle, localAiAnswer, moodSearch, simulateBudget } from "./ai-tools";
+import { buildStructuredLocalAiAnswer, compareDestinations, detectTravelStyle, localAiAnswer, moodSearch, simulateBudget } from "./ai-tools";
 import type { AiChatRequest, BookingCreateRequest, DestinationListQuery, MobileOfflineSnapshot, ChillTravelApiContract } from "./contracts";
 
 describe("seed data and travel intelligence", () => {
@@ -58,6 +58,18 @@ describe("seed data and travel intelligence", () => {
     expect(chatRequest.contextSlug).toBe("da-nang");
     expect(snapshot.cachedAt).toBe("1970-01-01T00:00:00.000Z");
     expect(contract).toBe("ai");
+  });
+
+  it("builds structured local chat answers for the concierge UI", () => {
+    const answer = buildStructuredLocalAiAnswer("Đà Nẵng đi 3 ngày ăn gì cho cặp đôi");
+
+    expect(answer.destination).toBe("Đà Nẵng");
+    expect(answer.provider.requiresOpenAiApiKey).toBe(false);
+    expect(answer.itinerary.days).toHaveLength(3);
+    expect(answer.budget.total).toBeGreaterThan(0);
+    expect(answer.foods.length).toBeGreaterThan(1);
+    expect(answer.quickActions.map((action) => action.id)).toContain("convert_to_itinerary");
+    expect(answer.citations[0]?.trustTier).toBe("sample");
   });
 
   it("exports full app commerce mock data without real payment claims", () => {

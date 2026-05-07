@@ -88,6 +88,8 @@ export interface AiCitation {
   sourceId: string;
   chunkId: string;
   url?: string;
+  trustTier?: "official" | "curated" | "sample";
+  language?: "vi" | "en";
 }
 
 export interface AiAnswer {
@@ -97,6 +99,74 @@ export interface AiAnswer {
   itineraryDraft?: TripPlan;
   toolCalls: Array<{ name: string; status: "ok" | "error"; summary: string }>;
   safety: { grounded: boolean; confidence: "low" | "medium" | "high" };
+}
+
+export interface AiProviderStatus {
+  runtime: "local";
+  chatProvider: "ollama" | "sample";
+  model: string;
+  embeddingProvider: "ollama" | "sample";
+  vectorDb: "qdrant" | "sample";
+  available: boolean;
+  fallback: boolean;
+  requiresOpenAiApiKey: false;
+  note: string;
+}
+
+export interface AiClarifyingQuestion {
+  id: string;
+  question: string;
+  options: string[];
+}
+
+export interface AiQuickAction {
+  id: "save_answer" | "convert_to_itinerary" | "add_destination" | "estimate_budget" | "reindex_knowledge";
+  label: string;
+  href?: string;
+}
+
+export interface AiChatStructuredAnswer {
+  summary: string;
+  answer: string;
+  destination: string;
+  travelStyle: TravelStyle;
+  clarifyingQuestions: AiClarifyingQuestion[];
+  itinerary: TripPlan;
+  budget: BudgetSimulationResult;
+  foods: string[];
+  hotels: HotelMock[];
+  experiences: string[];
+  packingList: string[];
+  safetyNotes: string[];
+  culturalNotes: string[];
+  citations: AiCitation[];
+  toolCalls: Array<{ name: string; status: "ok" | "error"; summary: string }>;
+  quickActions: AiQuickAction[];
+  provider: AiProviderStatus;
+  realtimeWarning?: string;
+}
+
+export interface RagKnowledgeChunk {
+  chunkId: string;
+  sourceId: string;
+  destinationSlug?: string;
+  language: "vi" | "en";
+  trustTier: "official" | "curated" | "sample";
+  content: string;
+}
+
+export interface RagReindexResult {
+  status: "ready" | "fallback" | "queued";
+  vectorDb: "qdrant";
+  retrievalBackend: "qdrant" | "sample";
+  collection: string;
+  embeddingModel: string;
+  documents: number;
+  chunks: number;
+  indexedDocuments: number;
+  fallbackDocuments: number;
+  fallbackReason?: string;
+  requiresOpenAiApiKey: false;
 }
 
 export interface TravelQuizAnswer {

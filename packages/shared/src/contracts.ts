@@ -1,10 +1,11 @@
 import type {
-  AiAnswer,
+  AiChatStructuredAnswer,
   BudgetSimulationInput,
   BudgetSimulationResult,
   Destination,
   DestinationComparison,
   MoodSearchResult,
+  RagReindexResult,
   Role,
   TravelPersonalityResult,
   TravelQuizAnswer,
@@ -132,14 +133,14 @@ export interface ChillTravelApiContract {
     confirmPayment: { request: PaymentConfirmRequest; response: Pick<BookingMock, "bookingCode" | "paymentStatus" | "warning"> };
   };
   ai: {
-    chat: { request: AiChatRequest; response: AiAnswer };
+    chat: { request: AiChatRequest; response: AiChatStructuredAnswer };
     itinerary: { request: AiItineraryRequest; response: TripPlan };
     budget: { request: AiBudgetEstimateRequest; response: BudgetSimulationResult };
     simulateBudget: { request: BudgetSimulationInput; response: BudgetSimulationResult };
     compare: { request: AiCompareRequest; response: DestinationComparison[] };
     personality: { request: AiPersonalityRequest; response: TravelPersonalityResult };
     moodSearch: { request: AiMoodSearchRequest; response: MoodSearchResult };
-    reindex: { request: AiReindexRequest; response: { jobId: string; vectorDb: "qdrant"; status: "queued"; forced: boolean } };
+    reindex: { request: AiReindexRequest; response: RagReindexResult };
   };
 }
 

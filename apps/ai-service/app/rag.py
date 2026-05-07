@@ -25,6 +25,25 @@ def load_markdown_documents() -> list[dict[str, str]]:
     return docs
 
 
+def chunk_markdown_documents(max_chars: int = 900) -> list[dict[str, str]]:
+    chunks: list[dict[str, str]] = []
+    for doc in load_markdown_documents():
+        paragraphs = [part.strip() for part in doc["content"].split("\n\n") if part.strip()]
+        current = ""
+        chunk_index = 1
+        for paragraph in paragraphs:
+            next_text = f"{current}\n\n{paragraph}".strip() if current else paragraph
+            if len(next_text) > max_chars and current:
+                chunks.append(_chunk_payload(doc["source_id"], current, chunk_index))
+                chunk_index += 1
+                current = paragraph
+            else:
+                current = next_text
+        if current:
+            chunks.append(_chunk_payload(doc["source_id"], current, chunk_index))
+    return chunks
+
+
 class QdrantRagAdapter:
     def __init__(
         self,
@@ -67,9 +86,16 @@ class QdrantRagAdapter:
                 )
             points = [
                 PointStruct(
-                    id=_stable_point_id(doc["source_id"]),
+                    id=_stable_point_id(doc.get("chunk_id", doc["source_id"])),
                     vector=embedding.vector,
-                    payload={"source_id": doc["source_id"], "content": doc["content"]},
+                    payload={
+                        "chunkId": doc.get("chunk_id", doc["source_id"]),
+                        "sourceId": doc["source_id"],
+                        "destinationSlug": doc.get("destination_slug"),
+                        "language": doc.get("language", "vi"),
+                        "trustTier": doc.get("trust_tier", "sample"),
+                        "content": doc["content"],
+                    },
                 )
                 for doc, embedding in embeddings
             ]
@@ -96,7 +122,11 @@ class QdrantRagAdapter:
             hits = client.query_points(collection_name=self.collection, query=embedding.vector, limit=limit).points
             return [
                 {
-                    "source_id": str(hit.payload.get("source_id", "unknown")),
+                    "source_id": str(hit.payload.get("sourceId", hit.payload.get("source_id", "unknown"))),
+                    "chunk_id": str(hit.payload.get("chunkId", "unknown")),
+                    "destination_slug": str(hit.payload.get("destinationSlug", "")),
+                    "language": str(hit.payload.get("language", "vi")),
+                    "trust_tier": str(hit.payload.get("trustTier", "sample")),
                     "content": str(hit.payload.get("content", "")),
                     "score": float(hit.score or 0),
                     "backend": "qdrant",
@@ -118,7 +148,7 @@ def retrieve(query: str, limit: int = 4) -> list[dict[str, Any]]:
 def sample_retrieve(query: str, limit: int = 4) -> list[dict[str, Any]]:
     terms = [term.lower() for term in query.split() if len(term) > 2]
     scored = []
-    for doc in load_markdown_documents():
+    for doc in chunk_markdown_documents():
         content = doc["content"].lower()
         score = sum(1 for term in terms if term in content)
         if score:
@@ -128,7 +158,7 @@ def sample_retrieve(query: str, limit: int = 4) -> list[dict[str, Any]]:
 
 
 def reindex_summary() -> dict[str, object]:
-    docs = load_markdown_documents()
+    docs = chunk_markdown_documents()
     index_result = QdrantRagAdapter().reindex(docs)
     return {
         "status": index_result["status"],
@@ -136,13 +166,28 @@ def reindex_summary() -> dict[str, object]:
         "retrieval_backend": index_result["backend"],
         "collection": index_result["collection"],
         "embedding_model": index_result["embedding_model"],
-        "documents": len(docs),
+        "documents": len(load_markdown_documents()),
+        "chunks": len(docs),
         "indexed_documents": index_result["indexed_documents"],
         "fallback_documents": index_result["fallback_documents"],
         "fallback_reason": index_result.get("fallback_reason"),
+        "requires_openai_api_key": False,
         "note": "Qdrant is used when enabled and reachable; otherwise local markdown sample retrieval remains active.",
     }
 
 
 def _stable_point_id(source_id: str) -> int:
     return int(hashlib.sha256(source_id.encode("utf-8")).hexdigest()[:16], 16)
+
+
+def _chunk_payload(source_id: str, content: str, index: int) -> dict[str, str]:
+    stem = Path(source_id).stem
+    parent = Path(source_id).parent.name
+    return {
+        "chunk_id": f"{stem}-{index:03d}",
+        "source_id": source_id,
+        "destination_slug": stem,
+        "language": "vi" if parent == "vietnam" else "en",
+        "trust_tier": "sample",
+        "content": content,
+    }

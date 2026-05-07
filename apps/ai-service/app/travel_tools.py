@@ -267,6 +267,63 @@ def answer_from_knowledge_base(query: str) -> dict[str, Any]:
     }
 
 
+def build_structured_chat_answer(query: str, docs: list[dict[str, Any]] | None = None, provider: dict[str, Any] | None = None) -> dict[str, Any]:
+    destination = suggest_destination(query)
+    base = answer_from_knowledge_base(query)
+    style = detect_travel_style(query)
+    duration_days = 5 if "5" in query else 4 if "4" in query else 3
+    itinerary = build_itinerary(destination, duration_days, style)
+    budget = estimate_budget(destination, duration_days, _infer_travelers(query))
+    retrieved_docs = docs or []
+    provider_status = {
+        "runtime": "local",
+        "chat_provider": "sample",
+        "model": "local-tools",
+        "embedding_provider": "sample",
+        "vector_db": "qdrant" if any(doc.get("backend") == "qdrant" for doc in retrieved_docs) else "sample",
+        "available": False,
+        "fallback": True,
+        "requires_openai_api_key": False,
+        "note": "Deterministic local travel tools are active until Ollama/Qdrant are reachable.",
+    }
+    if provider:
+        provider_status.update(provider)
+        provider_status["requires_openai_api_key"] = False
+
+    return {
+        "summary": base["summary"],
+        "answer": base["answer"],
+        "destination": destination.name,
+        "travel_style": style,
+        "clarifying_questions": _clarifying_questions(query),
+        "itinerary": itinerary,
+        "budget": budget,
+        "foods": find_local_food(destination),
+        "hotels": find_hotels_mock(destination),
+        "experiences": find_experiences_mock(destination),
+        "packing_list": generate_packing_list(destination),
+        "safety_notes": destination.culture_notes,
+        "cultural_notes": destination.culture_notes,
+        "citations": _citations(destination, retrieved_docs),
+        "tool_calls": [
+            {"name": "suggest_destination", "status": "ok", "summary": f"Matched {destination.name}."},
+            {"name": "detect_travel_style", "status": "ok", "summary": f"Detected {style}."},
+            {"name": "answer_from_knowledge_base", "status": "ok", "summary": "Retrieved local sample knowledge with citations."},
+            {"name": "build_itinerary", "status": "ok", "summary": f"Built {duration_days} days."},
+            {"name": "estimate_budget", "status": "ok", "summary": "Estimated local VND budget without live prices."},
+        ],
+        "quick_actions": [
+            {"id": "save_answer", "label": "Lưu câu trả lời"},
+            {"id": "convert_to_itinerary", "label": "Chuyển thành lịch trình", "href": f"/ai-planner?destination={destination.slug}"},
+            {"id": "add_destination", "label": "Thêm điểm đến", "href": f"/destinations/{destination.slug}"},
+            {"id": "estimate_budget", "label": "Ước tính ngân sách", "href": f"/budget?destination={destination.slug}"},
+        ],
+        "provider": provider_status,
+        "realtime_warning": "Dữ liệu vé bay, visa và thời tiết hiện tại cần kiểm tra nguồn chính thức." if is_realtime_query(query) else None,
+        "retrieved_documents": [doc.get("source_id", "unknown") for doc in retrieved_docs],
+    }
+
+
 def is_realtime_query(query: str) -> bool:
     lowered = query.lower()
     realtime_tokens = [
@@ -300,3 +357,47 @@ def realtime_guardrail_notice() -> str:
 
 def _destination_by_slug(slug: str) -> LocalDestination:
     return next((item for item in DESTINATIONS if item.slug == slug), DESTINATIONS[0])
+
+
+def _infer_travelers(query: str) -> int:
+    lowered = query.lower()
+    if any(token in lowered for token in ["family", "gia dinh", "kids"]):
+        return 4
+    if any(token in lowered for token in ["couple", "cap doi"]):
+        return 2
+    return 2
+
+
+def _clarifying_questions(query: str) -> list[dict[str, Any]]:
+    lowered = query.lower()
+    questions: list[dict[str, Any]] = []
+    if not any(token in lowered for token in ["day", "ngay", "3", "4", "5"]):
+        questions.append({"id": "duration", "question": "Bạn đi mấy ngày?", "options": ["3 ngày", "4 ngày", "5 ngày"]})
+    if not any(token in lowered for token in ["budget", "ngan sach", "million", "trieu", "luxury", "cheap"]):
+        questions.append({"id": "budget", "question": "Ngân sách dự kiến của bạn là bao nhiêu?", "options": ["Tiết kiệm", "Tầm trung", "Thoải mái"]})
+    if not any(token in lowered for token in ["family", "couple", "solo", "gia dinh", "cap doi"]):
+        questions.append({"id": "travelers", "question": "Bạn đi một mình, cặp đôi hay gia đình?", "options": ["Một mình", "Cặp đôi", "Gia đình"]})
+    return questions[:3]
+
+
+def _citations(destination: LocalDestination, docs: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    if docs:
+        return [
+            {
+                "title": str(doc.get("source_id", destination.name)),
+                "source_id": str(doc.get("source_id", f"destinations/{destination.slug}.md")),
+                "chunk_id": str(doc.get("chunk_id", f"{destination.slug}-overview")),
+                "language": str(doc.get("language", "vi")),
+                "trust_tier": str(doc.get("trust_tier", "sample")),
+            }
+            for doc in docs[:4]
+        ]
+    return [
+        {
+            "title": destination.name,
+            "source_id": f"destinations/{destination.slug}.md",
+            "chunk_id": f"{destination.slug}-overview",
+            "language": "vi" if destination.country == "Vietnam" else "en",
+            "trust_tier": "sample",
+        }
+    ]

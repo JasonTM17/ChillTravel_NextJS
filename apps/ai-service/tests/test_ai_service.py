@@ -7,6 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from app.rag import reindex_summary
 from app.travel_tools import (
     answer_from_knowledge_base,
+    build_structured_chat_answer,
     build_itinerary,
     compare_destinations,
     estimate_budget,
@@ -73,8 +74,32 @@ class TravelToolsTest(unittest.TestCase):
         self.assertEqual(payload["collection"], "vietwander_travel")
         self.assertEqual(payload["embedding_model"], "nomic-embed-text")
         self.assertGreaterEqual(payload["documents"], 3)
+        self.assertGreaterEqual(payload["chunks"], payload["documents"])
         self.assertEqual(payload["indexed_documents"], 0)
-        self.assertEqual(payload["fallback_documents"], payload["documents"])
+        self.assertEqual(payload["fallback_documents"], payload["chunks"])
+        self.assertFalse(payload["requires_openai_api_key"])
+
+    def test_structured_chat_answer_has_provider_citations_and_actions(self):
+        answer = build_structured_chat_answer(
+            "Đà Nẵng đi 3 ngày ăn gì?",
+            docs=[
+                {
+                    "source_id": "vietnam/da-nang.md",
+                    "chunk_id": "da-nang-001",
+                    "language": "vi",
+                    "trust_tier": "sample",
+                    "backend": "sample",
+                    "content": "Da Nang food notes",
+                }
+            ],
+        )
+
+        self.assertEqual(answer["destination"], "Da Nang")
+        self.assertEqual(answer["itinerary"]["duration_days"], 3)
+        self.assertEqual(answer["citations"][0]["chunk_id"], "da-nang-001")
+        self.assertEqual(answer["provider"]["chat_provider"], "sample")
+        self.assertFalse(answer["provider"]["requires_openai_api_key"])
+        self.assertIn("convert_to_itinerary", [action["id"] for action in answer["quick_actions"]])
 
     def test_personality_compare_and_mood_search(self):
         personality = travel_personality("street food markets and local cafes")

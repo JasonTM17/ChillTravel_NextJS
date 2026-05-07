@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 from .providers import OllamaChatProvider, provider_health
 from .rag import reindex_summary, retrieve
-from .travel_tools import answer_from_knowledge_base, build_itinerary, compare_destinations, estimate_budget, mood_search, suggest_destination, travel_personality
+from .travel_tools import build_itinerary, build_structured_chat_answer, compare_destinations, estimate_budget, mood_search, suggest_destination, travel_personality
 
 
 app = FastAPI(title="CHILLTRAVEL Local Service", version="0.1.0")
@@ -52,15 +52,14 @@ def health() -> dict[str, Any]:
 def chat(request: ChatRequest) -> dict[str, Any]:
     query = f"{request.message} {request.context_slug or ''}".strip()
     docs = retrieve(query)
-    answer = answer_from_knowledge_base(query)
-    answer["retrieved_documents"] = [doc["source_id"] for doc in docs]
     provider_result = OllamaChatProvider().generate(query) if _use_ollama_chat() else None
-    answer["provider"] = {
-        "chat": "ollama" if provider_result and provider_result.available else "sample",
+    provider = {
+        "chat_provider": "ollama" if provider_result and provider_result.available else "sample",
         "model": provider_result.model if provider_result else "local-tools",
         "available": bool(provider_result and provider_result.available),
         "fallback": not bool(provider_result and provider_result.available),
     }
+    answer = build_structured_chat_answer(query, docs, provider)
     if provider_result and provider_result.text:
         answer["provider_answer"] = provider_result.text
     return {"success": True, "data": answer, "message": "Local RAG answer"}
@@ -71,7 +70,7 @@ def chat_stream(request: ChatRequest) -> StreamingResponse:
     payload = chat(request)["data"]
 
     def event_stream():
-        for key in ["summary", "answer"]:
+        for key in ["summary", "answer", "citations", "quick_actions", "provider"]:
             yield "data: " + json.dumps({"type": key, "value": payload.get(key)}, ensure_ascii=False) + "\n\n"
         yield "data: " + json.dumps({"type": "done", "value": payload}, ensure_ascii=False) + "\n\n"
 

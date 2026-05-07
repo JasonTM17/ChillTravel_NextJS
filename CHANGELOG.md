@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Upgraded the FastAPI local AI service with structured concierge answers, richer RAG chunk payloads, provider/fallback status, and expanded hallucination-guard tests.
 - Added structured local concierge contracts and deterministic shared answer builder for chat, planner, provider status, citations, quick actions, and RAG reindex results.
 - Updated the Stitch full-app baton, route map, and quality notes after implementing the flight, hotel detail, support, loyalty, and mobile account surfaces.
 - Expanded web smoke coverage for full Stitch app routes, including flights, hotel detail, support, loyalty, and a Windows-safe smoke server launcher.

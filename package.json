@@ -19,7 +19,8 @@
     "load-test": "k6 run load-tests/tours-list.js",
     "openapi:snapshot": "node scripts/openapi-contract-check.mjs --update",
     "openapi:check": "node scripts/openapi-contract-check.mjs",
-    "prepare": "husky"
+    "prepare": "husky",
+    "storybook": "pnpm --filter @vietwander/web storybook"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.0",

@@ -3,6 +3,10 @@
 Nền tảng đặt tour du lịch Việt Nam và quốc tế — full-stack, production-grade, Vietnamese-first.
 
 [![CI](https://github.com/your-org/wanderviet/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/wanderviet/actions/workflows/ci.yml)
+[![Docker API](https://img.shields.io/docker/v/nguyenson1710/wanderviet-api?label=API&logo=docker)](https://hub.docker.com/r/nguyenson1710/wanderviet-api)
+[![Docker Web](https://img.shields.io/docker/v/nguyenson1710/wanderviet-web?label=Web&logo=docker)](https://hub.docker.com/r/nguyenson1710/wanderviet-web)
+
+> 🌐 **[English version](./README.en.md)**
 
 ## Tổng quan
 

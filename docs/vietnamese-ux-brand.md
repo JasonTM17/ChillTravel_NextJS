@@ -1,72 +1,81 @@
-# ChillTravel Vietnamese UX & Brand Runbook
+# WanderViet — Vietnamese UX & Brand Guide
 
-## Mục tiêu
+## Design DNA
 
-ChillTravel dùng cảm hứng travel-commerce hiện đại: tìm kiếm nhanh, danh sách dễ so sánh, giá/CTA rõ ràng, thanh toán demo minh bạch và trợ lý local-first. Sản phẩm không clone Traveloka hay bất kỳ thương hiệu nào khác.
+WanderViet follows a Vietnamese OTA-style design: fast search, clear comparison, transparent demo payments, and a local-first AI assistant. The product is legally distinct and does not copy any third-party brand.
 
-## Nguyên tắc thương hiệu
+### Palette
 
-- Logo ChillTravel phải khác biệt hợp pháp: la bàn, đường bay, gợi ý bản đồ Việt Nam, Hoàng Sa, Trường Sa và nhịp chuyển động riêng.
-- Không dùng chim, wordmark, tỷ lệ biểu tượng, asset, screenshot, hoặc bố cục có thể gây nhầm lẫn với Traveloka.
-- Màu chủ đạo: booking blue đáng tin cậy, teal cho tín hiệu local/RAG an toàn, orange cho CTA chuyển đổi, nền trắng/xanh nhạt.
-- Ảnh điểm đến là tín hiệu chính; tránh nền sci-fi, orb, neon hoặc glass quá nặng.
+| Token        | Hex       | Usage                                    |
+| ------------ | --------- | ---------------------------------------- |
+| Booking Blue | `#0277D4` | Primary navigation, active states, trust |
+| Blue Dark    | `#005EA8` | Hover, high-trust states                 |
+| Sky Surface  | `#EAF7FF` | Page backgrounds, soft panels            |
+| White Card   | `#FFFFFF` | Booking and comparison surfaces          |
+| Orange CTA   | `#FF6D1A` | Conversion actions (Tìm kiếm, Đặt chỗ)   |
+| Teal Trust   | `#0F8B7B` | Local/RAG safety badges                  |
+| Ink          | `#071827` | Primary text                             |
+| Muted Ink    | `#476273` | Secondary text                           |
+| Border       | `#D9ECFB` | Cards, inputs, tables                    |
 
-## Copy tiếng Việt
+### Typography
 
-CTA chuẩn:
+- **UI font**: Be Vietnam Pro → Inter → system sans-serif
+- Letter spacing: `0` (except small uppercase metadata labels at `0.12–0.14em`)
+- Headings: `font-black` (900 weight), compact, high-legibility
 
-- `Tìm kiếm`
-- `Xem ưu đãi`
-- `Lập lịch trình thông minh`
-- `Lưu vào yêu thích`
-- `Đặt chỗ demo`
-- `Xem chi tiết`
+## Vietnamese Copy Standards
 
-Nhãn route chính:
+### Standard CTAs
 
-- `/budget`: `Ngân sách thông minh`
-- `/compare`: `So sánh thông minh`
-- `/personality`: `Phong cách du lịch`
-- `/wishlist`: `Yêu thích`
-- `/trips`: `Chuyến đi`
-- `/profile`: `Hồ sơ`
-- `/admin`: `Bảng vận hành`
+| Vietnamese                  | Context        |
+| --------------------------- | -------------- |
+| `Tìm kiếm`                  | Search submit  |
+| `Xem ưu đãi`                | View deals     |
+| `Lập lịch trình thông minh` | AI planner CTA |
+| `Lưu vào yêu thích`         | Wishlist add   |
+| `Đặt chỗ demo`              | Booking CTA    |
+| `Xem chi tiết`              | Detail link    |
+| `Đăng nhập`                 | Login          |
+| `Đăng ký`                   | Register       |
+| `Thử lại`                   | Retry on error |
 
-Không đưa lại các cụm cũ trong user flow: `Mock payment - no real transaction`, `Open dossier`, `Search results`, `Traveler profile`, `Login`, `Wishlist`, `Admin dashboard`.
+### Route Labels
 
-## Payment và trợ lý local boundary
+| Route            | Vietnamese label |
+| ---------------- | ---------------- |
+| `/`              | Trang chủ        |
+| `/tours`         | Danh sách tour   |
+| `/explore`       | Khám phá         |
+| `/wishlist`      | Yêu thích        |
+| `/my-bookings`   | Đặt chỗ của tôi  |
+| `/profile`       | Hồ sơ            |
+| `/notifications` | Thông báo        |
+| `/admin`         | Bảng vận hành    |
 
-- Luôn hiển thị: `Thanh toán demo — không phát sinh giao dịch thật`.
-- Không lưu thẻ thật, không charge thật, không bypass luật thanh toán.
-- Chatbot runtime dùng local assistant service/Ollama/RAG khi chạy production local; không yêu cầu OpenAI API key.
-- Nếu hỏi vé bay, visa, thời tiết real-time, UI/chatbot phải nói rõ đây là dữ liệu mẫu/local và khuyên kiểm tra nguồn chính thức.
+## Payment Boundary
 
-## QA bắt buộc
+Every payment-facing surface **must** display:
 
-Trước commit UI:
+> **Thanh toán demo — không phát sinh giao dịch thật**
 
-```powershell
-pnpm --filter @vietwander/web lint
-pnpm --filter @vietwander/web test
-pnpm --filter @vietwander/web build
-```
+Rules:
 
-Smoke routes:
+- Never store real card data
+- Never charge real money
+- Never bypass legal or provider requirements
+- The `<PaymentBanner />` component is non-dismissible
 
-- `/`
-- `/explore?q=Da+Nang`
-- `/destinations/da-nang`
-- `/hotels`
-- `/experiences`
-- `/ai-planner`
-- `/chat`
-- `/booking/demo`
-- `/booking/da-nang`
-- `/budget`
-- `/compare`
-- `/personality`
-- `/wishlist`
-- `/trips`
-- `/profile`
-- `/admin`
-- `/admin/ai-knowledge`
+## AI Assistant Boundary
+
+- Chatbot runs on local Ollama + Qdrant — no OpenAI API key required
+- When users ask for live flight prices, visa requirements, or current weather, the UI must clearly state this is sample/local data and recommend official sources
+
+## Component Conventions
+
+- Cards: `rounded-2xl`, `border border-[#d9ecfb]`, `bg-white`, subtle blue shadow
+- Buttons: `rounded-xl`, orange for primary CTA, blue for secondary
+- Skeletons: `animate-pulse bg-[#d9ecfb]` via `<Skeleton />` component
+- Empty states: `MapPin` icon + Vietnamese message + CTA
+- Error states: red-50 background + "Thử lại" button
+- Focus ring: `outline: 3px solid #f97316` (orange)

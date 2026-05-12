@@ -1,21 +1,52 @@
-# Architecture
+# Architecture Overview
 
-CHILLTRAVEL is a local-first travel intelligence monorepo.
+> For the full technical design, see [`.kiro/specs/wanderviet-travel-platform/design.md`](../.kiro/specs/wanderviet-travel-platform/design.md).
+> For Architecture Decision Records, see [`docs/adr/`](./adr/).
+> For the Entity-Relationship diagram, see [`docs/er-diagram.md`](./er-diagram.md).
 
-- apps/web: Next.js portfolio and product web app.
-- apps/api: NestJS REST API with Swagger, RBAC, mock payment, travel data, trips, bookings, admin.
-- apps/ai-service: FastAPI local RAG service with Ollama and Qdrant adapters.
-- apps/mobile: Flutter clean architecture source with Riverpod, Dio, Drift-ready offline cache, local notification mock.
-- packages/shared: shared domain types, seed data, local AI tools.
-- packages/db: Prisma schema and seed preview.
+## System Context
 
-Chatbot runtime does not require an OpenAI API key. The default path is Ollama plus Qdrant using local/sample markdown knowledge. If hardware is limited, use qwen3:4b or llama3.2:3b. Fine-tuning is optional and must not be claimed unless actually run.
+```
+┌─────────────────┐     ┌──────────────────┐     ┌──────────────────┐
+│  Next.js 16     │────▶│  NestJS 11 API   │────▶│  PostgreSQL 18   │
+│  apps/web       │     │  apps/api        │     │  (Prisma 7 ORM)  │
+│  :3000          │     │  :4000 /api/v1   │     │  :5432           │
+└─────────────────┘     └──────────────────┘     └──────────────────┘
+                                │
+                                ▼
+                        ┌──────────────────┐
+                        │  FastAPI AI      │
+                        │  apps/ai-service │
+                        │  :8010           │
+                        └──────────────────┘
+```
 
-## Travel Intelligence Layer
+## Monorepo Layout
 
-The shared package owns deterministic product intelligence used by web and API:
+```
+wanderviet/
+├── apps/
+│   ├── api/          # NestJS 11 — REST API, Swagger at /api/docs
+│   ├── web/          # Next.js 16 — Vietnamese-first frontend
+│   ├── ai-service/   # FastAPI — local RAG (Ollama + Qdrant, no cloud key)
+│   └── mobile/       # Flutter — mobile app structure
+├── packages/
+│   ├── shared/       # Shared TypeScript types and API contracts
+│   ├── db/           # Prisma schema, migrations, seed data
+│   └── config/       # Shared ESLint, TypeScript, build configs
+├── infra/docker/     # Docker Compose (postgres, redis, qdrant, api, web, ai)
+├── e2e/              # Playwright end-to-end tests
+├── load-tests/       # k6 load test scripts
+└── docs/             # ADRs, ER diagram, architecture notes
+```
 
-- Bo nhan dien phong cach du lich maps quiz answers or natural language into Food Hunter, Culture Seeker, Beach Lover, Mountain Adventurer, Luxury Escaper, Budget Backpacker, Family Planner, or World Wanderer.
-- Smart Budget Simulator adjusts hotel, food, transport, activity, travelers, and duration into a local/sample VND budget breakdown.
-- So sanh thong minh scores 2-4 destinations for food, family fit, nightlife, safety, activity fit, and budget tradeoffs.
-- Mood Search converts natural language such as `yen binh co bien an ngon` into inferred filters and matching destinations.
+## Key Decisions
+
+| Concern           | Choice                          | ADR                                             |
+| ----------------- | ------------------------------- | ----------------------------------------------- |
+| Backend framework | NestJS 11 (TypeScript)          | [ADR-001](./adr/001-nestjs-over-spring-boot.md) |
+| ORM               | Prisma 7                        | [ADR-002](./adr/002-prisma-over-typeorm.md)     |
+| Payment           | Mock-only                       | [ADR-003](./adr/003-mock-payment-only.md)       |
+| Monorepo tooling  | pnpm + Turborepo                | [ADR-004](./adr/004-pnpm-turborepo-monorepo.md) |
+| Auth              | JWT access (15m) + refresh (7d) | design.md §4                                    |
+| AI runtime        | Ollama + Qdrant, no OpenAI key  | design.md §17                                   |

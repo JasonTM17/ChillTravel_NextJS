@@ -1,8 +1,8 @@
-# ChillTravel Stitch Loop Site Plan
+# WanderViet Stitch Loop Site Plan
 
 ## 1. Vision
 
-ChillTravel is a Vietnamese travel-commerce platform with local-first smart planning. The product should feel like a trustworthy OTA: fast search, clear service tabs, strong listing comparison, transparent price panels, useful admin operations, and explicit demo payment boundaries.
+WanderViet is a Vietnamese travel-commerce platform with local-first smart planning. The product should feel like a trustworthy OTA: fast search, clear service tabs, strong listing comparison, transparent price panels, useful admin operations, and explicit demo payment boundaries.
 
 ## 2. Stitch Project
 

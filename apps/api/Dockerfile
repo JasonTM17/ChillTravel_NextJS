@@ -25,7 +25,10 @@ WORKDIR /workspace
 # Copy full source
 COPY . .
 
-# Build shared package first (api depends on it)
+# Generate Prisma client (api depends on it for types)
+RUN pnpm --filter @vietwander/db build
+
+# Build shared package (api depends on it)
 RUN pnpm --filter @vietwander/shared build
 
 # Build the API (tsc → dist/)

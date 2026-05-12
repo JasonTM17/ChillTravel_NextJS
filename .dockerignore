@@ -1,0 +1,47 @@
+# Dependencies
+node_modules
+**/node_modules
+
+# Build outputs
+dist
+**/dist
+.next
+**/.next
+.turbo
+**/.turbo
+
+# Generated
+packages/db/generated
+apps/web/.next
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Tests
+e2e/test-results
+e2e/playwright-report
+coverage
+
+# Docs (not needed in image)
+docs/
+.kiro/
+.stitch/
+.github/

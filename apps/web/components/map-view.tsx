@@ -1,6 +1,6 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup, Circle, ZoomControl } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import Link from "next/link";
@@ -51,15 +51,12 @@ export default function MapView({ markers }: MapViewProps) {
     <MapContainer
       center={center}
       zoom={zoom}
-      zoomControl={false}
+      zoomControl={true}
       style={{ height: "100%", minHeight: 550, width: "100%" }}
       scrollWheelZoom={true}
       doubleClickZoom={true}
       dragging={true}
     >
-      {/* Zoom control ở góc phải */}
-      <ZoomControl position="topright" />
-
       {/* OpenStreetMap tiles */}
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'

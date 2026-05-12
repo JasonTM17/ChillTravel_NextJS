@@ -24,3 +24,5 @@ __pycache__
 assets/generated/*.png
 assets/generated/*.jpg
 packages/db/generated/
+e2e/playwright-report/
+e2e/test-results/

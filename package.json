@@ -13,9 +13,19 @@
     "docker:config": "docker compose -f infra/docker/docker-compose.yml config",
     "web:smoke": "node scripts/smoke-web.mjs",
     "seed": "pnpm --filter @vietwander/db seed",
-    "ai:test": "python -m unittest discover apps/ai-service/tests"
+    "ai:test": "python -m unittest discover apps/ai-service/tests",
+    "e2e": "pnpm --filter @vietwander/e2e e2e",
+    "generate:api-client": "node scripts/generate-api-client.mjs",
+    "load-test": "k6 run load-tests/tours-list.js",
+    "openapi:snapshot": "node scripts/openapi-contract-check.mjs --update",
+    "openapi:check": "node scripts/openapi-contract-check.mjs",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.0.0",
+    "@commitlint/config-conventional": "^21.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.4",
     "prettier": "^3.7.4",
     "turbo": "^2.6.3",
     "typescript": "^5.9.3"

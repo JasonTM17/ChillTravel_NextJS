@@ -2,24 +2,22 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
 import {
-  BadgePercent,
+  ArrowRight,
   Bus,
   CalendarDays,
   Car,
-  CheckCircle2,
   ChevronRight,
   Hotel,
   MapPin,
   Plane,
   Search,
-  ShieldCheck,
   Sparkles,
   Star,
   Ticket,
+  Train,
   Users,
-  WalletCards
+  Zap,
 } from "lucide-react";
 import { destinationApi } from "@/lib/api/destination.api";
 import { tourApi } from "@/lib/api/tour.api";
@@ -27,466 +25,562 @@ import type { Destination } from "@/lib/api/destination.api";
 import type { Tour } from "@/lib/api/tour.api";
 import { getDestinationImage } from "@/lib/destination-images";
 import { formatVnd } from "@/lib/utils";
-import { demoPaymentWarning, formatDateVi } from "@/lib/vietnamese";
 
-const serviceTabs = [
-  ["Khách sạn", "/hotels", Hotel, true],
-  ["Chuyến bay", "/flights", Plane, false],
-  ["Hoạt động", "/experiences", Ticket, false],
-  ["Xe đưa đón", "/map", Bus, false],
-  ["Thuê xe", "/map", Car, false],
-  ["Lập lịch trình thông minh", "/ai-planner", Sparkles, false]
+/* ─── Service tabs (Traveloka-style icon grid) ─────────────────────────────── */
+const services = [
+  { label: "Khách sạn",    href: "/hotels",      icon: Hotel,    color: "#0064D2" },
+  { label: "Vé máy bay",   href: "/flights",     icon: Plane,    color: "#0064D2" },
+  { label: "Tour du lịch", href: "/tours",       icon: Ticket,   color: "#0064D2" },
+  { label: "Tàu hỏa",      href: "/map",         icon: Train,    color: "#0064D2" },
+  { label: "Xe đưa đón",   href: "/map",         icon: Bus,      color: "#0064D2" },
+  { label: "Thuê xe",      href: "/map",         icon: Car,      color: "#0064D2" },
+  { label: "Hoạt động",    href: "/experiences", icon: Zap,      color: "#0064D2" },
+  { label: "Lập lịch AI",  href: "/ai-planner",  icon: Sparkles, color: "#FF6D00" },
 ] as const;
 
-const coupons = [
-  ["VWD-DANANG", "Đà Nẵng cuối tuần", "Ưu đãi demo cho khách sạn gần biển", "Giảm mẫu 12%"],
-  ["FOOD-HOIAN", "Hội An ăn gì", "Gợi ý tour ẩm thực và phố cổ", "Bán chạy"],
-  ["FAMILY-PQ", "Phú Quốc gia đình", "Lịch trình nhẹ, resort và bãi biển", "Gói mẫu"],
-  ["SAPA-VIEW", "Sapa săn mây", "Homestay, ruộng bậc thang, trekking", "Đề xuất"]
+/* ─── Promo deals ──────────────────────────────────────────────────────────── */
+const promos = [
+  {
+    code: "WVWELCOME10",
+    title: "Giảm 10% cho lần đầu",
+    desc: "Áp dụng cho tất cả tour và khách sạn",
+    badge: "Mới",
+    badgeColor: "tv-badge-red",
+    bg: "from-blue-500 to-blue-700",
+  },
+  {
+    code: "WV500K",
+    title: "Giảm 500.000đ",
+    desc: "Đơn hàng từ 5.000.000đ trở lên",
+    badge: "Hot",
+    badgeColor: "tv-badge-red",
+    bg: "from-orange-400 to-orange-600",
+  },
+  {
+    code: "VWD-DANANG",
+    title: "Đà Nẵng cuối tuần",
+    desc: "Ưu đãi đặc biệt cho tour biển",
+    badge: "Phổ biến",
+    badgeColor: "tv-badge-blue",
+    bg: "from-teal-500 to-teal-700",
+  },
+  {
+    code: "FAMILY-PQ",
+    title: "Phú Quốc gia đình",
+    desc: "Resort + tour trọn gói",
+    badge: "Gói mẫu",
+    badgeColor: "tv-badge-green",
+    bg: "from-emerald-500 to-emerald-700",
+  },
 ] as const;
 
-// ---------------------------------------------------------------------------
-// Skeleton components
-// ---------------------------------------------------------------------------
-
-function DestinationCardSkeleton() {
+/* ─── Skeleton ─────────────────────────────────────────────────────────────── */
+function CardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_14px_34px_rgba(2,68,120,0.08)] animate-pulse">
-      <div className="h-44 bg-[#d9ecfb]" />
-      <div className="p-4">
-        <div className="flex items-center justify-between gap-3">
-          <div className="h-4 w-24 rounded bg-[#d9ecfb]" />
-          <div className="h-4 w-10 rounded bg-[#d9ecfb]" />
-        </div>
-        <div className="mt-2 h-3 w-16 rounded bg-[#d9ecfb]" />
+    <div className="tv-card overflow-hidden">
+      <div className="tv-skeleton h-44 w-full" />
+      <div className="p-3 space-y-2">
+        <div className="tv-skeleton h-4 w-3/4" />
+        <div className="tv-skeleton h-3 w-1/2" />
+        <div className="tv-skeleton h-5 w-1/3" />
       </div>
     </div>
   );
 }
 
-function DealRowSkeleton() {
-  return (
-    <div className="grid overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_14px_34px_rgba(2,68,120,0.08)] md:grid-cols-[180px_minmax(0,1fr)_190px] animate-pulse">
-      <div className="min-h-40 bg-[#d9ecfb]" />
-      <div className="p-4 space-y-3">
-        <div className="h-3 w-32 rounded bg-[#d9ecfb]" />
-        <div className="h-5 w-40 rounded bg-[#d9ecfb]" />
-        <div className="h-3 w-full rounded bg-[#d9ecfb]" />
-        <div className="h-3 w-3/4 rounded bg-[#d9ecfb]" />
-      </div>
-      <div className="flex flex-col justify-between border-t border-[#edf4fa] bg-[#fbfdff] p-4 md:border-l md:border-t-0">
-        <div className="space-y-2">
-          <div className="h-3 w-12 rounded bg-[#d9ecfb]" />
-          <div className="h-6 w-24 rounded bg-[#d9ecfb]" />
-        </div>
-        <div className="mt-3 h-10 rounded-xl bg-[#d9ecfb]" />
-      </div>
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Main page
-// ---------------------------------------------------------------------------
-
+/* ─── Main page ─────────────────────────────────────────────────────────────── */
 export default function HomePage() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
-  const [featuredTours, setFeaturedTours] = useState<Tour[]>([]);
+  const [tours, setTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-
-    async function fetchData() {
-      setLoading(true);
-      setError(null);
+    async function load() {
       try {
-        const [destRes, toursRes] = await Promise.all([
-          destinationApi.list({ size: 10, sort: "ratingAvg,desc" }),
+        const [destRes, tourRes] = await Promise.all([
+          destinationApi.list({ size: 12, sort: "ratingAvg,desc" }),
           tourApi.getFeatured(),
         ]);
-
         if (cancelled) return;
-
-        if (destRes.success) {
-          setDestinations(destRes.data.items);
-        } else {
-          setError("Không thể tải danh sách điểm đến.");
-        }
-
-        if (toursRes.success) {
-          setFeaturedTours(Array.isArray(toursRes.data) ? toursRes.data : []);
-        }
+        if (destRes.success) setDestinations(destRes.data.items);
+        if (tourRes.success) setTours(Array.isArray(tourRes.data) ? tourRes.data.slice(0, 8) : []);
       } catch {
-        if (!cancelled) setError("Lỗi kết nối. Vui lòng thử lại.");
+        if (!cancelled) setError("Không thể tải dữ liệu. Vui lòng thử lại.");
       } finally {
         if (!cancelled) setLoading(false);
       }
     }
-
-    void fetchData();
+    void load();
     return () => { cancelled = true; };
   }, []);
 
-  const vietnam = destinations.filter((d) => d.country?.toLowerCase().includes("viet") || d.country?.toLowerCase().includes("việt")).slice(0, 6);
-  const world = destinations.filter((d) => !d.country?.toLowerCase().includes("viet") && !d.country?.toLowerCase().includes("việt")).slice(0, 4);
-  const featured = destinations.slice(0, 3);
+  const vietnam = destinations.filter(d =>
+    d.country?.toLowerCase().includes("viet") || d.country?.toLowerCase().includes("việt")
+  ).slice(0, 6);
+  const world = destinations.filter(d =>
+    !d.country?.toLowerCase().includes("viet") && !d.country?.toLowerCase().includes("việt")
+  ).slice(0, 6);
 
   return (
-    <main className="min-h-screen bg-[#f6fbff] text-[#071827]">
-      <BookingHero />
-      <CouponStrip />
-      <section className="mx-auto grid max-w-[1180px] gap-6 px-4 py-8 lg:grid-cols-[1fr_330px]">
-        <div className="space-y-8">
-          {error ? (
-            <ErrorState message={error} onRetry={() => window.location.reload()} />
-          ) : loading ? (
-            <>
-              <section>
-                <div className="flex items-end justify-between gap-4 mb-4">
-                  <div>
-                    <div className="h-6 w-64 rounded bg-[#d9ecfb] animate-pulse" />
-                    <div className="mt-2 h-3 w-80 rounded bg-[#d9ecfb] animate-pulse" />
-                  </div>
-                </div>
-                <div className="grid gap-4 md:grid-cols-3">
-                  {[1, 2, 3].map((i) => <DestinationCardSkeleton key={i} />)}
-                </div>
-              </section>
-              <section>
-                <div className="h-6 w-48 rounded bg-[#d9ecfb] animate-pulse mb-4" />
-                <div className="space-y-3">
-                  {[1, 2, 3].map((i) => <DealRowSkeleton key={i} />)}
-                </div>
-              </section>
-            </>
-          ) : (
-            <>
-              {vietnam.length > 0 && (
-                <DestinationGrid
-                  title="Điểm đến đang thịnh hành"
-                  subtitle="Dữ liệu thật từ hệ thống, phù hợp để lên kế hoạch du lịch."
-                  items={vietnam.slice(0, 3)}
-                />
-              )}
-              {featured.length > 0 && (
-                <DealRows title="Gợi ý lưu trú và trải nghiệm" items={featured} />
-              )}
-              {world.length > 0 && (
-                <DestinationGrid
-                  title="Bạn có thể thích"
-                  subtitle="Các điểm đến quốc tế nổi bật."
-                  items={world}
-                  compact
-                />
-              )}
-              {destinations.length === 0 && (
-                <EmptyState message="Chưa có điểm đến nào. Vui lòng thêm dữ liệu." />
-              )}
-            </>
-          )}
+    <main className="min-h-screen bg-tv-bg">
+      {/* ── Hero search section ──────────────────────────────────────────── */}
+      <HeroSearch />
+
+      {/* ── Service icon grid ────────────────────────────────────────────── */}
+      <ServiceGrid />
+
+      {/* ── Promo banner ─────────────────────────────────────────────────── */}
+      <PromoBanner />
+
+      {/* ── Main content ─────────────────────────────────────────────────── */}
+      <div className="mx-auto max-w-[1200px] px-4 py-6 space-y-8">
+
+        {/* Demo payment notice */}
+        <div className="flex items-center gap-2 rounded-tv bg-amber-50 border border-amber-200 px-4 py-2.5 text-tv-sm text-amber-800">
+          <span className="font-bold">⚠️ Thanh toán demo</span>
+          <span>— Không phát sinh giao dịch thật. Đây là nền tảng demo portfolio.</span>
         </div>
-        <TripPlannerPanel />
-      </section>
+
+        {/* Error state */}
+        {error && (
+          <div className="tv-card p-6 text-center">
+            <p className="text-tv-red font-semibold">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-3 tv-btn-primary text-tv-sm"
+            >
+              Thử lại
+            </button>
+          </div>
+        )}
+
+        {/* Featured tours */}
+        {(loading || tours.length > 0) && (
+          <Section
+            title="Tour nổi bật"
+            subtitle="Các tour được đặt nhiều nhất"
+            href="/tours"
+          >
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              {loading
+                ? Array.from({ length: 4 }).map((_, i) => <CardSkeleton key={i} />)
+                : tours.slice(0, 4).map(tour => <TourCard key={tour.slug} tour={tour} />)
+              }
+            </div>
+          </Section>
+        )}
+
+        {/* Vietnam destinations */}
+        {(loading || vietnam.length > 0) && (
+          <Section
+            title="Điểm đến Việt Nam"
+            subtitle="Khám phá vẻ đẹp đất nước hình chữ S"
+            href="/explore"
+          >
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+              {loading
+                ? Array.from({ length: 6 }).map((_, i) => <CardSkeleton key={i} />)
+                : vietnam.map(d => <DestCard key={d.slug} destination={d} compact />)
+              }
+            </div>
+          </Section>
+        )}
+
+        {/* World destinations */}
+        {(loading || world.length > 0) && (
+          <Section
+            title="Điểm đến quốc tế"
+            subtitle="Khám phá thế giới với WanderViet"
+            href="/explore"
+          >
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+              {loading
+                ? Array.from({ length: 6 }).map((_, i) => <CardSkeleton key={i} />)
+                : world.map(d => <DestCard key={d.slug} destination={d} compact />)
+              }
+            </div>
+          </Section>
+        )}
+
+        {/* All tours grid */}
+        {!loading && tours.length > 4 && (
+          <Section
+            title="Tất cả tour"
+            subtitle="Tìm tour phù hợp với bạn"
+            href="/tours"
+          >
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              {tours.slice(4).map(tour => <TourCard key={tour.slug} tour={tour} />)}
+            </div>
+          </Section>
+        )}
+      </div>
+
+      {/* ── Trust band ───────────────────────────────────────────────────── */}
       <TrustBand />
+
+      {/* ── Footer ───────────────────────────────────────────────────────── */}
+      <SiteFooter />
     </main>
   );
 }
 
-// ---------------------------------------------------------------------------
-// Error / Empty states
-// ---------------------------------------------------------------------------
-
-function ErrorState({ message, onRetry }: { message: string; onRetry?: () => void }) {
+/* ─── Hero search ───────────────────────────────────────────────────────────── */
+function HeroSearch() {
   return (
-    <div className="rounded-2xl border border-dashed border-red-200 bg-red-50 p-8 text-center">
-      <p className="text-lg font-black text-red-600">{message}</p>
-      {onRetry && (
-        <button
-          onClick={onRetry}
-          className="mt-4 inline-flex rounded-xl bg-[#0277d4] px-5 py-2.5 font-bold text-white hover:bg-[#005ea8]"
-          type="button"
-        >
-          Thử lại
-        </button>
-      )}
-    </div>
-  );
-}
+    <div className="bg-tv-blue">
+      <div className="mx-auto max-w-[1200px] px-4 py-8">
+        <h1 className="mb-6 text-center text-2xl font-bold text-white md:text-3xl">
+          Đặt tour, khách sạn và vé máy bay dễ dàng
+        </h1>
 
-function EmptyState({ message }: { message: string }) {
-  return (
-    <div className="rounded-2xl border border-dashed border-[#b8d8f0] bg-white p-10 text-center">
-      <MapPin className="mx-auto text-[#0277d4]" size={34} aria-hidden="true" />
-      <p className="mt-4 text-lg font-black text-[#476273]">{message}</p>
-    </div>
-  );
-}
+        {/* Search card */}
+        <div className="rounded-tv-lg bg-white p-4 shadow-tv-modal">
+          <div className="grid gap-3 md:grid-cols-[1fr_180px_180px_160px_auto]">
+            {/* Destination */}
+            <div className="tv-search-field">
+              <label htmlFor="dest">Điểm đến</label>
+              <div className="flex items-center gap-2 mt-1">
+                <MapPin size={16} className="shrink-0 text-tv-blue" />
+                <input
+                  id="dest"
+                  name="keyword"
+                  defaultValue="Đà Nẵng"
+                  placeholder="Nhập điểm đến..."
+                  className="w-full text-tv-base font-semibold text-tv-ink outline-none bg-transparent"
+                />
+              </div>
+            </div>
 
-// ---------------------------------------------------------------------------
-// Hero section
-// ---------------------------------------------------------------------------
+            {/* Check-in */}
+            <div className="tv-search-field">
+              <label>Nhận phòng</label>
+              <div className="flex items-center gap-2 mt-1">
+                <CalendarDays size={16} className="shrink-0 text-tv-blue" />
+                <span className="value text-tv-base font-semibold">12 thg 8, 2026</span>
+              </div>
+            </div>
 
-function BookingHero() {
-  return (
-    <section className="border-b border-[#d9ecfb] bg-white">
-      <div className="mx-auto max-w-[1180px] px-4 pb-10 pt-8">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center">
-          <div>
-            <p className="inline-flex items-center gap-2 rounded-full bg-[#eef7ff] px-3 py-1 text-xs font-black text-[#0277d4]">
-              <ShieldCheck size={14} aria-hidden="true" />
-              Nền tảng du lịch Việt hóa, thanh toán demo an toàn
-            </p>
-            <h1 className="mt-4 max-w-3xl text-4xl font-black leading-tight md:text-5xl">
-              Tìm chuyến đi, so sánh lựa chọn và đặt chỗ demo trong một luồng rõ ràng.
-            </h1>
-            <p className="mt-3 max-w-2xl text-base leading-7 text-[#476273]">
-              ChillTravel gom điểm đến, khách sạn mẫu, hoạt động, ngân sách và lịch trình thông minh local vào một giao diện đặt chuyến quen tay cho người Việt.
-            </p>
+            {/* Check-out */}
+            <div className="tv-search-field">
+              <label>Trả phòng</label>
+              <div className="flex items-center gap-2 mt-1">
+                <CalendarDays size={16} className="shrink-0 text-tv-blue" />
+                <span className="value text-tv-base font-semibold">16 thg 8, 2026</span>
+              </div>
+            </div>
+
+            {/* Guests */}
+            <div className="tv-search-field">
+              <label>Khách</label>
+              <div className="flex items-center gap-2 mt-1">
+                <Users size={16} className="shrink-0 text-tv-blue" />
+                <span className="value text-tv-base font-semibold">2 khách, 1 phòng</span>
+              </div>
+            </div>
+
+            {/* Search button */}
+            <Link
+              href="/explore"
+              className="flex items-center justify-center gap-2 rounded-tv bg-tv-orange px-6 py-3 text-tv-base font-bold text-white hover:bg-tv-orange-dark transition-colors"
+            >
+              <Search size={18} />
+              <span className="hidden md:inline">Tìm kiếm</span>
+            </Link>
           </div>
-          <div className="hidden rounded-[28px] bg-[#eaf7ff] p-3 lg:block">
-            <div className="min-h-[220px] rounded-[22px] bg-cover bg-center shadow-[0_20px_46px_rgba(2,68,120,0.18)]" style={{ backgroundImage: `linear-gradient(180deg, rgba(7,24,39,0.04), rgba(7,24,39,0.2)), url(${getDestinationImage("da-nang")})` }} />
-          </div>
-        </div>
 
-        <div className="relative z-10 mt-7 rounded-[28px] bg-[#1f9be0] p-4 shadow-[0_22px_54px_rgba(2,119,212,0.24)]">
-          <div className="flex gap-2 overflow-x-auto pb-4">
-            {serviceTabs.map(([label, href, Icon, active]) => (
+          {/* Quick search tags */}
+          <div className="mt-3 flex flex-wrap gap-2">
+            <span className="text-tv-xs text-tv-ink-3 self-center">Tìm nhanh:</span>
+            {["Đà Nẵng", "Phú Quốc", "Hội An", "Sapa", "Hà Nội", "Tokyo", "Bangkok"].map(city => (
               <Link
-                key={label}
-                href={href}
-                className={`inline-flex shrink-0 items-center gap-2 rounded-2xl px-4 py-3 text-sm font-black transition ${
-                  active ? "bg-white text-[#0277d4] shadow-sm" : "bg-[#0c83c9] text-white/90 hover:bg-white/20"
-                }`}
+                key={city}
+                href={`/explore?keyword=${encodeURIComponent(city)}`}
+                className="rounded-full border border-tv-border bg-tv-bg px-3 py-1 text-tv-xs font-semibold text-tv-ink-2 hover:border-tv-blue hover:text-tv-blue transition-colors"
               >
-                <Icon size={18} aria-hidden="true" />
-                {label}
-              </Link>
-            ))}
-          </div>
-
-          <form action="/explore" className="grid gap-3 rounded-[22px] bg-white p-3 lg:grid-cols-[1.4fr_1fr_1fr_1fr_64px]">
-            <SearchInput />
-            <HeroField icon={CalendarDays} label="Nhận phòng" value={formatDateVi(new Date("2026-08-12"))} />
-            <HeroField icon={CalendarDays} label="Trả phòng" value={formatDateVi(new Date("2026-08-16"))} />
-            <HeroField icon={Users} label="Khách và phòng" value="2 khách, 1 phòng" />
-            <button className="flex min-h-14 items-center justify-center rounded-2xl bg-[#ff6d1a] text-white transition hover:bg-[#e95c0a]" type="submit" aria-label="Tìm kiếm">
-              <Search size={24} aria-hidden="true" />
-            </button>
-          </form>
-
-          <div className="mt-3 flex flex-wrap gap-2 text-xs font-bold">
-            {["Đà Nẵng", "Phú Quốc", "Hội An", "Sapa", "Tokyo"].map((item) => (
-              <Link key={item} href={`/explore?keyword=${encodeURIComponent(item)}`} className="rounded-full bg-white/20 px-3 py-1.5 text-white transition hover:bg-white hover:text-[#0277d4]">
-                {item}
+                {city}
               </Link>
             ))}
           </div>
         </div>
       </div>
-    </section>
-  );
-}
-
-function SearchInput() {
-  return (
-    <label className="flex min-w-0 items-center gap-3 rounded-2xl border border-[#d9ecfb] bg-[#f7fbff] px-4 py-3">
-      <MapPin size={20} className="shrink-0 text-[#0277d4]" aria-hidden="true" />
-      <span className="min-w-0 flex-1">
-        <span className="block text-xs font-bold text-[#6f8594]">Bạn muốn đi đâu?</span>
-        <input name="keyword" defaultValue="Đà Nẵng" className="mt-1 w-full bg-transparent text-lg font-black text-[#071827] outline-none" />
-      </span>
-    </label>
-  );
-}
-
-function HeroField({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: string }) {
-  return (
-    <div className="flex min-w-0 items-center gap-3 rounded-2xl border border-[#d9ecfb] bg-white px-4 py-3">
-      <Icon size={20} className="shrink-0 text-[#0277d4]" aria-hidden="true" />
-      <span className="min-w-0">
-        <span className="block text-xs font-bold text-[#6f8594]">{label}</span>
-        <span className="mt-1 block truncate font-black">{value}</span>
-      </span>
     </div>
   );
 }
 
-// ---------------------------------------------------------------------------
-// Coupon strip
-// ---------------------------------------------------------------------------
-
-function CouponStrip() {
+/* ─── Service icon grid ─────────────────────────────────────────────────────── */
+function ServiceGrid() {
   return (
-    <section className="mx-auto max-w-[1180px] px-4 pt-7">
-      <div className="flex items-end justify-between gap-4">
-        <div>
-          <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">Ưu đãi mẫu</p>
-          <h2 className="mt-1 text-2xl font-black">Mã demo cho chuyến đi phổ biến</h2>
+    <div className="bg-white border-b border-tv-border shadow-tv-card">
+      <div className="mx-auto max-w-[1200px] px-4">
+        <div className="flex overflow-x-auto">
+          {services.map(({ label, href, icon: Icon, color }) => (
+            <Link
+              key={label}
+              href={href}
+              className="tv-service-tab flex-shrink-0"
+              style={{ color: undefined }}
+            >
+              <div
+                className="flex h-12 w-12 items-center justify-center rounded-full"
+                style={{ backgroundColor: color + "18" }}
+              >
+                <Icon size={24} style={{ color }} />
+              </div>
+              <span className="text-tv-xs font-semibold text-tv-ink-2">{label}</span>
+            </Link>
+          ))}
         </div>
-        <Link href="/booking/demo" className="hidden items-center gap-1 text-sm font-black text-[#0277d4] md:inline-flex">
-          Xem ưu đãi
-          <ChevronRight size={17} aria-hidden="true" />
+      </div>
+    </div>
+  );
+}
+
+/* ─── Promo banner ──────────────────────────────────────────────────────────── */
+function PromoBanner() {
+  return (
+    <div className="mx-auto max-w-[1200px] px-4 py-5">
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="tv-section-title">Ưu đãi hôm nay</h2>
+        <Link href="/" className="flex items-center gap-1 text-tv-sm font-semibold text-tv-blue hover:underline">
+          Xem tất cả <ChevronRight size={14} />
         </Link>
       </div>
-      <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-        {coupons.map(([code, title, description, badge]) => (
-          <Link key={code} href="/booking/demo" className="rounded-2xl border border-[#d9ecfb] bg-white p-4 shadow-[0_12px_30px_rgba(2,68,120,0.07)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(2,68,120,0.12)]">
-            <div className="flex items-center justify-between gap-3">
-              <span className="rounded-xl bg-[#eef7ff] px-3 py-1 text-xs font-black text-[#0277d4]">{code}</span>
-              <span className="rounded-full bg-[#fff3e8] px-2.5 py-1 text-[11px] font-black text-[#b45309]">{badge}</span>
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        {promos.map(promo => (
+          <Link
+            key={promo.code}
+            href="/"
+            className="tv-card overflow-hidden group"
+          >
+            <div className={`bg-gradient-to-br ${promo.bg} p-4 text-white`}>
+              <span className={`tv-badge bg-white/20 text-white text-tv-xs`}>
+                {promo.badge}
+              </span>
+              <p className="mt-2 font-bold text-tv-base leading-tight">{promo.title}</p>
+              <p className="mt-1 text-tv-xs text-white/80">{promo.desc}</p>
             </div>
-            <h3 className="mt-3 font-black">{title}</h3>
-            <p className="mt-1 text-sm leading-6 text-[#476273]">{description}</p>
+            <div className="flex items-center justify-between px-3 py-2 bg-tv-bg">
+              <code className="text-tv-xs font-bold text-tv-blue">{promo.code}</code>
+              <span className="text-tv-xs text-tv-ink-3 group-hover:text-tv-blue transition-colors">
+                Dùng ngay →
+              </span>
+            </div>
           </Link>
         ))}
       </div>
-    </section>
+    </div>
   );
 }
 
-// ---------------------------------------------------------------------------
-// Destination grid
-// ---------------------------------------------------------------------------
-
-function DestinationGrid({ title, subtitle, items, compact = false }: { title: string; subtitle: string; items: Destination[]; compact?: boolean }) {
+/* ─── Section wrapper ───────────────────────────────────────────────────────── */
+function Section({
+  title,
+  subtitle,
+  href,
+  children,
+}: {
+  title: string;
+  subtitle: string;
+  href: string;
+  children: React.ReactNode;
+}) {
   return (
     <section>
-      <div className="flex items-end justify-between gap-4">
+      <div className="flex items-end justify-between mb-4">
         <div>
-          <h2 className="text-2xl font-black">{title}</h2>
-          <p className="mt-1 text-sm text-[#476273]">{subtitle}</p>
+          <h2 className="tv-section-title">{title}</h2>
+          <p className="mt-0.5 text-tv-sm text-tv-ink-3">{subtitle}</p>
         </div>
-        <Link href="/explore" className="hidden rounded-xl border border-[#d9ecfb] bg-white px-4 py-2 text-sm font-black text-[#0277d4] md:inline-flex">
-          Xem tất cả
+        <Link
+          href={href}
+          className="flex items-center gap-1 text-tv-sm font-semibold text-tv-blue hover:underline whitespace-nowrap"
+        >
+          Xem tất cả <ArrowRight size={14} />
         </Link>
       </div>
-      <div className={`mt-4 grid gap-4 ${compact ? "md:grid-cols-2" : "md:grid-cols-3"}`}>
-        {items.map((destination) => (
-          <DestinationTile key={destination.slug} destination={destination} compact={compact} />
-        ))}
-      </div>
+      {children}
     </section>
   );
 }
 
-function DestinationTile({ destination, compact }: { destination: Destination; compact?: boolean }) {
-  const imgSrc = destination.imageUrl ?? getDestinationImage(destination.slug);
+/* ─── Destination card ──────────────────────────────────────────────────────── */
+function DestCard({ destination, compact = false }: { destination: Destination; compact?: boolean }) {
+  const img = destination.imageUrl ?? getDestinationImage(destination.slug);
   return (
-    <Link href={`/destinations/${destination.slug}`} className="group overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_14px_34px_rgba(2,68,120,0.08)] transition hover:-translate-y-1">
-      <div className={`${compact ? "h-36" : "h-44"} bg-cover bg-center`} style={{ backgroundImage: `url(${imgSrc})` }} />
-      <div className="p-4">
-        <div className="flex items-center justify-between gap-3">
-          <h3 className="font-black group-hover:text-[#0277d4]">{destination.name}</h3>
-          {destination.ratingAvg != null && (
-            <span className="inline-flex items-center gap-1 text-sm font-black text-[#b45309]">
-              <Star size={14} fill="currentColor" aria-hidden="true" />
-              {destination.ratingAvg.toFixed(1)}
-            </span>
-          )}
-        </div>
-        <p className="mt-1 text-sm text-[#476273]">{destination.country}</p>
+    <Link href={`/destinations/${destination.slug}`} className="tv-card overflow-hidden group block">
+      <div
+        className={`${compact ? "h-28" : "h-40"} bg-cover bg-center`}
+        style={{ backgroundImage: `url(${img})` }}
+      />
+      <div className="p-2.5">
+        <p className="font-bold text-tv-base text-tv-ink truncate group-hover:text-tv-blue transition-colors">
+          {destination.name}
+        </p>
+        <p className="text-tv-xs text-tv-ink-3 truncate">{destination.country}</p>
+        {destination.ratingAvg != null && (
+          <div className="mt-1 tv-rating">
+            <Star size={10} fill="currentColor" />
+            {destination.ratingAvg.toFixed(1)}
+          </div>
+        )}
       </div>
     </Link>
   );
 }
 
-// ---------------------------------------------------------------------------
-// Deal rows
-// ---------------------------------------------------------------------------
+/* ─── Tour card ─────────────────────────────────────────────────────────────── */
+function TourCard({ tour }: { tour: Tour }) {
+  const img =
+    tour.imageUrl ??
+    tour.images?.[0]?.imageUrl ??
+    getDestinationImage(tour.destination?.slug ?? tour.slug);
+  const price = tour.salePrice ?? tour.basePrice;
+  const hasSale = tour.salePrice != null && tour.salePrice < tour.basePrice;
 
-function DealRows({ title, items }: { title: string; items: Destination[] }) {
   return (
-    <section>
-      <h2 className="text-2xl font-black">{title}</h2>
-      <div className="mt-4 space-y-3">
-        {items.map((destination) => (
-          <article key={destination.slug} className="grid overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_14px_34px_rgba(2,68,120,0.08)] md:grid-cols-[180px_minmax(0,1fr)_190px]">
-            <div className="min-h-40 bg-cover bg-center" style={{ backgroundImage: `url(${destination.imageUrl ?? getDestinationImage(destination.slug)})` }} />
-            <div className="p-4">
-              <p className="text-xs font-black text-[#0277d4]">Có thể đặt chỗ demo</p>
-              <h3 className="mt-1 text-xl font-black">{destination.name}</h3>
-              <p className="mt-1 line-clamp-2 text-sm leading-6 text-[#476273]">{destination.shortDescription ?? destination.description}</p>
-              <p className="mt-2 text-xs font-bold text-[#0f8b7b]">Hủy demo miễn phí · Gói offline · trợ lý lập lịch local</p>
+    <Link href={`/tours/${tour.slug}`} className="tv-card overflow-hidden group block">
+      {/* Image */}
+      <div className="relative h-40 bg-cover bg-center" style={{ backgroundImage: `url(${img})` }}>
+        {tour.featured && (
+          <span className="absolute left-2 top-2 tv-badge tv-badge-orange">Nổi bật</span>
+        )}
+        {hasSale && (
+          <span className="absolute right-2 top-2 tv-badge tv-badge-red">Ưu đãi</span>
+        )}
+      </div>
+
+      {/* Info */}
+      <div className="p-3">
+        {tour.destination && (
+          <div className="flex items-center gap-1 text-tv-xs text-tv-ink-3 mb-1">
+            <MapPin size={11} />
+            {tour.destination.city ?? tour.destination.name}
+          </div>
+        )}
+        <p className="font-bold text-tv-base text-tv-ink line-clamp-2 group-hover:text-tv-blue transition-colors leading-snug">
+          {tour.title}
+        </p>
+        <p className="mt-1 text-tv-xs text-tv-ink-3">
+          {tour.durationDays} ngày {tour.durationNights} đêm
+        </p>
+
+        <div className="mt-2 flex items-end justify-between">
+          <div>
+            {hasSale && (
+              <p className="text-tv-xs text-tv-ink-4 line-through">{formatVnd(tour.basePrice)}</p>
+            )}
+            <p className="tv-price-small">{formatVnd(price)}<span className="text-tv-ink-3 font-normal">/người</span></p>
+          </div>
+          {tour.ratingAvg != null && (
+            <div className="tv-rating">
+              <Star size={10} fill="currentColor" />
+              {tour.ratingAvg.toFixed(1)}
             </div>
-            <div className="flex flex-col justify-between border-t border-[#edf4fa] bg-[#fbfdff] p-4 md:border-l md:border-t-0">
+          )}
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+/* ─── Trust band ────────────────────────────────────────────────────────────── */
+function TrustBand() {
+  const items = [
+    { icon: "🔒", title: "Thanh toán an toàn", desc: "Mã hóa SSL 256-bit, không lưu thẻ thật" },
+    { icon: "🤖", title: "AI Local-first", desc: "Chatbot chạy local, không cần OpenAI key" },
+    { icon: "📊", title: "Dữ liệu thật", desc: "Điểm đến và tour từ hệ thống backend thật" },
+    { icon: "🎯", title: "Demo an toàn", desc: "Thanh toán demo — không phát sinh giao dịch thật" },
+  ] as const;
+
+  return (
+    <div className="bg-white border-t border-tv-border mt-8">
+      <div className="mx-auto max-w-[1200px] px-4 py-6">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          {items.map(item => (
+            <div key={item.title} className="flex items-start gap-3">
+              <span className="text-2xl">{item.icon}</span>
               <div>
-                <p className="text-xs font-bold text-[#6f8594]">Khám phá</p>
-                <p className="text-xl font-black text-[#ff5f12]">{destination.city ?? destination.country}</p>
+                <p className="font-bold text-tv-base text-tv-ink">{item.title}</p>
+                <p className="text-tv-xs text-tv-ink-3 mt-0.5">{item.desc}</p>
               </div>
-              <Link href={`/destinations/${destination.slug}`} className="mt-3 inline-flex items-center justify-center rounded-xl bg-[#ff6d1a] px-4 py-2.5 text-sm font-black text-white">
-                Xem chi tiết
-              </Link>
             </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Trip planner panel
-// ---------------------------------------------------------------------------
-
-function TripPlannerPanel() {
-  return (
-    <aside className="h-fit rounded-3xl border border-[#d9ecfb] bg-white p-5 shadow-[0_16px_42px_rgba(2,68,120,0.1)] lg:sticky lg:top-24">
-      <div className="flex items-center gap-3">
-        <div className="rounded-2xl bg-[#eef7ff] p-3 text-[#0277d4]">
-          <Sparkles size={24} aria-hidden="true" />
-        </div>
-        <div>
-          <p className="text-xs font-black uppercase tracking-[0.12em] text-[#0277d4]">Giỏ chuyến đi</p>
-          <h2 className="text-xl font-black">Đà Nẵng 4 ngày</h2>
+          ))}
         </div>
       </div>
-      <div className="mt-5 space-y-3 text-sm">
-        <PanelRow label="Ngân sách/ngày" value={formatVnd(4500000)} />
-        <PanelRow label="Lịch trình" value="Biển · Ẩm thực · Văn hóa" />
-        <PanelRow label="Thanh toán" value="Demo local" />
-      </div>
-      <Link href="/ai-planner?destination=da-nang" className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#0277d4] px-4 py-3 font-black text-white">
-        Lập lịch trình thông minh
-        <ChevronRight size={18} aria-hidden="true" />
-      </Link>
-      <p className="mt-3 rounded-2xl bg-[#fff3e8] p-3 text-xs font-bold leading-5 text-[#b45309]">{demoPaymentWarning}</p>
-    </aside>
-  );
-}
-
-function PanelRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-center justify-between gap-4 border-b border-[#edf4fa] pb-3">
-      <span className="font-bold text-[#476273]">{label}</span>
-      <span className="text-right font-black">{value}</span>
     </div>
   );
 }
 
-// ---------------------------------------------------------------------------
-// Trust band
-// ---------------------------------------------------------------------------
-
-function TrustBand() {
+/* ─── Footer ────────────────────────────────────────────────────────────────── */
+function SiteFooter() {
   return (
-    <section className="mt-8 border-t border-[#d9ecfb] bg-white px-4 py-8">
-      <div className="mx-auto grid max-w-[1180px] gap-4 md:grid-cols-3">
-        {[
-          ["Thanh toán demo", "Không phát sinh giao dịch thật, không lưu thẻ thật."],
-          ["Trợ lý local-first", "Chatbot runtime dùng local service/RAG, không yêu cầu khóa cloud."],
-          ["Dữ liệu thật", "Dữ liệu điểm đến và tour từ hệ thống backend thật."]
-        ].map(([title, text]) => (
-          <div key={title} className="flex gap-3 rounded-2xl bg-[#f7fbff] p-4">
-            <CheckCircle2 className="mt-0.5 shrink-0 text-[#0f8b7b]" size={20} aria-hidden="true" />
-            <div>
-              <h3 className="font-black">{title}</h3>
-              <p className="mt-1 text-sm leading-6 text-[#476273]">{text}</p>
-            </div>
+    <footer className="bg-tv-ink text-white">
+      <div className="mx-auto max-w-[1200px] px-4 py-10">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+          {/* Brand */}
+          <div className="col-span-2 md:col-span-1">
+            <p className="text-tv-lg font-bold text-white">WanderViet</p>
+            <p className="mt-1 text-tv-xs text-white/60">Nền tảng đặt tour du lịch Việt Nam &amp; quốc tế</p>
+            <p className="mt-3 text-tv-xs text-white/40">
+              ⚠️ Thanh toán demo — không phát sinh giao dịch thật
+            </p>
           </div>
-        ))}
+
+          {/* Links */}
+          {[
+            {
+              title: "Dịch vụ",
+              links: [
+                { label: "Tour du lịch", href: "/tours" },
+                { label: "Khách sạn", href: "/hotels" },
+                { label: "Vé máy bay", href: "/flights" },
+                { label: "Hoạt động", href: "/experiences" },
+              ],
+            },
+            {
+              title: "Hỗ trợ",
+              links: [
+                { label: "Trung tâm hỗ trợ", href: "/support" },
+                { label: "Liên hệ", href: "/support" },
+                { label: "Blog du lịch", href: "/blog" },
+                { label: "Điều khoản", href: "/support" },
+              ],
+            },
+            {
+              title: "Tài khoản",
+              links: [
+                { label: "Đăng nhập", href: "/login" },
+                { label: "Đăng ký", href: "/register" },
+                { label: "Đặt chỗ của tôi", href: "/my-bookings" },
+                { label: "Yêu thích", href: "/wishlist" },
+              ],
+            },
+          ].map(col => (
+            <div key={col.title}>
+              <p className="mb-3 text-tv-sm font-bold text-white/80 uppercase tracking-wider">{col.title}</p>
+              <ul className="space-y-2">
+                {col.links.map(link => (
+                  <li key={link.label}>
+                    <Link href={link.href} className="text-tv-xs text-white/50 hover:text-white transition-colors">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 border-t border-white/10 pt-6 flex flex-col items-center gap-2 md:flex-row md:justify-between">
+          <p className="text-tv-xs text-white/40">© 2026 WanderViet. Portfolio demo project.</p>
+          <p className="text-tv-xs text-white/40">
+            Built with Next.js 16 · NestJS 11 · Prisma 7 · PostgreSQL
+          </p>
+        </div>
       </div>
-    </section>
+    </footer>
   );
 }

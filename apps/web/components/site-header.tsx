@@ -1,105 +1,163 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
-  BadgePercent,
-  Bookmark,
-  CalendarCheck2,
-  Gift,
+  Bell,
+  ChevronDown,
+  Globe,
   HelpCircle,
   LogIn,
   Menu,
-  Plane,
   UserRound,
+  X,
 } from "lucide-react";
+import { useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
-import { DarkModeToggle } from "@/components/dark-mode-toggle";
-import { LangToggle } from "@/components/lang-toggle";
-import { NotificationBell } from "@/components/notification-bell";
+import { useAuth } from "@/lib/auth/auth-context";
 
-const utilityNav = [
-  ["Ưu đãi", "/", BadgePercent],
-  ["Vé máy bay", "/flights", Plane],
-  ["Đặt chỗ", "/booking/demo", CalendarCheck2],
-  ["Đã lưu", "/wishlist", Bookmark],
-  ["Chill Rewards", "/loyalty", Gift],
-  ["Hỗ trợ", "/support", HelpCircle],
+/* ─── Top utility bar (above main header) ─────────────────────────────────── */
+const topLinks = [
+  { label: "Hỗ trợ", href: "/support", icon: HelpCircle },
+  { label: "Tiếng Việt", href: "#", icon: Globe },
+] as const;
+
+/* ─── Main navigation tabs ────────────────────────────────────────────────── */
+const mainNav = [
+  { label: "Khách sạn", href: "/hotels" },
+  { label: "Vé máy bay", href: "/flights" },
+  { label: "Tour du lịch", href: "/tours" },
+  { label: "Hoạt động", href: "/experiences" },
+  { label: "Xe đưa đón", href: "/map" },
+  { label: "Thuê xe", href: "/map" },
+  { label: "Ưu đãi", href: "/" },
 ] as const;
 
 export function SiteHeader() {
+  const pathname = usePathname();
+  const { user, isAuthenticated, logout } = useAuth();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-[#e4eef6] bg-white text-[#071827]">
-      <div className="mx-auto flex h-16 max-w-[1180px] items-center justify-between gap-4 px-4 md:px-6">
-        <BrandLogo />
+    <header className="sticky top-0 z-50 bg-white shadow-tv-header">
+      {/* ── Top bar ─────────────────────────────────────────────────────── */}
+      <div className="border-b border-tv-border bg-white">
+        <div className="mx-auto flex h-9 max-w-[1200px] items-center justify-between px-4">
+          {/* Left: brand tagline */}
+          <span className="hidden text-tv-xs text-tv-ink-3 md:block">
+            Nền tảng đặt tour du lịch Việt Nam &amp; quốc tế
+          </span>
 
-        <nav
-          className="hidden items-center gap-1 md:flex"
-          aria-label="Điều hướng chính"
-        >
-          {utilityNav.map(([label, href, Icon]) => (
-            <Link
-              key={href}
-              href={href}
-              className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-[#334e60] transition hover:bg-[#eef7ff] hover:text-[#0277d4]"
-            >
-              <Icon size={17} aria-hidden="true" />
-              {label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="flex items-center gap-2">
-          <DarkModeToggle />
-          <LangToggle />
-          <NotificationBell />
-          <Link
-            href="/profile"
-            className="hidden rounded-xl border border-[#d9ecfb] p-2 text-[#476273] transition hover:bg-[#eef7ff] hover:text-[#0277d4] md:inline-flex"
-            aria-label="Mở hồ sơ du lịch"
-          >
-            <UserRound size={18} aria-hidden="true" />
-          </Link>
-          <Link
-            href="/login"
-            className="hidden items-center gap-2 rounded-xl bg-[#0277d4] px-4 py-2.5 text-sm font-black text-white shadow-[0_10px_24px_rgba(2,119,212,0.22)] transition hover:bg-[#005ea8] md:inline-flex"
-          >
-            <LogIn size={17} aria-hidden="true" />
-            Đăng nhập
-          </Link>
-          <Link
-            href="/register"
-            className="hidden rounded-xl border border-[#d9ecfb] px-4 py-2.5 text-sm font-black text-[#0277d4] transition hover:bg-[#eef7ff] md:inline-flex"
-          >
-            Đăng ký
-          </Link>
-          <details className="group relative md:hidden">
-            <summary
-              className="inline-flex cursor-pointer list-none rounded-xl border border-[#d9ecfb] p-2 text-[#476273] transition hover:bg-[#eef7ff] hover:text-[#0277d4]"
-              aria-label="Mở menu"
-            >
-              <Menu size={20} aria-hidden="true" />
-            </summary>
-            <div className="absolute right-0 mt-3 w-[min(86vw,320px)] overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white p-2 shadow-[0_18px_48px_rgba(2,68,120,0.16)]">
-              {[...utilityNav, ["Đăng nhập", "/login", LogIn] as const].map(
-                ([label, href, Icon]) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-black text-[#334e60] transition hover:bg-[#eef7ff] hover:text-[#0277d4]"
-                  >
-                    <Icon size={18} aria-hidden="true" />
-                    {label}
-                  </Link>
-                ),
-              )}
+          {/* Right: utility links */}
+          <div className="flex items-center gap-4 ml-auto">
+            {topLinks.map(({ label, href, icon: Icon }) => (
               <Link
-                href="/register"
-                className="mt-2 flex items-center justify-center rounded-xl bg-[#ff6d1a] px-3 py-3 text-sm font-black text-white"
+                key={label}
+                href={href}
+                className="inline-flex items-center gap-1 text-tv-xs text-tv-ink-3 hover:text-tv-blue transition-colors"
               >
-                Đăng ký
+                <Icon size={13} />
+                {label}
               </Link>
-            </div>
-          </details>
+            ))}
+
+            {isAuthenticated ? (
+              <div className="flex items-center gap-3">
+                <Link href="/notifications" className="relative text-tv-ink-3 hover:text-tv-blue">
+                  <Bell size={16} />
+                </Link>
+                <div className="flex items-center gap-1 cursor-pointer text-tv-xs font-semibold text-tv-ink-2 hover:text-tv-blue">
+                  <UserRound size={14} />
+                  <span className="max-w-[100px] truncate">{user?.fullName ?? user?.email}</span>
+                  <ChevronDown size={12} />
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/login"
+                  className="inline-flex items-center gap-1 rounded-tv-sm border border-tv-blue px-3 py-1 text-tv-xs font-bold text-tv-blue hover:bg-tv-blue-light transition-colors"
+                >
+                  <LogIn size={12} />
+                  Đăng nhập
+                </Link>
+                <Link
+                  href="/register"
+                  className="inline-flex items-center rounded-tv-sm bg-tv-blue px-3 py-1 text-tv-xs font-bold text-white hover:bg-tv-blue-dark transition-colors"
+                >
+                  Đăng ký
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* ── Main header ─────────────────────────────────────────────────── */}
+      <div className="bg-white">
+        <div className="mx-auto flex h-14 max-w-[1200px] items-center gap-6 px-4">
+          {/* Logo */}
+          <BrandLogo />
+
+          {/* Nav tabs — desktop */}
+          <nav className="hidden flex-1 items-center md:flex" aria-label="Điều hướng chính">
+            {mainNav.map(({ label, href }) => {
+              const active = pathname === href || (href !== "/" && pathname.startsWith(href));
+              return (
+                <Link
+                  key={label}
+                  href={href}
+                  className={`relative inline-flex h-14 items-center px-3 text-tv-base font-semibold transition-colors whitespace-nowrap
+                    ${active
+                      ? "text-tv-blue after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[3px] after:bg-tv-blue after:rounded-t"
+                      : "text-tv-ink-2 hover:text-tv-blue"
+                    }`}
+                >
+                  {label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Mobile menu button */}
+          <button
+            className="ml-auto rounded-tv-sm border border-tv-border p-2 text-tv-ink-3 md:hidden"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Menu"
+          >
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </div>
+
+      {/* ── Mobile menu ─────────────────────────────────────────────────── */}
+      {mobileOpen && (
+        <div className="border-t border-tv-border bg-white shadow-tv-modal md:hidden">
+          <nav className="flex flex-col py-2">
+            {mainNav.map(({ label, href }) => (
+              <Link
+                key={label}
+                href={href}
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center px-4 py-3 text-tv-base font-semibold text-tv-ink-2 hover:bg-tv-blue-light hover:text-tv-blue"
+              >
+                {label}
+              </Link>
+            ))}
+            <hr className="my-2 border-tv-border" />
+            {!isAuthenticated && (
+              <>
+                <Link href="/login" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 text-tv-base font-bold text-tv-blue">
+                  <LogIn size={16} /> Đăng nhập
+                </Link>
+                <Link href="/register" onClick={() => setMobileOpen(false)} className="mx-4 mb-2 flex items-center justify-center rounded-tv bg-tv-blue py-2.5 text-tv-base font-bold text-white">
+                  Đăng ký
+                </Link>
+              </>
+            )}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

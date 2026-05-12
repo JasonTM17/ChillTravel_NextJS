@@ -22,7 +22,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from "lucide-react";
-import { destinationApi } from "@/lib/api/destination.api";
+import { destinationApi, getCountryName, getCityName } from "@/lib/api/destination.api";
 import type { Destination } from "@/lib/api/destination.api";
 import { getDestinationImage } from "@/lib/destination-images";
 import { formatVnd } from "@/lib/utils";
@@ -464,7 +464,7 @@ function SearchResultCard({ destination }: { destination: Destination }) {
       />
       <div className="min-w-0 p-5">
         <div className="flex flex-wrap items-center gap-2 text-sm">
-          <span className="rounded-full bg-tv-blue-light px-3 py-1 font-bold text-tv-blue">{destination.country}</span>
+          <span className="rounded-full bg-tv-blue-light px-3 py-1 font-bold text-tv-blue">{getCountryName(destination)}</span>
           {destination.ratingAvg != null && (
             <span className="inline-flex items-center gap-1 font-bold text-[#b45309]">
               <Star size={15} fill="currentColor" aria-hidden="true" />
@@ -483,7 +483,7 @@ function SearchResultCard({ destination }: { destination: Destination }) {
         </p>
         <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-tv-ink-3">
           <Amenity icon={Hotel} label="Nơi ở" />
-          {destination.city && <Amenity icon={MapPin} label={destination.city} />}
+          {destination.city && <Amenity icon={MapPin} label={getCityName(destination) ?? ''} />}
           {destination.category && <Amenity icon={Coffee} label={destination.category} />}
           <Amenity icon={ShieldCheck} label="An toàn" />
           <Amenity icon={Wifi} label="Gói offline" />
@@ -492,7 +492,7 @@ function SearchResultCard({ destination }: { destination: Destination }) {
       <aside className="flex flex-col justify-between border-t border-tv-border bg-tv-bg p-5 md:border-l md:border-t-0">
         <div>
           <p className="text-xs font-bold text-tv-ink-3">Khám phá</p>
-          <p className="mt-1 text-2xl font-bold text-tv-orange">{destination.city ?? destination.country}</p>
+          <p className="mt-1 text-2xl font-bold text-tv-orange">{getCityName(destination) ?? getCountryName(destination)}</p>
           <p className="mt-1 text-xs font-bold text-tv-ink-3">{destination.bestTimeToVisit ?? "Quanh năm"}</p>
           <p className="mt-4 rounded-full bg-[#fff3e8] px-3 py-1 text-center text-xs font-bold text-[#b45309]">Chỉ thanh toán demo</p>
         </div>
@@ -598,8 +598,8 @@ function TripSidePanel({ destination }: { destination: Destination }) {
       <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">Tóm tắt chuyến đi</p>
       <h2 className="mt-2 text-2xl font-bold">{destination.name}</h2>
       <div className="mt-5 space-y-3 text-sm">
-        <CartRow label="Quốc gia" value={destination.country} />
-        {destination.city && <CartRow label="Thành phố" value={destination.city} />}
+        <CartRow label="Quốc gia" value={getCountryName(destination)} />
+        {getCityName(destination) && <CartRow label="Thành phố" value={getCityName(destination)!} />}
         {destination.bestTimeToVisit && <CartRow label="Mùa đẹp" value={destination.bestTimeToVisit} />}
         {destination.ratingAvg != null && <CartRow label="Đánh giá" value={`${destination.ratingAvg.toFixed(1)} / 5`} />}
       </div>

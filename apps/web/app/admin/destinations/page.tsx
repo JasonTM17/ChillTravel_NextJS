@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { adminApi } from "@/lib/api/admin.api";
 import type { Destination, CreateDestinationRequest } from "@/lib/api/destination.api";
+import { getCountryName, getCityName } from "@/lib/api/destination.api";
 import { formatVnd } from "@/lib/utils";
 
 // ─── Toast ───────────────────────────────────────────────────────────────────
@@ -73,7 +74,7 @@ function DestinationModal({
   const [form, setForm] = useState<CreateDestinationRequest>(
     item
       ? {
-          name: item.name, country: item.country, city: item.city ?? "",
+          name: item.name, country: getCountryName(item), city: getCityName(item) ?? "",
           description: item.description, shortDescription: item.shortDescription ?? "",
           bestTimeToVisit: item.bestTimeToVisit ?? "", imageUrl: item.imageUrl ?? "",
           category: item.category ?? "",
@@ -247,8 +248,8 @@ export default function AdminDestinationsPage() {
                 {items.map((item) => (
                   <tr key={item.id} className="border-b last:border-0 hover:bg-gray-50">
                     <td className="px-4 py-3 font-semibold text-gray-900">{item.name}</td>
-                    <td className="px-4 py-3 text-gray-600">{item.country}</td>
-                    <td className="px-4 py-3 text-gray-600">{item.city ?? "—"}</td>
+                    <td className="px-4 py-3 text-gray-600">{getCountryName(item)}</td>
+                    <td className="px-4 py-3 text-gray-600">{getCityName(item) ?? "—"}</td>
                     <td className="px-4 py-3 text-gray-600">{item.category ?? "—"}</td>
                     <td className="px-4 py-3"><StatusBadge status={item.status} /></td>
                     <td className="px-4 py-3 text-right">

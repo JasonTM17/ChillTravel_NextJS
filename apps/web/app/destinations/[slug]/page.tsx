@@ -16,7 +16,7 @@ import {
   Utensils,
   WalletCards
 } from "lucide-react";
-import { destinationApi } from "@/lib/api/destination.api";
+import { destinationApi, getCountryName, getCityName } from "@/lib/api/destination.api";
 import type { Destination } from "@/lib/api/destination.api";
 import { BoundaryList, CommerceSurface, StatusPill, TrustBanner } from "@/components/commerce-primitives";
 import { getDestinationImage, getExperienceDealImage, getStayDealImage } from "@/lib/destination-images";
@@ -153,8 +153,8 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <div className="flex flex-wrap gap-2">
-                <StatusPill>{destination.country}</StatusPill>
-                {destination.city && <StatusPill tone="teal">{destination.city}</StatusPill>}
+                <StatusPill>{getCountryName(destination)}</StatusPill>
+                {getCityName(destination) && <StatusPill tone="teal">{getCityName(destination)}</StatusPill>}
                 {destination.category && <StatusPill tone="orange">{destination.category}</StatusPill>}
               </div>
               <h1 className="mt-4 text-4xl font-bold leading-tight md:text-6xl">{destination.name}</h1>
@@ -207,7 +207,7 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
               <InfoCard icon={CalendarDays} title="Mùa đẹp" value={destination.bestTimeToVisit} />
             )}
             <InfoCard icon={ShieldCheck} title="An toàn" value="Tốt" />
-            <InfoCard icon={MapPin} title="Vị trí" value={destination.city ?? destination.country} />
+            <InfoCard icon={MapPin} title="Vị trí" value={getCityName(destination) ?? getCountryName(destination)} />
           </div>
 
           <CommerceSurface>
@@ -239,8 +239,8 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
           <CommerceSurface>
             <h2 className="text-2xl font-bold">Thông tin điểm đến</h2>
             <div className="mt-4 space-y-3 text-sm">
-              <InfoRow label="Quốc gia" value={destination.country} />
-              {destination.city && <InfoRow label="Thành phố" value={destination.city} />}
+              <InfoRow label="Quốc gia" value={getCountryName(destination)} />
+              {getCityName(destination) && <InfoRow label="Thành phố" value={getCityName(destination)!} />}
               {destination.bestTimeToVisit && <InfoRow label="Thời điểm lý tưởng" value={destination.bestTimeToVisit} />}
               {destination.ratingAvg != null && (
                 <InfoRow
@@ -258,8 +258,8 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
             <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">Tóm tắt đặt chỗ</p>
             <h2 className="mt-2 text-2xl font-bold">{destination.name}</h2>
             <div className="mt-5 space-y-3 text-sm">
-              <SideRow label="Quốc gia" value={destination.country} />
-              {destination.city && <SideRow label="Thành phố" value={destination.city} />}
+              <SideRow label="Quốc gia" value={getCountryName(destination)} />
+              {getCityName(destination) && <SideRow label="Thành phố" value={getCityName(destination)!} />}
               {destination.ratingAvg != null && (
                 <SideRow label="Đánh giá" value={`${destination.ratingAvg.toFixed(1)} / 5`} />
               )}

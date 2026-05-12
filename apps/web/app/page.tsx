@@ -7,13 +7,17 @@ import {
   Bus,
   CalendarDays,
   Car,
+  CheckCircle2,
   ChevronRight,
+  Headphones,
   Hotel,
   MapPin,
   Plane,
   Search,
+  ShieldCheck,
   Sparkles,
   Star,
+  Tag,
   Ticket,
   Train,
   Users,
@@ -493,26 +497,50 @@ function TourCard({ tour }: { tour: Tour }) {
 
 /* ─── Trust band ────────────────────────────────────────────────────────────── */
 function TrustBand() {
-  const items = [
-    { icon: "🔒", title: "Thanh toán an toàn", desc: "Mã hóa SSL 256-bit, không lưu thẻ thật" },
-    { icon: "🤖", title: "AI Local-first", desc: "Chatbot chạy local, không cần OpenAI key" },
-    { icon: "📊", title: "Dữ liệu thật", desc: "Điểm đến và tour từ hệ thống backend thật" },
-    { icon: "🎯", title: "Demo an toàn", desc: "Thanh toán demo — không phát sinh giao dịch thật" },
-  ] as const;
-
   return (
-    <div className="bg-white border-t border-tv-border mt-8">
-      <div className="mx-auto max-w-[1200px] px-4 py-6">
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {items.map(item => (
-            <div key={item.title} className="flex items-start gap-3">
-              <span className="text-2xl">{item.icon}</span>
-              <div>
-                <p className="font-bold text-tv-base text-tv-ink">{item.title}</p>
-                <p className="text-tv-xs text-tv-ink-3 mt-0.5">{item.desc}</p>
-              </div>
+    <div className="bg-white border-t border-tv-border">
+      <div className="mx-auto max-w-[1200px] px-4 py-5">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-4 md:grid-cols-4">
+          {/* 1 */}
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-tv-blue-light">
+              <ShieldCheck size={20} className="text-tv-blue" />
             </div>
-          ))}
+            <div>
+              <p className="text-tv-sm font-bold text-tv-ink">Thanh toán an toàn</p>
+              <p className="text-tv-xs text-tv-ink-3">Mã hóa SSL, không lưu thẻ thật</p>
+            </div>
+          </div>
+          {/* 2 */}
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-50">
+              <CheckCircle2 size={20} className="text-emerald-600" />
+            </div>
+            <div>
+              <p className="text-tv-sm font-bold text-tv-ink">Dữ liệu thật</p>
+              <p className="text-tv-xs text-tv-ink-3">Tour và điểm đến từ backend thật</p>
+            </div>
+          </div>
+          {/* 3 */}
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-tv-orange-light">
+              <Headphones size={20} className="text-tv-orange-dark" />
+            </div>
+            <div>
+              <p className="text-tv-sm font-bold text-tv-ink">Hỗ trợ 24/7</p>
+              <p className="text-tv-xs text-tv-ink-3">Trợ lý local, không cần cloud key</p>
+            </div>
+          </div>
+          {/* 4 */}
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-50">
+              <Tag size={20} className="text-amber-600" />
+            </div>
+            <div>
+              <p className="text-tv-sm font-bold text-tv-ink">Giá tốt nhất</p>
+              <p className="text-tv-xs text-tv-ink-3">Demo — không phát sinh giao dịch thật</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -529,8 +557,9 @@ function SiteFooter() {
           <div className="col-span-2 md:col-span-1">
             <p className="text-tv-lg font-bold text-white">WanderViet</p>
             <p className="mt-1 text-tv-xs text-white/60">Nền tảng đặt tour du lịch Việt Nam &amp; quốc tế</p>
-            <p className="mt-3 text-tv-xs text-white/40">
-              ⚠️ Thanh toán demo — không phát sinh giao dịch thật
+            <p className="mt-3 inline-flex items-center gap-1.5 rounded-tv-sm bg-white/10 px-2.5 py-1 text-tv-xs text-white/50">
+              <ShieldCheck size={12} />
+              Thanh toán demo — không phát sinh giao dịch thật
             </p>
           </div>
 

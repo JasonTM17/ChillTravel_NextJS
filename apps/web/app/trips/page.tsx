@@ -29,17 +29,17 @@ export default function Page() {
                 <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                   <div>
                     <StatusPill tone="blue">Ngày {day.day}</StatusPill>
-                    <h2 className="mt-3 text-2xl font-black">{day.title}</h2>
-                    <p className="mt-1 inline-flex items-center gap-2 text-sm font-bold text-[#476273]">
-                      <MapPinned size={16} className="text-[#0277d4]" aria-hidden="true" />
+                    <h2 className="mt-3 text-2xl font-bold">{day.title}</h2>
+                    <p className="mt-1 inline-flex items-center gap-2 text-sm font-bold text-tv-ink-3">
+                      <MapPinned size={16} className="text-tv-blue" aria-hidden="true" />
                       {day.area}
                     </p>
                   </div>
-                  <p className="rounded-2xl bg-[#fff3e8] px-4 py-2 text-sm font-black text-[#b45309]">{formatVnd(day.cost)}</p>
+                  <p className="rounded-tv bg-[#fff3e8] px-4 py-2 text-sm font-bold text-[#b45309]">{formatVnd(day.cost)}</p>
                 </div>
                 <div className="mt-5 grid gap-3 md:grid-cols-3">
                   {day.activities.map((activity) => (
-                    <div key={activity} className="flex gap-2 rounded-2xl bg-[#f7fbff] p-4 text-sm font-bold text-[#34566f]">
+                    <div key={activity} className="flex gap-2 rounded-tv bg-tv-bg p-4 text-sm font-bold text-tv-ink-3">
                       <CheckCircle2 size={17} className="mt-0.5 shrink-0 text-[#0f8b7b]" aria-hidden="true" />
                       {activity}
                     </div>
@@ -52,35 +52,35 @@ export default function Page() {
         <aside className="h-fit space-y-4 lg:sticky lg:top-24">
           <TrustBanner compact />
           <CommerceSurface>
-            <h2 className="text-xl font-black">Booking hub</h2>
+            <h2 className="text-xl font-bold">Booking hub</h2>
             <div className="mt-4 space-y-3">
               {userBookingSummaries.map((booking) => (
-                <Link key={booking.id} href="/booking/demo" className="block rounded-2xl bg-[#f7fbff] p-4">
-                  <p className="font-black text-[#0277d4]">{booking.code}</p>
-                  <p className="mt-1 text-sm font-black text-[#071827]">{booking.title}</p>
-                  <p className="mt-1 text-xs font-bold text-[#6f8594]">{booking.paymentWarning}</p>
+                <Link key={booking.id} href="/booking/demo" className="block rounded-tv bg-tv-bg p-4">
+                  <p className="font-bold text-tv-blue">{booking.code}</p>
+                  <p className="mt-1 text-sm font-bold text-tv-ink">{booking.title}</p>
+                  <p className="mt-1 text-xs font-bold text-tv-ink-3">{booking.paymentWarning}</p>
                 </Link>
               ))}
             </div>
           </CommerceSurface>
           <CommerceSurface>
-            <h2 className="text-xl font-black">Gói chuyến đi</h2>
+            <h2 className="text-xl font-bold">Gói chuyến đi</h2>
             <div className="mt-4 space-y-3">
               {[
                 [CalendarDays, "Lịch đọc nhanh", "Sáng, chiều, tối rõ ràng cho từng ngày."],
                 [WalletCards, "Ngân sách mẫu", "Không khẳng định giá thật hoặc chỗ trống thật."],
                 [PlaneTakeoff, "Xuất phát", "Có thể đổi thành Hà Nội, TP.HCM hoặc địa phương khác."]
               ].map(([Icon, title, body]) => (
-                <div key={String(title)} className="flex gap-3 rounded-2xl bg-[#f7fbff] p-4">
-                  <Icon className="mt-0.5 shrink-0 text-[#0277d4]" size={20} aria-hidden="true" />
+                <div key={String(title)} className="flex gap-3 rounded-tv bg-tv-bg p-4">
+                  <Icon className="mt-0.5 shrink-0 text-tv-blue" size={20} aria-hidden="true" />
                   <div>
-                    <p className="font-black">{String(title)}</p>
-                    <p className="mt-1 text-sm leading-6 text-[#476273]">{String(body)}</p>
+                    <p className="font-bold">{String(title)}</p>
+                    <p className="mt-1 text-sm leading-6 text-tv-ink-3">{String(body)}</p>
                   </div>
                 </div>
               ))}
             </div>
-            <Link href="/booking/da-nang" className="mt-5 inline-flex w-full justify-center rounded-2xl bg-[#ff6d1a] px-4 py-3 font-black text-white">
+            <Link href="/booking/da-nang" className="mt-5 inline-flex w-full justify-center rounded-tv bg-tv-orange px-4 py-3 font-bold text-white">
               Đặt chỗ demo
             </Link>
           </CommerceSurface>

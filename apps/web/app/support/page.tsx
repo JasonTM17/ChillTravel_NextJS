@@ -15,13 +15,13 @@ export default function SupportPage() {
     <PageShell eyebrow="Trung tâm hỗ trợ" title="Hỗ trợ đặt chỗ demo, gói offline và ranh giới dữ liệu local">
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_330px]">
         <section className="space-y-5">
-          <CommerceSurface className="bg-[#eef7ff]">
+          <CommerceSurface className="bg-tv-blue-light">
             <form action="/support" className="flex flex-col gap-3 md:flex-row">
-              <label className="flex min-w-0 flex-1 items-center gap-3 rounded-2xl border border-[#cbe2f4] bg-white px-4 py-3">
-                <Search size={19} className="text-[#0277d4]" aria-hidden="true" />
-                <input defaultValue="Thanh toán demo" className="w-full bg-transparent font-black outline-none" aria-label="Tìm bài hỗ trợ" />
+              <label className="flex min-w-0 flex-1 items-center gap-3 rounded-tv border border-[#cbe2f4] bg-white px-4 py-3">
+                <Search size={19} className="text-tv-blue" aria-hidden="true" />
+                <input defaultValue="Thanh toán demo" className="w-full bg-transparent font-bold outline-none" aria-label="Tìm bài hỗ trợ" />
               </label>
-              <button className="rounded-2xl bg-[#0277d4] px-5 py-3 font-black text-white" type="submit">Tìm hỗ trợ</button>
+              <button className="rounded-tv bg-tv-blue px-5 py-3 font-bold text-white" type="submit">Tìm hỗ trợ</button>
             </form>
           </CommerceSurface>
 
@@ -32,22 +32,22 @@ export default function SupportPage() {
           </div>
 
           <CommerceSurface>
-            <h2 className="text-2xl font-black">Câu hỏi thường gặp</h2>
+            <h2 className="text-2xl font-bold">Câu hỏi thường gặp</h2>
             <div className="mt-5 space-y-3">
               {supportArticles.map((article) => (
-                <details key={article.id} className="group rounded-2xl border border-[#d9ecfb] bg-[#fbfdff] p-4">
+                <details key={article.id} className="group rounded-tv border border-tv-border bg-tv-bg p-4">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
                     <span>
                       <StatusPill tone={article.category === "payment" ? "orange" : "blue"}>{categoryLabel(article.category)}</StatusPill>
-                      <span className="mt-2 block text-lg font-black">{article.title}</span>
+                      <span className="mt-2 block text-lg font-bold">{article.title}</span>
                     </span>
-                    <HelpCircle className="shrink-0 text-[#0277d4]" size={22} aria-hidden="true" />
+                    <HelpCircle className="shrink-0 text-tv-blue" size={22} aria-hidden="true" />
                   </summary>
-                  <p className="mt-3 text-sm leading-6 text-[#476273]">{article.summary}</p>
+                  <p className="mt-3 text-sm leading-6 text-tv-ink-3">{article.summary}</p>
                   <ol className="mt-4 grid gap-2">
                     {article.steps.map((step, index) => (
-                      <li key={step} className="flex gap-3 rounded-xl bg-white p-3 text-sm font-bold text-[#34566f]">
-                        <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#eef7ff] text-xs font-black text-[#0277d4]">{index + 1}</span>
+                      <li key={step} className="flex gap-3 rounded-tv-sm bg-white p-3 text-sm font-bold text-tv-ink-3">
+                        <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-tv-blue-light text-xs font-bold text-tv-blue">{index + 1}</span>
                         {step}
                       </li>
                     ))}
@@ -61,14 +61,14 @@ export default function SupportPage() {
         <aside className="h-fit space-y-4 lg:sticky lg:top-24">
           <TrustBanner compact />
           <CommerceSurface>
-            <h2 className="text-xl font-black">Liên hệ mock</h2>
+            <h2 className="text-xl font-bold">Liên hệ mock</h2>
             <div className="mt-4 space-y-3">
               {supportContacts.map(([Icon, title, href, body]) => (
-                <Link key={String(title)} href={String(href)} className="flex gap-3 rounded-2xl bg-[#f7fbff] p-4">
-                  <Icon className="mt-0.5 shrink-0 text-[#0277d4]" size={20} aria-hidden="true" />
+                <Link key={String(title)} href={String(href)} className="flex gap-3 rounded-tv bg-tv-bg p-4">
+                  <Icon className="mt-0.5 shrink-0 text-tv-blue" size={20} aria-hidden="true" />
                   <span>
-                    <span className="block font-black">{String(title)}</span>
-                    <span className="mt-1 block text-sm leading-6 text-[#476273]">{String(body)}</span>
+                    <span className="block font-bold">{String(title)}</span>
+                    <span className="mt-1 block text-sm leading-6 text-tv-ink-3">{String(body)}</span>
                   </span>
                 </Link>
               ))}
@@ -77,7 +77,7 @@ export default function SupportPage() {
           <CommerceSurface>
             <div className="flex gap-3">
               <ShieldCheck className="mt-0.5 shrink-0 text-[#0f8b7b]" size={22} aria-hidden="true" />
-              <p className="text-sm font-bold leading-6 text-[#476273]">{demoPaymentWarning}. ChillTravel không yêu cầu gửi ảnh thẻ, mã OTP thật hoặc thông tin ngân hàng thật.</p>
+              <p className="text-sm font-bold leading-6 text-tv-ink-3">{demoPaymentWarning}. ChillTravel không yêu cầu gửi ảnh thẻ, mã OTP thật hoặc thông tin ngân hàng thật.</p>
             </div>
           </CommerceSurface>
         </aside>

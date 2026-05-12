@@ -12,17 +12,17 @@ export function MoodSearchPanel() {
   const result = useMemo(() => moodSearch(query), [query]);
 
   return (
-    <section className="rounded-[18px] border border-[#d9ecfb] bg-white p-5 shadow-[0_18px_54px_rgba(2,68,120,0.08)]">
+    <section className="rounded-tv border border-tv-border bg-white p-5 shadow-tv-card">
       <div className="grid gap-6 lg:grid-cols-[340px_1fr]">
         <div>
-          <p className="text-sm font-black uppercase tracking-[0.2em] text-[#0277d4]">Tìm theo cảm xúc</p>
-          <h2 className="mt-3 text-3xl font-black leading-tight text-[#071827]">Mô tả cảm giác chuyến đi bạn muốn.</h2>
-          <label className="mt-5 block text-sm font-bold text-[#071827]">
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-tv-blue">Tìm theo cảm xúc</p>
+          <h2 className="mt-3 text-3xl font-bold leading-tight text-tv-ink">Mô tả cảm giác chuyến đi bạn muốn.</h2>
+          <label className="mt-5 block text-sm font-bold text-tv-ink">
             Cảm xúc, nhịp đi, món ăn, người đi cùng, ngân sách
             <textarea
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              className="mt-2 min-h-28 w-full rounded-xl border border-[#d9ecfb] bg-[#f7fbff] px-4 py-3 leading-6 outline-none focus:border-[#0277d4] focus:ring-2 focus:ring-[#0277d4]/15"
+              className="mt-2 min-h-28 w-full rounded-tv-sm border border-tv-border bg-tv-bg px-4 py-3 leading-6 outline-none focus:border-tv-blue focus:ring-2 focus:ring-tv-blue/15"
             />
           </label>
           <div className="mt-4 flex flex-wrap gap-2">
@@ -31,7 +31,7 @@ export function MoodSearchPanel() {
                 key={example}
                 type="button"
                 onClick={() => setQuery(example)}
-                className="rounded-full border border-[#d9ecfb] px-3 py-1.5 text-left text-xs font-semibold text-[#40515d] transition hover:border-[#0277d4] hover:text-[#0277d4]"
+                className="rounded-full border border-tv-border px-3 py-1.5 text-left text-xs font-semibold text-tv-ink-3 transition hover:border-tv-blue hover:text-tv-blue"
               >
                 {example}
               </button>
@@ -39,7 +39,7 @@ export function MoodSearchPanel() {
           </div>
           <div className="mt-5 flex flex-wrap gap-2">
             {result.inferredFilters.tags.map((tag) => (
-              <span key={tag} className="rounded-full bg-[#f5efe4] px-3 py-1 text-sm font-semibold text-[#40515d]">
+              <span key={tag} className="rounded-full bg-[#f5efe4] px-3 py-1 text-sm font-semibold text-tv-ink-3">
                 {tagLabel(tag)}
               </span>
             ))}

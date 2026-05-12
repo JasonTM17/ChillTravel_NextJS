@@ -25,15 +25,15 @@ export function CompareConsole() {
 
   return (
     <section className="space-y-6">
-      <div className="rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_18px_48px_rgba(2,68,120,0.08)]">
+      <div className="rounded-tv border border-tv-border bg-white p-5 shadow-[0_18px_48px_rgba(2,68,120,0.08)]">
         <div className="grid gap-4 lg:grid-cols-[1fr_260px]">
           <div>
-            <p className="text-sm font-bold uppercase tracking-[0.16em] text-[#0277d4]">So sánh điểm đến</p>
-            <h2 className="mt-2 text-3xl font-black text-[#071827]">Chọn 2-4 điểm đến và xem khác biệt khi lên kế hoạch thật</h2>
+            <p className="text-sm font-bold uppercase tracking-[0.16em] text-tv-blue">So sánh điểm đến</p>
+            <h2 className="mt-2 text-3xl font-bold text-tv-ink">Chọn 2-4 điểm đến và xem khác biệt khi lên kế hoạch thật</h2>
           </div>
-          <label className="block text-sm font-bold text-[#071827]">
+          <label className="block text-sm font-bold text-tv-ink">
             Phong cách du lịch
-            <select value={style} onChange={(event) => setStyle(event.target.value as TravelStyle)} className="mt-2 w-full rounded-lg border border-[#d9ecfb] bg-[#f7fbff] px-3 py-3">
+            <select value={style} onChange={(event) => setStyle(event.target.value as TravelStyle)} className="mt-2 w-full rounded-lg border border-tv-border bg-tv-bg px-3 py-3">
               {styles.map((item) => (
                 <option key={item} value={item}>
                   {travelStyleLabel(item)}
@@ -48,7 +48,7 @@ export function CompareConsole() {
               key={destination.slug}
               type="button"
               onClick={() => toggle(destination.slug)}
-              className={selected.includes(destination.slug) ? "rounded-full bg-[#0277d4] px-3 py-2 text-sm font-semibold text-white" : "rounded-full border border-[#d9ecfb] bg-[#f7fbff] px-3 py-2 text-sm font-semibold text-[#071827]"}
+              className={selected.includes(destination.slug) ? "rounded-full bg-tv-blue px-3 py-2 text-sm font-semibold text-white" : "rounded-full border border-tv-border bg-tv-bg px-3 py-2 text-sm font-semibold text-tv-ink"}
             >
               {getDestinationCopy(destination).name}
             </button>
@@ -56,9 +56,9 @@ export function CompareConsole() {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_18px_48px_rgba(2,68,120,0.08)]">
+      <div className="overflow-x-auto rounded-tv border border-tv-border bg-white shadow-[0_18px_48px_rgba(2,68,120,0.08)]">
         <table className="w-full min-w-[760px] text-left text-sm">
-          <thead className="bg-[#0277d4] text-white">
+          <thead className="bg-tv-blue text-white">
             <tr>
               {headings.map((heading) => (
                 <th key={heading} className="px-4 py-3 font-semibold">
@@ -69,16 +69,16 @@ export function CompareConsole() {
           </thead>
           <tbody>
             {rows.map((row) => (
-              <tr key={row.slug} className="border-b border-[#edf4fa]">
-                <td className="px-4 py-4 font-bold text-[#071827]">{getDestinationCopy(destinations.find((item) => item.slug === row.slug) ?? destinations[0]).name}</td>
+              <tr key={row.slug} className="border-b border-tv-border">
+                <td className="px-4 py-4 font-bold text-tv-ink">{getDestinationCopy(destinations.find((item) => item.slug === row.slug) ?? destinations[0]).name}</td>
                 <td className="px-4 py-4">{formatBudgetRange(row.slug)}</td>
                 <td className="px-4 py-4">{getDestinationCopy(destinations.find((item) => item.slug === row.slug) ?? destinations[0]).bestTimeToVisit}</td>
                 <td className="px-4 py-4">{row.foodFit}</td>
                 <td className="px-4 py-4">{row.familyFit}</td>
                 <td className="px-4 py-4">{row.nightlifeFit}</td>
                 <td className="px-4 py-4">{row.safetyFit}</td>
-                <td className="px-4 py-4 font-black text-[#0f8b7b]">{row.aiScore}</td>
-                <td className="px-4 py-4 font-semibold text-[#ff6d1a]">{comparisonVerdictLabel(row.verdict)}</td>
+                <td className="px-4 py-4 font-bold text-[#0f8b7b]">{row.aiScore}</td>
+                <td className="px-4 py-4 font-semibold text-tv-orange">{comparisonVerdictLabel(row.verdict)}</td>
               </tr>
             ))}
           </tbody>

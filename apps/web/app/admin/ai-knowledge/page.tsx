@@ -30,10 +30,10 @@ export default async function Page() {
           <CommerceSurface>
             <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">Nhật ký truy xuất</p>
-                <h2 className="mt-2 text-2xl font-black">Nguồn được truy xuất gần đây</h2>
+                <p className="text-tv-xs font-bold uppercase tracking-widest text-tv-blue">Nhật ký truy xuất</p>
+                <h2 className="mt-2 text-tv-lg font-bold">Nguồn được truy xuất gần đây</h2>
               </div>
-              <button type="button" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#ff6d1a] px-4 py-3 text-sm font-black text-white">
+              <button type="button" className="inline-flex items-center justify-center gap-2 rounded-tv-sm bg-tv-orange px-4 py-3 text-tv-sm font-bold text-white hover:bg-tv-orange-dark transition-colors">
                 <RefreshCw size={16} aria-hidden="true" />
                 Lập lại chỉ mục local
               </button>

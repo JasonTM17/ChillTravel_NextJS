@@ -10,11 +10,11 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="flex items-center gap-1 text-sm text-[#6f8594]"
+      className="flex items-center gap-1 text-sm text-tv-ink-3"
     >
       <Link
         href="/"
-        className="inline-flex items-center gap-1 hover:text-[#0277d4]"
+        className="inline-flex items-center gap-1 hover:text-tv-blue"
         aria-label="Trang chủ"
       >
         <Home size={14} aria-hidden="true" />
@@ -23,11 +23,11 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
         <span key={i} className="inline-flex items-center gap-1">
           <ChevronRight size={14} aria-hidden="true" />
           {item.href ? (
-            <Link href={item.href} className="hover:text-[#0277d4] font-medium">
+            <Link href={item.href} className="hover:text-tv-blue font-medium">
               {item.label}
             </Link>
           ) : (
-            <span className="font-bold text-[#071827] dark:text-[#eaf7ff]">
+            <span className="font-bold text-tv-ink dark:text-[#eaf7ff]">
               {item.label}
             </span>
           )}

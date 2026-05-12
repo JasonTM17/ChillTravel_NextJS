@@ -16,7 +16,7 @@ export function DarkModeToggle() {
   return (
     <button
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#d9ecfb] text-[#476273] transition hover:bg-[#eef7ff] hover:text-[#0277d4] dark:border-[#1a3a52] dark:text-[#8ab4cc] dark:hover:bg-[#0d2236]"
+      className="inline-flex h-9 w-9 items-center justify-center rounded-tv-sm border border-tv-border text-tv-ink-3 transition hover:bg-tv-blue-light hover:text-tv-blue dark:border-[#1a3a52] dark:text-[#8ab4cc] dark:hover:bg-[#0d2236]"
       aria-label={
         theme === "dark" ? "Chuyển sang chế độ sáng" : "Chuyển sang chế độ tối"
       }

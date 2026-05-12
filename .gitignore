@@ -3,6 +3,8 @@ node_modules
 .next
 dist
 coverage
+.vscode/
+.kiro/
 .env
 .env.local
 .env.*.local
@@ -21,3 +23,4 @@ __pycache__
 *.pyc
 assets/generated/*.png
 assets/generated/*.jpg
+packages/db/generated/

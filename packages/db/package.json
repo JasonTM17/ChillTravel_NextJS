@@ -2,18 +2,36 @@
   "name": "@vietwander/db",
   "version": "0.1.0",
   "private": true,
+  "main": "./generated/client/client.ts",
+  "types": "./generated/client/client.ts",
+  "exports": {
+    ".": {
+      "types": "./generated/client/client.ts",
+      "default": "./generated/client/client.ts"
+    }
+  },
   "scripts": {
     "build": "prisma validate --schema prisma/schema.prisma",
     "lint": "prisma validate --schema prisma/schema.prisma",
     "test": "node -e \"console.log('db schema validation delegated to build')\"",
     "seed": "tsx prisma/seed.ts"
   },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "dependencies": {
+    "@prisma/adapter-pg": "7.8.0",
+    "@prisma/client": "7.8.0",
     "@vietwander/shared": "workspace:*",
-    "@prisma/client": "7.8.0"
+    "bcryptjs": "^3.0.3",
+    "pg": "^8.13.1"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^3.0.0",
+    "@types/node": "^24.10.2",
+    "@types/pg": "^8.11.10",
     "prisma": "7.8.0",
-    "tsx": "^4.20.6"
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
   }
 }

@@ -42,11 +42,37 @@ const prisma = createPrisma();
 // Helpers
 // ---------------------------------------------------------------------------
 
-function image(seed: string, w = 1200, h = 800): string {
-  // Stable deterministic demo images — never hits a real CDN in CI, works fine
-  // for local frontend preview.
-  return `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}`;
-}
+// ---------------------------------------------------------------------------
+// Real Unsplash photo URLs per destination slug
+// All photos are free under the Unsplash License (https://unsplash.com/license)
+// ---------------------------------------------------------------------------
+const DESTINATION_IMAGES: Record<string, string> = {
+  "ha-long-bay":  "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1400&q=80",
+  "da-nang":      "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1400&q=80",
+  "hoi-an":       "https://images.unsplash.com/photo-1555400038-63f5ba517a47?auto=format&fit=crop&w=1400&q=80",
+  "sapa":         "https://images.unsplash.com/photo-1573408301185-9519f94f4e8e?auto=format&fit=crop&w=1400&q=80",
+  "ninh-binh":    "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=1400&q=80",
+  "phu-quoc":     "https://images.unsplash.com/photo-1540202404-a2f29564651f?auto=format&fit=crop&w=1400&q=80",
+  "da-lat":       "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1400&q=80",
+  "ha-giang":     "https://images.unsplash.com/photo-1573408301185-9519f94f4e8e?auto=format&fit=crop&w=1400&q=80",
+  "bali":         "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1400&q=80",
+  "tokyo":        "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1400&q=80",
+  "paris":        "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1400&q=80",
+  "bangkok":      "https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1400&q=80",
+};
+
+const TOUR_IMAGES: Record<string, string> = {
+  "northern-vietnam-adventure":    "https://images.unsplash.com/photo-1573408301185-9519f94f4e8e?auto=format&fit=crop&w=1400&q=80",
+  "central-vietnam-heritage-tour": "https://images.unsplash.com/photo-1555400038-63f5ba517a47?auto=format&fit=crop&w=1400&q=80",
+  "phu-quoc-beach-escape":         "https://images.unsplash.com/photo-1540202404-a2f29564651f?auto=format&fit=crop&w=1400&q=80",
+  "ha-giang-motorbike-adventure":  "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=1400&q=80",
+  "bali-luxury-retreat":           "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1400&q=80",
+  "japan-spring-discovery":        "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1400&q=80",
+  "thailand-city-island-tour":     "https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1400&q=80",
+  "europe-romantic-journey":       "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1400&q=80",
+};
+
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1400&q=80";
 
 function daysFromNow(days: number): Date {
   const d = new Date();
@@ -1192,7 +1218,7 @@ async function main() {
       emailVerified: true,
       fullName: "WanderViet Admin",
       phone: "+84 90 000 0001",
-      avatarUrl: image("admin-avatar", 256, 256),
+      avatarUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=256&q=80",
       profile: {
         create: {
           displayName: "Admin",
@@ -1220,7 +1246,7 @@ async function main() {
       emailVerified: true,
       fullName: "Demo Traveler",
       phone: "+84 90 000 0002",
-      avatarUrl: image("user-avatar", 256, 256),
+      avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=256&q=80",
       profile: {
         create: {
           displayName: "Traveler",
@@ -1250,7 +1276,7 @@ async function main() {
       emailVerified: true,
       fullName: "WanderViet Staff",
       phone: "+84 90 000 0003",
-      avatarUrl: image("staff-avatar", 256, 256),
+      avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=256&q=80",
       profile: {
         create: {
           displayName: "Staff",
@@ -1293,7 +1319,7 @@ async function main() {
   for (const d of DESTINATIONS) {
     const countryId = countryIdByKey.get(d.countryKey)!;
     const cityId = cityIdByName.get(`${d.countryKey}:${d.cityName}`) ?? null;
-    const baseImage = image(d.slug);
+    const baseImage = DESTINATION_IMAGES[d.slug] ?? FALLBACK_IMAGE;
 
     const destination = await prisma.destination.upsert({
       where: { slug: d.slug },
@@ -1362,7 +1388,7 @@ async function main() {
     if (!destinationId) {
       throw new Error(`Tour ${t.slug}: destination ${t.destinationSlug} not seeded`);
     }
-    const tourImage = image(`tour-${t.slug}`);
+    const tourImage = TOUR_IMAGES[t.slug] ?? DESTINATION_IMAGES[t.destinationSlug] ?? FALLBACK_IMAGE;
 
     const tour = await prisma.tour.upsert({
       where: { slug: t.slug },
@@ -1428,14 +1454,15 @@ async function main() {
       });
     }
 
-    // Tour images (2 per tour)
-    for (let i = 0; i < 2; i++) {
-      const imgSlug = `tour-${t.slug}-${i}`;
-      const imgUrl = image(imgSlug);
-      // upsert-by-url-ish: TourImage has no unique constraint, so we wipe and
-      // re-create deterministically.
+    // Tour images (2 per tour — use real Unsplash photos)
+    const tourGalleryImages = [
+      TOUR_IMAGES[t.slug] ?? FALLBACK_IMAGE,
+      DESTINATION_IMAGES[t.destinationSlug] ?? FALLBACK_IMAGE,
+    ];
+    for (let i = 0; i < tourGalleryImages.length; i++) {
+      const imgUrl = tourGalleryImages[i];
       const existing = await prisma.tourImage.findFirst({
-        where: { tourId: tour.id, url: imgUrl }
+        where: { tourId: tour.id, sortOrder: i }
       });
       if (!existing) {
         await prisma.tourImage.create({
@@ -1906,7 +1933,7 @@ async function main() {
       p.status === "PUBLISHED" && p.publishedDaysAgo !== undefined
         ? daysFromNow(-p.publishedDaysAgo)
         : null;
-    const coverImageUrl = image(`blog-${p.slug}`, 1200, 600);
+    const coverImageUrl = FALLBACK_IMAGE;
 
     await prisma.blogPost.upsert({
       where: { slug: p.slug },

@@ -19,7 +19,7 @@ import {
   Users,
   Zap,
 } from "lucide-react";
-import { destinationApi } from "@/lib/api/destination.api";
+import { destinationApi, getCountryName, getCityName } from "@/lib/api/destination.api";
 import { tourApi } from "@/lib/api/tour.api";
 import type { Destination } from "@/lib/api/destination.api";
 import type { Tour } from "@/lib/api/tour.api";
@@ -116,12 +116,15 @@ export default function HomePage() {
     return () => { cancelled = true; };
   }, []);
 
-  const vietnam = destinations.filter(d =>
-    d.country?.toLowerCase().includes("viet") || d.country?.toLowerCase().includes("việt")
-  ).slice(0, 6);
-  const world = destinations.filter(d =>
-    !d.country?.toLowerCase().includes("viet") && !d.country?.toLowerCase().includes("việt")
-  ).slice(0, 6);
+  // country can be a string OR an object { id, name } depending on API include depth
+  const vietnam = destinations.filter(d => {
+    const c = getCountryName(d).toLowerCase();
+    return c.includes("viet") || c.includes("việt");
+  }).slice(0, 6);
+  const world = destinations.filter(d => {
+    const c = getCountryName(d).toLowerCase();
+    return !c.includes("viet") && !c.includes("việt");
+  }).slice(0, 6);
 
   return (
     <main className="min-h-screen bg-tv-bg">
@@ -419,7 +422,9 @@ function DestCard({ destination, compact = false }: { destination: Destination; 
         <p className="font-bold text-tv-base text-tv-ink truncate group-hover:text-tv-blue transition-colors">
           {destination.name}
         </p>
-        <p className="text-tv-xs text-tv-ink-3 truncate">{destination.country}</p>
+        <p className="text-tv-xs text-tv-ink-3 truncate">
+          {getCountryName(destination)}
+        </p>
         {destination.ratingAvg != null && (
           <div className="mt-1 tv-rating">
             <Star size={10} fill="currentColor" />

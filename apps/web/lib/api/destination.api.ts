@@ -6,11 +6,13 @@ import type { ApiSuccess, ApiPaginatedResponse } from "@vietwander/shared";
 // ---------------------------------------------------------------------------
 
 export interface Country {
+  id: string;
   name: string;
   code?: string;
 }
 
 export interface City {
+  id: string;
   name: string;
 }
 
@@ -25,8 +27,10 @@ export interface Destination {
   id: string;
   name: string;
   slug: string;
-  country: string;
-  city: string | null;
+  /** API may return a string OR a Country object depending on include depth */
+  country: string | Country;
+  /** API may return a string OR a City object */
+  city: string | City | null;
   description: string;
   shortDescription: string | null;
   bestTimeToVisit: string | null;
@@ -39,6 +43,20 @@ export interface Destination {
   images: DestinationImage[];
   createdAt: string;
   updatedAt: string;
+}
+
+/** Safely extract country name regardless of whether API returned string or object */
+export function getCountryName(destination: Destination): string {
+  if (!destination.country) return "";
+  if (typeof destination.country === "string") return destination.country;
+  return destination.country.name ?? "";
+}
+
+/** Safely extract city name regardless of whether API returned string or object */
+export function getCityName(destination: Destination): string | null {
+  if (!destination.city) return null;
+  if (typeof destination.city === "string") return destination.city;
+  return destination.city.name ?? null;
 }
 
 export interface DestinationQuery {

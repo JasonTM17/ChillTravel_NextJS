@@ -74,7 +74,8 @@ import { BookingScheduler } from "./booking/booking.scheduler";
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      validate: validateEnv
+      validate: validateEnv,
+      envFilePath: [".env", "../../.env"]
     }),
     LoggerModule.forRootAsync({
       inject: [ConfigService],

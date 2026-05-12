@@ -40,10 +40,10 @@ export class LocalUploadService implements IUploadService {
   private readonly maxFileSize: number;
 
   constructor(private readonly config: ConfigService) {
-    const rawDir = this.config.get<string>("UPLOAD_DIR") ?? "./uploads";
+    const rawDir = this.config?.get<string>("UPLOAD_DIR") ?? "./uploads";
     this.uploadDir = join(process.cwd(), rawDir);
 
-    const rawMax = this.config.get<number | string>("MAX_FILE_SIZE");
+    const rawMax = this.config?.get<number | string>("MAX_FILE_SIZE");
     this.maxFileSize =
       rawMax !== undefined && rawMax !== null && rawMax !== ""
         ? Number(rawMax)

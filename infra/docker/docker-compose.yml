@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: vietwander
       POSTGRES_DB: vietwander
     ports:
-      - "5432:5432"
+      - "5433:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U vietwander"]
       interval: 10s

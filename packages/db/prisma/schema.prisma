@@ -1,3 +1,20 @@
+// =============================================================================
+// WanderViet Travel Platform — Prisma schema (evolved from ChillTravel baseline)
+//
+// Evolution strategy (see design.md §2 + §18.1):
+//   • Preserve every legacy model (Country, City, HotelMock, RoomMock,
+//     Experience, Trip, TripDay, ItineraryItem, Chatbot*, AiKnowledge*,
+//     AdminAction, PaymentMock, Wishlist, WishlistItem, BookingItem) so the AI
+//     service, Flutter client, and legacy seed data keep working unchanged.
+//   • Add new WanderViet enums + models alongside legacy ones.
+//   • Extend existing models (User, Destination, Booking, Review, Notification,
+//     AuditLog) with new optional fields. All additions default to safe values
+//     so migrations do not destroy existing rows.
+//   • Canonical status/role labels live at the application layer. See enum
+//     comments below for the mapping from legacy lowercase values to the
+//     WanderViet canonical labels (PENDING / CONFIRMED / PAID / ...).
+// =============================================================================
+
 generator client {
   provider = "prisma-client"
   output   = "../generated/client"
@@ -7,20 +24,42 @@ datasource db {
   provider = "postgresql"
 }
 
+// =============================================================================
+// ENUMS
+// =============================================================================
+
+// --- Legacy (preserved — app layer normalizes to canonical labels) -----------
+
+/// Application role. The WanderViet canonical model is USER | ADMIN | STAFF.
+/// We extend the legacy enum with `STAFF` instead of introducing a separate
+/// UserRole enum so existing rows and seed data keep working unchanged.
+/// Mapping performed by the NestJS service layer:
+///   USER         -> USER
+///   ADMIN        -> ADMIN
+///   STAFF        -> STAFF (canonical WanderViet staff role)
+///   HOST | GUIDE -> STAFF (legacy ChillTravel values normalized up)
 enum RoleName {
   USER
   HOST
   GUIDE
   ADMIN
+  STAFF
 }
 
+/// Booking lifecycle. Legacy lowercase values retained for backward compat.
+/// Canonical labels (app layer): PENDING | CONFIRMED | CANCELLED | COMPLETED |
+/// REFUNDED. `completed` value added for the WanderViet lifecycle scheduler.
 enum BookingStatus {
   pending
   confirmed
   cancelled
+  completed
   refunded_mock
 }
 
+/// Payment lifecycle. Legacy lowercase values retained. Canonical labels
+/// (app layer): UNPAID (pending) | PAID (confirmed_mock) | FAILED
+/// (failed_mock) | REFUNDED (refunded_mock).
 enum PaymentStatus {
   pending
   confirmed_mock
@@ -28,17 +67,106 @@ enum PaymentStatus {
   refunded_mock
 }
 
+// --- WanderViet additions ---------------------------------------------------
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  BANNED
+}
+
+enum DestinationStatus {
+  ACTIVE
+  INACTIVE
+  DELETED
+}
+
+enum TourStatus {
+  ACTIVE
+  INACTIVE
+  DELETED
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  HIDDEN
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+  DELETED
+}
+
+enum ContactStatus {
+  NEW
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum WishlistItemType {
+  TOUR
+  DESTINATION
+}
+
+enum CouponDiscountType {
+  PERCENT
+  FIXED
+}
+
+enum NotificationType {
+  BOOKING_CONFIRMED
+  BOOKING_CANCELLED
+  BOOKING_COMPLETED
+  REVIEW_APPROVED
+  CONTACT_REPLY
+  SYSTEM
+}
+
+// =============================================================================
+// IDENTITY & ACCESS
+// =============================================================================
+
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  role      RoleName @default(USER)
-  profile   UserProfile?
-  bookings  Booking[]
-  trips     Trip[]
-  reviews   Review[]
+  id            String     @id @default(cuid())
+  email         String     @unique
+  /// Bcrypt hash. Field name kept as `password` for backward compat with the
+  /// existing seed/client but always stores the hash — never plaintext.
+  password      String
+  role          RoleName   @default(USER)
+
+  // --- WanderViet additions ---
+  fullName      String?
+  phone         String?
+  avatarUrl     String?
+  status        UserStatus @default(ACTIVE)
+  emailVerified Boolean    @default(false)
+
+  // --- Legacy relations ---
+  profile  UserProfile?
+  bookings Booking[]
+  trips    Trip[]
+  reviews  Review[]
+
+  // --- WanderViet relations ---
+  refreshTokens           RefreshToken[]
+  passwordResetTokens     PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
+  accountLockout          AccountLockout?
+  blogPosts               BlogPost[]
+  auditLogs               AuditLog[]
+  notifications           Notification[]
+  wishlistEntries         WishlistEntry[]
+  assignedContacts        ContactRequest[]         @relation("ContactAssignee")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([role])
+  @@index([status])
 }
 
 model UserProfile {
@@ -49,6 +177,67 @@ model UserProfile {
   travelStyle String @default("Culture Seeker")
   user        User   @relation(fields: [userId], references: [id])
 }
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model EmailVerificationToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model LoginAttempt {
+  id        String   @id @default(cuid())
+  email     String
+  ipAddress String
+  success   Boolean
+  createdAt DateTime @default(now())
+
+  @@index([email, createdAt])
+}
+
+model AccountLockout {
+  userId      String   @id
+  lockedUntil DateTime
+  reason      String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// =============================================================================
+// GEOGRAPHY / DESTINATIONS
+// =============================================================================
 
 model Country {
   id           String        @id @default(cuid())
@@ -63,96 +252,350 @@ model City {
   countryId    String
   country      Country       @relation(fields: [countryId], references: [id])
   destinations Destination[]
+
   @@unique([name, countryId])
 }
 
 model Destination {
-  id                String              @id @default(cuid())
-  slug              String              @unique
-  name              String
-  countryId         String
-  cityId            String?
-  description       String
-  longDescription   String
-  bestTimeToVisit   String
-  budgetMin         Int
-  budgetMax         Int
-  currency          String              @default("VND")
-  travelStyles      String[]
-  latitude          Float
-  longitude         Float
-  safetyLevel       String
-  cultureNotes      String[]
-  foodHighlights    String[]
-  ratingAvg         Float               @default(0)
-  reviewCount       Int                 @default(0)
-  isFeatured        Boolean             @default(false)
-  country           Country             @relation(fields: [countryId], references: [id])
-  city              City?               @relation(fields: [cityId], references: [id])
-  images            DestinationImage[]
-  tags              DestinationTag[]
-  experiences       Experience[]
-  hotels            HotelMock[]
-  reviews           Review[]
-  itineraryItems    ItineraryItem[]
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
+  id              String @id @default(cuid())
+  slug            String @unique
+  name            String
+  countryId       String
+  cityId          String?
+
+  description     String
+  longDescription String
+  bestTimeToVisit String
+  budgetMin       Int
+  budgetMax       Int
+  currency        String   @default("VND")
+  travelStyles    String[]
+  latitude        Float
+  longitude        Float
+  safetyLevel     String
+  cultureNotes    String[]
+  foodHighlights  String[]
+  ratingAvg       Float    @default(0)
+  reviewCount     Int      @default(0)
+  isFeatured      Boolean  @default(false)
+
+  // --- WanderViet additions ---
+  shortDescription String?
+  /// Primary image URL used on cards when no DestinationImage rows exist yet.
+  imageUrl         String?
+  /// Public filter category (e.g. "beach", "mountain", "culture").
+  category         String?
+  status           DestinationStatus @default(ACTIVE)
+
+  country        Country            @relation(fields: [countryId], references: [id])
+  city           City?              @relation(fields: [cityId], references: [id])
+  images         DestinationImage[]
+  tags           DestinationTag[]
+  experiences    Experience[]
+  hotels         HotelMock[]
+  reviews        Review[]
+  itineraryItems ItineraryItem[]
+  tours          Tour[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([countryId])
+  @@index([status])
+  @@index([isFeatured])
 }
 
 model DestinationImage {
-  id            String      @id @default(cuid())
+  id            String @id @default(cuid())
   destinationId String
   url           String
   prompt        String
   alt           String
-  destination   Destination @relation(fields: [destinationId], references: [id])
+  // --- WanderViet additions (optional admin gallery metadata) ---
+  altText       String?
+  sortOrder     Int     @default(0)
+
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@index([destinationId])
 }
 
 model DestinationTag {
-  id            String      @id @default(cuid())
+  id            String @id @default(cuid())
   destinationId String
   name          String
-  destination   Destination @relation(fields: [destinationId], references: [id])
+
+  destination Destination @relation(fields: [destinationId], references: [id])
+
   @@unique([destinationId, name])
 }
 
 model Experience {
-  id            String      @id @default(cuid())
+  id            String @id @default(cuid())
   destinationId String
   title         String
   description   String
   priceMock     Int
-  destination   Destination @relation(fields: [destinationId], references: [id])
+
+  destination Destination @relation(fields: [destinationId], references: [id])
 }
 
 model HotelMock {
-  id            String      @id @default(cuid())
+  id            String     @id @default(cuid())
   destinationId String
   name          String
   nightlyPrice  Int
   rating        Float
   rooms         RoomMock[]
-  destination   Destination @relation(fields: [destinationId], references: [id])
+
+  destination Destination @relation(fields: [destinationId], references: [id])
 }
 
 model RoomMock {
-  id        String    @id @default(cuid())
+  id        String @id @default(cuid())
   hotelId   String
   name      String
   capacity  Int
   priceMock Int
-  hotel     HotelMock @relation(fields: [hotelId], references: [id])
+
+  hotel HotelMock @relation(fields: [hotelId], references: [id])
 }
 
+// =============================================================================
+// TOURS
+// =============================================================================
+
+model Tour {
+  id               String     @id @default(cuid())
+  slug             String     @unique
+  title            String
+  destinationId    String
+  description      String
+  shortDescription String?
+  durationDays     Int
+  durationNights   Int
+  /// VND, major units (no cents).
+  basePrice        Int
+  salePrice        Int?
+  maxGuests        Int
+  minGuests        Int        @default(1)
+  availableSlots   Int
+  startDate        DateTime?
+  endDate          DateTime?
+  status           TourStatus @default(ACTIVE)
+  featured         Boolean    @default(false)
+  imageUrl         String?
+  category         String?
+
+  destination Destination     @relation(fields: [destinationId], references: [id])
+  images      TourImage[]
+  itinerary   TourItinerary[]
+  departures  TourDeparture[]
+  bookings    Booking[]
+  reviews     Review[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([destinationId, status])
+  @@index([status])
+  @@index([featured])
+}
+
+model TourImage {
+  id        String  @id @default(cuid())
+  tourId    String
+  url       String
+  altText   String?
+  sortOrder Int     @default(0)
+
+  tour Tour @relation(fields: [tourId], references: [id], onDelete: Cascade)
+
+  @@index([tourId])
+}
+
+model TourItinerary {
+  id            String  @id @default(cuid())
+  tourId        String
+  dayNumber     Int
+  title         String
+  description   String?
+  meals         String?
+  accommodation String?
+  activities    String?
+
+  tour Tour @relation(fields: [tourId], references: [id], onDelete: Cascade)
+
+  @@unique([tourId, dayNumber])
+}
+
+model TourDeparture {
+  id             String    @id @default(cuid())
+  tourId         String
+  departureDate  DateTime
+  returnDate     DateTime?
+  availableSlots Int
+  priceOverride  Int?
+  /// OPEN | CLOSED | SOLDOUT — plain string to avoid extra enum churn
+  /// (design §18.1 TourDeparture.status).
+  status         String    @default("OPEN")
+
+  tour     Tour      @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  bookings Booking[]
+
+  @@index([tourId, departureDate])
+}
+
+// =============================================================================
+// BOOKING / PAYMENT / COUPON
+// =============================================================================
+
+model Booking {
+  id            String        @id @default(cuid())
+  userId        String
+  bookingCode   String        @unique
+  status        BookingStatus @default(pending)
+  totalAmount   Int
+  currency      String        @default("VND")
+  paymentStatus PaymentStatus @default(pending)
+  paymentMethod String
+  isDemo        Boolean       @default(true)
+
+  // --- WanderViet additions (all nullable for backward compat with legacy
+  //     BookingItem-based bookings; required for tour-centric bookings at the
+  //     service layer) ---
+  tourId         String?
+  departureId    String?
+  couponId       String?
+  contactName    String?
+  contactEmail   String?
+  contactPhone   String?
+  numberOfGuests Int?
+  specialRequest String?
+  bookingDate    DateTime  @default(now())
+  discountAmount Int       @default(0)
+
+  user      User           @relation(fields: [userId], references: [id])
+  tour      Tour?          @relation(fields: [tourId], references: [id])
+  departure TourDeparture? @relation(fields: [departureId], references: [id])
+  coupon    Coupon?        @relation(fields: [couponId], references: [id])
+  items     BookingItem[]
+  guests    BookingGuest[]
+
+  /// Legacy demo payment record (pre-WanderViet ChillTravel flow). Kept for
+  /// backward compat with mobile/AI preview clients.
+  paymentMock PaymentMock?
+  /// Canonical payment record used by the WanderViet checkout flow.
+  payment     Payment?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([tourId])
+}
+
+model BookingItem {
+  id        String @id @default(cuid())
+  bookingId String
+  itemType  String
+  itemName  String
+  amount    Int
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model BookingGuest {
+  id          String    @id @default(cuid())
+  bookingId   String
+  fullName    String
+  dateOfBirth DateTime?
+  gender      String?
+  note        String?
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+}
+
+/// Legacy demo payment snapshot. Preserved for backward compat with the
+/// original ChillTravel mock flow. New flows populate the `Payment` model.
+model PaymentMock {
+  id        String        @id @default(cuid())
+  bookingId String        @unique
+  provider  String
+  token     String
+  status    PaymentStatus @default(confirmed_mock)
+  warning   String        @default("Demo payment — no real transaction")
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  bookingId       String        @unique
+  provider        String        @default("MOCK")
+  amount          Int
+  currency        String        @default("VND")
+  status          PaymentStatus @default(pending)
+  transactionCode String?       @unique
+  paidAt          DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @default(now()) @updatedAt
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+}
+
+model Coupon {
+  id                String             @id @default(cuid())
+  code              String             @unique
+  description       String?
+  discountType      CouponDiscountType
+  discountValue     Int
+  minBookingAmount  Int                @default(0)
+  maxDiscountAmount Int?
+  usageLimit        Int?
+  usedCount         Int                @default(0)
+  validFrom         DateTime
+  validTo           DateTime
+  isActive          Boolean            @default(true)
+  createdAt         DateTime           @default(now())
+
+  bookings Booking[]
+
+  @@index([isActive, validFrom, validTo])
+}
+
+// =============================================================================
+// REVIEWS / WISHLIST (legacy Wishlist+WishlistItem preserved)
+// =============================================================================
+
 model Review {
-  id            String       @id @default(cuid())
+  id            String @id @default(cuid())
   userId        String?
   destinationId String?
-  rating        Int
-  content       String
-  user          User?        @relation(fields: [userId], references: [id])
-  destination   Destination? @relation(fields: [destinationId], references: [id])
-  createdAt     DateTime     @default(now())
+  // --- WanderViet additions ---
+  tourId        String?
+  title         String?
+  status        ReviewStatus @default(PENDING)
+
+  rating  Int
+  content String
+
+  user        User?        @relation(fields: [userId], references: [id])
+  destination Destination? @relation(fields: [destinationId], references: [id])
+  tour        Tour?        @relation(fields: [tourId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([tourId, status])
+  @@index([destinationId, status])
+  @@index([userId])
 }
 
 model Wishlist {
@@ -164,12 +607,39 @@ model Wishlist {
 }
 
 model WishlistItem {
-  id         String   @id @default(cuid())
+  id         String @id @default(cuid())
   wishlistId String
+  /// Discriminator: "TOUR" | "DESTINATION" — matches WishlistItemType enum at
+  /// the app layer. Kept as free-form String to avoid breaking the legacy
+  /// shared seed that already uses "destination" etc.
   itemType   String
   itemId     String
-  wishlist   Wishlist @relation(fields: [wishlistId], references: [id])
+
+  wishlist Wishlist @relation(fields: [wishlistId], references: [id])
+
+  @@unique([wishlistId, itemId, itemType])
 }
+
+/// WanderViet canonical wishlist entry. Flat user-owned favourite used by the
+/// tour/destination detail pages and /wishlist. The legacy Wishlist +
+/// WishlistItem models above remain for the trip-wishlist feature that groups
+/// items into named collections (AI itinerary flow).
+model WishlistEntry {
+  id        String           @id @default(cuid())
+  userId    String
+  itemId    String
+  itemType  WishlistItemType
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, itemId, itemType])
+  @@index([userId, createdAt])
+}
+
+// =============================================================================
+// TRIPS / ITINERARY (legacy, kept for mobile + AI compat)
+// =============================================================================
 
 model Trip {
   id        String    @id @default(cuid())
@@ -201,40 +671,53 @@ model ItineraryItem {
   destination   Destination? @relation(fields: [destinationId], references: [id])
 }
 
-model Booking {
-  id            String        @id @default(cuid())
-  userId        String
-  bookingCode   String        @unique
-  status        BookingStatus @default(pending)
-  totalAmount   Int
-  currency      String        @default("VND")
-  paymentStatus PaymentStatus @default(pending)
-  paymentMethod String
-  isDemo        Boolean       @default(true)
-  user          User          @relation(fields: [userId], references: [id])
-  items         BookingItem[]
-  payment       PaymentMock?
-  createdAt     DateTime      @default(now())
+// =============================================================================
+// CMS — BLOG + CONTACT
+// =============================================================================
+
+model BlogPost {
+  id            String     @id @default(cuid())
+  slug          String     @unique
+  title         String
+  excerpt       String?
+  content       String
+  coverImageUrl String?
+  category      String?
+  status        BlogStatus @default(DRAFT)
+  authorId      String
+  publishedAt   DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  author User @relation(fields: [authorId], references: [id])
+
+  @@index([status])
+  @@index([authorId])
+  @@index([publishedAt])
 }
 
-model BookingItem {
-  id        String  @id @default(cuid())
-  bookingId String
-  itemType  String
-  itemName  String
-  amount    Int
-  booking   Booking @relation(fields: [bookingId], references: [id])
+model ContactRequest {
+  id                    String        @id @default(cuid())
+  name                  String
+  email                 String
+  phone                 String?
+  destinationInterested String?
+  message               String
+  status                ContactStatus @default(NEW)
+  assignedTo            String?
+  adminNote             String?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @default(now()) @updatedAt
+
+  assignee User? @relation("ContactAssignee", fields: [assignedTo], references: [id])
+
+  @@index([status])
+  @@index([assignedTo])
 }
 
-model PaymentMock {
-  id            String        @id @default(cuid())
-  bookingId     String        @unique
-  provider      String
-  token         String
-  status        PaymentStatus @default(confirmed_mock)
-  warning       String        @default("Demo payment — no real transaction")
-  booking       Booking       @relation(fields: [bookingId], references: [id])
-}
+// =============================================================================
+// CHATBOT / AI KNOWLEDGE (legacy — AI service compat)
+// =============================================================================
 
 model ChatbotSession {
   id        String           @id @default(cuid())
@@ -264,20 +747,36 @@ model AiKnowledgeDocument {
 }
 
 model AiRetrievalLog {
-  id          String   @id @default(cuid())
-  query       String
-  chunkIds    String[]
-  model       String
-  confidence  String
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  query      String
+  chunkIds   String[]
+  model      String
+  confidence String
+  createdAt  DateTime @default(now())
 }
 
+// =============================================================================
+// AUDIT / ADMIN / NOTIFICATIONS
+// =============================================================================
+
 model AuditLog {
-  id        String   @id @default(cuid())
-  actorId   String?
-  action    String
-  entity    String
+  id      String  @id @default(cuid())
+  actorId String?
+  action  String
+  /// Legacy free-form entity label. Retained so existing writers don't break.
+  entity  String
+  // --- WanderViet additions (normalized resource descriptor + metadata) ---
+  resourceType String?
+  resourceId   String?
+  metadata     Json?
+
   createdAt DateTime @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id])
+
+  @@index([actorId])
+  @@index([resourceType])
+  @@index([createdAt])
 }
 
 model AdminAction {
@@ -289,10 +788,19 @@ model AdminAction {
 }
 
 model Notification {
-  id        String   @id @default(cuid())
-  userId    String
-  title     String
-  body      String
-  read      Boolean  @default(false)
+  id     String           @id @default(cuid())
+  userId String
+  /// WanderViet addition — classifies notification for icon/badge rendering.
+  type   NotificationType @default(SYSTEM)
+  title  String
+  body   String
+  /// Optional deep-link (relative path) the UI navigates to on click.
+  link   String?
+  read   Boolean          @default(false)
+
   createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read, createdAt])
 }

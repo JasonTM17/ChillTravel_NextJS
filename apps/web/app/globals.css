@@ -19,6 +19,14 @@
   --warm-border: #e0c0b1;
 }
 
+.dark {
+  color-scheme: dark;
+  --background: #071827;
+  --foreground: #eaf7ff;
+  --paper: #0d2236;
+  --line: #1a3a52;
+}
+
 * {
   box-sizing: border-box;
 }

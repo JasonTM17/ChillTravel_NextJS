@@ -66,7 +66,7 @@ const MOCK_BOOKING = {
     durationDays: 6,
     durationNights: 5,
   },
-  guests: [],
+  guests: [] as { id: string; bookingId: string; fullName: string; dateOfBirth: Date | null; gender: string | null; note: string | null }[],
   payment: {
     id: "payment-id-1",
     status: "pending",

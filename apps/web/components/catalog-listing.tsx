@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { CalendarCheck2, MapPin, Star, Ticket, Utensils } from "lucide-react";
 import type { Destination, HotelProperty, RoomOffer } from "@vietwander/shared";
 import { destinations, hotelProperties } from "@vietwander/shared";
@@ -18,10 +18,10 @@ export function CatalogListing({ kind }: { kind: "hotel" | "experience" }) {
         <CommerceSurface>
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">{title}</p>
-              <h2 className="mt-2 text-2xl font-black">{helper}</h2>
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">{title}</p>
+              <h2 className="mt-2 text-2xl font-bold">{helper}</h2>
             </div>
-            <Link href="/explore" className="inline-flex rounded-xl bg-[#0277d4] px-4 py-3 text-sm font-black text-white">
+            <Link href="/explore" className="inline-flex rounded-tv-sm bg-[tv-blue] px-4 py-3 text-sm font-bold text-white">
               Tìm thêm
             </Link>
           </div>
@@ -33,7 +33,7 @@ export function CatalogListing({ kind }: { kind: "hotel" | "experience" }) {
       <aside className="h-fit space-y-4 lg:sticky lg:top-24">
         <TrustBanner />
         <CommerceSurface>
-          <h2 className="text-xl font-black">Bộ lọc nhanh</h2>
+          <h2 className="text-xl font-bold">Bộ lọc nhanh</h2>
           <div className="mt-4 flex flex-wrap gap-2">
             {["Hủy demo miễn phí", "Gần trung tâm", "Gia đình", "Ẩm thực", "Gói offline"].map((filter) => (
               <StatusPill key={filter}>{filter}</StatusPill>
@@ -51,23 +51,23 @@ function HotelCatalogRow({ hotel }: { hotel: HotelProperty }) {
   const lowestRoom = hotel.rooms.reduce<RoomOffer | undefined>((lowest, room) => (!lowest || room.nightlyPrice < lowest.nightlyPrice ? room : lowest), undefined);
 
   return (
-    <article className="grid overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_14px_34px_rgba(2,68,120,0.08)] md:grid-cols-[210px_minmax(0,1fr)_210px]">
+    <article className="grid overflow-hidden rounded-tv border border-[tv-border] bg-white shadow-tv-card md:grid-cols-[210px_minmax(0,1fr)_210px]">
       <Link href={`/hotels/${hotel.slug}`} className="min-h-[190px] bg-cover bg-center" style={{ backgroundImage: `url(${getDestinationImage(hotel.destinationSlug)})` }} aria-label={`Xem chi tiết ${hotel.name}`} />
       <div className="p-5">
         <div className="flex flex-wrap items-center gap-2">
           <StatusPill tone="blue">{hotel.district}</StatusPill>
-          <span className="inline-flex items-center gap-1 text-sm font-black text-[#b45309]">
+          <span className="inline-flex items-center gap-1 text-sm font-bold text-[#b45309]">
             <Star size={15} fill="currentColor" aria-hidden="true" />
             {hotel.rating.toFixed(1)}
           </span>
         </div>
-        <Link href={`/hotels/${hotel.slug}`} className="mt-3 block text-xl font-black hover:text-[#0277d4]">
+        <Link href={`/hotels/${hotel.slug}`} className="mt-3 block text-xl font-bold hover:text-[tv-blue]">
           {hotel.name}
         </Link>
-        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#476273]">{hotel.summary}</p>
-        <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-[#476273]">
+        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[tv-ink-3]">{hotel.summary}</p>
+        <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-[tv-ink-3]">
           <span className="inline-flex items-center gap-1 rounded-full bg-[#f3f9ff] px-3 py-1">
-            <MapPin size={14} className="text-[#0277d4]" aria-hidden="true" />
+            <MapPin size={14} className="text-[tv-blue]" aria-hidden="true" />
             {copy.city}
           </span>
           {hotel.amenities.slice(0, 2).map((amenity) => (
@@ -77,13 +77,13 @@ function HotelCatalogRow({ hotel }: { hotel: HotelProperty }) {
           ))}
         </div>
       </div>
-      <aside className="flex flex-col justify-between border-t border-[#edf4fa] bg-[#fbfdff] p-5 md:border-l md:border-t-0">
+      <aside className="flex flex-col justify-between border-t border-[tv-border] bg-[tv-bg] p-5 md:border-l md:border-t-0">
         <div>
-          <p className="text-xs font-bold text-[#6f8594]">Giá mẫu từ</p>
-          <p className="mt-1 text-2xl font-black text-[#ff5f12]">{formatVnd(lowestRoom?.nightlyPrice ?? 0)}</p>
-          <p className="mt-1 text-xs font-bold text-[#6f8594]">mỗi đêm</p>
+          <p className="text-xs font-bold text-[tv-ink-3]">Giá mẫu từ</p>
+          <p className="mt-1 text-2xl font-bold text-[tv-orange]">{formatVnd(lowestRoom?.nightlyPrice ?? 0)}</p>
+          <p className="mt-1 text-xs font-bold text-[tv-ink-3]">mỗi đêm</p>
         </div>
-        <Link href={`/hotels/${hotel.slug}`} className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-[#ff6d1a] px-4 py-3 text-sm font-black text-white">
+        <Link href={`/hotels/${hotel.slug}`} className="mt-5 inline-flex items-center justify-center gap-2 rounded-tv-sm bg-[tv-orange] px-4 py-3 text-sm font-bold text-white">
           <CalendarCheck2 size={16} aria-hidden="true" />
           Xem phòng
         </Link>
@@ -100,36 +100,36 @@ function CatalogRow({ destination, kind }: { destination: Destination; kind: "ho
   const Icon = kind === "hotel" ? CalendarCheck2 : Ticket;
 
   return (
-    <article className="grid overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_14px_34px_rgba(2,68,120,0.08)] md:grid-cols-[210px_minmax(0,1fr)_210px]">
+    <article className="grid overflow-hidden rounded-tv border border-[tv-border] bg-white shadow-tv-card md:grid-cols-[210px_minmax(0,1fr)_210px]">
       <div className="min-h-[190px] bg-cover bg-center" style={{ backgroundImage: `url(${getDestinationImage(destination.slug)})` }} />
       <div className="p-5">
         <div className="flex flex-wrap items-center gap-2">
           <StatusPill tone="blue">{copy.country}</StatusPill>
-          <span className="inline-flex items-center gap-1 text-sm font-black text-[#b45309]">
+          <span className="inline-flex items-center gap-1 text-sm font-bold text-[#b45309]">
             <Star size={15} fill="currentColor" aria-hidden="true" />
             {(hotel?.rating ?? destination.ratingAvg).toFixed(1)}
           </span>
         </div>
-        <h3 className="mt-3 text-xl font-black">{primaryLabel}</h3>
-        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#476273]">{copy.summary}</p>
-        <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-[#476273]">
+        <h3 className="mt-3 text-xl font-bold">{primaryLabel}</h3>
+        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[tv-ink-3]">{copy.summary}</p>
+        <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-[tv-ink-3]">
           <span className="inline-flex items-center gap-1 rounded-full bg-[#f3f9ff] px-3 py-1">
-            <MapPin size={14} className="text-[#0277d4]" aria-hidden="true" />
+            <MapPin size={14} className="text-[tv-blue]" aria-hidden="true" />
             {copy.city}
           </span>
           <span className="inline-flex items-center gap-1 rounded-full bg-[#f3f9ff] px-3 py-1">
-            <Utensils size={14} className="text-[#0277d4]" aria-hidden="true" />
+            <Utensils size={14} className="text-[tv-blue]" aria-hidden="true" />
             {copy.foodHighlights[0]}
           </span>
         </div>
       </div>
-      <aside className="flex flex-col justify-between border-t border-[#edf4fa] bg-[#fbfdff] p-5 md:border-l md:border-t-0">
+      <aside className="flex flex-col justify-between border-t border-[tv-border] bg-[tv-bg] p-5 md:border-l md:border-t-0">
         <div>
-          <p className="text-xs font-bold text-[#6f8594]">Giá mẫu từ</p>
-          <p className="mt-1 text-2xl font-black text-[#ff5f12]">{formatVnd(price)}</p>
-          <p className="mt-1 text-xs font-bold text-[#6f8594]">{kind === "hotel" ? "mỗi đêm" : "mỗi khách"}</p>
+          <p className="text-xs font-bold text-[tv-ink-3]">Giá mẫu từ</p>
+          <p className="mt-1 text-2xl font-bold text-[tv-orange]">{formatVnd(price)}</p>
+          <p className="mt-1 text-xs font-bold text-[tv-ink-3]">{kind === "hotel" ? "mỗi đêm" : "mỗi khách"}</p>
         </div>
-        <Link href={`/booking/${destination.slug}`} className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-[#ff6d1a] px-4 py-3 text-sm font-black text-white">
+        <Link href={`/booking/${destination.slug}`} className="mt-5 inline-flex items-center justify-center gap-2 rounded-tv-sm bg-[tv-orange] px-4 py-3 text-sm font-bold text-white">
           <Icon size={16} aria-hidden="true" />
           Đặt chỗ demo
         </Link>

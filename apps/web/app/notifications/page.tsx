@@ -25,11 +25,11 @@ const TYPE_META: Record<string, { icon: string; label: string; color: string }> 
   BOOKING_COMPLETED: { icon: "✓", label: "Tour hoàn thành", color: "bg-blue-100 text-blue-700" },
   REVIEW_APPROVED: { icon: "★", label: "Đánh giá được duyệt", color: "bg-yellow-100 text-yellow-700" },
   CONTACT_REPLY: { icon: "✉", label: "Phản hồi liên hệ", color: "bg-purple-100 text-purple-700" },
-  SYSTEM: { icon: "ℹ", label: "Hệ thống", color: "bg-[#eef7ff] text-[#0277d4]" },
+  SYSTEM: { icon: "ℹ", label: "Hệ thống", color: "bg-tv-blue-light text-tv-blue" },
 };
 
 function typeMeta(type: string) {
-  return TYPE_META[type] ?? { icon: "ℹ", label: type, color: "bg-[#eef7ff] text-[#0277d4]" };
+  return TYPE_META[type] ?? { icon: "ℹ", label: type, color: "bg-tv-blue-light text-tv-blue" };
 }
 
 // ---------------------------------------------------------------------------
@@ -54,12 +54,12 @@ function relativeTime(iso: string): string {
 
 function SkeletonRow() {
   return (
-    <div className="flex animate-pulse items-start gap-4 rounded-2xl border border-[#e4eef6] bg-white p-4">
-      <div className="h-10 w-10 shrink-0 rounded-full bg-[#e4eef6]" />
+    <div className="flex animate-pulse items-start gap-4 rounded-tv border border-tv-border bg-white p-4">
+      <div className="h-10 w-10 shrink-0 rounded-full tv-skeleton" />
       <div className="flex-1 space-y-2">
-        <div className="h-4 w-2/3 rounded bg-[#e4eef6]" />
-        <div className="h-3 w-full rounded bg-[#e4eef6]" />
-        <div className="h-3 w-1/4 rounded bg-[#e4eef6]" />
+        <div className="h-4 w-2/3 rounded tv-skeleton" />
+        <div className="h-3 w-full rounded tv-skeleton" />
+        <div className="h-3 w-1/4 rounded tv-skeleton" />
       </div>
     </div>
   );
@@ -175,13 +175,13 @@ export default function NotificationsPage() {
       {/* Page header */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#eef7ff]">
-            <Bell size={20} className="text-[#0277d4]" aria-hidden="true" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-tv bg-tv-blue-light">
+            <Bell size={20} className="text-tv-blue" aria-hidden="true" />
           </div>
           <div>
-            <h1 className="text-xl font-black text-[#071827]">Thông báo</h1>
+            <h1 className="text-xl font-bold text-tv-ink">Thông báo</h1>
             {totalElements > 0 && (
-              <p className="text-sm text-[#476273]">
+              <p className="text-sm text-tv-ink-3">
                 {totalElements} thông báo
                 {unreadCount > 0 && ` · ${unreadCount} chưa đọc`}
               </p>
@@ -194,7 +194,7 @@ export default function NotificationsPage() {
             type="button"
             onClick={handleMarkAllRead}
             disabled={markingAll}
-            className="inline-flex items-center gap-2 rounded-xl border border-[#d9ecfb] px-3 py-2 text-sm font-bold text-[#0277d4] transition hover:bg-[#eef7ff] disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-tv-sm border border-tv-border px-3 py-2 text-sm font-bold text-tv-blue transition hover:bg-tv-blue-light disabled:opacity-50"
           >
             <CheckCheck size={16} aria-hidden="true" />
             {markingAll ? "Đang xử lý…" : "Đánh dấu tất cả đã đọc"}
@@ -204,7 +204,7 @@ export default function NotificationsPage() {
 
       {/* Error state */}
       {error && (
-        <div className="mb-6 rounded-2xl border border-red-100 bg-red-50 px-4 py-4 text-sm text-red-600">
+        <div className="mb-6 rounded-tv border border-red-100 bg-red-50 px-4 py-4 text-sm text-red-600">
           {error}
           <button
             type="button"
@@ -227,13 +227,13 @@ export default function NotificationsPage() {
 
       {/* Empty state */}
       {!loading && !error && notifications.length === 0 && (
-        <div className="flex flex-col items-center gap-4 rounded-2xl border border-[#e4eef6] bg-white py-16 text-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#eef7ff]">
-            <Bell size={28} className="text-[#0277d4]" aria-hidden="true" />
+        <div className="flex flex-col items-center gap-4 rounded-tv border border-tv-border bg-white py-16 text-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-tv-blue-light">
+            <Bell size={28} className="text-tv-blue" aria-hidden="true" />
           </div>
           <div>
-            <p className="font-black text-[#071827]">Chưa có thông báo</p>
-            <p className="mt-1 text-sm text-[#476273]">
+            <p className="font-bold text-tv-ink">Chưa có thông báo</p>
+            <p className="mt-1 text-sm text-tv-ink-3">
               Các thông báo về đặt tour, đánh giá sẽ xuất hiện ở đây.
             </p>
           </div>
@@ -250,16 +250,16 @@ export default function NotificationsPage() {
                 <button
                   type="button"
                   onClick={() => handleClick(n)}
-                  className={`flex w-full items-start gap-4 rounded-2xl border p-4 text-left transition hover:shadow-md ${
+                  className={`flex w-full items-start gap-4 rounded-tv border p-4 text-left transition hover:shadow-md ${
                     !n.isRead
-                      ? "border-[#b3d9f7] bg-[#f0f8ff] hover:bg-[#e6f3fd]"
-                      : "border-[#e4eef6] bg-white hover:bg-[#f8fbff]"
+                      ? "border-tv-blue bg-tv-blue-light hover:bg-[#dce9f8]"
+                      : "border-tv-border bg-white hover:bg-tv-bg"
                   }`}
                 >
                   {/* Type icon */}
                   <span
                     aria-hidden="true"
-                    className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-black ${meta.color}`}
+                    className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-base font-bold ${meta.color}`}
                   >
                     {meta.icon}
                   </span>
@@ -269,7 +269,7 @@ export default function NotificationsPage() {
                     <div className="flex items-start justify-between gap-2">
                       <p
                         className={`text-sm ${
-                          !n.isRead ? "font-black text-[#071827]" : "font-bold text-[#334e60]"
+                          !n.isRead ? "font-bold text-tv-ink" : "font-bold text-tv-ink-2"
                         }`}
                       >
                         {n.title}
@@ -277,16 +277,16 @@ export default function NotificationsPage() {
                       {!n.isRead && (
                         <span
                           aria-label="Chưa đọc"
-                          className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-[#0277d4]"
+                          className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-tv-blue"
                         />
                       )}
                     </div>
-                    <p className="mt-1 text-sm text-[#476273]">{n.body}</p>
+                    <p className="mt-1 text-sm text-tv-ink-3">{n.body}</p>
                     <div className="mt-2 flex items-center gap-2">
                       <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${meta.color}`}>
                         {meta.label}
                       </span>
-                      <span className="text-[11px] text-[#8aabb8]">{relativeTime(n.createdAt)}</span>
+                      <span className="text-[11px] text-tv-ink-3">{relativeTime(n.createdAt)}</span>
                     </div>
                   </div>
                 </button>
@@ -306,12 +306,12 @@ export default function NotificationsPage() {
             type="button"
             onClick={() => setPage((p) => Math.max(0, p - 1))}
             disabled={page === 0}
-            className="rounded-xl border border-[#d9ecfb] px-4 py-2 text-sm font-bold text-[#0277d4] transition hover:bg-[#eef7ff] disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-tv-sm border border-tv-border px-4 py-2 text-sm font-bold text-tv-blue transition hover:bg-tv-blue-light disabled:cursor-not-allowed disabled:opacity-40"
           >
             ← Trước
           </button>
 
-          <span className="text-sm text-[#476273]">
+          <span className="text-sm text-tv-ink-3">
             Trang {page + 1} / {totalPages}
           </span>
 
@@ -319,7 +319,7 @@ export default function NotificationsPage() {
             type="button"
             onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
             disabled={page >= totalPages - 1}
-            className="rounded-xl border border-[#d9ecfb] px-4 py-2 text-sm font-bold text-[#0277d4] transition hover:bg-[#eef7ff] disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-tv-sm border border-tv-border px-4 py-2 text-sm font-bold text-tv-blue transition hover:bg-tv-blue-light disabled:cursor-not-allowed disabled:opacity-40"
           >
             Tiếp →
           </button>

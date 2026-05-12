@@ -1,4 +1,4 @@
-import { BarChart3, PieChart, Search, Users } from "lucide-react";
+﻿import { BarChart3, PieChart, Search, Users } from "lucide-react";
 import { CommerceMetric, CommerceSurface, ServiceActionCard } from "@/components/commerce-primitives";
 import { PageShell } from "@/components/page-shell";
 
@@ -13,7 +13,7 @@ export default function Page() {
           <CommerceMetric label="Cảnh báo" value="97%" helper="Câu hỏi theo thời gian thực được cảnh báo đúng." />
         </div>
         <CommerceSurface>
-          <h2 className="text-2xl font-black">Bảng đọc nhanh</h2>
+          <h2 className="text-2xl font-bold">Bảng đọc nhanh</h2>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
             <ServiceActionCard icon={Search} title="Từ khóa nổi bật" description="Đà Nẵng, Phú Quốc, Hội An, Tokyo, gia đình, biển yên bình." href="/explore" />
             <ServiceActionCard icon={BarChart3} title="Xu hướng đặt chỗ" description="Luồng thanh toán demo có tỷ lệ tiếp tục cao nhất khi giá và cảnh báo rõ." href="/admin/bookings" tone="orange" />

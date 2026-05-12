@@ -104,20 +104,20 @@ function SignInForm() {
     <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
       <CommerceSurface>
         <div className="flex items-center gap-3">
-          <div className="rounded-2xl bg-[#eef7ff] p-3 text-[#0277d4]">
+          <div className="rounded-tv bg-tv-blue-light p-3 text-tv-blue">
             <LogIn size={22} aria-hidden="true" />
           </div>
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">
               Tài khoản
             </p>
-            <h2 className="text-2xl font-black">Đăng nhập để tiếp tục</h2>
+            <h2 className="text-2xl font-bold">Đăng nhập để tiếp tục</h2>
           </div>
         </div>
 
         {/* Error banner */}
         {error && (
-          <div className="mt-4 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          <div className="mt-4 flex items-start gap-3 rounded-tv border border-red-200 bg-red-50 p-4 text-sm text-red-700">
             <AlertCircle
               size={18}
               className="mt-0.5 shrink-0"
@@ -128,7 +128,7 @@ function SignInForm() {
         )}
 
         <form onSubmit={handleSubmit} className="mt-6 grid gap-4" noValidate>
-          <label className="grid gap-2 text-sm font-bold text-[#476273]">
+          <label className="grid gap-2 text-sm font-bold text-tv-ink-3">
             Email
             <input
               name="email"
@@ -137,7 +137,7 @@ function SignInForm() {
               onChange={handleChange}
               autoComplete="email"
               placeholder="ban@example.com"
-              className="rounded-2xl border border-[#d9ecfb] bg-[#f7fbff] px-4 py-3 font-black text-[#071827] outline-none focus:border-[#0277d4] aria-[invalid=true]:border-red-400"
+              className="rounded-tv border border-tv-border bg-tv-bg px-4 py-3 font-bold text-tv-ink outline-none focus:border-tv-blue aria-[invalid=true]:border-red-400"
               aria-invalid={!!fieldErrors.email}
               aria-describedby={fieldErrors.email ? "email-error" : undefined}
             />
@@ -148,7 +148,7 @@ function SignInForm() {
             )}
           </label>
 
-          <label className="grid gap-2 text-sm font-bold text-[#476273]">
+          <label className="grid gap-2 text-sm font-bold text-tv-ink-3">
             Mật khẩu
             <input
               name="password"
@@ -157,7 +157,7 @@ function SignInForm() {
               onChange={handleChange}
               autoComplete="current-password"
               placeholder="••••••••"
-              className="rounded-2xl border border-[#d9ecfb] bg-[#f7fbff] px-4 py-3 font-black text-[#071827] outline-none focus:border-[#0277d4] aria-[invalid=true]:border-red-400"
+              className="rounded-tv border border-tv-border bg-tv-bg px-4 py-3 font-bold text-tv-ink outline-none focus:border-tv-blue aria-[invalid=true]:border-red-400"
               aria-invalid={!!fieldErrors.password}
               aria-describedby={
                 fieldErrors.password ? "password-error" : undefined
@@ -176,7 +176,7 @@ function SignInForm() {
           <div className="flex items-center justify-between">
             <Link
               href="/forgot-password"
-              className="text-sm font-black text-[#0277d4] hover:underline"
+              className="text-sm font-bold text-tv-blue hover:underline"
             >
               Quên mật khẩu?
             </Link>
@@ -185,17 +185,17 @@ function SignInForm() {
           <button
             type="submit"
             disabled={isLoading}
-            className="rounded-2xl bg-[#ff6d1a] px-5 py-3 font-black text-white transition hover:bg-[#e85e0f] disabled:cursor-not-allowed disabled:opacity-60"
+            className="tv-btn-orange w-full rounded-tv py-3 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isLoading ? "Đang đăng nhập…" : "Đăng nhập"}
           </button>
         </form>
 
-        <p className="mt-4 text-sm leading-6 text-[#476273]">
+        <p className="mt-4 text-sm leading-6 text-tv-ink-3">
           Chưa có tài khoản?{" "}
           <Link
             href="/register"
-            className="font-black text-[#0277d4] hover:underline"
+            className="font-bold text-tv-blue hover:underline"
           >
             Đăng ký ngay
           </Link>
@@ -206,21 +206,21 @@ function SignInForm() {
         <TrustBanner compact />
         <CommerceSurface>
           <div className="flex items-center gap-3">
-            <div className="rounded-2xl bg-[#e8fbf6] p-3 text-[#0f766e]">
+            <div className="rounded-tv bg-[#e8fbf6] p-3 text-[#0f766e]">
               <ShieldCheck size={22} aria-hidden="true" />
             </div>
-            <h2 className="text-xl font-black">Tài khoản demo</h2>
+            <h2 className="text-xl font-bold">Tài khoản demo</h2>
           </div>
-          <div className="mt-4 space-y-2 text-sm font-bold text-[#476273]">
+          <div className="mt-4 space-y-2 text-sm font-bold text-tv-ink-3">
             {accounts.map((account) => (
-              <p key={account} className="rounded-xl bg-[#f7fbff] p-3">
+              <p key={account} className="rounded-tv-sm bg-tv-bg p-3">
                 {account}
               </p>
             ))}
           </div>
           <Link
             href="/register"
-            className="mt-4 inline-flex font-black text-[#0277d4]"
+            className="mt-4 inline-flex font-bold text-tv-blue"
           >
             Tạo tài khoản mới
           </Link>
@@ -239,7 +239,7 @@ export default function SignInPage() {
     <PageShell eyebrow="Truy cập tài khoản" title="Đăng nhập WanderViet">
       <Suspense
         fallback={
-          <div className="h-64 animate-pulse rounded-2xl bg-[#f7fbff]" />
+          <div className="h-64 animate-pulse rounded-tv bg-tv-bg" />
         }
       >
         <SignInForm />

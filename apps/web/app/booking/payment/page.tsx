@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 /**
  * Mock Payment page — /booking/payment
@@ -92,11 +92,11 @@ const PAYMENT_METHODS: PaymentMethod[] = [
 
 function DemoBanner() {
   return (
-    <div className="rounded-2xl border border-[#f0b3ad] bg-[#ffe4e1] p-4 text-[#9f1239]">
+    <div className="rounded-tv border border-[#f0b3ad] bg-[#ffe4e1] p-4 text-[#9f1239]">
       <div className="flex items-start gap-3">
         <ShieldAlert className="mt-0.5 shrink-0" size={22} aria-hidden="true" />
         <div>
-          <p className="text-lg font-black">{demoPaymentWarning}</p>
+          <p className="text-lg font-bold">{demoPaymentWarning}</p>
           <p className="mt-1 text-sm font-bold text-[#9f1239]/80">
             Mọi nhà cung cấp trong trang này là local/mô phỏng/thử nghiệm. Không phát sinh giao
             dịch thật, không lưu số thẻ.
@@ -122,19 +122,19 @@ function Stepper({ current }: { current: number }) {
         return (
           <li key={step} className="flex items-center gap-2">
             <span
-              className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black ${
+              className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                 active
-                  ? "bg-[#0277d4] text-white ring-4 ring-[#b8ddff]"
+                  ? "bg-[tv-blue] text-white ring-4 ring-[#b8ddff]"
                   : done
                   ? "bg-[#0f8b7b] text-white"
-                  : "bg-[#edf4fa] text-[#8b99a7]"
+                  : "bg-[tv-border] text-[#8b99a7]"
               }`}
             >
               {i + 1}
             </span>
             <span
-              className={`hidden font-black sm:inline ${
-                active ? "text-[#0277d4]" : done ? "text-[#0f8b7b]" : "text-[#8b99a7]"
+              className={`hidden font-bold sm:inline ${
+                active ? "text-[tv-blue]" : done ? "text-[#0f8b7b]" : "text-[#8b99a7]"
               }`}
             >
               {step}
@@ -156,28 +156,28 @@ function Stepper({ current }: { current: number }) {
 function BookingSummaryCard({ booking }: { booking: Booking }) {
   return (
     <CommerceSurface>
-      <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
         Tóm tắt đặt tour
       </p>
       <div className="mt-4 space-y-3">
         <div>
-          <p className="font-black text-[#071827]">
+          <p className="font-bold text-[tv-ink]">
             {booking.tour?.title ?? `Tour #${booking.tourId}`}
           </p>
-          <p className="mt-1 text-sm font-bold text-[#476273]">
-            Mã đặt tour: <span className="font-black text-[#0277d4]">{booking.bookingCode}</span>
+          <p className="mt-1 text-sm font-bold text-[tv-ink-3]">
+            Mã đặt tour: <span className="font-bold text-[tv-blue]">{booking.bookingCode}</span>
           </p>
         </div>
 
         <div className="space-y-2 text-sm">
-          <div className="flex items-center gap-2 text-[#476273]">
-            <CalendarDays size={14} className="text-[#0277d4]" aria-hidden="true" />
+          <div className="flex items-center gap-2 text-[tv-ink-3]">
+            <CalendarDays size={14} className="text-[tv-blue]" aria-hidden="true" />
             <span>
               Ngày đặt: {formatDateVi(new Date(booking.bookingDate))}
             </span>
           </div>
-          <div className="flex items-center gap-2 text-[#476273]">
-            <Users size={14} className="text-[#0277d4]" aria-hidden="true" />
+          <div className="flex items-center gap-2 text-[tv-ink-3]">
+            <Users size={14} className="text-[tv-blue]" aria-hidden="true" />
             <span>{booking.numberOfGuests} khách</span>
           </div>
         </div>
@@ -186,10 +186,10 @@ function BookingSummaryCard({ booking }: { booking: Booking }) {
           <StatusPill tone="orange">Chờ thanh toán</StatusPill>
         </div>
 
-        <div className="border-t border-[#edf4fa] pt-3">
+        <div className="border-t border-[tv-border] pt-3">
           <div className="flex items-center justify-between">
-            <span className="font-black text-[#071827]">Tổng thanh toán</span>
-            <span className="text-xl font-black text-[#ff5f12]">
+            <span className="font-bold text-[tv-ink]">Tổng thanh toán</span>
+            <span className="text-xl font-bold text-[tv-orange]">
               {formatVnd(booking.totalPrice)}
             </span>
           </div>
@@ -305,7 +305,7 @@ function PaymentContent() {
     return (
       <PageShell eyebrow="Thanh toán" title="Đang tải thông tin...">
         <div className="flex items-center justify-center py-20">
-          <Loader2 size={32} className="animate-spin text-[#0277d4]" aria-hidden="true" />
+          <Loader2 size={32} className="animate-spin text-[tv-blue]" aria-hidden="true" />
         </div>
       </PageShell>
     );
@@ -318,12 +318,12 @@ function PaymentContent() {
         <CommerceSurface>
           <div className="flex flex-col items-center gap-4 py-10 text-center">
             <AlertCircle size={40} className="text-red-400" aria-hidden="true" />
-            <p className="text-lg font-black text-red-600">
+            <p className="text-lg font-bold text-red-600">
               {bookingError ?? "Không tìm thấy booking."}
             </p>
             <Link
               href="/my-bookings"
-              className="rounded-2xl bg-[#0277d4] px-6 py-3 text-sm font-black text-white"
+              className="rounded-tv bg-[tv-blue] px-6 py-3 text-sm font-bold text-white"
             >
               Xem lịch sử booking
             </Link>
@@ -347,12 +347,12 @@ function PaymentContent() {
           <CommerceSurface>
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <h2 className="text-xl font-black">Phương thức thanh toán</h2>
-                <p className="mt-1 text-sm text-[#476273]">
+                <h2 className="text-xl font-bold">Phương thức thanh toán</h2>
+                <p className="mt-1 text-sm text-[tv-ink-3]">
                   Chọn phương thức demo. Không nhập số thẻ thật.
                 </p>
               </div>
-              <span className="inline-flex rounded-full bg-[#e7f8f5] px-3 py-1 text-xs font-black text-[#0f8b7b]">
+              <span className="inline-flex rounded-full bg-[#e7f8f5] px-3 py-1 text-xs font-bold text-[#0f8b7b]">
                 Local / mô phỏng / thử nghiệm
               </span>
             </div>
@@ -365,28 +365,28 @@ function PaymentContent() {
                     key={id}
                     type="button"
                     onClick={() => setSelectedMethod(id)}
-                    className={`flex items-center gap-3 rounded-2xl border p-4 text-left transition ${
+                    className={`flex items-center gap-3 rounded-tv border p-4 text-left transition ${
                       active
-                        ? "border-[#0277d4] bg-[#eef7ff] ring-2 ring-[#0277d4]/10"
-                        : "border-[#d9ecfb] bg-white hover:border-[#0277d4] hover:bg-[#f7fbff]"
+                        ? "border-[tv-blue] bg-[tv-blue-light] ring-2 ring-[tv-blue]/10"
+                        : "border-[tv-border] bg-white hover:border-[tv-blue] hover:bg-[tv-bg]"
                     }`}
                     aria-pressed={active}
                   >
                     <span
                       className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border ${
-                        active ? "border-[#0277d4] bg-[#0277d4]" : "border-[#8b99a7]"
+                        active ? "border-[tv-blue] bg-[tv-blue]" : "border-[#8b99a7]"
                       }`}
                     >
                       {active && <span className="h-2 w-2 rounded-full bg-white" />}
                     </span>
                     <Icon
                       size={24}
-                      className={active ? "text-[#0277d4]" : "text-[#476273]"}
+                      className={active ? "text-[tv-blue]" : "text-[tv-ink-3]"}
                       aria-hidden="true"
                     />
                     <span className="min-w-0">
-                      <span className="block font-black">{label}</span>
-                      <span className="mt-0.5 block text-sm text-[#6f8594]">{description}</span>
+                      <span className="block font-bold">{label}</span>
+                      <span className="mt-0.5 block text-sm text-[tv-ink-3]">{description}</span>
                     </span>
                   </button>
                 );
@@ -396,8 +396,8 @@ function PaymentContent() {
 
           {/* Pay error */}
           {payError && (
-            <div className="rounded-2xl border border-red-200 bg-red-50 p-4">
-              <p className="flex items-center gap-2 text-sm font-black text-red-600">
+            <div className="rounded-tv border border-red-200 bg-red-50 p-4">
+              <p className="flex items-center gap-2 text-sm font-bold text-red-600">
                 <AlertCircle size={16} aria-hidden="true" />
                 {payError}
               </p>
@@ -415,7 +415,7 @@ function PaymentContent() {
               type="button"
               onClick={handlePay}
               disabled={paying}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#ff6d1a] px-4 py-4 font-black text-white shadow-[0_14px_28px_rgba(255,109,26,0.22)] transition hover:bg-[#e95c0a] disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-tv bg-[tv-orange] px-4 py-4 font-bold text-white shadow-tv-card transition hover:bg-[tv-orange-dark] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {paying ? (
                 <>
@@ -431,25 +431,25 @@ function PaymentContent() {
               )}
             </button>
 
-            <div className="mt-4 flex items-center justify-center gap-2 rounded-full bg-[#e7f8f5] px-3 py-2 text-sm font-black text-[#0f8b7b]">
+            <div className="mt-4 flex items-center justify-center gap-2 rounded-full bg-[#e7f8f5] px-3 py-2 text-sm font-bold text-[#0f8b7b]">
               <ShieldCheck size={16} aria-hidden="true" />
               {demoPaymentWarning}
             </div>
 
             {paying && (
-              <p className="mt-3 text-center text-xs font-bold text-[#476273]">
+              <p className="mt-3 text-center text-xs font-bold text-[tv-ink-3]">
                 Đang mô phỏng giao dịch... Vui lòng không đóng trang.
               </p>
             )}
           </CommerceSurface>
 
           {/* QR preview */}
-          <div className="rounded-2xl border border-[#d9ecfb] bg-[#eef7ff] p-5 text-center">
-            <div className="mx-auto grid h-20 w-20 place-items-center rounded-2xl bg-white text-[#0277d4]">
+          <div className="rounded-tv border border-[tv-border] bg-[tv-blue-light] p-5 text-center">
+            <div className="mx-auto grid h-20 w-20 place-items-center rounded-tv bg-white text-[tv-blue]">
               <QrCode size={48} aria-hidden="true" />
             </div>
-            <h3 className="mt-3 text-base font-black">Vé QR demo</h3>
-            <p className="mt-1 text-xs leading-5 text-[#476273]">
+            <h3 className="mt-3 text-base font-bold">Vé QR demo</h3>
+            <p className="mt-1 text-xs leading-5 text-[tv-ink-3]">
               Vé điện tử demo sẽ được tạo sau khi xác nhận thanh toán.
             </p>
           </div>
@@ -466,7 +466,7 @@ function PaymentContent() {
 function PaymentFallback() {
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0277d4]" />
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[tv-blue]" />
     </div>
   );
 }

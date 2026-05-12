@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { adminApi } from "@/lib/api/admin.api";
@@ -23,7 +23,7 @@ function ToastContainer({ toasts }: { toasts: ToastMsg[] }) {
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
       {toasts.map((t) => (
-        <div key={t.id} className={`rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg ${t.type === "success" ? "bg-[#0277D4]" : "bg-red-500"}`}>
+        <div key={t.id} className={`rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg ${t.type === "success" ? "bg-[tv-blue]" : "bg-red-500"}`}>
           {t.text}
         </div>
       ))}
@@ -95,14 +95,14 @@ function BookingDrawer({
     <div className="fixed inset-0 z-40 flex justify-end bg-black/40" onClick={onClose}>
       <div className="h-full w-full max-w-md overflow-y-auto bg-white p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-[#0277D4]">Chi tiết đặt chỗ</h2>
+          <h2 className="text-lg font-bold text-[tv-blue]">Chi tiết đặt chỗ</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl font-bold">×</button>
         </div>
 
         <div className="space-y-4">
-          <div className="rounded-xl bg-[#EAF7FF] p-4">
+          <div className="rounded-tv-sm bg-[tv-blue-light] p-4">
             <p className="text-xs text-gray-500">Mã đặt chỗ</p>
-            <p className="font-bold text-[#0277D4]">{booking.bookingCode}</p>
+            <p className="font-bold text-[tv-blue]">{booking.bookingCode}</p>
           </div>
 
           <div className="grid grid-cols-2 gap-3 text-sm">
@@ -128,7 +128,7 @@ function BookingDrawer({
             </div>
             <div>
               <p className="text-xs text-gray-500">Tổng tiền</p>
-              <p className="font-bold text-[#FF6D1A]">{formatVnd(booking.totalPrice)}</p>
+              <p className="font-bold text-[tv-orange]">{formatVnd(booking.totalPrice)}</p>
             </div>
           </div>
 
@@ -150,7 +150,7 @@ function BookingDrawer({
                   onClick={() => changeStatus(s)}
                   className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
                     booking.status === s
-                      ? "bg-[#0277D4] text-white"
+                      ? "bg-[tv-blue] text-white"
                       : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   } disabled:opacity-60`}
                 >
@@ -170,7 +170,7 @@ function BookingDrawer({
                   onClick={() => changePayment(s)}
                   className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
                     booking.paymentStatus === s
-                      ? "bg-[#0277D4] text-white"
+                      ? "bg-[tv-blue] text-white"
                       : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   } disabled:opacity-60`}
                 >
@@ -246,20 +246,20 @@ export default function AdminBookingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#EAF7FF] p-6">
+    <div className="min-h-screen bg-[tv-blue-light] p-6">
       <ToastContainer toasts={toasts} />
 
       <nav className="mb-4 text-sm text-gray-500">
         <span>Admin</span> <span className="mx-1">/</span>
-        <span className="font-semibold text-[#0277D4]">Đặt chỗ</span>
+        <span className="font-semibold text-[tv-blue]">Đặt chỗ</span>
       </nav>
 
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-black text-gray-900">Quản lý đặt chỗ</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Quản lý đặt chỗ</h1>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold focus:border-[#0277D4] focus:outline-none"
+          className="rounded-tv-sm border border-gray-200 bg-white px-4 py-2 text-sm font-semibold focus:border-[tv-blue] focus:outline-none"
         >
           <option value="">Tất cả trạng thái</option>
           <option value="PENDING">Chờ xử lý</option>
@@ -270,7 +270,7 @@ export default function AdminBookingsPage() {
         </select>
       </div>
 
-      <div className="rounded-2xl bg-white shadow">
+      <div className="rounded-tv bg-white shadow">
         {loading ? (
           <div className="space-y-3 p-6">{[...Array(5)].map((_, i) => <div key={i} className="h-10 animate-pulse rounded-lg bg-gray-100" />)}</div>
         ) : error ? (
@@ -281,7 +281,7 @@ export default function AdminBookingsPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b bg-[#EAF7FF] text-left text-xs font-bold uppercase text-gray-500">
+                <tr className="border-b bg-[tv-blue-light] text-left text-xs font-bold uppercase text-gray-500">
                   <th className="px-4 py-3">Mã đặt chỗ</th>
                   <th className="px-4 py-3">Khách hàng</th>
                   <th className="px-4 py-3">Tour</th>
@@ -295,18 +295,18 @@ export default function AdminBookingsPage() {
               <tbody>
                 {items.map((item) => (
                   <tr key={item.id} className="border-b last:border-0 hover:bg-gray-50">
-                    <td className="px-4 py-3 font-mono text-xs font-bold text-[#0277D4]">{item.bookingCode}</td>
+                    <td className="px-4 py-3 font-mono text-xs font-bold text-[tv-blue]">{item.bookingCode}</td>
                     <td className="px-4 py-3">
                       <div className="font-semibold text-gray-900">{item.contactName}</div>
                       <div className="text-xs text-gray-500">{item.contactEmail}</div>
                     </td>
                     <td className="px-4 py-3 text-gray-600 max-w-[160px] truncate">{item.tour?.title ?? "—"}</td>
                     <td className="px-4 py-3 text-gray-600">{item.numberOfGuests}</td>
-                    <td className="px-4 py-3 font-semibold text-[#FF6D1A]">{formatVnd(item.totalPrice)}</td>
+                    <td className="px-4 py-3 font-semibold text-[tv-orange]">{formatVnd(item.totalPrice)}</td>
                     <td className="px-4 py-3"><BookingStatusBadge status={item.status} /></td>
                     <td className="px-4 py-3"><PaymentStatusBadge status={item.paymentStatus} /></td>
                     <td className="px-4 py-3 text-right">
-                      <button onClick={() => setDrawer(item)} className="rounded-lg bg-[#EAF7FF] px-3 py-1 text-xs font-semibold text-[#0277D4] hover:bg-blue-100">
+                      <button onClick={() => setDrawer(item)} className="rounded-lg bg-[tv-blue-light] px-3 py-1 text-xs font-semibold text-[tv-blue] hover:bg-blue-100">
                         Xem
                       </button>
                     </td>

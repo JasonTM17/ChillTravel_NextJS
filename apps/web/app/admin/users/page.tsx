@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { adminApi } from "@/lib/api/admin.api";
@@ -25,7 +25,7 @@ function ToastContainer({ toasts }: { toasts: ToastMsg[] }) {
         <div
           key={t.id}
           className={`rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg ${
-            t.type === "success" ? "bg-[#0277D4]" : "bg-red-500"
+            t.type === "success" ? "bg-[tv-blue]" : "bg-red-500"
           }`}
         >
           {t.text}
@@ -113,22 +113,22 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#EAF7FF] p-6">
+    <div className="min-h-screen bg-[tv-blue-light] p-6">
       <ToastContainer toasts={toasts} />
 
       {/* Breadcrumbs */}
       <nav className="mb-4 text-sm text-gray-500">
         <span>Admin</span> <span className="mx-1">/</span>
-        <span className="font-semibold text-[#0277D4]">Người dùng</span>
+        <span className="font-semibold text-[tv-blue]">Người dùng</span>
       </nav>
 
       {/* Header */}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-black text-gray-900">Quản lý người dùng</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Quản lý người dùng</h1>
           {totalElements > 0 && (
             <p className="mt-1 text-sm text-gray-500">
-              Tổng cộng <span className="font-semibold text-[#0277D4]">{totalElements}</span> người dùng
+              Tổng cộng <span className="font-semibold text-[tv-blue]">{totalElements}</span> người dùng
             </p>
           )}
         </div>
@@ -140,11 +140,11 @@ export default function AdminUsersPage() {
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Tìm theo email hoặc tên..."
-            className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm focus:border-[#0277D4] focus:outline-none"
+            className="rounded-tv-sm border border-gray-200 bg-white px-4 py-2 text-sm focus:border-[tv-blue] focus:outline-none"
           />
           <button
             type="submit"
-            className="rounded-xl bg-[#0277D4] px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+            className="rounded-tv-sm bg-[tv-blue] px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
           >
             Tìm
           </button>
@@ -152,12 +152,12 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Read-only notice */}
-      <div className="mb-4 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-700">
+      <div className="mb-4 rounded-tv-sm border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-700">
         <span className="font-semibold">Chế độ xem:</span> Danh sách người dùng chỉ đọc. Chức năng chỉnh sửa/xóa sẽ được bổ sung trong phiên bản tiếp theo.
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl bg-white shadow">
+      <div className="rounded-tv bg-white shadow">
         {loading ? (
           <div className="space-y-3 p-6">
             {[...Array(8)].map((_, i) => (
@@ -169,7 +169,7 @@ export default function AdminUsersPage() {
             <p className="mb-3 text-red-500">{error}</p>
             <button
               onClick={load}
-              className="rounded-lg bg-[#0277D4] px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+              className="rounded-lg bg-[tv-blue] px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
             >
               Thử lại
             </button>
@@ -182,7 +182,7 @@ export default function AdminUsersPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b bg-[#EAF7FF] text-left text-xs font-bold uppercase text-gray-500">
+                <tr className="border-b bg-[tv-blue-light] text-left text-xs font-bold uppercase text-gray-500">
                   <th className="px-4 py-3">Email</th>
                   <th className="px-4 py-3">Họ tên</th>
                   <th className="px-4 py-3">Điện thoại</th>
@@ -195,7 +195,7 @@ export default function AdminUsersPage() {
               <tbody>
                 {items.map((item) => (
                   <tr key={item.id} className="border-b last:border-0 hover:bg-gray-50">
-                    <td className="px-4 py-3 font-semibold text-[#0277D4]">{item.email}</td>
+                    <td className="px-4 py-3 font-semibold text-[tv-blue]">{item.email}</td>
                     <td className="px-4 py-3 text-gray-900">{item.fullName ?? "—"}</td>
                     <td className="px-4 py-3 text-gray-600">{item.phone ?? "—"}</td>
                     <td className="px-4 py-3">

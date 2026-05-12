@@ -45,29 +45,29 @@ const categoryOptions = ["Biển", "Văn hóa", "Ẩm thực", "Núi", "Nghỉ d
 
 function SearchResultSkeleton() {
   return (
-    <div className="grid overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_14px_34px_rgba(2,68,120,0.08)] md:grid-cols-[220px_minmax(0,1fr)_210px] animate-pulse">
-      <div className="min-h-[210px] bg-[#d9ecfb]" />
+    <div className="grid overflow-hidden rounded-tv border border-tv-border bg-white shadow-tv-card md:grid-cols-[220px_minmax(0,1fr)_210px] animate-pulse">
+      <div className="min-h-[210px] tv-skeleton" />
       <div className="min-w-0 p-5 space-y-3">
         <div className="flex gap-2">
-          <div className="h-6 w-20 rounded-full bg-[#d9ecfb]" />
-          <div className="h-6 w-12 rounded-full bg-[#d9ecfb]" />
+          <div className="h-6 w-20 rounded-full tv-skeleton" />
+          <div className="h-6 w-12 rounded-full tv-skeleton" />
         </div>
-        <div className="h-6 w-48 rounded bg-[#d9ecfb]" />
-        <div className="h-3 w-full rounded bg-[#d9ecfb]" />
-        <div className="h-3 w-3/4 rounded bg-[#d9ecfb]" />
+        <div className="h-6 w-48 rounded tv-skeleton" />
+        <div className="h-3 w-full rounded tv-skeleton" />
+        <div className="h-3 w-3/4 rounded tv-skeleton" />
         <div className="flex gap-2 mt-2">
-          {[1, 2, 3, 4].map((i) => <div key={i} className="h-6 w-20 rounded-full bg-[#d9ecfb]" />)}
+          {[1, 2, 3, 4].map((i) => <div key={i} className="h-6 w-20 rounded-full tv-skeleton" />)}
         </div>
       </div>
-      <div className="flex flex-col justify-between border-t border-[#edf4fa] bg-[#fbfdff] p-5 md:border-l md:border-t-0">
+      <div className="flex flex-col justify-between border-t border-tv-border bg-tv-bg p-5 md:border-l md:border-t-0">
         <div className="space-y-2">
-          <div className="h-3 w-12 rounded bg-[#d9ecfb]" />
-          <div className="h-7 w-28 rounded bg-[#d9ecfb]" />
-          <div className="h-3 w-20 rounded bg-[#d9ecfb]" />
+          <div className="h-3 w-12 rounded tv-skeleton" />
+          <div className="h-7 w-28 rounded tv-skeleton" />
+          <div className="h-3 w-20 rounded tv-skeleton" />
         </div>
         <div className="mt-5 space-y-2">
-          <div className="h-10 rounded-xl bg-[#d9ecfb]" />
-          <div className="h-10 rounded-xl bg-[#d9ecfb]" />
+          <div className="h-10 rounded-tv-sm tv-skeleton" />
+          <div className="h-10 rounded-tv-sm tv-skeleton" />
         </div>
       </div>
     </div>
@@ -88,18 +88,18 @@ export default function ExplorePage() {
 
 function ExplorePageSkeleton() {
   return (
-    <main className="min-h-screen bg-[#f6fbff] text-[#071827]">
-      <section className="border-b border-[#d9ecfb] bg-white">
+    <main className="min-h-screen bg-tv-bg text-tv-ink">
+      <section className="border-b border-tv-border bg-white">
         <div className="mx-auto max-w-[1180px] px-4 py-5">
-          <div className="rounded-[26px] bg-[#1f9be0] p-3 h-24 animate-pulse" />
+          <div className="rounded-[26px] bg-tv-blue p-3 h-24 animate-pulse" />
         </div>
       </section>
       <section className="mx-auto grid max-w-[1180px] gap-5 px-4 py-6 lg:grid-cols-[260px_minmax(0,1fr)_300px]">
-        <div className="h-96 rounded-2xl border border-[#d9ecfb] bg-white animate-pulse" />
+        <div className="h-96 rounded-tv border border-tv-border bg-white animate-pulse" />
         <div className="space-y-4">
           {[1, 2, 3].map((i) => <SearchResultSkeleton key={i} />)}
         </div>
-        <div className="h-64 rounded-2xl border border-[#d9ecfb] bg-white animate-pulse" />
+        <div className="h-64 rounded-tv border border-tv-border bg-white animate-pulse" />
       </section>
     </main>
   );
@@ -192,7 +192,7 @@ function ExplorePageInner() {
   const activeDestination = destinations[0];
 
   return (
-    <main className="min-h-screen bg-[#f6fbff] text-[#071827]">
+    <main className="min-h-screen bg-tv-bg text-tv-ink">
       <ExploreSearch keyword={keyword} onSearch={handleSearch} />
       <section className="mx-auto grid max-w-[1180px] gap-5 px-4 py-6 lg:grid-cols-[260px_minmax(0,1fr)_300px]">
         <FilterRail
@@ -236,8 +236,8 @@ function ExplorePageInner() {
         {activeDestination ? (
           <TripSidePanel destination={activeDestination} />
         ) : (
-          <aside className="h-fit rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_12px_30px_rgba(2,68,120,0.06)] lg:sticky lg:top-24">
-            <p className="text-sm font-bold text-[#476273]">Tìm kiếm để xem gợi ý chuyến đi.</p>
+          <aside className="h-fit rounded-tv border border-tv-border bg-white p-5 shadow-tv-card lg:sticky lg:top-24">
+            <p className="text-sm font-bold text-tv-ink-3">Tìm kiếm để xem gợi ý chuyến đi.</p>
           </aside>
         )}
       </section>
@@ -251,12 +251,12 @@ function ExplorePageInner() {
 
 function ErrorState({ message, onRetry }: { message: string; onRetry?: () => void }) {
   return (
-    <div className="rounded-2xl border border-dashed border-red-200 bg-red-50 p-8 text-center">
-      <p className="text-lg font-black text-red-600">{message}</p>
+    <div className="rounded-tv border border-dashed border-red-200 bg-red-50 p-8 text-center">
+      <p className="text-lg font-bold text-red-600">{message}</p>
       {onRetry && (
         <button
           onClick={onRetry}
-          className="mt-4 inline-flex rounded-xl bg-[#0277d4] px-5 py-2.5 font-bold text-white hover:bg-[#005ea8]"
+          className="mt-4 inline-flex rounded-tv-sm bg-tv-blue px-5 py-2.5 font-bold text-white hover:bg-tv-blue-dark"
           type="button"
         >
           Thử lại
@@ -268,13 +268,13 @@ function ErrorState({ message, onRetry }: { message: string; onRetry?: () => voi
 
 function EmptyResults({ onClear }: { onClear: () => void }) {
   return (
-    <div className="rounded-2xl border border-dashed border-[#b8d8f0] bg-white p-10 text-center">
-      <MapPin className="mx-auto text-[#0277d4]" size={34} aria-hidden="true" />
-      <h2 className="mt-4 text-2xl font-black">Chưa có lựa chọn phù hợp.</h2>
-      <p className="mt-2 text-[#476273]">Thử nhập thành phố, phong cách du lịch hoặc thay đổi bộ lọc.</p>
+    <div className="rounded-tv border border-dashed border-tv-border bg-white p-10 text-center">
+      <MapPin className="mx-auto text-tv-blue" size={34} aria-hidden="true" />
+      <h2 className="mt-4 text-2xl font-bold">Chưa có lựa chọn phù hợp.</h2>
+      <p className="mt-2 text-tv-ink-3">Thử nhập thành phố, phong cách du lịch hoặc thay đổi bộ lọc.</p>
       <button
         onClick={onClear}
-        className="mt-5 inline-flex rounded-xl bg-[#0277d4] px-5 py-3 font-bold text-white"
+        className="mt-5 inline-flex rounded-tv-sm bg-tv-blue px-5 py-3 font-bold text-white"
         type="button"
       >
         Xóa bộ lọc
@@ -289,18 +289,18 @@ function EmptyResults({ onClear }: { onClear: () => void }) {
 
 function ExploreSearch({ keyword, onSearch }: { keyword: string; onSearch: (e: React.FormEvent<HTMLFormElement>) => void }) {
   return (
-    <section className="border-b border-[#d9ecfb] bg-white">
+    <section className="border-b border-tv-border bg-white">
       <div className="mx-auto max-w-[1180px] px-4 py-5">
-        <form onSubmit={onSearch} className="rounded-[26px] bg-[#1f9be0] p-3 shadow-[0_18px_42px_rgba(2,119,212,0.18)]">
+        <form onSubmit={onSearch} className="rounded-[26px] bg-tv-blue p-3 shadow-[0_18px_42px_rgba(2,119,212,0.18)]">
           <div className="grid gap-3 rounded-[20px] bg-white p-3 lg:grid-cols-[1.35fr_0.9fr_0.9fr_0.95fr_148px]">
-            <label className="flex min-w-0 items-center gap-3 rounded-2xl border border-[#d9ecfb] bg-[#f7fbff] px-4 py-3">
-              <Search size={19} className="text-[#0277d4]" aria-hidden="true" />
+            <label className="flex min-w-0 items-center gap-3 rounded-tv border border-tv-border bg-tv-bg px-4 py-3">
+              <Search size={19} className="text-tv-blue" aria-hidden="true" />
               <span className="min-w-0 flex-1">
-                <span className="block text-xs font-bold text-[#6f8594]">Bạn muốn đi đâu?</span>
+                <span className="block text-xs font-bold text-tv-ink-3">Bạn muốn đi đâu?</span>
                 <input
                   name="keyword"
                   defaultValue={keyword}
-                  className="mt-1 w-full bg-transparent font-black text-[#071827] outline-none"
+                  className="mt-1 w-full bg-transparent font-bold text-tv-ink outline-none"
                   placeholder="Tên điểm đến, quốc gia..."
                 />
               </span>
@@ -308,7 +308,7 @@ function ExploreSearch({ keyword, onSearch }: { keyword: string; onSearch: (e: R
             <CompactField icon={CalendarDays} label="Nhận phòng" value={formatDateVi(new Date("2026-08-12"))} />
             <CompactField icon={CalendarDays} label="Trả phòng" value={formatDateVi(new Date("2026-08-16"))} />
             <CompactField icon={Users} label="Khách/phòng" value="2 khách, 1 phòng" />
-            <button className="rounded-2xl bg-[#ff6d1a] px-5 py-3 text-sm font-black text-white transition hover:bg-[#e95c0a]" type="submit">
+            <button className="rounded-tv bg-tv-orange px-5 py-3 text-sm font-bold text-white transition hover:bg-tv-orange-dark" type="submit">
               Tìm kiếm
             </button>
           </div>
@@ -320,11 +320,11 @@ function ExploreSearch({ keyword, onSearch }: { keyword: string; onSearch: (e: R
 
 function CompactField({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: string }) {
   return (
-    <div className="flex min-w-0 items-center gap-3 rounded-2xl border border-[#d9ecfb] bg-white px-4 py-3">
-      <Icon size={18} className="shrink-0 text-[#0277d4]" aria-hidden="true" />
+    <div className="flex min-w-0 items-center gap-3 rounded-tv border border-tv-border bg-white px-4 py-3">
+      <Icon size={18} className="shrink-0 text-tv-blue" aria-hidden="true" />
       <span className="min-w-0">
-        <span className="block text-xs font-bold text-[#6f8594]">{label}</span>
-        <span className="mt-1 block truncate font-black">{value}</span>
+        <span className="block text-xs font-bold text-tv-ink-3">{label}</span>
+        <span className="mt-1 block truncate font-bold">{value}</span>
       </span>
     </div>
   );
@@ -346,24 +346,24 @@ function ResultsToolbar({
   onSortChange: (value: string) => void;
 }) {
   return (
-    <div className="rounded-2xl border border-[#d9ecfb] bg-white p-4 shadow-[0_12px_30px_rgba(2,68,120,0.06)]">
+    <div className="rounded-tv border border-tv-border bg-white p-4 shadow-tv-card">
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">Kết quả tìm kiếm</p>
-          <h1 className="mt-1 text-2xl font-black">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">Kết quả tìm kiếm</p>
+          <h1 className="mt-1 text-2xl font-bold">
             {count} điểm đến{keyword ? ` cho "${keyword}"` : ""}
           </h1>
-          <p className="mt-1 text-sm text-[#476273]">Dữ liệu thật từ hệ thống.</p>
+          <p className="mt-1 text-sm text-tv-ink-3">Dữ liệu thật từ hệ thống.</p>
         </div>
         <div className="flex flex-wrap gap-2">
           {sortOptions.map((option) => (
             <button
               key={option.value}
               onClick={() => onSortChange(option.value)}
-              className={`rounded-full border px-3 py-2 text-xs font-black ${
+              className={`rounded-full border px-3 py-2 text-xs font-bold ${
                 sort === option.value
-                  ? "border-[#0277d4] bg-[#eef7ff] text-[#0277d4]"
-                  : "border-[#d9ecfb] bg-white text-[#476273]"
+                  ? "border-tv-blue bg-tv-blue-light text-tv-blue"
+                  : "border-tv-border bg-white text-tv-ink-3"
               }`}
               type="button"
             >
@@ -392,14 +392,14 @@ function FilterRail({
   onSortChange: (value: string) => void;
 }) {
   return (
-    <aside className="h-fit rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_12px_30px_rgba(2,68,120,0.06)] lg:sticky lg:top-24">
-      <div className="flex items-center justify-between border-b border-[#edf4fa] pb-4">
-        <h2 className="text-xl font-black">Bộ lọc</h2>
-        <SlidersHorizontal className="text-[#0277d4]" size={18} aria-hidden="true" />
+    <aside className="h-fit rounded-tv border border-tv-border bg-white p-5 shadow-tv-card lg:sticky lg:top-24">
+      <div className="flex items-center justify-between border-b border-tv-border pb-4">
+        <h2 className="text-xl font-bold">Bộ lọc</h2>
+        <SlidersHorizontal className="text-tv-blue" size={18} aria-hidden="true" />
       </div>
 
       <div className="mt-5">
-        <h3 className="text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">Phong cách</h3>
+        <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">Phong cách</h3>
         <div className="mt-3 grid gap-2">
           {categoryOptions.map((cat) => {
             const active = selectedCategory === cat;
@@ -407,10 +407,10 @@ function FilterRail({
               <button
                 key={cat}
                 onClick={() => onCategoryToggle(cat)}
-                className={`flex items-center justify-between rounded-xl border px-3 py-2 text-sm font-bold transition text-left ${
+                className={`flex items-center justify-between rounded-tv-sm border px-3 py-2 text-sm font-bold transition text-left ${
                   active
-                    ? "border-[#0277d4] bg-[#eef7ff] text-[#0277d4]"
-                    : "border-[#edf4fa] bg-white text-[#476273] hover:border-[#0277d4] hover:text-[#0277d4]"
+                    ? "border-tv-blue bg-tv-blue-light text-tv-blue"
+                    : "border-tv-border bg-white text-tv-ink-3 hover:border-tv-blue hover:text-tv-blue"
                 }`}
                 type="button"
               >
@@ -422,9 +422,9 @@ function FilterRail({
         </div>
       </div>
 
-      <div className="mt-6 rounded-2xl bg-[#f7fbff] p-4">
-        <div className="flex items-center gap-2 text-sm font-black">
-          <WalletCards size={17} className="text-[#0277d4]" aria-hidden="true" />
+      <div className="mt-6 rounded-tv bg-tv-bg p-4">
+        <div className="flex items-center gap-2 text-sm font-bold">
+          <WalletCards size={17} className="text-tv-blue" aria-hidden="true" />
           Sắp xếp
         </div>
         <div className="mt-3 grid gap-2">
@@ -432,10 +432,10 @@ function FilterRail({
             <button
               key={option.value}
               onClick={() => onSortChange(option.value)}
-              className={`rounded-xl border px-3 py-2 text-xs font-bold text-left transition ${
+              className={`rounded-tv-sm border px-3 py-2 text-xs font-bold text-left transition ${
                 selectedSort === option.value
-                  ? "border-[#0277d4] bg-[#eef7ff] text-[#0277d4]"
-                  : "border-[#edf4fa] bg-white text-[#476273] hover:border-[#0277d4]"
+                  ? "border-tv-blue bg-tv-blue-light text-tv-blue"
+                  : "border-tv-border bg-white text-tv-ink-3 hover:border-tv-blue"
               }`}
               type="button"
             >
@@ -455,7 +455,7 @@ function FilterRail({
 function SearchResultCard({ destination }: { destination: Destination }) {
   const imgSrc = destination.imageUrl ?? getDestinationImage(destination.slug);
   return (
-    <article className="grid overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_14px_34px_rgba(2,68,120,0.08)] md:grid-cols-[220px_minmax(0,1fr)_210px]">
+    <article className="grid overflow-hidden rounded-tv border border-tv-border bg-white shadow-tv-card md:grid-cols-[220px_minmax(0,1fr)_210px]">
       <Link
         href={`/destinations/${destination.slug}`}
         className="min-h-[210px] bg-cover bg-center"
@@ -464,24 +464,24 @@ function SearchResultCard({ destination }: { destination: Destination }) {
       />
       <div className="min-w-0 p-5">
         <div className="flex flex-wrap items-center gap-2 text-sm">
-          <span className="rounded-full bg-[#eef7ff] px-3 py-1 font-black text-[#0277d4]">{destination.country}</span>
+          <span className="rounded-full bg-tv-blue-light px-3 py-1 font-bold text-tv-blue">{destination.country}</span>
           {destination.ratingAvg != null && (
-            <span className="inline-flex items-center gap-1 font-black text-[#b45309]">
+            <span className="inline-flex items-center gap-1 font-bold text-[#b45309]">
               <Star size={15} fill="currentColor" aria-hidden="true" />
               {destination.ratingAvg.toFixed(1)}
             </span>
           )}
           {destination.reviewCount != null && (
-            <span className="text-[#6f8594]">({destination.reviewCount} đánh giá)</span>
+            <span className="text-tv-ink-3">({destination.reviewCount} đánh giá)</span>
           )}
         </div>
-        <Link href={`/destinations/${destination.slug}`} className="mt-3 block text-2xl font-black hover:text-[#0277d4]">
+        <Link href={`/destinations/${destination.slug}`} className="mt-3 block text-2xl font-bold hover:text-tv-blue">
           {destination.name}
         </Link>
-        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#476273]">
+        <p className="mt-2 line-clamp-2 text-sm leading-6 text-tv-ink-3">
           {destination.shortDescription ?? destination.description}
         </p>
-        <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-[#476273]">
+        <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-tv-ink-3">
           <Amenity icon={Hotel} label="Nơi ở" />
           {destination.city && <Amenity icon={MapPin} label={destination.city} />}
           {destination.category && <Amenity icon={Coffee} label={destination.category} />}
@@ -489,24 +489,24 @@ function SearchResultCard({ destination }: { destination: Destination }) {
           <Amenity icon={Wifi} label="Gói offline" />
         </div>
       </div>
-      <aside className="flex flex-col justify-between border-t border-[#edf4fa] bg-[#fbfdff] p-5 md:border-l md:border-t-0">
+      <aside className="flex flex-col justify-between border-t border-tv-border bg-tv-bg p-5 md:border-l md:border-t-0">
         <div>
-          <p className="text-xs font-bold text-[#6f8594]">Khám phá</p>
-          <p className="mt-1 text-2xl font-black text-[#ff5f12]">{destination.city ?? destination.country}</p>
-          <p className="mt-1 text-xs font-bold text-[#6f8594]">{destination.bestTimeToVisit ?? "Quanh năm"}</p>
-          <p className="mt-4 rounded-full bg-[#fff3e8] px-3 py-1 text-center text-xs font-black text-[#b45309]">Chỉ thanh toán demo</p>
+          <p className="text-xs font-bold text-tv-ink-3">Khám phá</p>
+          <p className="mt-1 text-2xl font-bold text-tv-orange">{destination.city ?? destination.country}</p>
+          <p className="mt-1 text-xs font-bold text-tv-ink-3">{destination.bestTimeToVisit ?? "Quanh năm"}</p>
+          <p className="mt-4 rounded-full bg-[#fff3e8] px-3 py-1 text-center text-xs font-bold text-[#b45309]">Chỉ thanh toán demo</p>
         </div>
         <div className="mt-5 grid gap-2">
           <Link
             href={`/destinations/${destination.slug}`}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#ff6d1a] px-4 py-3 text-sm font-black text-white hover:bg-[#e95c0a]"
+            className="inline-flex items-center justify-center gap-2 rounded-tv-sm bg-tv-orange px-4 py-3 text-sm font-bold text-white hover:bg-tv-orange-dark"
           >
             Xem chi tiết
             <ArrowRight size={16} aria-hidden="true" />
           </Link>
           <Link
             href={`/ai-planner?destination=${destination.slug}`}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#d9ecfb] bg-white px-4 py-3 text-sm font-black text-[#0277d4] hover:bg-[#eef7ff]"
+            className="inline-flex items-center justify-center gap-2 rounded-tv-sm border border-tv-border bg-white px-4 py-3 text-sm font-bold text-tv-blue hover:bg-tv-blue-light"
           >
             Lập lịch trình thông minh
             <Sparkles size={16} aria-hidden="true" />
@@ -519,8 +519,8 @@ function SearchResultCard({ destination }: { destination: Destination }) {
 
 function Amenity({ icon: Icon, label }: { icon: LucideIcon; label: string }) {
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-[#f3f9ff] px-3 py-1">
-      <Icon size={14} className="text-[#0277d4]" aria-hidden="true" />
+    <span className="inline-flex items-center gap-1 rounded-full bg-tv-bg px-3 py-1">
+      <Icon size={14} className="text-tv-blue" aria-hidden="true" />
       {label}
     </span>
   );
@@ -544,7 +544,7 @@ function Pagination({
       <button
         onClick={() => onPageChange(page - 1)}
         disabled={page === 0}
-        className="inline-flex items-center gap-1 rounded-xl border border-[#d9ecfb] bg-white px-4 py-2 text-sm font-black text-[#0277d4] disabled:opacity-40 hover:bg-[#eef7ff]"
+        className="inline-flex items-center gap-1 rounded-tv-sm border border-tv-border bg-white px-4 py-2 text-sm font-bold text-tv-blue disabled:opacity-40 hover:bg-tv-blue-light"
         type="button"
         aria-label="Trang trước"
       >
@@ -559,10 +559,10 @@ function Pagination({
             <button
               key={pageNum}
               onClick={() => onPageChange(pageNum)}
-              className={`h-9 w-9 rounded-xl text-sm font-black transition ${
+              className={`h-9 w-9 rounded-tv-sm text-sm font-bold transition ${
                 pageNum === page
-                  ? "bg-[#0277d4] text-white"
-                  : "border border-[#d9ecfb] bg-white text-[#476273] hover:bg-[#eef7ff]"
+                  ? "bg-tv-blue text-white"
+                  : "border border-tv-border bg-white text-tv-ink-3 hover:bg-tv-blue-light"
               }`}
               type="button"
               aria-label={`Trang ${pageNum + 1}`}
@@ -577,7 +577,7 @@ function Pagination({
       <button
         onClick={() => onPageChange(page + 1)}
         disabled={page >= totalPages - 1}
-        className="inline-flex items-center gap-1 rounded-xl border border-[#d9ecfb] bg-white px-4 py-2 text-sm font-black text-[#0277d4] disabled:opacity-40 hover:bg-[#eef7ff]"
+        className="inline-flex items-center gap-1 rounded-tv-sm border border-tv-border bg-white px-4 py-2 text-sm font-bold text-tv-blue disabled:opacity-40 hover:bg-tv-blue-light"
         type="button"
         aria-label="Trang sau"
       >
@@ -594,9 +594,9 @@ function Pagination({
 
 function TripSidePanel({ destination }: { destination: Destination }) {
   return (
-    <aside className="h-fit rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_12px_30px_rgba(2,68,120,0.06)] lg:sticky lg:top-24">
-      <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">Tóm tắt chuyến đi</p>
-      <h2 className="mt-2 text-2xl font-black">{destination.name}</h2>
+    <aside className="h-fit rounded-tv border border-tv-border bg-white p-5 shadow-tv-card lg:sticky lg:top-24">
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">Tóm tắt chuyến đi</p>
+      <h2 className="mt-2 text-2xl font-bold">{destination.name}</h2>
       <div className="mt-5 space-y-3 text-sm">
         <CartRow label="Quốc gia" value={destination.country} />
         {destination.city && <CartRow label="Thành phố" value={destination.city} />}
@@ -604,14 +604,14 @@ function TripSidePanel({ destination }: { destination: Destination }) {
         {destination.ratingAvg != null && <CartRow label="Đánh giá" value={`${destination.ratingAvg.toFixed(1)} / 5`} />}
       </div>
       {destination.shortDescription && (
-        <div className="mt-5 rounded-2xl bg-[#f7fbff] p-4">
-          <p className="text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">Mô tả ngắn</p>
+        <div className="mt-5 rounded-tv bg-tv-bg p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">Mô tả ngắn</p>
           <p className="mt-2 text-sm leading-6 text-[#34566f]">{destination.shortDescription}</p>
         </div>
       )}
       <Link
         href={`/destinations/${destination.slug}`}
-        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0277d4] px-4 py-3 text-sm font-black text-white hover:bg-[#005ea8]"
+        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-tv-sm bg-tv-blue px-4 py-3 text-sm font-bold text-white hover:bg-tv-blue-dark"
       >
         Xem chi tiết
         <ArrowRight size={16} aria-hidden="true" />
@@ -623,9 +623,9 @@ function TripSidePanel({ destination }: { destination: Destination }) {
 
 function CartRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-[#edf4fa] pb-3">
-      <span className="font-bold text-[#476273]">{label}</span>
-      <span className="text-right font-black">{value}</span>
+    <div className="flex items-center justify-between gap-3 border-b border-tv-border pb-3">
+      <span className="font-bold text-tv-ink-3">{label}</span>
+      <span className="text-right font-bold">{value}</span>
     </div>
   );
 }

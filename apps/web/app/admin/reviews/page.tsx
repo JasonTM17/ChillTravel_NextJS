@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { adminApi } from "@/lib/api/admin.api";
@@ -22,7 +22,7 @@ function ToastContainer({ toasts }: { toasts: ToastMsg[] }) {
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
       {toasts.map((t) => (
-        <div key={t.id} className={`rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg ${t.type === "success" ? "bg-[#0277D4]" : "bg-red-500"}`}>
+        <div key={t.id} className={`rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg ${t.type === "success" ? "bg-[tv-blue]" : "bg-red-500"}`}>
           {t.text}
         </div>
       ))}
@@ -54,7 +54,7 @@ function StarRating({ rating }: { rating: number }) {
   return (
     <span className="text-sm">
       {[1, 2, 3, 4, 5].map((s) => (
-        <span key={s} className={s <= rating ? "text-[#FF6D1A]" : "text-gray-200"}>★</span>
+        <span key={s} className={s <= rating ? "text-[tv-orange]" : "text-gray-200"}>★</span>
       ))}
     </span>
   );
@@ -114,20 +114,20 @@ export default function AdminReviewsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#EAF7FF] p-6">
+    <div className="min-h-screen bg-[tv-blue-light] p-6">
       <ToastContainer toasts={toasts} />
 
       <nav className="mb-4 text-sm text-gray-500">
         <span>Admin</span> <span className="mx-1">/</span>
-        <span className="font-semibold text-[#0277D4]">Đánh giá</span>
+        <span className="font-semibold text-[tv-blue]">Đánh giá</span>
       </nav>
 
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-black text-gray-900">Kiểm duyệt đánh giá</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Kiểm duyệt đánh giá</h1>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold focus:border-[#0277D4] focus:outline-none"
+          className="rounded-tv-sm border border-gray-200 bg-white px-4 py-2 text-sm font-semibold focus:border-[tv-blue] focus:outline-none"
         >
           <option value="">Tất cả</option>
           <option value="PENDING">Chờ duyệt</option>
@@ -137,7 +137,7 @@ export default function AdminReviewsPage() {
         </select>
       </div>
 
-      <div className="rounded-2xl bg-white shadow">
+      <div className="rounded-tv bg-white shadow">
         {loading ? (
           <div className="space-y-3 p-6">{[...Array(5)].map((_, i) => <div key={i} className="h-16 animate-pulse rounded-lg bg-gray-100" />)}</div>
         ) : error ? (

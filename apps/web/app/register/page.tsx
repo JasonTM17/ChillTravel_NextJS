@@ -93,25 +93,25 @@ export default function SignUpPage() {
       <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <CommerceSurface>
           <div className="flex items-center gap-3">
-            <div className="rounded-2xl bg-[#eef7ff] p-3 text-[#0277d4]">
+            <div className="rounded-tv bg-tv-blue-light p-3 text-tv-blue">
               <UserPlus size={22} aria-hidden="true" />
             </div>
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">Tài khoản mới</p>
-              <h2 className="text-2xl font-black">Tạo tài khoản để khám phá</h2>
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">Tài khoản mới</p>
+              <h2 className="text-2xl font-bold">Tạo tài khoản để khám phá</h2>
             </div>
           </div>
 
           {/* Error banner */}
           {error && (
-            <div className="mt-4 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            <div className="mt-4 flex items-start gap-3 rounded-tv border border-red-200 bg-red-50 p-4 text-sm text-red-700">
               <AlertCircle size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
               <p className="font-bold">{error}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="mt-6 grid gap-4 md:grid-cols-2" noValidate>
-            <label className="grid gap-2 text-sm font-bold text-[#476273]">
+            <label className="grid gap-2 text-sm font-bold text-tv-ink-3">
               Họ và tên
               <input
                 name="fullName"
@@ -120,7 +120,7 @@ export default function SignUpPage() {
                 onChange={handleChange}
                 autoComplete="name"
                 placeholder="Nguyễn Văn A"
-                className="rounded-2xl border border-[#d9ecfb] bg-[#f7fbff] px-4 py-3 font-black text-[#071827] outline-none focus:border-[#0277d4] aria-[invalid=true]:border-red-400"
+                className="rounded-tv border border-tv-border bg-tv-bg px-4 py-3 font-bold text-tv-ink outline-none focus:border-tv-blue aria-[invalid=true]:border-red-400"
                 aria-invalid={!!fieldErrors.fullName}
                 aria-describedby={fieldErrors.fullName ? "fullName-error" : undefined}
               />
@@ -129,7 +129,7 @@ export default function SignUpPage() {
               )}
             </label>
 
-            <label className="grid gap-2 text-sm font-bold text-[#476273]">
+            <label className="grid gap-2 text-sm font-bold text-tv-ink-3">
               Email
               <input
                 name="email"
@@ -138,7 +138,7 @@ export default function SignUpPage() {
                 onChange={handleChange}
                 autoComplete="email"
                 placeholder="ban@example.com"
-                className="rounded-2xl border border-[#d9ecfb] bg-[#f7fbff] px-4 py-3 font-black text-[#071827] outline-none focus:border-[#0277d4] aria-[invalid=true]:border-red-400"
+                className="rounded-tv border border-tv-border bg-tv-bg px-4 py-3 font-bold text-tv-ink outline-none focus:border-tv-blue aria-[invalid=true]:border-red-400"
                 aria-invalid={!!fieldErrors.email}
                 aria-describedby={fieldErrors.email ? "email-error" : undefined}
               />
@@ -147,7 +147,7 @@ export default function SignUpPage() {
               )}
             </label>
 
-            <label className="grid gap-2 text-sm font-bold text-[#476273]">
+            <label className="grid gap-2 text-sm font-bold text-tv-ink-3">
               Mật khẩu
               <input
                 name="password"
@@ -156,7 +156,7 @@ export default function SignUpPage() {
                 onChange={handleChange}
                 autoComplete="new-password"
                 placeholder="Ít nhất 8 ký tự"
-                className="rounded-2xl border border-[#d9ecfb] bg-[#f7fbff] px-4 py-3 font-black text-[#071827] outline-none focus:border-[#0277d4] aria-[invalid=true]:border-red-400"
+                className="rounded-tv border border-tv-border bg-tv-bg px-4 py-3 font-bold text-tv-ink outline-none focus:border-tv-blue aria-[invalid=true]:border-red-400"
                 aria-invalid={!!fieldErrors.password}
                 aria-describedby={fieldErrors.password ? "password-error" : undefined}
               />
@@ -165,8 +165,8 @@ export default function SignUpPage() {
               )}
             </label>
 
-            <label className="grid gap-2 text-sm font-bold text-[#476273]">
-              Số điện thoại <span className="font-normal text-[#6f8594]">(tuỳ chọn)</span>
+            <label className="grid gap-2 text-sm font-bold text-tv-ink-3">
+              Số điện thoại <span className="font-normal text-tv-ink-3">(tuỳ chọn)</span>
               <input
                 name="phone"
                 type="tel"
@@ -174,22 +174,22 @@ export default function SignUpPage() {
                 onChange={handleChange}
                 autoComplete="tel"
                 placeholder="0912 345 678"
-                className="rounded-2xl border border-[#d9ecfb] bg-[#f7fbff] px-4 py-3 font-black text-[#071827] outline-none focus:border-[#0277d4]"
+                className="rounded-tv border border-tv-border bg-tv-bg px-4 py-3 font-bold text-tv-ink outline-none focus:border-tv-blue"
               />
             </label>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="rounded-2xl bg-[#ff6d1a] px-5 py-3 font-black text-white transition hover:bg-[#e85e0f] disabled:cursor-not-allowed disabled:opacity-60 md:col-span-2"
+              className="tv-btn-orange w-full rounded-tv py-3 disabled:cursor-not-allowed disabled:opacity-60 md:col-span-2"
             >
               {isLoading ? "Đang tạo tài khoản…" : "Tạo tài khoản"}
             </button>
           </form>
 
-          <p className="mt-4 text-sm leading-6 text-[#476273]">
+          <p className="mt-4 text-sm leading-6 text-tv-ink-3">
             Đã có tài khoản?{" "}
-            <Link href="/login" className="font-black text-[#0277d4] hover:underline">
+            <Link href="/login" className="font-bold text-tv-blue hover:underline">
               Đăng nhập
             </Link>
           </p>
@@ -198,7 +198,7 @@ export default function SignUpPage() {
         <aside className="space-y-4">
           <TrustBanner compact />
           <CommerceSurface>
-            <h2 className="text-xl font-black">Sau khi đăng ký</h2>
+            <h2 className="text-xl font-bold">Sau khi đăng ký</h2>
             <div className="mt-4 flex flex-wrap gap-2">
               {["Đặt tour", "Yêu thích", "Lịch trình", "Đánh giá"].map((item) => (
                 <StatusPill key={item} tone="teal">{item}</StatusPill>
@@ -210,13 +210,13 @@ export default function SignUpPage() {
                 "Lưu điểm đến yêu thích",
                 "Viết đánh giá sau chuyến đi",
               ].map((item) => (
-                <li key={item} className="flex items-start gap-2 text-sm font-bold text-[#476273]">
+                <li key={item} className="flex items-start gap-2 text-sm font-bold text-tv-ink-3">
                   <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[#0f8b7b]" aria-hidden="true" />
                   {item}
                 </li>
               ))}
             </ul>
-            <Link href="/login" className="mt-4 inline-flex font-black text-[#0277d4]">
+            <Link href="/login" className="mt-4 inline-flex font-bold text-tv-blue">
               Đã có tài khoản
             </Link>
           </CommerceSurface>

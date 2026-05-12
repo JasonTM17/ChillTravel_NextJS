@@ -1,78 +1,90 @@
-"use client";
+﻿"use client";
 
 /**
- * Booking Confirmation page — /booking/success/[code]
- * Req 10, 12, 45 | Design §7
+ * Mock Payment page — /booking/payment
+ * Req 12, 45 | Design §7
  *
- * URL params: code (booking code, e.g. WV-20260101-ABCDEF)
- * Shows: booking code (QR demo), tour name, dates, guests, total price, payment status.
+ * URL params: bookingId
+ * Flow: show booking summary → select payment method → click "Thanh toán demo"
+ *       → POST /payments/mock-checkout → POST /payments/mock-callback → navigate to /booking/success/[code]
  */
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   AlertCircle,
-  BadgeCheck,
+  Building2,
   CalendarDays,
-  CheckCircle2,
   ChevronRight,
-  Home,
+  CreditCard,
+  Landmark,
   Loader2,
+  LockKeyhole,
   QrCode,
   ShieldAlert,
   ShieldCheck,
-  Ticket,
+  Smartphone,
   Users,
+  WalletCards,
 } from "lucide-react";
 import { AuthGuard } from "@/components/auth-guard";
 import { bookingApi, type Booking } from "@/lib/api/booking.api";
+import { paymentApi } from "@/lib/api/payment.api";
 import { CommerceSurface, StatusPill } from "@/components/commerce-primitives";
 import { PageShell } from "@/components/page-shell";
 import { formatVnd } from "@/lib/utils";
 import { demoPaymentWarning, formatDateVi } from "@/lib/vietnamese";
 
 // ---------------------------------------------------------------------------
-// Status helpers
+// Payment methods
 // ---------------------------------------------------------------------------
 
-function bookingStatusLabel(status: string): string {
-  const labels: Record<string, string> = {
-    PENDING: "Chờ xác nhận",
-    CONFIRMED: "Đã xác nhận",
-    CANCELLED: "Đã hủy",
-    COMPLETED: "Hoàn thành",
-    REFUNDED: "Đã hoàn tiền (demo)",
-  };
-  return labels[status.toUpperCase()] ?? status;
+interface PaymentMethod {
+  id: string;
+  label: string;
+  description: string;
+  icon: React.ElementType;
 }
 
-function paymentStatusLabel(status: string): string {
-  const labels: Record<string, string> = {
-    UNPAID: "Chưa thanh toán",
-    PAID: "Đã thanh toán",
-    FAILED: "Thanh toán thất bại",
-    REFUNDED: "Đã hoàn tiền (demo)",
-  };
-  return labels[status.toUpperCase()] ?? status;
-}
-
-type StatusTone = "blue" | "orange" | "teal" | "gray";
-
-function paymentStatusTone(status: string): StatusTone {
-  const s = status.toUpperCase();
-  if (s === "PAID") return "teal";
-  if (s === "FAILED") return "gray";
-  if (s === "UNPAID") return "orange";
-  return "blue";
-}
-
-function bookingStatusTone(status: string): StatusTone {
-  const s = status.toUpperCase();
-  if (s === "CONFIRMED") return "teal";
-  if (s === "COMPLETED") return "blue";
-  if (s === "CANCELLED") return "gray";
-  return "orange";
-}
+const PAYMENT_METHODS: PaymentMethod[] = [
+  {
+    id: "MOCK_CARD",
+    label: "Thẻ demo",
+    description: "Token giả lập — không nhập số thẻ thật",
+    icon: CreditCard,
+  },
+  {
+    id: "MOCK_MOMO",
+    label: "MoMo demo",
+    description: "Ví điện tử local/mô phỏng",
+    icon: Smartphone,
+  },
+  {
+    id: "MOCK_VNPAY",
+    label: "VNPay demo",
+    description: "Cổng thanh toán thử nghiệm giả lập",
+    icon: WalletCards,
+  },
+  {
+    id: "MOCK_ZALOPAY",
+    label: "ZaloPay demo",
+    description: "Không gọi nhà cung cấp thật",
+    icon: QrCode,
+  },
+  {
+    id: "MOCK_BANK",
+    label: "Chuyển khoản demo",
+    description: "Không tạo giao dịch ngân hàng",
+    icon: Building2,
+  },
+  {
+    id: "MOCK_CASH",
+    label: "Tiền mặt khi đến",
+    description: "Trạng thái xác nhận mẫu",
+    icon: Landmark,
+  },
+];
 
 // ---------------------------------------------------------------------------
 // Demo banner
@@ -80,13 +92,14 @@ function bookingStatusTone(status: string): StatusTone {
 
 function DemoBanner() {
   return (
-    <div className="rounded-2xl border border-[#f0b3ad] bg-[#ffe4e1] p-4 text-[#9f1239]">
+    <div className="rounded-tv border border-[#f0b3ad] bg-[#ffe4e1] p-4 text-[#9f1239]">
       <div className="flex items-start gap-3">
-        <ShieldAlert className="mt-0.5 shrink-0" size={20} aria-hidden="true" />
+        <ShieldAlert className="mt-0.5 shrink-0" size={22} aria-hidden="true" />
         <div>
-          <p className="font-black">{demoPaymentWarning}</p>
+          <p className="text-lg font-bold">{demoPaymentWarning}</p>
           <p className="mt-1 text-sm font-bold text-[#9f1239]/80">
-            Đây là xác nhận demo. Không phát sinh giao dịch thật.
+            Mọi nhà cung cấp trong trang này là local/mô phỏng/thử nghiệm. Không phát sinh giao
+            dịch thật, không lưu số thẻ.
           </p>
         </div>
       </div>
@@ -109,19 +122,19 @@ function Stepper({ current }: { current: number }) {
         return (
           <li key={step} className="flex items-center gap-2">
             <span
-              className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black ${
+              className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                 active
-                  ? "bg-[#0277d4] text-white ring-4 ring-[#b8ddff]"
+                  ? "bg-[tv-blue] text-white ring-4 ring-[#b8ddff]"
                   : done
                   ? "bg-[#0f8b7b] text-white"
-                  : "bg-[#edf4fa] text-[#8b99a7]"
+                  : "bg-[tv-border] text-[#8b99a7]"
               }`}
             >
-              {done ? <CheckCircle2 size={14} aria-hidden="true" /> : i + 1}
+              {i + 1}
             </span>
             <span
-              className={`hidden font-black sm:inline ${
-                active ? "text-[#0277d4]" : done ? "text-[#0f8b7b]" : "text-[#8b99a7]"
+              className={`hidden font-bold sm:inline ${
+                active ? "text-[tv-blue]" : done ? "text-[#0f8b7b]" : "text-[#8b99a7]"
               }`}
             >
               {step}
@@ -137,24 +150,52 @@ function Stepper({ current }: { current: number }) {
 }
 
 // ---------------------------------------------------------------------------
-// QR Demo card
+// Booking summary card
 // ---------------------------------------------------------------------------
 
-function QrDemoCard({ bookingCode }: { bookingCode: string }) {
+function BookingSummaryCard({ booking }: { booking: Booking }) {
   return (
-    <div className="rounded-2xl border border-[#d9ecfb] bg-[#eef7ff] p-6 text-center">
-      <div className="mx-auto grid h-28 w-28 place-items-center rounded-2xl bg-white shadow-[0_8px_24px_rgba(2,68,120,0.12)] text-[#0277d4]">
-        <QrCode size={64} aria-hidden="true" />
+    <CommerceSurface>
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
+        Tóm tắt đặt tour
+      </p>
+      <div className="mt-4 space-y-3">
+        <div>
+          <p className="font-bold text-[tv-ink]">
+            {booking.tour?.title ?? `Tour #${booking.tourId}`}
+          </p>
+          <p className="mt-1 text-sm font-bold text-[tv-ink-3]">
+            Mã đặt tour: <span className="font-bold text-[tv-blue]">{booking.bookingCode}</span>
+          </p>
+        </div>
+
+        <div className="space-y-2 text-sm">
+          <div className="flex items-center gap-2 text-[tv-ink-3]">
+            <CalendarDays size={14} className="text-[tv-blue]" aria-hidden="true" />
+            <span>
+              Ngày đặt: {formatDateVi(new Date(booking.bookingDate))}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-[tv-ink-3]">
+            <Users size={14} className="text-[tv-blue]" aria-hidden="true" />
+            <span>{booking.numberOfGuests} khách</span>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          <StatusPill tone="orange">Chờ thanh toán</StatusPill>
+        </div>
+
+        <div className="border-t border-[tv-border] pt-3">
+          <div className="flex items-center justify-between">
+            <span className="font-bold text-[tv-ink]">Tổng thanh toán</span>
+            <span className="text-xl font-bold text-[tv-orange]">
+              {formatVnd(booking.totalPrice)}
+            </span>
+          </div>
+        </div>
       </div>
-      <h3 className="mt-4 text-lg font-black text-[#071827]">Vé điện tử demo</h3>
-      <p className="mt-2 text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">
-        Mã đặt tour
-      </p>
-      <p className="mt-1 text-2xl font-black text-[#071827] tracking-wider">{bookingCode}</p>
-      <p className="mt-3 text-xs leading-5 text-[#476273]">
-        Vé QR demo — không có giá trị thật. Xuất trình mã này khi check-in (demo).
-      </p>
-    </div>
+    </CommerceSurface>
   );
 }
 
@@ -162,67 +203,127 @@ function QrDemoCard({ bookingCode }: { bookingCode: string }) {
 // Main page content
 // ---------------------------------------------------------------------------
 
-function SuccessContent({ code }: { code: string }) {
-  const [booking, setBooking] = useState<Booking | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+function PaymentContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
+  const bookingId = searchParams.get("bookingId") ?? "";
+
+  const [booking, setBooking] = useState<Booking | null>(null);
+  const [bookingLoading, setBookingLoading] = useState(true);
+  const [bookingError, setBookingError] = useState<string | null>(null);
+
+  const [selectedMethod, setSelectedMethod] = useState<string>("MOCK_CARD");
+  const [paying, setPaying] = useState(false);
+  const [payError, setPayError] = useState<string | null>(null);
+
+  // Fetch booking by ID — we use bookingCode from the booking object
   useEffect(() => {
-    if (!code) {
-      setError("Thiếu mã đặt tour.");
-      setLoading(false);
+    if (!bookingId) {
+      setBookingError("Thiếu thông tin booking. Vui lòng quay lại.");
+      setBookingLoading(false);
       return;
     }
 
     let cancelled = false;
-    setLoading(true);
+    setBookingLoading(true);
 
+    // bookingId here is the booking's database id; we need to find it
+    // The API getByCode accepts bookingCode, but we have the id from the create response.
+    // We'll use listMine and find by id, or use getByCode if we stored the code.
+    // Since we navigate with bookingId (the DB id), we need to list and find.
     bookingApi
-      .getByCode(code)
+      .listMine({ page: 0, size: 50 })
       .then((res) => {
         if (cancelled) return;
         if (res.success) {
-          setBooking(res.data);
+          const found = res.data.items.find((b) => b.id === bookingId);
+          if (found) {
+            setBooking(found);
+          } else {
+            setBookingError("Không tìm thấy booking. Vui lòng kiểm tra lại.");
+          }
         } else {
-          setError("Không tìm thấy booking. Vui lòng kiểm tra lại.");
+          setBookingError("Không thể tải thông tin booking.");
         }
       })
       .catch(() => {
-        if (!cancelled) setError("Lỗi kết nối. Vui lòng thử lại.");
+        if (!cancelled) setBookingError("Lỗi kết nối. Vui lòng thử lại.");
       })
       .finally(() => {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) setBookingLoading(false);
       });
 
     return () => {
       cancelled = true;
     };
-  }, [code]);
+  }, [bookingId]);
+
+  async function handlePay() {
+    if (!booking) return;
+    setPaying(true);
+    setPayError(null);
+
+    try {
+      // Step 1: mock-checkout — pass bookingCode
+      const checkoutRes = await paymentApi.mockCheckout(booking.bookingCode);
+      if (!checkoutRes.success) {
+        setPayError(
+          (checkoutRes as { message?: string }).message ?? "Khởi tạo thanh toán thất bại."
+        );
+        setPaying(false);
+        return;
+      }
+
+      const { transactionCode, bookingCode } = checkoutRes.data;
+
+      // Step 2: mock-callback with SUCCESS
+      const callbackRes = await paymentApi.mockCallback({
+        transactionCode,
+        status: "SUCCESS",
+      });
+
+      if (!callbackRes.success) {
+        setPayError(
+          (callbackRes as { message?: string }).message ?? "Xác nhận thanh toán thất bại."
+        );
+        setPaying(false);
+        return;
+      }
+
+      // Step 3: navigate to success page
+      const code = callbackRes.data.bookingCode ?? bookingCode;
+      router.push(`/booking/success/${code}`);
+    } catch {
+      setPayError("Lỗi kết nối. Vui lòng thử lại.");
+      setPaying(false);
+    }
+  }
 
   // Loading
-  if (loading) {
+  if (bookingLoading) {
     return (
-      <PageShell eyebrow="Xác nhận đặt tour" title="Đang tải thông tin...">
+      <PageShell eyebrow="Thanh toán" title="Đang tải thông tin...">
         <div className="flex items-center justify-center py-20">
-          <Loader2 size={32} className="animate-spin text-[#0277d4]" aria-hidden="true" />
+          <Loader2 size={32} className="animate-spin text-[tv-blue]" aria-hidden="true" />
         </div>
       </PageShell>
     );
   }
 
   // Error
-  if (error || !booking) {
+  if (bookingError || !booking) {
     return (
-      <PageShell eyebrow="Xác nhận đặt tour" title="Không tìm thấy booking">
+      <PageShell eyebrow="Thanh toán" title="Không tìm thấy booking">
         <CommerceSurface>
           <div className="flex flex-col items-center gap-4 py-10 text-center">
             <AlertCircle size={40} className="text-red-400" aria-hidden="true" />
-            <p className="text-lg font-black text-red-600">
-              {error ?? "Không tìm thấy booking."}
+            <p className="text-lg font-bold text-red-600">
+              {bookingError ?? "Không tìm thấy booking."}
             </p>
             <Link
               href="/my-bookings"
-              className="rounded-2xl bg-[#0277d4] px-6 py-3 text-sm font-black text-white"
+              className="rounded-tv bg-[tv-blue] px-6 py-3 text-sm font-bold text-white"
             >
               Xem lịch sử booking
             </Link>
@@ -232,228 +333,125 @@ function SuccessContent({ code }: { code: string }) {
     );
   }
 
-  const isPaid = booking.paymentStatus?.toUpperCase() === "PAID";
-
   return (
-    <PageShell eyebrow="Xác nhận đặt tour" title="Đặt tour thành công!">
+    <PageShell eyebrow="Thanh toán demo" title="Xác nhận thanh toán">
       <div className="mb-6">
-        <Stepper current={2} />
+        <Stepper current={1} />
       </div>
 
       <DemoBanner />
 
-      {/* Success hero */}
-      <div className="mt-6 rounded-2xl border border-[#c3f0e0] bg-[#e7f8f5] p-6 text-center">
-        <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#0f8b7b] text-white">
-          <BadgeCheck size={36} aria-hidden="true" />
-        </div>
-        <h2 className="mt-4 text-2xl font-black text-[#071827]">
-          {isPaid ? "Thanh toán thành công!" : "Đặt tour thành công!"}
-        </h2>
-        <p className="mt-2 text-sm font-bold text-[#476273]">
-          {isPaid
-            ? "Booking của bạn đã được xác nhận. Kiểm tra email để nhận vé điện tử demo."
-            : "Booking đã được tạo. Vui lòng hoàn tất thanh toán để xác nhận chỗ."}
-        </p>
-      </div>
-
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
-        {/* Left — booking details */}
+        {/* Left — payment method selector */}
         <div className="space-y-6">
-          {/* Booking info */}
           <CommerceSurface>
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">
-                Chi tiết đặt tour
-              </p>
-              <div className="flex gap-2">
-                <StatusPill tone={bookingStatusTone(booking.status)}>
-                  {bookingStatusLabel(booking.status)}
-                </StatusPill>
-                <StatusPill tone={paymentStatusTone(booking.paymentStatus)}>
-                  {paymentStatusLabel(booking.paymentStatus)}
-                </StatusPill>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="text-xl font-bold">Phương thức thanh toán</h2>
+                <p className="mt-1 text-sm text-[tv-ink-3]">
+                  Chọn phương thức demo. Không nhập số thẻ thật.
+                </p>
               </div>
+              <span className="inline-flex rounded-full bg-[#e7f8f5] px-3 py-1 text-xs font-bold text-[#0f8b7b]">
+                Local / mô phỏng / thử nghiệm
+              </span>
             </div>
 
-            <div className="mt-5 space-y-4">
-              {/* Tour name */}
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.12em] text-[#6f8594]">
-                  Tour
-                </p>
-                <p className="mt-1 text-lg font-black text-[#071827]">
-                  {booking.tour?.title ?? `Tour #${booking.tourId}`}
-                </p>
-                {booking.tour && (
-                  <p className="mt-0.5 text-sm font-bold text-[#476273]">
-                    {booking.tour.durationDays} ngày {booking.tour.durationNights} đêm
-                  </p>
-                )}
-              </div>
-
-              {/* Booking code */}
-              <div className="flex items-center gap-3 rounded-xl bg-[#eef7ff] px-4 py-3">
-                <Ticket size={18} className="text-[#0277d4]" aria-hidden="true" />
-                <div>
-                  <p className="text-xs font-black uppercase tracking-[0.12em] text-[#6f8594]">
-                    Mã đặt tour
-                  </p>
-                  <p className="font-black text-[#0277d4] tracking-wider">{booking.bookingCode}</p>
-                </div>
-              </div>
-
-              {/* Date & guests */}
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="flex items-center gap-2 text-sm text-[#476273]">
-                  <CalendarDays size={16} className="text-[#0277d4]" aria-hidden="true" />
-                  <span>
-                    Ngày đặt: <span className="font-black text-[#071827]">{formatDateVi(new Date(booking.bookingDate))}</span>
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-[#476273]">
-                  <Users size={16} className="text-[#0277d4]" aria-hidden="true" />
-                  <span>
-                    Số khách: <span className="font-black text-[#071827]">{booking.numberOfGuests} người</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Contact info */}
-              <div className="rounded-xl border border-[#d9ecfb] bg-[#f7fbff] p-4 space-y-1 text-sm">
-                <p className="text-xs font-black uppercase tracking-[0.12em] text-[#6f8594] mb-2">
-                  Thông tin liên hệ
-                </p>
-                <p className="font-bold text-[#071827]">{booking.contactName}</p>
-                <p className="text-[#476273]">{booking.contactEmail}</p>
-                <p className="text-[#476273]">{booking.contactPhone}</p>
-              </div>
-
-              {/* Guest list */}
-              {booking.guests && booking.guests.length > 0 && (
-                <div>
-                  <p className="text-xs font-black uppercase tracking-[0.12em] text-[#6f8594] mb-2">
-                    Danh sách khách
-                  </p>
-                  <div className="space-y-2">
-                    {booking.guests.map((guest, i) => (
-                      <div
-                        key={guest.id}
-                        className="flex items-center gap-2 rounded-xl bg-[#f7fbff] px-3 py-2 text-sm"
-                      >
-                        <CheckCircle2 size={14} className="text-[#0f8b7b]" aria-hidden="true" />
-                        <span className="font-bold text-[#071827]">
-                          Khách {i + 1}: {guest.fullName}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Special request */}
-              {booking.specialRequest && (
-                <div className="rounded-xl border border-[#d9ecfb] bg-[#f7fbff] p-3 text-sm">
-                  <p className="text-xs font-black uppercase tracking-[0.12em] text-[#6f8594] mb-1">
-                    Yêu cầu đặc biệt
-                  </p>
-                  <p className="text-[#476273]">{booking.specialRequest}</p>
-                </div>
-              )}
+            <div className="mt-5 grid gap-3">
+              {PAYMENT_METHODS.map(({ id, label, description, icon: Icon }) => {
+                const active = selectedMethod === id;
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => setSelectedMethod(id)}
+                    className={`flex items-center gap-3 rounded-tv border p-4 text-left transition ${
+                      active
+                        ? "border-[tv-blue] bg-[tv-blue-light] ring-2 ring-[tv-blue]/10"
+                        : "border-[tv-border] bg-white hover:border-[tv-blue] hover:bg-[tv-bg]"
+                    }`}
+                    aria-pressed={active}
+                  >
+                    <span
+                      className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border ${
+                        active ? "border-[tv-blue] bg-[tv-blue]" : "border-[#8b99a7]"
+                      }`}
+                    >
+                      {active && <span className="h-2 w-2 rounded-full bg-white" />}
+                    </span>
+                    <Icon
+                      size={24}
+                      className={active ? "text-[tv-blue]" : "text-[tv-ink-3]"}
+                      aria-hidden="true"
+                    />
+                    <span className="min-w-0">
+                      <span className="block font-bold">{label}</span>
+                      <span className="mt-0.5 block text-sm text-[tv-ink-3]">{description}</span>
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </CommerceSurface>
 
-          {/* Payment info */}
-          {booking.payment && (
-            <CommerceSurface>
-              <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">
-                Thông tin thanh toán
+          {/* Pay error */}
+          {payError && (
+            <div className="rounded-tv border border-red-200 bg-red-50 p-4">
+              <p className="flex items-center gap-2 text-sm font-bold text-red-600">
+                <AlertCircle size={16} aria-hidden="true" />
+                {payError}
               </p>
-              <div className="mt-4 space-y-3 text-sm">
-                <div className="flex items-center justify-between">
-                  <span className="text-[#476273]">Nhà cung cấp</span>
-                  <span className="font-black text-[#071827]">
-                    {booking.payment.provider} (demo)
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-[#476273]">Trạng thái</span>
-                  <StatusPill tone={paymentStatusTone(booking.payment.status)}>
-                    {paymentStatusLabel(booking.payment.status)}
-                  </StatusPill>
-                </div>
-                {booking.payment.transactionCode && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#476273]">Mã giao dịch</span>
-                    <span className="font-black text-[#071827] text-xs tracking-wider">
-                      {booking.payment.transactionCode}
-                    </span>
-                  </div>
-                )}
-                {booking.payment.paidAt && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#476273]">Thời gian thanh toán</span>
-                    <span className="font-black text-[#071827]">
-                      {formatDateVi(new Date(booking.payment.paidAt))}
-                    </span>
-                  </div>
-                )}
-                <div className="flex items-center justify-between border-t border-[#edf4fa] pt-3">
-                  <span className="font-black text-[#071827]">Tổng thanh toán</span>
-                  <span className="text-xl font-black text-[#ff5f12]">
-                    {formatVnd(booking.totalPrice)}
-                  </span>
-                </div>
-              </div>
-            </CommerceSurface>
+            </div>
           )}
-
-          {/* Actions */}
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Link
-              href="/my-bookings"
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl border border-[#0277d4] bg-[#eef7ff] px-5 py-3 font-black text-[#0277d4] transition hover:bg-[#d9ecfb]"
-            >
-              <Ticket size={18} aria-hidden="true" />
-              Xem lịch sử booking
-            </Link>
-            <Link
-              href="/"
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl border border-[#d9ecfb] bg-white px-5 py-3 font-black text-[#476273] transition hover:bg-[#f7fbff]"
-            >
-              <Home size={18} aria-hidden="true" />
-              Về trang chủ
-            </Link>
-          </div>
         </div>
 
-        {/* Right — QR demo + summary */}
+        {/* Right — summary + CTA */}
         <aside className="h-fit space-y-4 lg:sticky lg:top-24">
-          <QrDemoCard bookingCode={booking.bookingCode} />
+          <BookingSummaryCard booking={booking} />
 
-          {/* Price summary */}
+          {/* Pay button */}
           <CommerceSurface>
-            <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">
-              Tóm tắt giá
-            </p>
-            <div className="mt-4 space-y-2 text-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-[#476273]">{booking.numberOfGuests} khách</span>
-                <span className="font-black text-[#071827]">{formatVnd(booking.totalPrice)}</span>
-              </div>
-              <div className="flex items-center justify-between border-t border-[#edf4fa] pt-2">
-                <span className="font-black text-[#071827]">Tổng cộng</span>
-                <span className="text-xl font-black text-[#ff5f12]">
-                  {formatVnd(booking.totalPrice)}
-                </span>
-              </div>
+            <button
+              type="button"
+              onClick={handlePay}
+              disabled={paying}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-tv bg-[tv-orange] px-4 py-4 font-bold text-white shadow-tv-card transition hover:bg-[tv-orange-dark] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {paying ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" aria-hidden="true" />
+                  Đang xử lý thanh toán...
+                </>
+              ) : (
+                <>
+                  <LockKeyhole size={18} aria-hidden="true" />
+                  Thanh toán demo
+                  <ChevronRight size={18} aria-hidden="true" />
+                </>
+              )}
+            </button>
+
+            <div className="mt-4 flex items-center justify-center gap-2 rounded-full bg-[#e7f8f5] px-3 py-2 text-sm font-bold text-[#0f8b7b]">
+              <ShieldCheck size={16} aria-hidden="true" />
+              {demoPaymentWarning}
             </div>
+
+            {paying && (
+              <p className="mt-3 text-center text-xs font-bold text-[tv-ink-3]">
+                Đang mô phỏng giao dịch... Vui lòng không đóng trang.
+              </p>
+            )}
           </CommerceSurface>
 
-          {/* Demo trust badge */}
-          <div className="flex items-center justify-center gap-2 rounded-full bg-[#e7f8f5] px-4 py-3 text-sm font-black text-[#0f8b7b]">
-            <ShieldCheck size={16} aria-hidden="true" />
-            {demoPaymentWarning}
+          {/* QR preview */}
+          <div className="rounded-tv border border-[tv-border] bg-[tv-blue-light] p-5 text-center">
+            <div className="mx-auto grid h-20 w-20 place-items-center rounded-tv bg-white text-[tv-blue]">
+              <QrCode size={48} aria-hidden="true" />
+            </div>
+            <h3 className="mt-3 text-base font-bold">Vé QR demo</h3>
+            <p className="mt-1 text-xs leading-5 text-[tv-ink-3]">
+              Vé điện tử demo sẽ được tạo sau khi xác nhận thanh toán.
+            </p>
           </div>
         </aside>
       </div>
@@ -462,22 +460,23 @@ function SuccessContent({ code }: { code: string }) {
 }
 
 // ---------------------------------------------------------------------------
-// Export with AuthGuard
+// Export with AuthGuard + Suspense
 // ---------------------------------------------------------------------------
 
-function SuccessPageInner({ params }: { params: Promise<{ code: string }> }) {
-  const { code } = use(params);
-  return <SuccessContent code={code} />;
+function PaymentFallback() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[tv-blue]" />
+    </div>
+  );
 }
 
-export default function BookingSuccessPage({
-  params,
-}: {
-  params: Promise<{ code: string }>;
-}) {
+export default function BookingPaymentPage() {
   return (
     <AuthGuard>
-      <SuccessPageInner params={params} />
+      <Suspense fallback={<PaymentFallback />}>
+        <PaymentContent />
+      </Suspense>
     </AuthGuard>
   );
 }

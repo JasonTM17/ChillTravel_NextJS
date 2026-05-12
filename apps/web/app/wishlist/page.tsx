@@ -72,7 +72,7 @@ function FavoriteSkeleton() {
       {[1, 2, 3].map((i) => (
         <div
           key={i}
-          className="rounded-2xl border border-[#d9ecfb] bg-white h-40"
+          className="rounded-tv border border-tv-border bg-white h-40"
         />
       ))}
     </div>
@@ -111,7 +111,7 @@ function FavoriteCard({
   }
 
   return (
-    <div className="group overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_12px_30px_rgba(2,68,120,0.06)]">
+    <div className="group overflow-hidden rounded-tv border border-tv-border bg-white shadow-tv-card">
       <div className="flex">
         {imageUrl ? (
           <div
@@ -121,8 +121,8 @@ function FavoriteCard({
             aria-label={name}
           />
         ) : (
-          <div className="h-32 w-32 shrink-0 bg-[#eef7ff] flex items-center justify-center">
-            <Heart size={28} className="text-[#d9ecfb]" aria-hidden="true" />
+          <div className="h-32 w-32 shrink-0 bg-tv-blue-light flex items-center justify-center">
+            <Heart size={28} className="text-tv-border" aria-hidden="true" />
           </div>
         )}
         <div className="flex flex-1 flex-col justify-between p-4">
@@ -132,12 +132,12 @@ function FavoriteCard({
                 {entry.itemType === "TOUR" ? "Tour" : "Điểm đến"}
               </StatusPill>
               <Link href={href}>
-                <h3 className="mt-2 font-black text-[#071827] group-hover:text-[#0277d4]">
+                <h3 className="mt-2 font-bold text-tv-ink group-hover:text-tv-blue">
                   {name}
                 </h3>
               </Link>
               {price !== null && (
-                <p className="mt-1 text-sm font-black text-[#ff5f12]">
+                <p className="mt-1 text-sm font-bold text-tv-orange">
                   {formatVnd(price)}
                   {entry.itemType === "DESTINATION" && " / ngày"}
                 </p>
@@ -147,7 +147,7 @@ function FavoriteCard({
               type="button"
               onClick={handleRemove}
               disabled={removing}
-              className="shrink-0 rounded-xl border border-[#d9ecfb] bg-white p-2 text-[#6f8594] hover:border-red-200 hover:bg-red-50 hover:text-red-500 disabled:opacity-60"
+              className="shrink-0 rounded-tv-sm border border-tv-border bg-white p-2 text-tv-ink-3 hover:border-red-200 hover:bg-red-50 hover:text-red-500 disabled:opacity-60"
               aria-label={`Xóa ${name} khỏi danh sách yêu thích`}
             >
               <X size={16} aria-hidden="true" />
@@ -156,14 +156,14 @@ function FavoriteCard({
           <div className="mt-2 flex items-center gap-2">
             <Link
               href={href}
-              className="rounded-xl bg-[#0277d4] px-4 py-2 text-xs font-black text-white"
+              className="rounded-tv-sm bg-tv-blue px-4 py-2 text-xs font-bold text-white"
             >
               Xem chi tiết
             </Link>
             <Heart
               size={16}
-              fill="#ff6d1a"
-              className="text-[#ff6d1a]"
+              fill="#FF6D00"
+              className="text-tv-orange"
               aria-hidden="true"
             />
           </div>
@@ -226,7 +226,7 @@ function FavoriteContent() {
               <button
                 type="button"
                 onClick={fetchFavorites}
-                className="mt-3 rounded-xl bg-[#0277d4] px-4 py-2 text-sm font-black text-white"
+                className="mt-3 rounded-tv-sm bg-tv-blue px-4 py-2 text-sm font-bold text-white"
               >
                 Thử lại
               </button>
@@ -236,26 +236,26 @@ function FavoriteContent() {
               <div className="flex flex-col items-center gap-4 py-10 text-center">
                 <Heart
                   size={40}
-                  className="text-[#d9ecfb]"
+                  className="text-tv-border"
                   aria-hidden="true"
                 />
-                <p className="text-lg font-black text-[#071827]">
+                <p className="text-lg font-bold text-tv-ink">
                   Danh sách yêu thích trống
                 </p>
-                <p className="text-sm text-[#476273]">
+                <p className="text-sm text-tv-ink-3">
                   Nhấn vào biểu tượng trái tim trên các tour và điểm đến để lưu
                   vào đây.
                 </p>
                 <div className="flex gap-3">
                   <Link
                     href="/tours"
-                    className="rounded-2xl bg-[#0277d4] px-6 py-3 text-sm font-black text-white"
+                    className="rounded-tv bg-tv-blue px-6 py-3 text-sm font-bold text-white"
                   >
                     Khám phá tour
                   </Link>
                   <Link
                     href="/destinations"
-                    className="rounded-2xl border border-[#d9ecfb] bg-white px-6 py-3 text-sm font-black text-[#0277d4]"
+                    className="rounded-tv border border-tv-border bg-white px-6 py-3 text-sm font-bold text-tv-blue"
                   >
                     Điểm đến
                   </Link>
@@ -271,7 +271,7 @@ function FavoriteContent() {
                       <StatusPill tone="blue">
                         {tours.length} tour đã lưu
                       </StatusPill>
-                      <h2 className="mt-2 text-xl font-black">Tour yêu thích</h2>
+                      <h2 className="mt-2 text-xl font-bold">Tour yêu thích</h2>
                     </div>
                   </div>
                   <div className="space-y-3">
@@ -293,7 +293,7 @@ function FavoriteContent() {
                       <StatusPill tone="teal">
                         {destinations.length} điểm đến đã lưu
                       </StatusPill>
-                      <h2 className="mt-2 text-xl font-black">
+                      <h2 className="mt-2 text-xl font-bold">
                         Điểm đến yêu thích
                       </h2>
                     </div>
@@ -316,7 +316,7 @@ function FavoriteContent() {
         <aside className="h-fit space-y-4 lg:sticky lg:top-24">
           <TrustBanner compact />
           <CommerceSurface>
-            <h2 className="text-xl font-black">Hành động nhanh</h2>
+            <h2 className="text-xl font-bold">Hành động nhanh</h2>
             <div className="mt-4 space-y-3">
               {(
                 [
@@ -344,16 +344,16 @@ function FavoriteContent() {
               ).map(([Icon, title, body]) => (
                 <div
                   key={String(title)}
-                  className="flex gap-3 rounded-2xl bg-[#f7fbff] p-4"
+                  className="flex gap-3 rounded-tv bg-tv-bg p-4"
                 >
                   <Icon
-                    className="mt-0.5 shrink-0 text-[#0277d4]"
+                    className="mt-0.5 shrink-0 text-tv-blue"
                     size={20}
                     aria-hidden="true"
                   />
                   <div>
-                    <p className="font-black">{String(title)}</p>
-                    <p className="mt-1 text-sm leading-6 text-[#476273]">
+                    <p className="font-bold">{String(title)}</p>
+                    <p className="mt-1 text-sm leading-6 text-tv-ink-3">
                       {String(body)}
                     </p>
                   </div>

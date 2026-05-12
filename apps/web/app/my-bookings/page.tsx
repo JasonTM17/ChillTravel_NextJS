@@ -73,7 +73,7 @@ function BookingSkeleton() {
       {[1, 2, 3].map((i) => (
         <div
           key={i}
-          className="rounded-2xl border border-[#d9ecfb] bg-white p-5 h-28"
+          className="tv-card h-28 p-5"
         />
       ))}
     </div>
@@ -116,11 +116,11 @@ function BookingRow({
   }
 
   return (
-    <div className="rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_12px_30px_rgba(2,68,120,0.06)]">
+    <div className="tv-card p-5">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex-1 space-y-2">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-black text-[#0277d4]">
+            <span className="font-bold text-tv-blue">
               {booking.bookingCode}
             </span>
             <StatusPill tone={bookingStatusTone(booking.status)}>
@@ -130,16 +130,16 @@ function BookingRow({
               {paymentStatusLabel(booking.paymentStatus)}
             </StatusPill>
           </div>
-          <p className="font-black text-[#071827]">
+          <p className="font-bold text-tv-ink">
             {booking.tour?.title ?? `Tour #${booking.tourId}`}
           </p>
-          <div className="flex flex-wrap gap-4 text-sm text-[#476273]">
+          <div className="flex flex-wrap gap-4 text-sm text-tv-ink-3">
             <span className="flex items-center gap-1">
               <CalendarDays size={14} aria-hidden="true" />
               {new Date(booking.bookingDate).toLocaleDateString("vi-VN")}
             </span>
             <span>{booking.numberOfGuests} khách</span>
-            <span className="font-black text-[#ff5f12]">
+            <span className="font-bold text-tv-orange">
               {formatVnd(booking.totalPrice)}
             </span>
           </div>
@@ -150,14 +150,14 @@ function BookingRow({
               type="button"
               onClick={handleCancel}
               disabled={cancelling}
-              className="rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm font-black text-red-600 hover:bg-red-100 disabled:opacity-60"
+              className="rounded-tv-sm border border-red-200 bg-red-50 px-4 py-2 text-sm font-bold text-red-600 hover:bg-red-100 disabled:opacity-60"
             >
               {cancelling ? "Đang hủy..." : "Hủy booking"}
             </button>
           )}
           <Link
             href={`/bookings/${booking.bookingCode}`}
-            className="flex items-center gap-1 rounded-xl bg-[#0277d4] px-4 py-2 text-sm font-black text-white"
+            className="flex items-center gap-1 rounded-tv-sm bg-tv-blue px-4 py-2 text-sm font-bold text-white"
           >
             Chi tiết
             <ChevronRight size={16} aria-hidden="true" />
@@ -225,7 +225,7 @@ function MyBookingsContent() {
               <button
                 type="button"
                 onClick={() => fetchBookings(page)}
-                className="mt-3 rounded-xl bg-[#0277d4] px-4 py-2 text-sm font-black text-white"
+                className="mt-3 rounded-tv-sm bg-tv-blue px-4 py-2 text-sm font-bold text-white"
               >
                 Thử lại
               </button>
@@ -233,16 +233,16 @@ function MyBookingsContent() {
           ) : bookings.length === 0 ? (
             <CommerceSurface>
               <div className="flex flex-col items-center gap-4 py-10 text-center">
-                <Ticket size={40} className="text-[#d9ecfb]" aria-hidden="true" />
-                <p className="text-lg font-black text-[#071827]">
+                <Ticket size={40} className="text-tv-border" aria-hidden="true" />
+                <p className="text-lg font-bold text-tv-ink">
                   Bạn chưa có booking nào
                 </p>
-                <p className="text-sm text-[#476273]">
+                <p className="text-sm text-tv-ink-3">
                   Khám phá các tour hấp dẫn và đặt chuyến đi đầu tiên của bạn.
                 </p>
                 <Link
                   href="/tours"
-                  className="rounded-2xl bg-[#0277d4] px-6 py-3 text-sm font-black text-white"
+                  className="rounded-tv bg-tv-blue px-6 py-3 text-sm font-bold text-white"
                 >
                   Khám phá tour
                 </Link>
@@ -265,18 +265,18 @@ function MyBookingsContent() {
                     type="button"
                     onClick={() => setPage((p) => Math.max(0, p - 1))}
                     disabled={page === 0}
-                    className="rounded-xl border border-[#d9ecfb] bg-white px-4 py-2 text-sm font-black text-[#0277d4] disabled:opacity-40"
+                    className="rounded-tv-sm border border-tv-border bg-white px-4 py-2 text-sm font-bold text-tv-blue disabled:opacity-40"
                   >
                     Trước
                   </button>
-                  <span className="text-sm font-bold text-[#476273]">
+                  <span className="text-sm font-bold text-tv-ink-3">
                     Trang {page + 1} / {totalPages}
                   </span>
                   <button
                     type="button"
                     onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
                     disabled={page >= totalPages - 1}
-                    className="rounded-xl border border-[#d9ecfb] bg-white px-4 py-2 text-sm font-black text-[#0277d4] disabled:opacity-40"
+                    className="rounded-tv-sm border border-tv-border bg-white px-4 py-2 text-sm font-bold text-tv-blue disabled:opacity-40"
                   >
                     Sau
                   </button>
@@ -289,7 +289,7 @@ function MyBookingsContent() {
         <aside className="h-fit space-y-4 lg:sticky lg:top-24">
           <TrustBanner compact />
           <CommerceSurface>
-            <h2 className="text-lg font-black mb-3">Trạng thái booking</h2>
+            <h2 className="text-lg font-bold mb-3">Trạng thái booking</h2>
             <div className="space-y-2 text-sm">
               {(
                 [

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 /**
  * Admin Dashboard Overview — Task 37
@@ -52,10 +52,10 @@ import { CommerceSurface } from "@/components/commerce-primitives";
 // Colour palette (Design DNA)
 // ---------------------------------------------------------------------------
 
-const BLUE = "#0277D4";
-const ORANGE = "#FF6D1A";
+const BLUE = "#0064D2";
+const ORANGE = "#FF6D00";
 const TEAL = "#0f8b7b";
-const GRAY = "#6f8594";
+const GRAY = "#767676";
 
 const STATUS_COLORS: Record<string, string> = {
   PENDING: ORANGE,
@@ -80,7 +80,7 @@ const STATUS_LABELS: Record<string, string> = {
 function SkeletonBox({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`animate-pulse rounded-xl bg-[#e8f4fd] ${className}`}
+      className={`animate-pulse rounded-tv-sm bg-[#e8f4fd] ${className}`}
       aria-hidden="true"
     />
   );
@@ -88,7 +88,7 @@ function SkeletonBox({ className = "" }: { className?: string }) {
 
 function MetricCardSkeleton() {
   return (
-    <div className="rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_12px_30px_rgba(2,68,120,0.06)]">
+    <div className="rounded-tv border border-[tv-border] bg-white p-5 shadow-tv-card">
       <SkeletonBox className="h-3 w-24" />
       <SkeletonBox className="mt-3 h-8 w-32" />
       <SkeletonBox className="mt-2 h-3 w-40" />
@@ -99,7 +99,7 @@ function MetricCardSkeleton() {
 function ChartSkeleton({ height = 280 }: { height?: number }) {
   return (
     <div
-      className="animate-pulse rounded-xl bg-[#e8f4fd]"
+      className="animate-pulse rounded-tv-sm bg-[#e8f4fd]"
       style={{ height }}
       aria-hidden="true"
     />
@@ -121,27 +121,27 @@ interface MetricCardProps {
 function MetricCard({ label, value, helper, icon, tone = "blue" }: MetricCardProps) {
   const valueColor =
     tone === "orange"
-      ? "text-[#FF6D1A]"
+      ? "text-[tv-orange]"
       : tone === "teal"
       ? "text-[#0f8b7b]"
-      : "text-[#0277D4]";
+      : "text-[tv-blue]";
   const iconBg =
     tone === "orange"
-      ? "bg-[#fff3e8] text-[#FF6D1A]"
+      ? "bg-[#fff3e8] text-[tv-orange]"
       : tone === "teal"
       ? "bg-[#e8fbf6] text-[#0f8b7b]"
-      : "bg-[#EAF7FF] text-[#0277D4]";
+      : "bg-[tv-blue-light] text-[tv-blue]";
 
   return (
-    <div className="rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_12px_30px_rgba(2,68,120,0.06)]">
+    <div className="rounded-tv border border-[tv-border] bg-white p-5 shadow-tv-card">
       <div className="flex items-start justify-between">
-        <p className="text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">
+        <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-ink-3]">
           {label}
         </p>
-        <div className={`rounded-xl p-2 ${iconBg}`}>{icon}</div>
+        <div className={`rounded-tv-sm p-2 ${iconBg}`}>{icon}</div>
       </div>
-      <p className={`mt-3 text-3xl font-black ${valueColor}`}>{value}</p>
-      <p className="mt-1 text-sm font-bold leading-6 text-[#476273]">{helper}</p>
+      <p className={`mt-3 text-3xl font-bold ${valueColor}`}>{value}</p>
+      <p className="mt-1 text-sm font-bold leading-6 text-[tv-ink-3]">{helper}</p>
     </div>
   );
 }
@@ -152,16 +152,16 @@ function MetricCard({ label, value, helper, icon, tone = "blue" }: MetricCardPro
 
 function ErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
   return (
-    <div className="flex flex-col items-center gap-4 rounded-2xl border border-red-100 bg-red-50 p-8 text-center">
+    <div className="flex flex-col items-center gap-4 rounded-tv border border-red-100 bg-red-50 p-8 text-center">
       <AlertCircle size={40} className="text-red-400" aria-hidden="true" />
       <div>
-        <p className="font-black text-red-700">Không thể tải dữ liệu</p>
+        <p className="font-bold text-red-700">Không thể tải dữ liệu</p>
         <p className="mt-1 text-sm text-red-600">{message}</p>
       </div>
       <button
         type="button"
         onClick={onRetry}
-        className="rounded-xl bg-[#0277D4] px-5 py-2 text-sm font-black text-white transition hover:bg-[#0265b8]"
+        className="rounded-tv-sm bg-[tv-blue] px-5 py-2 text-sm font-bold text-white transition hover:bg-[#0265b8]"
       >
         Thử lại
       </button>
@@ -178,7 +178,7 @@ function StatusBadge({ status }: { status: string }) {
   const label = STATUS_LABELS[status] ?? status;
   return (
     <span
-      className="inline-flex rounded-full px-2.5 py-0.5 text-xs font-black"
+      className="inline-flex rounded-full px-2.5 py-0.5 text-xs font-bold"
       style={{ background: `${color}18`, color }}
     >
       {label}
@@ -199,8 +199,8 @@ function QuickActions() {
   ] as const;
 
   const toneClasses = {
-    blue: "bg-[#EAF7FF] text-[#0277D4] hover:bg-[#d0ecfa]",
-    orange: "bg-[#fff3e8] text-[#FF6D1A] hover:bg-[#ffe8d0]",
+    blue: "bg-[tv-blue-light] text-[tv-blue] hover:bg-[#d0ecfa]",
+    orange: "bg-[#fff3e8] text-[tv-orange] hover:bg-[#ffe8d0]",
     teal: "bg-[#e8fbf6] text-[#0f8b7b] hover:bg-[#d0f5ec]",
   };
 
@@ -210,7 +210,7 @@ function QuickActions() {
         <Link
           key={a.href}
           href={a.href}
-          className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-black transition ${toneClasses[a.tone]}`}
+          className={`inline-flex items-center gap-2 rounded-tv-sm px-4 py-2.5 text-sm font-bold transition ${toneClasses[a.tone]}`}
         >
           {a.icon}
           {a.label}
@@ -254,7 +254,7 @@ function RevenueChart({ data }: { data: RevenueData[] }) {
           formatter={(value: number) => [formatVnd(value), "Doanh thu"]}
           contentStyle={{
             borderRadius: 12,
-            border: "1px solid #d9ecfb",
+            border: "1px solid #E8E8E8",
             fontSize: 12,
             fontWeight: 700,
           }}
@@ -312,7 +312,7 @@ function BookingsDonut({ data }: { data: BookingStatusCounts }) {
             ]}
             contentStyle={{
               borderRadius: 12,
-              border: "1px solid #d9ecfb",
+              border: "1px solid #E8E8E8",
               fontSize: 12,
               fontWeight: 700,
             }}
@@ -321,7 +321,7 @@ function BookingsDonut({ data }: { data: BookingStatusCounts }) {
       </ResponsiveContainer>
       <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
         {entries.map((e) => (
-          <div key={e.name} className="flex items-center gap-1.5 text-xs font-bold text-[#476273]">
+          <div key={e.name} className="flex items-center gap-1.5 text-xs font-bold text-[tv-ink-3]">
             <span
               className="inline-block h-2.5 w-2.5 rounded-full"
               style={{ background: e.color }}
@@ -375,7 +375,7 @@ function TopToursChart({ data }: { data: TopTour[] }) {
           }
           contentStyle={{
             borderRadius: 12,
-            border: "1px solid #d9ecfb",
+            border: "1px solid #E8E8E8",
             fontSize: 12,
             fontWeight: 700,
           }}
@@ -403,7 +403,7 @@ function RecentBookingsTable({
 }) {
   if (!bookings.length) {
     return (
-      <p className="py-6 text-center text-sm text-[#6f8594]">
+      <p className="py-6 text-center text-sm text-[tv-ink-3]">
         Chưa có đặt chỗ nào.
       </p>
     );
@@ -413,7 +413,7 @@ function RecentBookingsTable({
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-[#edf4fa] text-left text-xs font-black uppercase tracking-[0.12em] text-[#6f8594]">
+          <tr className="border-b border-[tv-border] text-left text-xs font-bold uppercase tracking-[0.12em] text-[tv-ink-3]">
             <th className="pb-3 pr-4">Mã đặt chỗ</th>
             <th className="pb-3 pr-4">Khách hàng</th>
             <th className="pb-3 pr-4">Tour</th>
@@ -425,9 +425,9 @@ function RecentBookingsTable({
           {bookings.map((b) => (
             <tr
               key={b.id}
-              className="border-b border-[#edf4fa] last:border-b-0"
+              className="border-b border-[tv-border] last:border-b-0"
             >
-              <td className="py-3 pr-4 font-black text-[#0277D4]">
+              <td className="py-3 pr-4 font-bold text-[tv-blue]">
                 <Link
                   href={`/admin/bookings`}
                   className="hover:underline"
@@ -435,11 +435,11 @@ function RecentBookingsTable({
                   {b.bookingCode}
                 </Link>
               </td>
-              <td className="py-3 pr-4 text-[#071827]">{b.contactName}</td>
-              <td className="py-3 pr-4 text-[#476273]">
+              <td className="py-3 pr-4 text-[tv-ink]">{b.contactName}</td>
+              <td className="py-3 pr-4 text-[tv-ink-3]">
                 {b.tour?.title ?? "—"}
               </td>
-              <td className="py-3 pr-4 font-bold text-[#071827]">
+              <td className="py-3 pr-4 font-bold text-[tv-ink]">
                 {formatVnd(b.totalPrice)}
               </td>
               <td className="py-3">
@@ -478,7 +478,7 @@ function RecentContactsList({
 }) {
   if (!contacts.length) {
     return (
-      <p className="py-6 text-center text-sm text-[#6f8594]">
+      <p className="py-6 text-center text-sm text-[tv-ink-3]">
         Chưa có yêu cầu tư vấn nào.
       </p>
     );
@@ -492,22 +492,22 @@ function RecentContactsList({
         return (
           <li
             key={c.id}
-            className="flex items-start gap-3 rounded-xl border border-[#edf4fa] p-3"
+            className="flex items-start gap-3 rounded-tv-sm border border-[tv-border] p-3"
           >
             <div className="flex-1 min-w-0">
-              <p className="truncate font-black text-[#071827]">{c.name}</p>
-              <p className="mt-0.5 truncate text-xs text-[#6f8594]">
+              <p className="truncate font-bold text-[tv-ink]">{c.name}</p>
+              <p className="mt-0.5 truncate text-xs text-[tv-ink-3]">
                 {c.email}
                 {c.destinationInterested
                   ? ` · ${c.destinationInterested}`
                   : ""}
               </p>
-              <p className="mt-0.5 text-xs text-[#476273]">
+              <p className="mt-0.5 text-xs text-[tv-ink-3]">
                 {new Date(c.createdAt).toLocaleDateString("vi-VN")}
               </p>
             </div>
             <span
-              className="inline-flex shrink-0 rounded-full px-2.5 py-0.5 text-xs font-black"
+              className="inline-flex shrink-0 rounded-full px-2.5 py-0.5 text-xs font-bold"
               style={{ background: `${color}18`, color }}
             >
               {label}
@@ -532,7 +532,7 @@ function PendingReviewsList({
 
   if (!pending.length) {
     return (
-      <p className="py-6 text-center text-sm text-[#6f8594]">
+      <p className="py-6 text-center text-sm text-[tv-ink-3]">
         Không có đánh giá nào chờ duyệt.
       </p>
     );
@@ -543,13 +543,13 @@ function PendingReviewsList({
       {pending.map((r) => (
         <li
           key={r.id}
-          className="flex items-start gap-3 rounded-xl border border-[#edf4fa] p-3"
+          className="flex items-start gap-3 rounded-tv-sm border border-[tv-border] p-3"
         >
           <div className="flex-1 min-w-0">
-            <p className="truncate font-black text-[#071827]">
+            <p className="truncate font-bold text-[tv-ink]">
               {r.title ?? r.content.slice(0, 60)}
             </p>
-            <p className="mt-0.5 text-xs text-[#6f8594]">
+            <p className="mt-0.5 text-xs text-[tv-ink-3]">
               {"★".repeat(r.rating)}
               {"☆".repeat(5 - r.rating)} ·{" "}
               {new Date(r.createdAt).toLocaleDateString("vi-VN")}
@@ -676,10 +676,10 @@ export default function AdminDashboardPage() {
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
           {/* Revenue area chart */}
           <CommerceSurface>
-            <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277D4]">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
               Doanh thu
             </p>
-            <h2 className="mt-1 text-xl font-black text-[#071827]">
+            <h2 className="mt-1 text-xl font-bold text-[tv-ink]">
               12 tháng gần nhất
             </h2>
             <div className="mt-5">
@@ -688,7 +688,7 @@ export default function AdminDashboardPage() {
               ) : revenue.length > 0 ? (
                 <RevenueChart data={revenue} />
               ) : (
-                <p className="py-16 text-center text-sm text-[#6f8594]">
+                <p className="py-16 text-center text-sm text-[tv-ink-3]">
                   Chưa có dữ liệu doanh thu.
                 </p>
               )}
@@ -697,10 +697,10 @@ export default function AdminDashboardPage() {
 
           {/* Bookings by status donut */}
           <CommerceSurface>
-            <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277D4]">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
               Đặt chỗ theo trạng thái
             </p>
-            <h2 className="mt-1 text-xl font-black text-[#071827]">
+            <h2 className="mt-1 text-xl font-bold text-[tv-ink]">
               Phân bổ hiện tại
             </h2>
             <div className="mt-5">
@@ -709,7 +709,7 @@ export default function AdminDashboardPage() {
               ) : bookingsByStatus ? (
                 <BookingsDonut data={bookingsByStatus} />
               ) : (
-                <p className="py-16 text-center text-sm text-[#6f8594]">
+                <p className="py-16 text-center text-sm text-[tv-ink-3]">
                   Chưa có dữ liệu.
                 </p>
               )}
@@ -721,16 +721,16 @@ export default function AdminDashboardPage() {
         <CommerceSurface>
           <div className="flex items-end justify-between">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277D4]">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
                 Top tour
               </p>
-              <h2 className="mt-1 text-xl font-black text-[#071827]">
+              <h2 className="mt-1 text-xl font-bold text-[tv-ink]">
                 5 tour được đặt nhiều nhất
               </h2>
             </div>
             <Link
               href="/admin/tours"
-              className="rounded-xl bg-[#EAF7FF] px-4 py-2 text-sm font-black text-[#0277D4] transition hover:bg-[#d0ecfa]"
+              className="rounded-tv-sm bg-[tv-blue-light] px-4 py-2 text-sm font-bold text-[tv-blue] transition hover:bg-[#d0ecfa]"
             >
               Xem tất cả
             </Link>
@@ -741,7 +741,7 @@ export default function AdminDashboardPage() {
             ) : topTours.length > 0 ? (
               <TopToursChart data={topTours} />
             ) : (
-              <p className="py-12 text-center text-sm text-[#6f8594]">
+              <p className="py-12 text-center text-sm text-[tv-ink-3]">
                 Chưa có dữ liệu tour.
               </p>
             )}
@@ -754,16 +754,16 @@ export default function AdminDashboardPage() {
           <CommerceSurface>
             <div className="flex items-end justify-between">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277D4]">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
                   Hoạt động gần đây
                 </p>
-                <h2 className="mt-1 text-xl font-black text-[#071827]">
+                <h2 className="mt-1 text-xl font-bold text-[tv-ink]">
                   Đặt chỗ mới nhất
                 </h2>
               </div>
               <Link
                 href="/admin/bookings"
-                className="rounded-xl bg-[#EAF7FF] px-4 py-2 text-sm font-black text-[#0277D4] transition hover:bg-[#d0ecfa]"
+                className="rounded-tv-sm bg-[tv-blue-light] px-4 py-2 text-sm font-bold text-[tv-blue] transition hover:bg-[#d0ecfa]"
               >
                 Xem tất cả
               </Link>
@@ -785,16 +785,16 @@ export default function AdminDashboardPage() {
           <CommerceSurface>
             <div className="flex items-end justify-between">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277D4]">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
                   Yêu cầu tư vấn
                 </p>
-                <h2 className="mt-1 text-xl font-black text-[#071827]">
+                <h2 className="mt-1 text-xl font-bold text-[tv-ink]">
                   Liên hệ gần đây
                 </h2>
               </div>
               <Link
                 href="/admin/contacts"
-                className="rounded-xl bg-[#EAF7FF] px-4 py-2 text-sm font-black text-[#0277D4] transition hover:bg-[#d0ecfa]"
+                className="rounded-tv-sm bg-[tv-blue-light] px-4 py-2 text-sm font-bold text-[tv-blue] transition hover:bg-[#d0ecfa]"
               >
                 Xem tất cả
               </Link>
@@ -816,16 +816,16 @@ export default function AdminDashboardPage() {
           <CommerceSurface>
             <div className="flex items-end justify-between">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277D4]">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
                   Kiểm duyệt
                 </p>
-                <h2 className="mt-1 text-xl font-black text-[#071827]">
+                <h2 className="mt-1 text-xl font-bold text-[tv-ink]">
                   Đánh giá chờ duyệt
                 </h2>
               </div>
               <Link
                 href="/admin/reviews"
-                className="rounded-xl bg-[#EAF7FF] px-4 py-2 text-sm font-black text-[#0277D4] transition hover:bg-[#d0ecfa]"
+                className="rounded-tv-sm bg-[tv-blue-light] px-4 py-2 text-sm font-bold text-[tv-blue] transition hover:bg-[#d0ecfa]"
               >
                 Xem tất cả
               </Link>

@@ -1,5 +1,5 @@
 {
-  "*.{ts,tsx}": ["eslint --fix --max-warnings=0", "prettier --write"],
-  "*.{js,mjs,cjs}": ["prettier --write"],
-  "*.{json,md}": ["prettier --write"]
+  "*.{ts,tsx}": ["pnpm exec prettier --write"],
+  "*.{js,mjs,cjs}": ["pnpm exec prettier --write"],
+  "*.{json,md}": ["pnpm exec prettier --write"]
 }

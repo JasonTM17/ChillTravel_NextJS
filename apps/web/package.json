@@ -6,7 +6,9 @@
     "dev": "next dev --port 3000",
     "build": "next build",
     "lint": "tsc --noEmit",
-    "test": "vitest run lib"
+    "test": "vitest run lib",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@vietwander/shared": "workspace:*",
@@ -24,11 +26,16 @@
     "zod": "^4.2.1"
   },
   "devDependencies": {
+    "@storybook/addon-a11y": "^8.6.12",
+    "@storybook/addon-essentials": "^8.6.12",
+    "@storybook/nextjs": "^8.6.12",
+    "@storybook/react": "^8.6.12",
     "@types/node": "^24.10.2",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.23",
     "postcss": "^8.5.6",
+    "storybook": "^8.6.12",
     "tailwindcss": "^3.4.19",
     "typescript": "^5.9.3",
     "vitest": "^4.0.15"

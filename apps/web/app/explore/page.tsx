@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useState, useCallback, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -14,58 +18,291 @@ import {
   Star,
   Users,
   WalletCards,
-  Wifi
+  Wifi,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
-import { destinations, normalizeTravelText } from "@vietwander/shared";
-import type { Destination } from "@vietwander/shared";
-import { getDestinationCopy } from "@/lib/destination-copy";
+import { destinationApi } from "@/lib/api/destination.api";
+import type { Destination } from "@/lib/api/destination.api";
 import { getDestinationImage } from "@/lib/destination-images";
 import { formatVnd } from "@/lib/utils";
-import { demoPaymentWarning, formatDateVi, safetyLabel } from "@/lib/vietnamese";
+import { demoPaymentWarning, formatDateVi } from "@/lib/vietnamese";
 
-const filterGroups = [
-  ["Ưu tiên", ["Hủy demo miễn phí", "Phù hợp gia đình", "Gần biển", "Có gói offline"]],
-  ["Phong cách", ["Biển", "Văn hóa", "Ẩm thực", "Núi", "Nghỉ dưỡng"]],
-  ["Khu vực", ["Trung tâm", "Phố cổ", "View biển", "View núi"]]
-] as const;
+const PAGE_SIZE = 9;
 
-const sortOptions = ["Phù hợp nhất", "Đánh giá cao", "Giá thấp trước", "Mùa đẹp"];
+const sortOptions = [
+  { label: "Phù hợp nhất", value: "" },
+  { label: "Đánh giá cao", value: "ratingAvg,desc" },
+  { label: "Tên A-Z", value: "name,asc" },
+  { label: "Mới nhất", value: "createdAt,desc" },
+];
 
-export default async function ExplorePage({ searchParams }: { searchParams: Promise<{ q?: string; style?: string }> }) {
-  const { q = "Đà Nẵng", style = "" } = await searchParams;
-  const normalizedQuery = normalizeTravelText(q.trim());
-  const normalizedStyle = normalizeTravelText(style.trim());
-  const filtered = destinations.filter((destination) => matchesQuery(destination, normalizedQuery, normalizedStyle));
-  const active = filtered[0] ?? destinations.find((destination) => destination.slug === "da-nang") ?? destinations[0];
+const categoryOptions = ["Biển", "Văn hóa", "Ẩm thực", "Núi", "Nghỉ dưỡng", "Phố cổ"];
 
+// ---------------------------------------------------------------------------
+// Skeleton
+// ---------------------------------------------------------------------------
+
+function SearchResultSkeleton() {
+  return (
+    <div className="grid overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_14px_34px_rgba(2,68,120,0.08)] md:grid-cols-[220px_minmax(0,1fr)_210px] animate-pulse">
+      <div className="min-h-[210px] bg-[#d9ecfb]" />
+      <div className="min-w-0 p-5 space-y-3">
+        <div className="flex gap-2">
+          <div className="h-6 w-20 rounded-full bg-[#d9ecfb]" />
+          <div className="h-6 w-12 rounded-full bg-[#d9ecfb]" />
+        </div>
+        <div className="h-6 w-48 rounded bg-[#d9ecfb]" />
+        <div className="h-3 w-full rounded bg-[#d9ecfb]" />
+        <div className="h-3 w-3/4 rounded bg-[#d9ecfb]" />
+        <div className="flex gap-2 mt-2">
+          {[1, 2, 3, 4].map((i) => <div key={i} className="h-6 w-20 rounded-full bg-[#d9ecfb]" />)}
+        </div>
+      </div>
+      <div className="flex flex-col justify-between border-t border-[#edf4fa] bg-[#fbfdff] p-5 md:border-l md:border-t-0">
+        <div className="space-y-2">
+          <div className="h-3 w-12 rounded bg-[#d9ecfb]" />
+          <div className="h-7 w-28 rounded bg-[#d9ecfb]" />
+          <div className="h-3 w-20 rounded bg-[#d9ecfb]" />
+        </div>
+        <div className="mt-5 space-y-2">
+          <div className="h-10 rounded-xl bg-[#d9ecfb]" />
+          <div className="h-10 rounded-xl bg-[#d9ecfb]" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Main page — wrapped in Suspense for useSearchParams
+// ---------------------------------------------------------------------------
+
+export default function ExplorePage() {
+  return (
+    <Suspense fallback={<ExplorePageSkeleton />}>
+      <ExplorePageInner />
+    </Suspense>
+  );
+}
+
+function ExplorePageSkeleton() {
   return (
     <main className="min-h-screen bg-[#f6fbff] text-[#071827]">
-      <ExploreSearch q={q} />
+      <section className="border-b border-[#d9ecfb] bg-white">
+        <div className="mx-auto max-w-[1180px] px-4 py-5">
+          <div className="rounded-[26px] bg-[#1f9be0] p-3 h-24 animate-pulse" />
+        </div>
+      </section>
       <section className="mx-auto grid max-w-[1180px] gap-5 px-4 py-6 lg:grid-cols-[260px_minmax(0,1fr)_300px]">
-        <FilterRail selectedStyle={style} q={q} />
-        <section className="min-w-0">
-          <ResultsToolbar count={filtered.length} q={q} />
-          <div className="mt-4 space-y-4">
-            {filtered.length ? filtered.map((destination) => <SearchResultCard key={destination.slug} destination={destination} />) : <EmptyResults />}
-          </div>
-        </section>
-        <TripSidePanel destination={active} />
+        <div className="h-96 rounded-2xl border border-[#d9ecfb] bg-white animate-pulse" />
+        <div className="space-y-4">
+          {[1, 2, 3].map((i) => <SearchResultSkeleton key={i} />)}
+        </div>
+        <div className="h-64 rounded-2xl border border-[#d9ecfb] bg-white animate-pulse" />
       </section>
     </main>
   );
 }
 
-function ExploreSearch({ q }: { q: string }) {
+function ExplorePageInner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const keyword = searchParams.get("keyword") ?? searchParams.get("q") ?? "";
+  const country = searchParams.get("country") ?? "";
+  const city = searchParams.get("city") ?? "";
+  const category = searchParams.get("category") ?? "";
+  const sort = searchParams.get("sort") ?? "";
+  const page = parseInt(searchParams.get("page") ?? "0", 10);
+
+  const [destinations, setDestinations] = useState<Destination[]>([]);
+  const [totalElements, setTotalElements] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchDestinations = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await destinationApi.list({
+        keyword: keyword || undefined,
+        country: country || undefined,
+        city: city || undefined,
+        category: category || undefined,
+        sort: sort || undefined,
+        page,
+        size: PAGE_SIZE,
+      });
+
+      if (res.success) {
+        setDestinations(res.data.items);
+        setTotalElements(res.data.totalElements);
+        setTotalPages(res.data.totalPages);
+      } else {
+        setError("Không thể tải danh sách điểm đến.");
+      }
+    } catch {
+      setError("Lỗi kết nối. Vui lòng thử lại.");
+    } finally {
+      setLoading(false);
+    }
+  }, [keyword, country, city, category, sort, page]);
+
+  useEffect(() => {
+    void fetchDestinations();
+  }, [fetchDestinations]);
+
+  function updateParams(updates: Record<string, string>) {
+    const params = new URLSearchParams(searchParams.toString());
+    for (const [key, value] of Object.entries(updates)) {
+      if (value) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
+    }
+    // Reset page when filters change (unless explicitly setting page)
+    if (!("page" in updates)) {
+      params.delete("page");
+    }
+    router.push(`/explore?${params.toString()}`);
+  }
+
+  function handleSearch(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const kw = (form.elements.namedItem("keyword") as HTMLInputElement)?.value ?? "";
+    updateParams({ keyword: kw });
+  }
+
+  function handleSortChange(value: string) {
+    updateParams({ sort: value });
+  }
+
+  function handleCategoryToggle(cat: string) {
+    updateParams({ category: category === cat ? "" : cat });
+  }
+
+  function handlePageChange(newPage: number) {
+    updateParams({ page: String(newPage) });
+  }
+
+  const activeDestination = destinations[0];
+
+  return (
+    <main className="min-h-screen bg-[#f6fbff] text-[#071827]">
+      <ExploreSearch keyword={keyword} onSearch={handleSearch} />
+      <section className="mx-auto grid max-w-[1180px] gap-5 px-4 py-6 lg:grid-cols-[260px_minmax(0,1fr)_300px]">
+        <FilterRail
+          selectedCategory={category}
+          selectedSort={sort}
+          onCategoryToggle={handleCategoryToggle}
+          onSortChange={handleSortChange}
+        />
+
+        <section className="min-w-0">
+          <ResultsToolbar
+            count={totalElements}
+            keyword={keyword}
+            sort={sort}
+            onSortChange={handleSortChange}
+          />
+
+          <div className="mt-4 space-y-4">
+            {error ? (
+              <ErrorState message={error} onRetry={() => void fetchDestinations()} />
+            ) : loading ? (
+              [1, 2, 3].map((i) => <SearchResultSkeleton key={i} />)
+            ) : destinations.length === 0 ? (
+              <EmptyResults onClear={() => router.push("/explore")} />
+            ) : (
+              destinations.map((destination) => (
+                <SearchResultCard key={destination.slug} destination={destination} />
+              ))
+            )}
+          </div>
+
+          {!loading && !error && totalPages > 1 && (
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          )}
+        </section>
+
+        {activeDestination ? (
+          <TripSidePanel destination={activeDestination} />
+        ) : (
+          <aside className="h-fit rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_12px_30px_rgba(2,68,120,0.06)] lg:sticky lg:top-24">
+            <p className="text-sm font-bold text-[#476273]">Tìm kiếm để xem gợi ý chuyến đi.</p>
+          </aside>
+        )}
+      </section>
+    </main>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Error / Empty states
+// ---------------------------------------------------------------------------
+
+function ErrorState({ message, onRetry }: { message: string; onRetry?: () => void }) {
+  return (
+    <div className="rounded-2xl border border-dashed border-red-200 bg-red-50 p-8 text-center">
+      <p className="text-lg font-black text-red-600">{message}</p>
+      {onRetry && (
+        <button
+          onClick={onRetry}
+          className="mt-4 inline-flex rounded-xl bg-[#0277d4] px-5 py-2.5 font-bold text-white hover:bg-[#005ea8]"
+          type="button"
+        >
+          Thử lại
+        </button>
+      )}
+    </div>
+  );
+}
+
+function EmptyResults({ onClear }: { onClear: () => void }) {
+  return (
+    <div className="rounded-2xl border border-dashed border-[#b8d8f0] bg-white p-10 text-center">
+      <MapPin className="mx-auto text-[#0277d4]" size={34} aria-hidden="true" />
+      <h2 className="mt-4 text-2xl font-black">Chưa có lựa chọn phù hợp.</h2>
+      <p className="mt-2 text-[#476273]">Thử nhập thành phố, phong cách du lịch hoặc thay đổi bộ lọc.</p>
+      <button
+        onClick={onClear}
+        className="mt-5 inline-flex rounded-xl bg-[#0277d4] px-5 py-3 font-bold text-white"
+        type="button"
+      >
+        Xóa bộ lọc
+      </button>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Search bar
+// ---------------------------------------------------------------------------
+
+function ExploreSearch({ keyword, onSearch }: { keyword: string; onSearch: (e: React.FormEvent<HTMLFormElement>) => void }) {
   return (
     <section className="border-b border-[#d9ecfb] bg-white">
       <div className="mx-auto max-w-[1180px] px-4 py-5">
-        <form action="/explore" className="rounded-[26px] bg-[#1f9be0] p-3 shadow-[0_18px_42px_rgba(2,119,212,0.18)]">
+        <form onSubmit={onSearch} className="rounded-[26px] bg-[#1f9be0] p-3 shadow-[0_18px_42px_rgba(2,119,212,0.18)]">
           <div className="grid gap-3 rounded-[20px] bg-white p-3 lg:grid-cols-[1.35fr_0.9fr_0.9fr_0.95fr_148px]">
             <label className="flex min-w-0 items-center gap-3 rounded-2xl border border-[#d9ecfb] bg-[#f7fbff] px-4 py-3">
               <Search size={19} className="text-[#0277d4]" aria-hidden="true" />
               <span className="min-w-0 flex-1">
                 <span className="block text-xs font-bold text-[#6f8594]">Bạn muốn đi đâu?</span>
-                <input name="q" defaultValue={q} className="mt-1 w-full bg-transparent font-black text-[#071827] outline-none" />
+                <input
+                  name="keyword"
+                  defaultValue={keyword}
+                  className="mt-1 w-full bg-transparent font-black text-[#071827] outline-none"
+                  placeholder="Tên điểm đến, quốc gia..."
+                />
               </span>
             </label>
             <CompactField icon={CalendarDays} label="Nhận phòng" value={formatDateVi(new Date("2026-08-12"))} />
@@ -93,19 +330,44 @@ function CompactField({ icon: Icon, label, value }: { icon: LucideIcon; label: s
   );
 }
 
-function ResultsToolbar({ count, q }: { count: number; q: string }) {
+// ---------------------------------------------------------------------------
+// Results toolbar
+// ---------------------------------------------------------------------------
+
+function ResultsToolbar({
+  count,
+  keyword,
+  sort,
+  onSortChange,
+}: {
+  count: number;
+  keyword: string;
+  sort: string;
+  onSortChange: (value: string) => void;
+}) {
   return (
     <div className="rounded-2xl border border-[#d9ecfb] bg-white p-4 shadow-[0_12px_30px_rgba(2,68,120,0.06)]">
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">Kết quả gợi ý</p>
-          <h1 className="mt-1 text-2xl font-black">{count} lựa chọn cho {q || "chuyến đi của bạn"}</h1>
-          <p className="mt-1 text-sm text-[#476273]">Giá và chỗ trống là dữ liệu mẫu local, không phải thông tin thời gian thực.</p>
+          <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">Kết quả tìm kiếm</p>
+          <h1 className="mt-1 text-2xl font-black">
+            {count} điểm đến{keyword ? ` cho "${keyword}"` : ""}
+          </h1>
+          <p className="mt-1 text-sm text-[#476273]">Dữ liệu thật từ hệ thống.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          {sortOptions.map((option, index) => (
-            <button key={option} className={`rounded-full border px-3 py-2 text-xs font-black ${index === 0 ? "border-[#0277d4] bg-[#eef7ff] text-[#0277d4]" : "border-[#d9ecfb] bg-white text-[#476273]"}`} type="button">
-              {option}
+          {sortOptions.map((option) => (
+            <button
+              key={option.value}
+              onClick={() => onSortChange(option.value)}
+              className={`rounded-full border px-3 py-2 text-xs font-black ${
+                sort === option.value
+                  ? "border-[#0277d4] bg-[#eef7ff] text-[#0277d4]"
+                  : "border-[#d9ecfb] bg-white text-[#476273]"
+              }`}
+              type="button"
+            >
+              {option.label}
             </button>
           ))}
         </div>
@@ -114,90 +376,138 @@ function ResultsToolbar({ count, q }: { count: number; q: string }) {
   );
 }
 
-function FilterRail({ selectedStyle, q }: { selectedStyle: string; q: string }) {
+// ---------------------------------------------------------------------------
+// Filter rail
+// ---------------------------------------------------------------------------
+
+function FilterRail({
+  selectedCategory,
+  selectedSort,
+  onCategoryToggle,
+  onSortChange,
+}: {
+  selectedCategory: string;
+  selectedSort: string;
+  onCategoryToggle: (cat: string) => void;
+  onSortChange: (value: string) => void;
+}) {
   return (
     <aside className="h-fit rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_12px_30px_rgba(2,68,120,0.06)] lg:sticky lg:top-24">
       <div className="flex items-center justify-between border-b border-[#edf4fa] pb-4">
         <h2 className="text-xl font-black">Bộ lọc</h2>
         <SlidersHorizontal className="text-[#0277d4]" size={18} aria-hidden="true" />
       </div>
-      {filterGroups.map(([title, values]) => (
-        <FilterGroup key={title} title={title} values={values} selected={selectedStyle} q={q} />
-      ))}
+
+      <div className="mt-5">
+        <h3 className="text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">Phong cách</h3>
+        <div className="mt-3 grid gap-2">
+          {categoryOptions.map((cat) => {
+            const active = selectedCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => onCategoryToggle(cat)}
+                className={`flex items-center justify-between rounded-xl border px-3 py-2 text-sm font-bold transition text-left ${
+                  active
+                    ? "border-[#0277d4] bg-[#eef7ff] text-[#0277d4]"
+                    : "border-[#edf4fa] bg-white text-[#476273] hover:border-[#0277d4] hover:text-[#0277d4]"
+                }`}
+                type="button"
+              >
+                <span>{cat}</span>
+                {active ? <CheckCircle2 size={16} aria-hidden="true" /> : null}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="mt-6 rounded-2xl bg-[#f7fbff] p-4">
         <div className="flex items-center gap-2 text-sm font-black">
           <WalletCards size={17} className="text-[#0277d4]" aria-hidden="true" />
-          Khoảng giá/ngày
+          Sắp xếp
         </div>
-        <div className="mt-4 h-2 rounded-full bg-[#d8ecfb]">
-          <div className="h-2 w-2/3 rounded-full bg-[#0277d4]" />
-        </div>
-        <div className="mt-3 flex justify-between text-xs font-bold text-[#476273]">
-          <span>{formatVnd(500000)}</span>
-          <span>{formatVnd(5000000)}+</span>
+        <div className="mt-3 grid gap-2">
+          {sortOptions.map((option) => (
+            <button
+              key={option.value}
+              onClick={() => onSortChange(option.value)}
+              className={`rounded-xl border px-3 py-2 text-xs font-bold text-left transition ${
+                selectedSort === option.value
+                  ? "border-[#0277d4] bg-[#eef7ff] text-[#0277d4]"
+                  : "border-[#edf4fa] bg-white text-[#476273] hover:border-[#0277d4]"
+              }`}
+              type="button"
+            >
+              {option.label}
+            </button>
+          ))}
         </div>
       </div>
     </aside>
   );
 }
 
-function FilterGroup({ title, values, selected = "", q }: { title: string; values: readonly string[]; selected?: string; q: string }) {
-  return (
-    <div className="mt-5">
-      <h3 className="text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">{title}</h3>
-      <div className="mt-3 grid gap-2">
-        {values.map((value) => {
-          const active = normalizeTravelText(selected) === normalizeTravelText(value);
-          return (
-            <Link key={value} href={`/explore?q=${encodeURIComponent(q)}&style=${encodeURIComponent(value)}`} className={`flex items-center justify-between rounded-xl border px-3 py-2 text-sm font-bold transition ${active ? "border-[#0277d4] bg-[#eef7ff] text-[#0277d4]" : "border-[#edf4fa] bg-white text-[#476273] hover:border-[#0277d4] hover:text-[#0277d4]"}`}>
-              <span>{value}</span>
-              {active ? <CheckCircle2 size={16} aria-hidden="true" /> : null}
-            </Link>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
+// ---------------------------------------------------------------------------
+// Search result card
+// ---------------------------------------------------------------------------
 
 function SearchResultCard({ destination }: { destination: Destination }) {
-  const copy = getDestinationCopy(destination);
+  const imgSrc = destination.imageUrl ?? getDestinationImage(destination.slug);
   return (
     <article className="grid overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_14px_34px_rgba(2,68,120,0.08)] md:grid-cols-[220px_minmax(0,1fr)_210px]">
-      <Link href={`/destinations/${destination.slug}`} className="min-h-[210px] bg-cover bg-center" style={{ backgroundImage: `url(${getDestinationImage(destination.slug)})` }} aria-label={`Xem chi tiết ${copy.name}`} />
+      <Link
+        href={`/destinations/${destination.slug}`}
+        className="min-h-[210px] bg-cover bg-center"
+        style={{ backgroundImage: `url(${imgSrc})` }}
+        aria-label={`Xem chi tiết ${destination.name}`}
+      />
       <div className="min-w-0 p-5">
         <div className="flex flex-wrap items-center gap-2 text-sm">
-          <span className="rounded-full bg-[#eef7ff] px-3 py-1 font-black text-[#0277d4]">{copy.country}</span>
-          <span className="inline-flex items-center gap-1 font-black text-[#b45309]">
-            <Star size={15} fill="currentColor" aria-hidden="true" />
-            {destination.ratingAvg.toFixed(1)}
-          </span>
-          <span className="text-[#6f8594]">({destination.reviewCount} đánh giá)</span>
+          <span className="rounded-full bg-[#eef7ff] px-3 py-1 font-black text-[#0277d4]">{destination.country}</span>
+          {destination.ratingAvg != null && (
+            <span className="inline-flex items-center gap-1 font-black text-[#b45309]">
+              <Star size={15} fill="currentColor" aria-hidden="true" />
+              {destination.ratingAvg.toFixed(1)}
+            </span>
+          )}
+          {destination.reviewCount != null && (
+            <span className="text-[#6f8594]">({destination.reviewCount} đánh giá)</span>
+          )}
         </div>
         <Link href={`/destinations/${destination.slug}`} className="mt-3 block text-2xl font-black hover:text-[#0277d4]">
-          {copy.name}
+          {destination.name}
         </Link>
-        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#476273]">{copy.summary}</p>
+        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#476273]">
+          {destination.shortDescription ?? destination.description}
+        </p>
         <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-[#476273]">
-          <Amenity icon={Hotel} label="Nơi ở mẫu" />
-          <Amenity icon={Coffee} label={copy.foodHighlights[0] ?? "Ẩm thực địa phương"} />
-          <Amenity icon={ShieldCheck} label={safetyLabel(destination.safetyLevel)} />
+          <Amenity icon={Hotel} label="Nơi ở" />
+          {destination.city && <Amenity icon={MapPin} label={destination.city} />}
+          {destination.category && <Amenity icon={Coffee} label={destination.category} />}
+          <Amenity icon={ShieldCheck} label="An toàn" />
           <Amenity icon={Wifi} label="Gói offline" />
         </div>
       </div>
       <aside className="flex flex-col justify-between border-t border-[#edf4fa] bg-[#fbfdff] p-5 md:border-l md:border-t-0">
         <div>
-          <p className="text-xs font-bold text-[#6f8594]">Giá từ</p>
-          <p className="mt-1 text-2xl font-black text-[#ff5f12]">{formatVnd(destination.budgetMin)}</p>
-          <p className="mt-1 text-xs font-bold text-[#6f8594]">mỗi ngày, giá mẫu</p>
+          <p className="text-xs font-bold text-[#6f8594]">Khám phá</p>
+          <p className="mt-1 text-2xl font-black text-[#ff5f12]">{destination.city ?? destination.country}</p>
+          <p className="mt-1 text-xs font-bold text-[#6f8594]">{destination.bestTimeToVisit ?? "Quanh năm"}</p>
           <p className="mt-4 rounded-full bg-[#fff3e8] px-3 py-1 text-center text-xs font-black text-[#b45309]">Chỉ thanh toán demo</p>
         </div>
         <div className="mt-5 grid gap-2">
-          <Link href={`/booking/${destination.slug}`} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#ff6d1a] px-4 py-3 text-sm font-black text-white hover:bg-[#e95c0a]">
-            Xem ưu đãi
+          <Link
+            href={`/destinations/${destination.slug}`}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#ff6d1a] px-4 py-3 text-sm font-black text-white hover:bg-[#e95c0a]"
+          >
+            Xem chi tiết
             <ArrowRight size={16} aria-hidden="true" />
           </Link>
-          <Link href={`/ai-planner?destination=${destination.slug}`} className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#d9ecfb] bg-white px-4 py-3 text-sm font-black text-[#0277d4] hover:bg-[#eef7ff]">
+          <Link
+            href={`/ai-planner?destination=${destination.slug}`}
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#d9ecfb] bg-white px-4 py-3 text-sm font-black text-[#0277d4] hover:bg-[#eef7ff]"
+          >
             Lập lịch trình thông minh
             <Sparkles size={16} aria-hidden="true" />
           </Link>
@@ -216,23 +526,94 @@ function Amenity({ icon: Icon, label }: { icon: LucideIcon; label: string }) {
   );
 }
 
+// ---------------------------------------------------------------------------
+// Pagination
+// ---------------------------------------------------------------------------
+
+function Pagination({
+  page,
+  totalPages,
+  onPageChange,
+}: {
+  page: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}) {
+  return (
+    <div className="mt-6 flex items-center justify-center gap-2">
+      <button
+        onClick={() => onPageChange(page - 1)}
+        disabled={page === 0}
+        className="inline-flex items-center gap-1 rounded-xl border border-[#d9ecfb] bg-white px-4 py-2 text-sm font-black text-[#0277d4] disabled:opacity-40 hover:bg-[#eef7ff]"
+        type="button"
+        aria-label="Trang trước"
+      >
+        <ChevronLeft size={16} aria-hidden="true" />
+        Trước
+      </button>
+
+      <div className="flex gap-1">
+        {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
+          const pageNum = totalPages <= 7 ? i : Math.max(0, Math.min(page - 3, totalPages - 7)) + i;
+          return (
+            <button
+              key={pageNum}
+              onClick={() => onPageChange(pageNum)}
+              className={`h-9 w-9 rounded-xl text-sm font-black transition ${
+                pageNum === page
+                  ? "bg-[#0277d4] text-white"
+                  : "border border-[#d9ecfb] bg-white text-[#476273] hover:bg-[#eef7ff]"
+              }`}
+              type="button"
+              aria-label={`Trang ${pageNum + 1}`}
+              aria-current={pageNum === page ? "page" : undefined}
+            >
+              {pageNum + 1}
+            </button>
+          );
+        })}
+      </div>
+
+      <button
+        onClick={() => onPageChange(page + 1)}
+        disabled={page >= totalPages - 1}
+        className="inline-flex items-center gap-1 rounded-xl border border-[#d9ecfb] bg-white px-4 py-2 text-sm font-black text-[#0277d4] disabled:opacity-40 hover:bg-[#eef7ff]"
+        type="button"
+        aria-label="Trang sau"
+      >
+        Sau
+        <ChevronRight size={16} aria-hidden="true" />
+      </button>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Trip side panel
+// ---------------------------------------------------------------------------
+
 function TripSidePanel({ destination }: { destination: Destination }) {
-  const copy = getDestinationCopy(destination);
   return (
     <aside className="h-fit rounded-2xl border border-[#d9ecfb] bg-white p-5 shadow-[0_12px_30px_rgba(2,68,120,0.06)] lg:sticky lg:top-24">
       <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0277d4]">Tóm tắt chuyến đi</p>
-      <h2 className="mt-2 text-2xl font-black">{copy.name}</h2>
+      <h2 className="mt-2 text-2xl font-black">{destination.name}</h2>
       <div className="mt-5 space-y-3 text-sm">
-        <CartRow label="Lưu trú" value={`${formatVnd(destination.budgetMin)}+`} />
-        <CartRow label="Trải nghiệm" value={copy.foodHighlights[0] ?? "Ẩm thực địa phương"} />
-        <CartRow label="Lịch trình thông minh" value="4 ngày cân bằng" />
+        <CartRow label="Quốc gia" value={destination.country} />
+        {destination.city && <CartRow label="Thành phố" value={destination.city} />}
+        {destination.bestTimeToVisit && <CartRow label="Mùa đẹp" value={destination.bestTimeToVisit} />}
+        {destination.ratingAvg != null && <CartRow label="Đánh giá" value={`${destination.ratingAvg.toFixed(1)} / 5`} />}
       </div>
-      <div className="mt-5 rounded-2xl bg-[#f7fbff] p-4">
-        <p className="text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">Lưu ý văn hóa</p>
-        <p className="mt-2 text-sm leading-6 text-[#34566f]">{copy.cultureNotes[0]}</p>
-      </div>
-      <Link href={`/booking/${destination.slug}`} className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0277d4] px-4 py-3 text-sm font-black text-white hover:bg-[#005ea8]">
-        Đặt chỗ demo
+      {destination.shortDescription && (
+        <div className="mt-5 rounded-2xl bg-[#f7fbff] p-4">
+          <p className="text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">Mô tả ngắn</p>
+          <p className="mt-2 text-sm leading-6 text-[#34566f]">{destination.shortDescription}</p>
+        </div>
+      )}
+      <Link
+        href={`/destinations/${destination.slug}`}
+        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0277d4] px-4 py-3 text-sm font-black text-white hover:bg-[#005ea8]"
+      >
+        Xem chi tiết
         <ArrowRight size={16} aria-hidden="true" />
       </Link>
       <p className="mt-3 text-center text-xs font-bold text-[#b45309]">{demoPaymentWarning}</p>
@@ -247,42 +628,4 @@ function CartRow({ label, value }: { label: string; value: string }) {
       <span className="text-right font-black">{value}</span>
     </div>
   );
-}
-
-function EmptyResults() {
-  return (
-    <div className="rounded-2xl border border-dashed border-[#b8d8f0] bg-white p-10 text-center">
-      <MapPin className="mx-auto text-[#0277d4]" size={34} aria-hidden="true" />
-      <h2 className="mt-4 text-2xl font-black">Chưa có lựa chọn phù hợp.</h2>
-      <p className="mt-2 text-[#476273]">Thử nhập thành phố, món ăn, phong cách du lịch hoặc mùa đi.</p>
-      <Link href="/explore" className="mt-5 inline-flex rounded-xl bg-[#0277d4] px-5 py-3 font-bold text-white">
-        Xóa bộ lọc
-      </Link>
-    </div>
-  );
-}
-
-const filterTerms: Record<string, string[]> = {
-  "huy demo mien phi": ["demo"],
-  "phu hop gia dinh": ["family", "gia dinh"],
-  "gan bien": ["beach", "bien"],
-  "co goi offline": ["offline"],
-  bien: ["beach", "bien"],
-  "van hoa": ["culture", "van hoa"],
-  "am thuc": ["food", "am thuc"],
-  nui: ["mountain", "nui"],
-  "nghi duong": ["luxury", "resort", "boutique"],
-  "trung tam": ["city", "central", "trung tam"],
-  "pho co": ["heritage", "old quarter", "pho co"],
-  "view bien": ["beach", "bien"],
-  "view nui": ["mountain", "nui"]
-};
-
-function matchesQuery(destination: Destination, normalizedQuery: string, normalizedStyle: string) {
-  const copy = getDestinationCopy(destination);
-  const haystack = normalizeTravelText([copy.name, copy.country, copy.city, copy.summary, destination.slug, destination.bestTimeToVisit, destination.tags.join(" "), destination.travelStyles.join(" "), destination.foodHighlights.join(" ")].join(" "));
-  const queryMatches = !normalizedQuery || haystack.includes(normalizedQuery) || normalizedQuery.includes(destination.slug);
-  const styleTerms = filterTerms[normalizedStyle] ?? (normalizedStyle ? [normalizedStyle] : []);
-  const styleMatches = styleTerms.length === 0 || styleTerms.some((term) => haystack.includes(term));
-  return queryMatches && styleMatches;
 }

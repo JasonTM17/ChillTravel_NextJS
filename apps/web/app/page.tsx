@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -18,9 +21,10 @@ import {
   Users,
   WalletCards
 } from "lucide-react";
-import { destinations } from "@vietwander/shared";
-import type { Destination } from "@vietwander/shared";
-import { getDestinationCopy } from "@/lib/destination-copy";
+import { destinationApi } from "@/lib/api/destination.api";
+import { tourApi } from "@/lib/api/tour.api";
+import type { Destination } from "@/lib/api/destination.api";
+import type { Tour } from "@/lib/api/tour.api";
 import { getDestinationImage } from "@/lib/destination-images";
 import { formatVnd } from "@/lib/utils";
 import { demoPaymentWarning, formatDateVi } from "@/lib/vietnamese";
@@ -41,10 +45,93 @@ const coupons = [
   ["SAPA-VIEW", "Sapa săn mây", "Homestay, ruộng bậc thang, trekking", "Đề xuất"]
 ] as const;
 
+// ---------------------------------------------------------------------------
+// Skeleton components
+// ---------------------------------------------------------------------------
+
+function DestinationCardSkeleton() {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_14px_34px_rgba(2,68,120,0.08)] animate-pulse">
+      <div className="h-44 bg-[#d9ecfb]" />
+      <div className="p-4">
+        <div className="flex items-center justify-between gap-3">
+          <div className="h-4 w-24 rounded bg-[#d9ecfb]" />
+          <div className="h-4 w-10 rounded bg-[#d9ecfb]" />
+        </div>
+        <div className="mt-2 h-3 w-16 rounded bg-[#d9ecfb]" />
+      </div>
+    </div>
+  );
+}
+
+function DealRowSkeleton() {
+  return (
+    <div className="grid overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_14px_34px_rgba(2,68,120,0.08)] md:grid-cols-[180px_minmax(0,1fr)_190px] animate-pulse">
+      <div className="min-h-40 bg-[#d9ecfb]" />
+      <div className="p-4 space-y-3">
+        <div className="h-3 w-32 rounded bg-[#d9ecfb]" />
+        <div className="h-5 w-40 rounded bg-[#d9ecfb]" />
+        <div className="h-3 w-full rounded bg-[#d9ecfb]" />
+        <div className="h-3 w-3/4 rounded bg-[#d9ecfb]" />
+      </div>
+      <div className="flex flex-col justify-between border-t border-[#edf4fa] bg-[#fbfdff] p-4 md:border-l md:border-t-0">
+        <div className="space-y-2">
+          <div className="h-3 w-12 rounded bg-[#d9ecfb]" />
+          <div className="h-6 w-24 rounded bg-[#d9ecfb]" />
+        </div>
+        <div className="mt-3 h-10 rounded-xl bg-[#d9ecfb]" />
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Main page
+// ---------------------------------------------------------------------------
+
 export default function HomePage() {
-  const vietnam = destinations.filter((item) => item.tags.includes("Vietnam")).slice(0, 6);
-  const world = destinations.filter((item) => item.tags.includes("World")).slice(0, 4);
-  const featured = [destinations.find((item) => item.slug === "da-nang"), destinations.find((item) => item.slug === "phu-quoc"), destinations.find((item) => item.slug === "hoi-an")].filter(Boolean) as Destination[];
+  const [destinations, setDestinations] = useState<Destination[]>([]);
+  const [featuredTours, setFeaturedTours] = useState<Tour[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchData() {
+      setLoading(true);
+      setError(null);
+      try {
+        const [destRes, toursRes] = await Promise.all([
+          destinationApi.list({ size: 10, sort: "ratingAvg,desc" }),
+          tourApi.getFeatured(),
+        ]);
+
+        if (cancelled) return;
+
+        if (destRes.success) {
+          setDestinations(destRes.data.items);
+        } else {
+          setError("Không thể tải danh sách điểm đến.");
+        }
+
+        if (toursRes.success) {
+          setFeaturedTours(Array.isArray(toursRes.data) ? toursRes.data : []);
+        }
+      } catch {
+        if (!cancelled) setError("Lỗi kết nối. Vui lòng thử lại.");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    void fetchData();
+    return () => { cancelled = true; };
+  }, []);
+
+  const vietnam = destinations.filter((d) => d.country?.toLowerCase().includes("viet") || d.country?.toLowerCase().includes("việt")).slice(0, 6);
+  const world = destinations.filter((d) => !d.country?.toLowerCase().includes("viet") && !d.country?.toLowerCase().includes("việt")).slice(0, 4);
+  const featured = destinations.slice(0, 3);
 
   return (
     <main className="min-h-screen bg-[#f6fbff] text-[#071827]">
@@ -52,9 +139,53 @@ export default function HomePage() {
       <CouponStrip />
       <section className="mx-auto grid max-w-[1180px] gap-6 px-4 py-8 lg:grid-cols-[1fr_330px]">
         <div className="space-y-8">
-          <DestinationGrid title="Điểm đến đang thịnh hành" subtitle="Ảnh thật, thông tin mẫu local, phù hợp để demo luồng đặt chỗ." items={vietnam.slice(0, 3)} />
-          <DealRows title="Gợi ý lưu trú và trải nghiệm" items={featured} />
-          <DestinationGrid title="Bạn có thể thích" subtitle="Các tuyến quốc tế dùng dữ liệu mẫu, không thay thế nguồn chính thức." items={world} compact />
+          {error ? (
+            <ErrorState message={error} onRetry={() => window.location.reload()} />
+          ) : loading ? (
+            <>
+              <section>
+                <div className="flex items-end justify-between gap-4 mb-4">
+                  <div>
+                    <div className="h-6 w-64 rounded bg-[#d9ecfb] animate-pulse" />
+                    <div className="mt-2 h-3 w-80 rounded bg-[#d9ecfb] animate-pulse" />
+                  </div>
+                </div>
+                <div className="grid gap-4 md:grid-cols-3">
+                  {[1, 2, 3].map((i) => <DestinationCardSkeleton key={i} />)}
+                </div>
+              </section>
+              <section>
+                <div className="h-6 w-48 rounded bg-[#d9ecfb] animate-pulse mb-4" />
+                <div className="space-y-3">
+                  {[1, 2, 3].map((i) => <DealRowSkeleton key={i} />)}
+                </div>
+              </section>
+            </>
+          ) : (
+            <>
+              {vietnam.length > 0 && (
+                <DestinationGrid
+                  title="Điểm đến đang thịnh hành"
+                  subtitle="Dữ liệu thật từ hệ thống, phù hợp để lên kế hoạch du lịch."
+                  items={vietnam.slice(0, 3)}
+                />
+              )}
+              {featured.length > 0 && (
+                <DealRows title="Gợi ý lưu trú và trải nghiệm" items={featured} />
+              )}
+              {world.length > 0 && (
+                <DestinationGrid
+                  title="Bạn có thể thích"
+                  subtitle="Các điểm đến quốc tế nổi bật."
+                  items={world}
+                  compact
+                />
+              )}
+              {destinations.length === 0 && (
+                <EmptyState message="Chưa có điểm đến nào. Vui lòng thêm dữ liệu." />
+              )}
+            </>
+          )}
         </div>
         <TripPlannerPanel />
       </section>
@@ -62,6 +193,40 @@ export default function HomePage() {
     </main>
   );
 }
+
+// ---------------------------------------------------------------------------
+// Error / Empty states
+// ---------------------------------------------------------------------------
+
+function ErrorState({ message, onRetry }: { message: string; onRetry?: () => void }) {
+  return (
+    <div className="rounded-2xl border border-dashed border-red-200 bg-red-50 p-8 text-center">
+      <p className="text-lg font-black text-red-600">{message}</p>
+      {onRetry && (
+        <button
+          onClick={onRetry}
+          className="mt-4 inline-flex rounded-xl bg-[#0277d4] px-5 py-2.5 font-bold text-white hover:bg-[#005ea8]"
+          type="button"
+        >
+          Thử lại
+        </button>
+      )}
+    </div>
+  );
+}
+
+function EmptyState({ message }: { message: string }) {
+  return (
+    <div className="rounded-2xl border border-dashed border-[#b8d8f0] bg-white p-10 text-center">
+      <MapPin className="mx-auto text-[#0277d4]" size={34} aria-hidden="true" />
+      <p className="mt-4 text-lg font-black text-[#476273]">{message}</p>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Hero section
+// ---------------------------------------------------------------------------
 
 function BookingHero() {
   return (
@@ -92,7 +257,7 @@ function BookingHero() {
                 key={label}
                 href={href}
                 className={`inline-flex shrink-0 items-center gap-2 rounded-2xl px-4 py-3 text-sm font-black transition ${
-                  active ? "bg-white text-[#0277d4] shadow-sm" : "bg-[#0c83c9] text-white/92 hover:bg-white/16"
+                  active ? "bg-white text-[#0277d4] shadow-sm" : "bg-[#0c83c9] text-white/90 hover:bg-white/20"
                 }`}
               >
                 <Icon size={18} aria-hidden="true" />
@@ -113,7 +278,7 @@ function BookingHero() {
 
           <div className="mt-3 flex flex-wrap gap-2 text-xs font-bold">
             {["Đà Nẵng", "Phú Quốc", "Hội An", "Sapa", "Tokyo"].map((item) => (
-              <Link key={item} href={`/explore?q=${encodeURIComponent(item)}`} className="rounded-full bg-white/16 px-3 py-1.5 text-white transition hover:bg-white hover:text-[#0277d4]">
+              <Link key={item} href={`/explore?keyword=${encodeURIComponent(item)}`} className="rounded-full bg-white/20 px-3 py-1.5 text-white transition hover:bg-white hover:text-[#0277d4]">
                 {item}
               </Link>
             ))}
@@ -130,7 +295,7 @@ function SearchInput() {
       <MapPin size={20} className="shrink-0 text-[#0277d4]" aria-hidden="true" />
       <span className="min-w-0 flex-1">
         <span className="block text-xs font-bold text-[#6f8594]">Bạn muốn đi đâu?</span>
-        <input name="q" defaultValue="Đà Nẵng" className="mt-1 w-full bg-transparent text-lg font-black text-[#071827] outline-none" />
+        <input name="keyword" defaultValue="Đà Nẵng" className="mt-1 w-full bg-transparent text-lg font-black text-[#071827] outline-none" />
       </span>
     </label>
   );
@@ -147,6 +312,10 @@ function HeroField({ icon: Icon, label, value }: { icon: LucideIcon; label: stri
     </div>
   );
 }
+
+// ---------------------------------------------------------------------------
+// Coupon strip
+// ---------------------------------------------------------------------------
 
 function CouponStrip() {
   return (
@@ -177,6 +346,10 @@ function CouponStrip() {
   );
 }
 
+// ---------------------------------------------------------------------------
+// Destination grid
+// ---------------------------------------------------------------------------
+
 function DestinationGrid({ title, subtitle, items, compact = false }: { title: string; subtitle: string; items: Destination[]; compact?: boolean }) {
   return (
     <section>
@@ -199,56 +372,63 @@ function DestinationGrid({ title, subtitle, items, compact = false }: { title: s
 }
 
 function DestinationTile({ destination, compact }: { destination: Destination; compact?: boolean }) {
-  const copy = getDestinationCopy(destination);
+  const imgSrc = destination.imageUrl ?? getDestinationImage(destination.slug);
   return (
     <Link href={`/destinations/${destination.slug}`} className="group overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_14px_34px_rgba(2,68,120,0.08)] transition hover:-translate-y-1">
-      <div className={`${compact ? "h-36" : "h-44"} bg-cover bg-center`} style={{ backgroundImage: `url(${getDestinationImage(destination.slug)})` }} />
+      <div className={`${compact ? "h-36" : "h-44"} bg-cover bg-center`} style={{ backgroundImage: `url(${imgSrc})` }} />
       <div className="p-4">
         <div className="flex items-center justify-between gap-3">
-          <h3 className="font-black group-hover:text-[#0277d4]">{copy.name}</h3>
-          <span className="inline-flex items-center gap-1 text-sm font-black text-[#b45309]">
-            <Star size={14} fill="currentColor" aria-hidden="true" />
-            {destination.ratingAvg.toFixed(1)}
-          </span>
+          <h3 className="font-black group-hover:text-[#0277d4]">{destination.name}</h3>
+          {destination.ratingAvg != null && (
+            <span className="inline-flex items-center gap-1 text-sm font-black text-[#b45309]">
+              <Star size={14} fill="currentColor" aria-hidden="true" />
+              {destination.ratingAvg.toFixed(1)}
+            </span>
+          )}
         </div>
-        <p className="mt-1 text-sm text-[#476273]">{copy.country}</p>
+        <p className="mt-1 text-sm text-[#476273]">{destination.country}</p>
       </div>
     </Link>
   );
 }
+
+// ---------------------------------------------------------------------------
+// Deal rows
+// ---------------------------------------------------------------------------
 
 function DealRows({ title, items }: { title: string; items: Destination[] }) {
   return (
     <section>
       <h2 className="text-2xl font-black">{title}</h2>
       <div className="mt-4 space-y-3">
-        {items.map((destination) => {
-          const copy = getDestinationCopy(destination);
-          return (
-            <article key={destination.slug} className="grid overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_14px_34px_rgba(2,68,120,0.08)] md:grid-cols-[180px_minmax(0,1fr)_190px]">
-              <div className="min-h-40 bg-cover bg-center" style={{ backgroundImage: `url(${getDestinationImage(destination.slug)})` }} />
-              <div className="p-4">
-                <p className="text-xs font-black text-[#0277d4]">Có thể đặt chỗ demo</p>
-                <h3 className="mt-1 text-xl font-black">{copy.name}</h3>
-                <p className="mt-1 line-clamp-2 text-sm leading-6 text-[#476273]">{copy.summary}</p>
-                <p className="mt-2 text-xs font-bold text-[#0f8b7b]">Hủy demo miễn phí · Gói offline · trợ lý lập lịch local</p>
+        {items.map((destination) => (
+          <article key={destination.slug} className="grid overflow-hidden rounded-2xl border border-[#d9ecfb] bg-white shadow-[0_14px_34px_rgba(2,68,120,0.08)] md:grid-cols-[180px_minmax(0,1fr)_190px]">
+            <div className="min-h-40 bg-cover bg-center" style={{ backgroundImage: `url(${destination.imageUrl ?? getDestinationImage(destination.slug)})` }} />
+            <div className="p-4">
+              <p className="text-xs font-black text-[#0277d4]">Có thể đặt chỗ demo</p>
+              <h3 className="mt-1 text-xl font-black">{destination.name}</h3>
+              <p className="mt-1 line-clamp-2 text-sm leading-6 text-[#476273]">{destination.shortDescription ?? destination.description}</p>
+              <p className="mt-2 text-xs font-bold text-[#0f8b7b]">Hủy demo miễn phí · Gói offline · trợ lý lập lịch local</p>
+            </div>
+            <div className="flex flex-col justify-between border-t border-[#edf4fa] bg-[#fbfdff] p-4 md:border-l md:border-t-0">
+              <div>
+                <p className="text-xs font-bold text-[#6f8594]">Khám phá</p>
+                <p className="text-xl font-black text-[#ff5f12]">{destination.city ?? destination.country}</p>
               </div>
-              <div className="flex flex-col justify-between border-t border-[#edf4fa] bg-[#fbfdff] p-4 md:border-l md:border-t-0">
-                <div>
-                  <p className="text-xs font-bold text-[#6f8594]">Giá từ</p>
-                  <p className="text-xl font-black text-[#ff5f12]">{formatVnd(destination.budgetMin)}</p>
-                </div>
-                <Link href={`/booking/${destination.slug}`} className="mt-3 inline-flex items-center justify-center rounded-xl bg-[#ff6d1a] px-4 py-2.5 text-sm font-black text-white">
-                  Xem ưu đãi
-                </Link>
-              </div>
-            </article>
-          );
-        })}
+              <Link href={`/destinations/${destination.slug}`} className="mt-3 inline-flex items-center justify-center rounded-xl bg-[#ff6d1a] px-4 py-2.5 text-sm font-black text-white">
+                Xem chi tiết
+              </Link>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   );
 }
+
+// ---------------------------------------------------------------------------
+// Trip planner panel
+// ---------------------------------------------------------------------------
 
 function TripPlannerPanel() {
   return (
@@ -285,6 +465,10 @@ function PanelRow({ label, value }: { label: string; value: string }) {
   );
 }
 
+// ---------------------------------------------------------------------------
+// Trust band
+// ---------------------------------------------------------------------------
+
 function TrustBand() {
   return (
     <section className="mt-8 border-t border-[#d9ecfb] bg-white px-4 py-8">
@@ -292,7 +476,7 @@ function TrustBand() {
         {[
           ["Thanh toán demo", "Không phát sinh giao dịch thật, không lưu thẻ thật."],
           ["Trợ lý local-first", "Chatbot runtime dùng local service/RAG, không yêu cầu khóa cloud."],
-          ["Dữ liệu mẫu", "Không khẳng định vé bay, visa hoặc thời tiết theo thời gian thực."]
+          ["Dữ liệu thật", "Dữ liệu điểm đến và tour từ hệ thống backend thật."]
         ].map(([title, text]) => (
           <div key={title} className="flex gap-3 rounded-2xl bg-[#f7fbff] p-4">
             <CheckCircle2 className="mt-0.5 shrink-0 text-[#0f8b7b]" size={20} aria-hidden="true" />

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { BadgePercent, Bookmark, CalendarCheck2, Gift, HelpCircle, LogIn, Menu, Plane, UserRound } from "lucide-react";
 import { BrandLogo } from "@/components/brand-logo";
+import { LangToggle } from "@/components/lang-toggle";
+import { NotificationBell } from "@/components/notification-bell";
 
 const utilityNav = [
   ["Ưu đãi", "/", BadgePercent],
@@ -27,6 +29,8 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <LangToggle />
+          <NotificationBell />
           <Link href="/profile" className="hidden rounded-xl border border-[#d9ecfb] p-2 text-[#476273] transition hover:bg-[#eef7ff] hover:text-[#0277d4] md:inline-flex" aria-label="Mở hồ sơ du lịch">
             <UserRound size={18} aria-hidden="true" />
           </Link>

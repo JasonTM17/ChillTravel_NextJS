@@ -1,3 +1,8 @@
+/**
+ * @deprecated Use guards from apps/api/src/common/guards/ instead.
+ * This file is kept temporarily for backward compatibility during migration.
+ * Will be removed in a later task.
+ */
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable, SetMetadata, UnauthorizedException, createParamDecorator } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { type Role } from "@vietwander/shared";

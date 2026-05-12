@@ -1,53 +1,158 @@
-import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
-import { IsEmail, IsIn, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
-import { envelope, type AuthLoginRequest, type AuthRegisterRequest, type Role } from "@vietwander/shared";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Ip,
+  Put,
+  Post,
+  Req
+} from "@nestjs/common";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags
+} from "@nestjs/swagger";
+import { Throttle } from "@nestjs/throttler";
+import { Public } from "../common/decorators/public.decorator";
+import { CurrentUser } from "../common/decorators/current-user.decorator";
+import type { AuthenticatedUser } from "../common/strategies/jwt.strategy";
 import { AuthService } from "./auth.service";
-import { CurrentUser, JwtAuthGuard, type AuthUser } from "./security";
+import { RegisterDto } from "./auth/dto/register.dto";
+import { LoginDto } from "./auth/dto/login.dto";
+import { RefreshTokenDto } from "./auth/dto/refresh-token.dto";
+import { ChangePasswordDto } from "./auth/dto/change-password.dto";
+import { UpdateProfileDto } from "./auth/dto/update-profile.dto";
 
-class LoginDto implements AuthLoginRequest {
-  @IsEmail()
-  @MaxLength(160)
-  email!: string;
-
-  @IsString()
-  @MinLength(6)
-  @MaxLength(120)
-  password!: string;
+interface RequestWithIp {
+  ip?: string;
+  headers?: Record<string, string | string[] | undefined>;
+  socket?: { remoteAddress?: string };
 }
 
-class RegisterDto extends LoginDto implements AuthRegisterRequest {
-  @IsOptional()
-  @IsIn(["USER", "HOST", "GUIDE", "ADMIN"])
-  role?: Role;
+function extractIp(req: RequestWithIp): string {
+  const forwarded = req.headers?.["x-forwarded-for"];
+  if (typeof forwarded === "string") return forwarded.split(",")[0].trim();
+  return req.ip ?? req.socket?.remoteAddress ?? "unknown";
 }
 
+/**
+ * Auth controller — register, login, refresh, logout, me, change-password.
+ * Design §4, §5.2. Requirements 1, 2, 3, 4, 5, 28.
+ */
+@ApiTags("Auth")
+@ApiBearerAuth()
 @Controller("auth")
 export class AuthController {
-  constructor(private readonly auth: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
+
+  // -------------------------------------------------------------------------
+  // POST /auth/register
+  // -------------------------------------------------------------------------
 
   @Post("register")
-  register(@Body() body: RegisterDto) {
-    return envelope(this.auth.register(body.email, body.password, body.role), "Registered demo user");
+  @Public()
+  @ApiOperation({ summary: "Register a new user account" })
+  @ApiResponse({ status: 201, description: "User registered successfully" })
+  @ApiResponse({ status: 400, description: "Validation error" })
+  @ApiResponse({ status: 409, description: "Email already registered" })
+  register(@Body() dto: RegisterDto) {
+    return this.authService.register(dto);
   }
+
+  // -------------------------------------------------------------------------
+  // POST /auth/login
+  // -------------------------------------------------------------------------
 
   @Post("login")
-  login(@Body() body: LoginDto) {
-    return envelope(this.auth.login(body.email, body.password), "Logged in with demo credentials");
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ auth: { limit: 5, ttl: 60000 } })
+  @ApiOperation({ summary: "Login with email and password" })
+  @ApiResponse({ status: 200, description: "Login successful, returns tokens" })
+  @ApiResponse({ status: 401, description: "Invalid credentials" })
+  @ApiResponse({ status: 423, description: "Account locked due to too many failed attempts" })
+  @ApiResponse({ status: 429, description: "Too many requests" })
+  login(@Body() dto: LoginDto, @Req() req: RequestWithIp) {
+    const ip = extractIp(req);
+    return this.authService.login(dto, ip);
   }
+
+  // -------------------------------------------------------------------------
+  // POST /auth/refresh
+  // -------------------------------------------------------------------------
 
   @Post("refresh")
-  refresh() {
-    return envelope({ accessToken: "mock-refreshed-access-token" }, "Refresh token accepted in local demo");
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: "Refresh access token using refresh token" })
+  @ApiResponse({ status: 200, description: "New tokens issued" })
+  @ApiResponse({ status: 401, description: "Invalid or expired refresh token" })
+  refresh(@Body() dto: RefreshTokenDto) {
+    return this.authService.refresh(dto);
   }
+
+  // -------------------------------------------------------------------------
+  // POST /auth/logout
+  // -------------------------------------------------------------------------
 
   @Post("logout")
-  logout() {
-    return envelope({ revoked: true }, "Logged out");
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: "Logout and revoke refresh token" })
+  @ApiResponse({ status: 200, description: "Logged out successfully" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  async logout(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() dto: RefreshTokenDto
+  ) {
+    await this.authService.logout(user.id, dto.refreshToken);
+    return { revoked: true };
   }
 
+  // -------------------------------------------------------------------------
+  // GET /auth/me
+  // -------------------------------------------------------------------------
+
   @Get("me")
-  @UseGuards(JwtAuthGuard)
-  me(@CurrentUser() user: AuthUser) {
-    return envelope(this.auth.me(user.sub, user.role));
+  @ApiOperation({ summary: "Get current user profile" })
+  @ApiResponse({ status: 200, description: "User profile" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  getMe(@CurrentUser() user: AuthenticatedUser) {
+    return this.authService.getMe(user.id);
+  }
+
+  // -------------------------------------------------------------------------
+  // PUT /auth/me
+  // -------------------------------------------------------------------------
+
+  @Put("me")
+  @ApiOperation({ summary: "Update current user profile" })
+  @ApiResponse({ status: 200, description: "Updated profile" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  updateMe(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() dto: UpdateProfileDto
+  ) {
+    return this.authService.updateMe(user.id, dto);
+  }
+
+  // -------------------------------------------------------------------------
+  // PUT /auth/change-password
+  // -------------------------------------------------------------------------
+
+  @Put("change-password")
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: "Change current user password" })
+  @ApiResponse({ status: 200, description: "Password changed successfully" })
+  @ApiResponse({ status: 400, description: "Old password is incorrect" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  async changePassword(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() dto: ChangePasswordDto
+  ) {
+    await this.authService.changePassword(user.id, dto);
+    return { changed: true };
   }
 }

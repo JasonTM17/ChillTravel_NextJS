@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Patch, Post } from "@nestjs/common";
 import { IsArray, IsOptional, IsString, MaxLength } from "class-validator";
 import { envelope } from "@vietwander/shared";
+import { Public } from "../common/decorators/public.decorator";
 import { TripsService } from "./trips.service";
 
 class ProfileUpdateDto {
@@ -45,6 +46,7 @@ class TripCreateDto {
 }
 
 @Controller("me")
+@Public()
 export class TripsController {
   constructor(private readonly tripsService: TripsService) {}
 

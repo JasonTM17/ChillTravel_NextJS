@@ -14,6 +14,7 @@ import {
   type TravelQuizAnswer,
   type TravelStyle
 } from "@vietwander/shared";
+import { Public } from "../common/decorators/public.decorator";
 import { AiService } from "./ai.service";
 
 class ChatDto implements AiChatRequest {
@@ -122,6 +123,7 @@ class ReindexDto implements AiReindexRequest {
 }
 
 @Controller("ai")
+@Public()
 export class AiController {
   constructor(private readonly ai: AiService) {}
 

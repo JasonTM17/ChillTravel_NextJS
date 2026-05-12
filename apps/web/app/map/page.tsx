@@ -1,134 +1,151 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Filter, MapPin, Navigation, Route, ShieldCheck } from "lucide-react";
-import { destinations } from "@vietwander/shared";
-import { CommerceSurface, StatusPill, TrustBanner } from "@/components/commerce-primitives";
-import { PageShell } from "@/components/page-shell";
-import { getDestinationCopy } from "@/lib/destination-copy";
+import dynamic from "next/dynamic";
+import { Filter, MapPin, Navigation, Route } from "lucide-react";
+import { destinationApi, getCountryName } from "@/lib/api/destination.api";
+import type { Destination } from "@/lib/api/destination.api";
 import { formatVnd } from "@/lib/utils";
 
-const routeStops = ["da-nang", "hoi-an", "hue", "ninh-binh"];
-const markerPositions = [
-  ["ha-long", "68%", "20%"],
-  ["ha-noi", "58%", "24%"],
-  ["da-nang", "55%", "48%"],
-  ["hoi-an", "58%", "54%"],
-  ["phu-quoc", "42%", "82%"],
-  ["sapa", "45%", "15%"]
-] as const;
+// Lazy-load the map component (Leaflet requires window)
+const MapView = dynamic(() => import("@/components/map-view"), { ssr: false });
 
-export default function Page() {
-  const stops = routeStops.map((slug) => destinations.find((item) => item.slug === slug) ?? destinations[0]);
+/* ─── Destination coordinates (from seed data) ─────────────────────────────── */
+const COORDS: Record<string, [number, number]> = {
+  "ha-long-bay": [20.9101, 107.1839],
+  "da-nang":     [16.0544, 108.2022],
+  "hoi-an":      [15.8801, 108.338],
+  "sapa":        [22.3364, 103.8438],
+  "ninh-binh":   [20.2506, 105.9745],
+  "phu-quoc":    [10.2899, 103.984],
+  "da-lat":      [11.9404, 108.4583],
+  "ha-giang":    [23.0035, 105.0146],
+  "bali":        [-8.3405, 115.092],
+  "tokyo":       [35.6762, 139.6503],
+  "paris":       [48.8566, 2.3522],
+  "bangkok":     [13.7563, 100.5018],
+};
+
+/* ─── Filter categories ────────────────────────────────────────────────────── */
+const CATEGORIES = ["Tất cả", "Biển", "Núi", "Văn hóa", "Ẩm thực", "Nghỉ dưỡng", "Phiêu lưu"];
+
+export default function MapPage() {
+  const [destinations, setDestinations] = useState<Destination[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState("Tất cả");
+
+  useEffect(() => {
+    destinationApi.list({ size: 20 }).then(res => {
+      if (res.success) setDestinations(res.data.items);
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, []);
+
+  const filtered = activeCategory === "Tất cả"
+    ? destinations
+    : destinations.filter(d => d.category?.toLowerCase().includes(activeCategory.toLowerCase()));
+
+  const markers = filtered
+    .filter(d => COORDS[d.slug])
+    .map(d => ({
+      slug: d.slug,
+      name: d.name,
+      position: COORDS[d.slug],
+      country: getCountryName(d),
+    }));
 
   return (
-    <PageShell eyebrow="Bản đồ khám phá" title="Duyệt điểm đến theo marker, tuyến đường và phong cách chuyến đi">
-      <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)_330px]">
-        <aside className="h-fit space-y-4 lg:sticky lg:top-24">
-          <CommerceSurface>
-            <div className="flex items-center gap-3">
-              <div className="rounded-tv bg-tv-blue-light p-3 text-tv-blue">
-                <Filter size={20} aria-hidden="true" />
-              </div>
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">Bộ lọc</p>
-                <h2 className="font-bold">Phong cách chuyến đi</h2>
-              </div>
-            </div>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {["Biển", "Ẩm thực", "Gia đình", "Văn hóa", "Núi", "Tiết kiệm"].map((item) => (
-                <StatusPill key={item}>{item}</StatusPill>
-              ))}
-            </div>
-          </CommerceSurface>
-          <TrustBanner compact />
-        </aside>
-
-        <section className="overflow-hidden rounded-tv-lg border border-tv-border bg-white shadow-[0_18px_54px_rgba(2,68,120,0.1)]">
-          <div className="flex flex-col gap-3 border-b border-tv-border p-5 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">Bản đồ mô phỏng</p>
-              <h2 className="mt-1 text-2xl font-bold">Việt Nam route preview</h2>
-            </div>
-            <div className="flex gap-2">
-              <StatusPill tone="teal">Dự phòng offline</StatusPill>
-              <StatusPill tone="orange">Dữ liệu mẫu</StatusPill>
-            </div>
-          </div>
-          <div className="relative min-h-[560px] bg-[radial-gradient(circle_at_35%_20%,#d7f0ff,transparent_30%),linear-gradient(160deg,#f7fbff,#eaf7ff_48%,#fff7ed)]">
-            <div className="absolute inset-8 rounded-[32px] border border-dashed border-[#9ccdec]" />
-            <div className="absolute left-[45%] top-[9%] h-[78%] w-24 rounded-[55%] border-l-[18px] border-[#9bd3b8] opacity-50" />
-            <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" role="img" aria-label="Tuyến demo Đà Nẵng Hội An Huế Ninh Bình">
-              <path d="M 55 48 C 68 44, 65 35, 62 27 C 58 58, 60 66, 49 73" fill="none" stroke="#ff6d1a" strokeWidth="4" strokeLinecap="round" strokeDasharray="10 10" />
-            </svg>
-            {markerPositions.map(([slug, left, top]) => {
-              const destination = destinations.find((item) => item.slug === slug) ?? destinations[0];
-              const copy = getDestinationCopy(destination);
-              return (
-                <Link
-                  key={slug}
-                  href={`/destinations/${slug}`}
-                  className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-white p-2 text-tv-blue shadow-[0_12px_28px_rgba(2,68,120,0.22)] ring-4 ring-white/70 transition hover:scale-110"
-                  style={{ left, top }}
-                  aria-label={`Mở ${copy.name}`}
-                >
-                  <MapPin size={24} fill="#0277d4" aria-hidden="true" />
-                </Link>
-              );
-            })}
-            <div className="absolute bottom-5 left-5 right-5 rounded-tv-lg border border-tv-border bg-white/92 p-4 shadow-[0_16px_36px_rgba(2,68,120,0.1)] backdrop-blur">
-              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">Dự phòng khi chưa có bản đồ thật</p>
-                  <h3 className="text-xl font-bold">Vẫn xem được marker, route preview và CTA đặt chỗ demo.</h3>
-                </div>
-                <Link href="/booking/da-nang" className="rounded-tv bg-tv-orange px-4 py-3 text-sm font-bold text-white">
-                  Đặt chỗ demo
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <aside className="h-fit space-y-4 lg:sticky lg:top-24">
-          <CommerceSurface>
-            <div className="flex items-center gap-3">
-              <div className="rounded-tv bg-[#e8fbf6] p-3 text-[#0f766e]">
-                <Route size={20} aria-hidden="true" />
-              </div>
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">Tuyến đề xuất</p>
-                <h2 className="font-bold">Miền Trung 4 điểm</h2>
-              </div>
-            </div>
-            <div className="mt-5 space-y-3">
-              {stops.map((destination, index) => {
-                const copy = getDestinationCopy(destination);
-                return (
-                  <Link key={destination.slug} href={`/destinations/${destination.slug}`} className="flex gap-3 rounded-tv bg-tv-bg p-4 transition hover:bg-tv-blue-light">
-                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-tv-blue text-sm font-bold text-white">{index + 1}</span>
-                    <span className="min-w-0">
-                      <span className="block font-bold">{copy.name}</span>
-                      <span className="mt-1 block text-sm text-tv-ink-3">{formatVnd(destination.budgetMin)} / ngày</span>
-                    </span>
-                  </Link>
-                );
-              })}
-            </div>
-          </CommerceSurface>
-          <CommerceSurface>
-            <div className="flex gap-3">
-              <ShieldCheck className="mt-0.5 shrink-0 text-[#0f8b7b]" size={22} aria-hidden="true" />
-              <div>
-                <h2 className="font-bold">Ranh giới dữ liệu</h2>
-                <p className="mt-2 text-sm leading-6 text-tv-ink-3">Bản đồ này là mô phỏng local. Không khẳng định đường bay, thời tiết hoặc giá theo thời gian thực.</p>
-              </div>
-            </div>
-          </CommerceSurface>
-          <Link href="/explore?q=Da+Nang" className="inline-flex w-full items-center justify-center gap-2 rounded-tv bg-tv-blue px-4 py-3 font-bold text-white">
-            <Navigation size={18} aria-hidden="true" />
-            Tìm điểm đến khác
-          </Link>
-        </aside>
+    <main className="min-h-screen bg-tv-bg">
+      {/* Header */}
+      <div className="border-b border-tv-border bg-white">
+        <div className="mx-auto max-w-[1200px] px-4 py-4">
+          <h1 className="text-tv-xl font-bold text-tv-ink">Bản đồ điểm đến</h1>
+          <p className="mt-1 text-tv-sm text-tv-ink-3">
+            Khám phá {destinations.length} điểm đến trên bản đồ thật
+          </p>
+        </div>
       </div>
-    </PageShell>
+
+      <div className="mx-auto max-w-[1200px] px-4 py-5">
+        <div className="grid gap-5 lg:grid-cols-[280px_minmax(0,1fr)]">
+          {/* Sidebar */}
+          <aside className="space-y-4">
+            {/* Filter */}
+            <div className="rounded-tv border border-tv-border bg-white p-4 shadow-tv-card">
+              <div className="flex items-center gap-2 mb-3">
+                <Filter size={16} className="text-tv-blue" />
+                <span className="text-tv-sm font-bold text-tv-ink">Lọc theo loại</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {CATEGORIES.map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`rounded-full px-3 py-1.5 text-tv-xs font-semibold transition-colors ${
+                      activeCategory === cat
+                        ? "bg-tv-blue text-white"
+                        : "border border-tv-border bg-white text-tv-ink-2 hover:border-tv-blue hover:text-tv-blue"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Destination list */}
+            <div className="rounded-tv border border-tv-border bg-white shadow-tv-card">
+              <div className="border-b border-tv-border px-4 py-3">
+                <span className="text-tv-sm font-bold text-tv-ink">
+                  {filtered.length} điểm đến
+                </span>
+              </div>
+              <div className="max-h-[400px] overflow-y-auto">
+                {loading ? (
+                  <div className="p-4 space-y-3">
+                    {[1,2,3,4].map(i => <div key={i} className="tv-skeleton h-12 rounded-tv-sm" />)}
+                  </div>
+                ) : filtered.length === 0 ? (
+                  <p className="p-4 text-tv-sm text-tv-ink-3">Không tìm thấy điểm đến.</p>
+                ) : (
+                  <div className="divide-y divide-tv-border">
+                    {filtered.map((d, i) => (
+                      <Link
+                        key={d.slug}
+                        href={`/destinations/${d.slug}`}
+                        className="flex items-center gap-3 px-4 py-3 hover:bg-tv-bg transition-colors"
+                      >
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-tv-blue text-tv-xs font-bold text-white">
+                          {i + 1}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-tv-sm font-semibold text-tv-ink truncate">{d.name}</p>
+                          <p className="text-tv-xs text-tv-ink-3">{getCountryName(d)}</p>
+                        </div>
+                        {d.ratingAvg != null && (
+                          <span className="text-tv-xs font-bold text-amber-600">★ {d.ratingAvg.toFixed(1)}</span>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </aside>
+
+          {/* Map */}
+          <div className="rounded-tv border border-tv-border bg-white shadow-tv-card overflow-hidden" style={{ minHeight: 500 }}>
+            {loading ? (
+              <div className="flex h-full items-center justify-center">
+                <div className="tv-skeleton h-full w-full" />
+              </div>
+            ) : (
+              <MapView markers={markers} />
+            )}
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }

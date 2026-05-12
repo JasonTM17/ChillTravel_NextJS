@@ -47,6 +47,7 @@ const prisma = createPrisma();
 // All photos are free under the Unsplash License (https://unsplash.com/license)
 // ---------------------------------------------------------------------------
 const DESTINATION_IMAGES: Record<string, string> = {
+  // Vietnam
   "ha-long-bay":  "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1400&q=80",
   "da-nang":      "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1400&q=80",
   "hoi-an":       "https://images.unsplash.com/photo-1555400038-63f5ba517a47?auto=format&fit=crop&w=1400&q=80",
@@ -54,22 +55,68 @@ const DESTINATION_IMAGES: Record<string, string> = {
   "ninh-binh":    "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=1400&q=80",
   "phu-quoc":     "https://images.unsplash.com/photo-1540202404-a2f29564651f?auto=format&fit=crop&w=1400&q=80",
   "da-lat":       "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1400&q=80",
-  "ha-giang":     "https://images.unsplash.com/photo-1573408301185-9519f94f4e8e?auto=format&fit=crop&w=1400&q=80",
+  "ha-giang":     "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1400&q=80",
+  "ha-noi":       "https://images.unsplash.com/photo-1509030450996-dd1a26dda07a?auto=format&fit=crop&w=1400&q=80",
+  "ho-chi-minh":  "https://images.unsplash.com/photo-1583417319070-4a69db38a482?auto=format&fit=crop&w=1400&q=80",
+  "hue":          "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=1400&q=80",
+  "nha-trang":    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80",
+  "phong-nha":    "https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=1400&q=80",
+  "mui-ne":       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1400&q=80",
+  "can-tho":      "https://images.unsplash.com/photo-1583417319070-4a69db38a482?auto=format&fit=crop&w=1400&q=80",
+  // International
   "bali":         "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1400&q=80",
   "tokyo":        "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1400&q=80",
+  "kyoto":        "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1400&q=80",
+  "osaka":        "https://images.unsplash.com/photo-1590559899731-a382839e5549?auto=format&fit=crop&w=1400&q=80",
   "paris":        "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1400&q=80",
   "bangkok":      "https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1400&q=80",
+  "chiang-mai":   "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1400&q=80",
+  "phuket":       "https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?auto=format&fit=crop&w=1400&q=80",
+  "singapore":    "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=1400&q=80",
+  "seoul":        "https://images.unsplash.com/photo-1538485399081-7c8edcb4a11e?auto=format&fit=crop&w=1400&q=80",
+  "rome":         "https://images.unsplash.com/photo-1525874684015-58379d421a52?auto=format&fit=crop&w=1400&q=80",
+  "barcelona":    "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=1400&q=80",
+  "sydney":       "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=1400&q=80",
+  "dubai":        "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1400&q=80",
+  "santorini":    "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1400&q=80",
+  "swiss-alps":   "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1400&q=80",
+  "kuala-lumpur": "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=1400&q=80",
+  "angkor-wat":   "https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1400&q=80",
 };
 
-const TOUR_IMAGES: Record<string, string> = {
-  "northern-vietnam-adventure":    "https://images.unsplash.com/photo-1573408301185-9519f94f4e8e?auto=format&fit=crop&w=1400&q=80",
-  "central-vietnam-heritage-tour": "https://images.unsplash.com/photo-1555400038-63f5ba517a47?auto=format&fit=crop&w=1400&q=80",
-  "phu-quoc-beach-escape":         "https://images.unsplash.com/photo-1540202404-a2f29564651f?auto=format&fit=crop&w=1400&q=80",
-  "ha-giang-motorbike-adventure":  "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=1400&q=80",
-  "bali-luxury-retreat":           "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1400&q=80",
-  "japan-spring-discovery":        "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1400&q=80",
-  "thailand-city-island-tour":     "https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1400&q=80",
-  "europe-romantic-journey":       "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1400&q=80",
+const TOUR_IMAGES: Record<string, string[]> = {
+  "northern-vietnam-adventure": [
+    "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1573408301185-9519f94f4e8e?auto=format&fit=crop&w=1400&q=80",
+  ],
+  "central-vietnam-heritage-tour": [
+    "https://images.unsplash.com/photo-1555400038-63f5ba517a47?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1400&q=80",
+  ],
+  "phu-quoc-beach-escape": [
+    "https://images.unsplash.com/photo-1540202404-a2f29564651f?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80",
+  ],
+  "ha-giang-motorbike-adventure": [
+    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=1400&q=80",
+  ],
+  "bali-luxury-retreat": [
+    "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1400&q=80",
+  ],
+  "japan-spring-discovery": [
+    "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1400&q=80",
+  ],
+  "thailand-city-island-tour": [
+    "https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1400&q=80",
+  ],
+  "europe-romantic-journey": [
+    "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1400&q=80",
+    "https://images.unsplash.com/photo-1525874684015-58379d421a52?auto=format&fit=crop&w=1400&q=80",
+  ],
 };
 
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1400&q=80";
@@ -98,11 +145,22 @@ const COUNTRIES = [
   { key: "ID", name: "Indonesia" },
   { key: "JP", name: "Nhật Bản" },
   { key: "FR", name: "Pháp" },
-  { key: "TH", name: "Thái Lan" }
+  { key: "TH", name: "Thái Lan" },
+  { key: "SG", name: "Singapore" },
+  { key: "KR", name: "Hàn Quốc" },
+  { key: "IT", name: "Ý" },
+  { key: "ES", name: "Tây Ban Nha" },
+  { key: "AU", name: "Úc" },
+  { key: "AE", name: "UAE" },
+  { key: "GR", name: "Hy Lạp" },
+  { key: "CH", name: "Thụy Sĩ" },
+  { key: "MY", name: "Malaysia" },
+  { key: "KH", name: "Campuchia" },
 ] as const;
 type CountryKey = (typeof COUNTRIES)[number]["key"];
 
 const CITIES: Array<{ name: string; countryKey: CountryKey }> = [
+  // Vietnam
   { name: "Quảng Ninh", countryKey: "VN" },
   { name: "Đà Nẵng", countryKey: "VN" },
   { name: "Quảng Nam", countryKey: "VN" },
@@ -111,10 +169,32 @@ const CITIES: Array<{ name: string; countryKey: CountryKey }> = [
   { name: "Kiên Giang", countryKey: "VN" },
   { name: "Lâm Đồng", countryKey: "VN" },
   { name: "Hà Giang", countryKey: "VN" },
+  { name: "Hà Nội", countryKey: "VN" },
+  { name: "TP. Hồ Chí Minh", countryKey: "VN" },
+  { name: "Thừa Thiên Huế", countryKey: "VN" },
+  { name: "Khánh Hòa", countryKey: "VN" },
+  { name: "Quảng Bình", countryKey: "VN" },
+  { name: "Bình Thuận", countryKey: "VN" },
+  { name: "Cần Thơ", countryKey: "VN" },
+  // International
   { name: "Bali", countryKey: "ID" },
   { name: "Tokyo", countryKey: "JP" },
+  { name: "Kyoto", countryKey: "JP" },
+  { name: "Osaka", countryKey: "JP" },
   { name: "Paris", countryKey: "FR" },
-  { name: "Bangkok", countryKey: "TH" }
+  { name: "Bangkok", countryKey: "TH" },
+  { name: "Chiang Mai", countryKey: "TH" },
+  { name: "Phuket", countryKey: "TH" },
+  { name: "Singapore", countryKey: "SG" },
+  { name: "Seoul", countryKey: "KR" },
+  { name: "Rome", countryKey: "IT" },
+  { name: "Barcelona", countryKey: "ES" },
+  { name: "Sydney", countryKey: "AU" },
+  { name: "Dubai", countryKey: "AE" },
+  { name: "Santorini", countryKey: "GR" },
+  { name: "Zurich", countryKey: "CH" },
+  { name: "Kuala Lumpur", countryKey: "MY" },
+  { name: "Siem Reap", countryKey: "KH" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -1388,7 +1468,7 @@ async function main() {
     if (!destinationId) {
       throw new Error(`Tour ${t.slug}: destination ${t.destinationSlug} not seeded`);
     }
-    const tourImage = TOUR_IMAGES[t.slug] ?? DESTINATION_IMAGES[t.destinationSlug] ?? FALLBACK_IMAGE;
+    const tourImage = (TOUR_IMAGES[t.slug]?.[0]) ?? DESTINATION_IMAGES[t.destinationSlug] ?? FALLBACK_IMAGE;
 
     const tour = await prisma.tour.upsert({
       where: { slug: t.slug },
@@ -1455,9 +1535,9 @@ async function main() {
     }
 
     // Tour images (2 per tour — use real Unsplash photos)
-    const tourGalleryImages = [
-      TOUR_IMAGES[t.slug] ?? FALLBACK_IMAGE,
+    const tourGalleryImages = TOUR_IMAGES[t.slug] ?? [
       DESTINATION_IMAGES[t.destinationSlug] ?? FALLBACK_IMAGE,
+      FALLBACK_IMAGE,
     ];
     for (let i = 0; i < tourGalleryImages.length; i++) {
       const imgUrl = tourGalleryImages[i];

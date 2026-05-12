@@ -28,9 +28,8 @@ const mainNav = [
   { label: "Vé máy bay", href: "/flights" },
   { label: "Tour du lịch", href: "/tours" },
   { label: "Hoạt động", href: "/experiences" },
-  { label: "Xe đưa đón", href: "/map" },
-  { label: "Thuê xe", href: "/map" },
-  { label: "Ưu đãi", href: "/" },
+  { label: "Bản đồ", href: "/map" },
+  { label: "Ưu đãi", href: "/explore" },
 ] as const;
 
 export function SiteHeader() {
@@ -102,7 +101,7 @@ export function SiteHeader() {
           {/* Nav tabs — desktop */}
           <nav className="hidden flex-1 items-center md:flex" aria-label="Điều hướng chính">
             {mainNav.map(({ label, href }) => {
-              const active = pathname === href || (href !== "/" && pathname.startsWith(href));
+              const active = pathname === href || pathname.startsWith(href + "/");
               return (
                 <Link
                   key={label}

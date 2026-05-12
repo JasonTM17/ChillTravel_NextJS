@@ -152,7 +152,7 @@ describe("BookingController", () => {
       const result = await controller.createBooking(
         MOCK_AUTHENTICATED_USER,
         BASE_CREATE_DTO as any
-      ) as typeof MOCK_BOOKING;
+      ) as any;
 
       expect(result.isDemo).toBe(true);
     });
@@ -256,7 +256,7 @@ describe("BookingController", () => {
       const result = await controller.cancelBooking(
         MOCK_AUTHENTICATED_USER,
         "WV-20260511-AAAAAA"
-      ) as typeof cancelledBooking;
+      ) as any;
 
       expect(service.cancelBooking).toHaveBeenCalledWith("user-id-1", "WV-20260511-AAAAAA");
       expect(result.status).toBe("cancelled");

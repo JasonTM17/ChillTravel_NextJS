@@ -1,35 +1,38 @@
 /**
  * Currency conversion configuration.
+ * Hardcoded rates for demo — TODO: integrate live exchange rate API.
  *
- * Rates are hardcoded for demo purposes. In production, replace with a
- * live exchange-rate API adapter (e.g. Open Exchange Rates, Fixer.io).
- *
- * Design §18.13 / Req 36.
+ * Req 36 / Design §18.5.
  */
 
-/** Supported currency codes. */
-export type CurrencyCode = "VND" | "USD";
-
-/** Hardcoded exchange rates relative to VND (1 VND = X currency). */
-const RATES: Record<CurrencyCode, number> = {
+export const CURRENCY_RATES: Record<string, number> = {
   VND: 1,
-  USD: 1 / 25_000, // 1 USD ≈ 25,000 VND
+  USD: 25000, // 1 USD = 25,000 VND
+  EUR: 27000, // 1 EUR = 27,000 VND
+  JPY: 170, // 1 JPY = 170 VND
+  SGD: 18500, // 1 SGD = 18,500 VND
 };
 
+export const SUPPORTED_CURRENCIES = Object.keys(CURRENCY_RATES);
+
 /**
- * Convert an amount from VND to the target currency.
- * Returns the original amount unchanged if the currency is VND or unknown.
+ * Convert a VND amount to the target currency.
+ * Returns the original amount if the currency is not supported.
  */
-export function convertFromVnd(amountVnd: number, to: CurrencyCode): number {
-  const rate = RATES[to] ?? 1;
-  return Math.round(amountVnd * rate * 100) / 100;
+export function convertFromVnd(
+  amountVnd: number,
+  targetCurrency: string,
+): number {
+  const rate = CURRENCY_RATES[targetCurrency.toUpperCase()];
+  if (!rate || rate === 1) return amountVnd;
+  return Math.round(amountVnd / rate);
 }
 
 /**
- * Parse a currency query param string into a supported CurrencyCode.
- * Falls back to "VND" for unknown values.
+ * Convert an amount in the source currency to VND.
  */
-export function parseCurrency(raw?: string): CurrencyCode {
-  if (raw === "USD") return "USD";
-  return "VND";
+export function convertToVnd(amount: number, sourceCurrency: string): number {
+  const rate = CURRENCY_RATES[sourceCurrency.toUpperCase()];
+  if (!rate || rate === 1) return amount;
+  return Math.round(amount * rate);
 }

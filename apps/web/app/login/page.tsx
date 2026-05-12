@@ -14,7 +14,10 @@ import { useAuth } from "@/lib/auth/auth-context";
 // ---------------------------------------------------------------------------
 
 const loginSchema = z.object({
-  email: z.string().min(1, "Email không được để trống").email("Email không hợp lệ"),
+  email: z
+    .string()
+    .min(1, "Email không được để trống")
+    .email("Email không hợp lệ"),
   password: z.string().min(1, "Mật khẩu không được để trống"),
 });
 
@@ -25,9 +28,9 @@ type SignInFields = z.infer<typeof loginSchema>;
 // ---------------------------------------------------------------------------
 
 const accounts = [
-  "admin@wanderviet.com / Admin123!",
-  "user@wanderviet.com / User123!",
-  "staff@wanderviet.com / Staff123!",
+  "admin@wanderviet.com / Admin@123456",
+  "user@wanderviet.com / User@123456",
+  "staff@wanderviet.com / Staff@123456",
 ];
 
 // ---------------------------------------------------------------------------
@@ -43,7 +46,9 @@ function SignInForm() {
     email: "",
     password: "",
   });
-  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof SignInFields, string>>>({});
+  const [fieldErrors, setFieldErrors] = useState<
+    Partial<Record<keyof SignInFields, string>>
+  >({});
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -75,12 +80,18 @@ function SignInForm() {
 
     setIsLoading(true);
     try {
-      const res = await login({ email: fields.email, password: fields.password });
+      const res = await login({
+        email: fields.email,
+        password: fields.password,
+      });
       if (res.success) {
         const redirect = searchParams.get("redirect") ?? "/";
         router.push(redirect);
       } else {
-        setError(res.message ?? "Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.");
+        setError(
+          res.message ??
+            "Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.",
+        );
       }
     } catch {
       setError("Đã xảy ra lỗi. Vui lòng thử lại.");
@@ -97,7 +108,9 @@ function SignInForm() {
             <LogIn size={22} aria-hidden="true" />
           </div>
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">Tài khoản</p>
+            <p className="text-xs font-black uppercase tracking-[0.14em] text-[#6f8594]">
+              Tài khoản
+            </p>
             <h2 className="text-2xl font-black">Đăng nhập để tiếp tục</h2>
           </div>
         </div>
@@ -105,7 +118,11 @@ function SignInForm() {
         {/* Error banner */}
         {error && (
           <div className="mt-4 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-            <AlertCircle size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
+            <AlertCircle
+              size={18}
+              className="mt-0.5 shrink-0"
+              aria-hidden="true"
+            />
             <p className="font-bold">{error}</p>
           </div>
         )}
@@ -125,7 +142,9 @@ function SignInForm() {
               aria-describedby={fieldErrors.email ? "email-error" : undefined}
             />
             {fieldErrors.email && (
-              <span id="email-error" className="text-xs font-bold text-red-600">{fieldErrors.email}</span>
+              <span id="email-error" className="text-xs font-bold text-red-600">
+                {fieldErrors.email}
+              </span>
             )}
           </label>
 
@@ -140,15 +159,25 @@ function SignInForm() {
               placeholder="••••••••"
               className="rounded-2xl border border-[#d9ecfb] bg-[#f7fbff] px-4 py-3 font-black text-[#071827] outline-none focus:border-[#0277d4] aria-[invalid=true]:border-red-400"
               aria-invalid={!!fieldErrors.password}
-              aria-describedby={fieldErrors.password ? "password-error" : undefined}
+              aria-describedby={
+                fieldErrors.password ? "password-error" : undefined
+              }
             />
             {fieldErrors.password && (
-              <span id="password-error" className="text-xs font-bold text-red-600">{fieldErrors.password}</span>
+              <span
+                id="password-error"
+                className="text-xs font-bold text-red-600"
+              >
+                {fieldErrors.password}
+              </span>
             )}
           </label>
 
           <div className="flex items-center justify-between">
-            <Link href="/forgot-password" className="text-sm font-black text-[#0277d4] hover:underline">
+            <Link
+              href="/forgot-password"
+              className="text-sm font-black text-[#0277d4] hover:underline"
+            >
               Quên mật khẩu?
             </Link>
           </div>
@@ -164,7 +193,10 @@ function SignInForm() {
 
         <p className="mt-4 text-sm leading-6 text-[#476273]">
           Chưa có tài khoản?{" "}
-          <Link href="/register" className="font-black text-[#0277d4] hover:underline">
+          <Link
+            href="/register"
+            className="font-black text-[#0277d4] hover:underline"
+          >
             Đăng ký ngay
           </Link>
         </p>
@@ -181,10 +213,15 @@ function SignInForm() {
           </div>
           <div className="mt-4 space-y-2 text-sm font-bold text-[#476273]">
             {accounts.map((account) => (
-              <p key={account} className="rounded-xl bg-[#f7fbff] p-3">{account}</p>
+              <p key={account} className="rounded-xl bg-[#f7fbff] p-3">
+                {account}
+              </p>
             ))}
           </div>
-          <Link href="/register" className="mt-4 inline-flex font-black text-[#0277d4]">
+          <Link
+            href="/register"
+            className="mt-4 inline-flex font-black text-[#0277d4]"
+          >
             Tạo tài khoản mới
           </Link>
         </CommerceSurface>
@@ -200,7 +237,11 @@ function SignInForm() {
 export default function SignInPage() {
   return (
     <PageShell eyebrow="Truy cập tài khoản" title="Đăng nhập WanderViet">
-      <Suspense fallback={<div className="h-64 animate-pulse rounded-2xl bg-[#f7fbff]" />}>
+      <Suspense
+        fallback={
+          <div className="h-64 animate-pulse rounded-2xl bg-[#f7fbff]" />
+        }
+      >
         <SignInForm />
       </Suspense>
     </PageShell>

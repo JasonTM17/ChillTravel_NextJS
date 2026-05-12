@@ -1,110 +1,212 @@
-# CHILLTRAVEL
+# WanderViet Travel Platform
 
-Vietnam & World Travel Commerce Platform.
+Nền tảng đặt tour du lịch Việt Nam và quốc tế — full-stack, production-grade, Vietnamese-first.
 
-CHILLTRAVEL is a portfolio-grade local-first travel platform combining a cinematic Next.js web app, NestJS API, FastAPI local assistant/RAG service, PostgreSQL/Prisma schema, Qdrant vector architecture, Redis-ready cache, and a Flutter mobile app source tree.
+[![CI](https://github.com/your-org/wanderviet/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/wanderviet/actions/workflows/ci.yml)
 
-## Highlights
+## Tổng quan
 
-- Vietnamese travel-commerce web app with Traveloka-inspired search-first UX, legally distinct ChillTravel branding, landing, explore, destination detail, smart planner, chat, compare, map, booking mock, wishlist, trips, profile, and admin.
-- Local chatbot runtime design: Ollama + RAG + Qdrant. No OpenAI API key required for runtime chatbot.
-- Rich sample travel data for Vietnam and world destinations.
-- Mock-only booking and payment. Thanh toán demo — không phát sinh giao dịch thật.
-- Flutter mobile app structure with Riverpod, Dio, Drift-ready offline cache, secure token storage, local notification mock, vi/en-ready UX.
-- Stitch Design DNA and prompts included. See `docs/vietnamese-ux-brand.md` for Vietnamese UX, brand, payment, and QA rules.
+WanderViet là nền tảng du lịch full-stack được xây dựng như một dự án portfolio chất lượng production, bao gồm:
 
-## Tech Stack
+- **Web**: Next.js 16 + TypeScript + Tailwind CSS — giao diện Vietnamese-first, Traveloka-inspired
+- **API**: NestJS 11 + Prisma 7 + PostgreSQL — REST API đầy đủ với Swagger docs
+- **AI Service**: FastAPI + Ollama + Qdrant — chatbot local-first, không cần OpenAI API key
+- **Mobile**: Flutter (cấu trúc sẵn, Riverpod + Dio)
+- **DevOps**: pnpm workspaces + Turborepo + Docker Compose + GitHub Actions CI
 
-- Web: Next.js 16.2.4, TypeScript, TailwindCSS, shadcn-style components, Framer Motion-ready.
-- API: NestJS 11.1.19, Swagger, validation, RBAC-ready services.
-- DB: PostgreSQL, Prisma 7.8.0 schema.
-- Local assistant: FastAPI, Ollama provider assumptions, Qdrant, local markdown knowledge.
-- Mobile: Flutter source tree, Riverpod, Dio, go_router, Drift-ready.
-- DevOps: pnpm, Turborepo, Docker Compose, GitHub Actions.
+> ⚠️ **Thanh toán demo** — Tất cả luồng thanh toán là mock/demo. Không phát sinh giao dịch thật.
 
-## Local Setup
+## Tính năng chính
 
-Install Node 24 and pnpm 10, then:
+| Module        | Mô tả                                                                |
+| ------------- | -------------------------------------------------------------------- |
+| Auth          | Đăng ký, đăng nhập, JWT access+refresh, đổi mật khẩu, khóa tài khoản |
+| Destinations  | Danh sách điểm đến, tìm kiếm, chi tiết, admin CRUD                   |
+| Tours         | Tìm kiếm/lọc/sắp xếp tour, lịch trình, ngày khởi hành, admin CRUD    |
+| Booking       | Đặt tour, quản lý booking, mã WV-YYYYMMDD-XXXXXX                     |
+| Payment       | Mock checkout + callback (demo only)                                 |
+| Reviews       | Đánh giá tour, admin duyệt/ẩn                                        |
+| Wishlist      | Lưu tour và điểm đến yêu thích                                       |
+| Blog          | CMS blog, DRAFT/PUBLISHED                                            |
+| Contact       | Form liên hệ, admin triage                                           |
+| Admin         | Dashboard tổng quan, doanh thu, top tours, quản lý tất cả modules    |
+| Notifications | Thông báo in-app, đánh dấu đã đọc                                    |
+| Coupons       | Mã giảm giá, PERCENT/FIXED, giới hạn sử dụng                         |
+| AI Concierge  | Chatbot local (Ollama + RAG + Qdrant), không cần cloud API key       |
 
-    pnpm install
-    pnpm build
-    pnpm test
-    pnpm lint
+## Yêu cầu hệ thống
 
-Run web:
+- **Node.js** 22 hoặc 24
+- **pnpm** 10.33.0+
+- **Docker** + Docker Compose (cho PostgreSQL, Redis, Qdrant)
+- **Python** 3.12+ (cho AI service)
+- **Ollama** (tùy chọn, cho chatbot local)
 
-    pnpm --filter @vietwander/web dev
+## Cài đặt nhanh
 
-Run Vietnamese web smoke checks:
+### 1. Clone và cài dependencies
 
-    pnpm web:smoke
+```bash
+git clone https://github.com/your-org/wanderviet.git
+cd wanderviet
+pnpm install
+```
 
-Browser E2E evidence from the in-app browser is recorded in `docs/browser-e2e-report.md`.
+### 2. Cấu hình môi trường
 
-Run API:
+```bash
+cp .env.example .env
+# Chỉnh sửa .env với các giá trị phù hợp
+```
 
-    pnpm --filter @vietwander/api dev
+Các biến bắt buộc:
 
-Run local assistant service:
+```dotenv
+DATABASE_URL=postgresql://vietwander:vietwander@localhost:5432/vietwander
+JWT_ACCESS_SECRET=<chuỗi ngẫu nhiên ít nhất 32 ký tự>
+JWT_REFRESH_SECRET=<chuỗi ngẫu nhiên ít nhất 32 ký tự>
+FRONTEND_URL=http://localhost:3000
+```
 
-    cd apps/ai-service
-    pip install -r requirements.txt
-    uvicorn app.main:app --reload --port 8010
+### 3. Khởi động Docker services
 
-Run Docker services:
+```bash
+# Khởi động PostgreSQL, Redis, Qdrant
+docker compose -f infra/docker/docker-compose.yml up -d postgres redis qdrant
+```
 
-    docker compose -f infra/docker/docker-compose.yml up
+### 4. Khởi tạo database
 
-## Local Assistant
+```bash
+# Chạy migrations
+pnpm --filter @vietwander/db exec prisma migrate dev --schema prisma/schema.prisma
 
-Install Ollama separately, then pull:
+# Seed dữ liệu mẫu (12 điểm đến, 8 tour, demo users, bookings, reviews...)
+pnpm seed
+```
 
-    ollama pull qwen3:4b
-    ollama pull nomic-embed-text
+### 5. Chạy development
 
-The local assistant service includes sample RAG and structured tools. It does not claim real-time flight, visa, or weather access.
+```bash
+# Chạy tất cả services song song (web + api)
+pnpm dev
 
-## Mobile
+# Hoặc chạy riêng lẻ:
+pnpm --filter @vietwander/web dev    # http://localhost:3000
+pnpm --filter @vietwander/api dev    # http://localhost:4000
+```
 
-Flutter is not installed on this machine yet. After installing Flutter stable:
+### 6. Chạy AI Service (tùy chọn)
 
-    cd apps/mobile
-    flutter pub get
-    flutter analyze
-    flutter test
-    flutter run
+```bash
+# Cài Ollama: https://ollama.ai
+ollama pull qwen3:4b
+ollama pull nomic-embed-text
 
-The Flutter package metadata is `chilltravel`; older VietWander/AI names are no longer used for the mobile app package.
+# Chạy AI service
+cd apps/ai-service
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8010
+```
 
-## Demo Accounts
+## Tài khoản demo
 
-- admin@chilltravel.local / Admin123!
-- user@chilltravel.local / User123!
-- guide@chilltravel.local / Guide123!
-- host@chilltravel.local / Host123!
+| Email                | Mật khẩu     | Vai trò |
+| -------------------- | ------------ | ------- |
+| admin@wanderviet.com | Admin@123456 | ADMIN   |
+| user@wanderviet.com  | User@123456  | USER    |
+| staff@wanderviet.com | Staff@123456 | STAFF   |
 
-## Payment Warning
+## API Documentation
 
-All payment flows are local/mock/sandbox only. The project never stores real card data and never charges money.
+Swagger UI: [http://localhost:4000/api/docs](http://localhost:4000/api/docs)
 
-## Data Limits
+## Cấu trúc dự án
 
-Travel data is sample/local. The chatbot does not provide real-time visa, current weather, or flight price truth. Check official sources for live travel decisions.
+```
+wanderviet/
+├── apps/
+│   ├── api/          # NestJS 11 — REST API
+│   ├── web/          # Next.js 16 — Frontend
+│   ├── ai-service/   # FastAPI — AI/RAG service
+│   └── mobile/       # Flutter — Mobile app
+├── packages/
+│   ├── shared/       # Shared TypeScript types
+│   ├── db/           # Prisma schema + migrations + seed
+│   └── config/       # Shared configs
+├── infra/docker/     # Docker Compose
+├── e2e/              # Playwright E2E tests
+├── load-tests/       # k6 load tests
+├── docs/
+│   ├── adr/          # Architecture Decision Records
+│   └── er-diagram.md # Entity-Relationship diagram
+├── .github/
+│   ├── workflows/ci.yml  # GitHub Actions CI
+│   └── renovate.json     # Renovate bot config
+└── Makefile          # Shortcut commands
+```
 
-## Verification
+## Lệnh thường dùng
 
-    pnpm lint
-    pnpm test
-    pnpm exec turbo build --no-daemon
-    pnpm web:smoke
-    pnpm ai:test
-    pnpm docker:config
+```bash
+# Development
+make dev              # Chạy tất cả services
+make build            # Build tất cả packages
+make test             # Chạy unit tests
+make lint             # Lint toàn bộ codebase
+make typecheck        # TypeScript type check
 
-## Roadmap
+# Database
+make migrate          # Chạy Prisma migrations
+make seed             # Seed dữ liệu mẫu
 
-- Connect Prisma Client to PostgreSQL migrations.
-- Push RAG chunks to Qdrant and add reranking.
-- Install Flutter SDK and complete native build verification.
-- Add real map provider behind an adapter.
-- Add Cloudinary/S3 storage adapter while keeping local storage default.
-- Add optional LoRA/QLoRA scripts when hardware allows.
+# Docker
+make docker-up        # Khởi động Docker services
+make docker-down      # Dừng Docker services
+make docker-build     # Build Docker images
+
+# Testing
+make e2e              # Chạy Playwright E2E tests
+make load-test        # Chạy k6 load tests
+
+# Storybook
+pnpm storybook        # Chạy Storybook tại http://localhost:6006
+```
+
+## CI/CD
+
+GitHub Actions CI chạy các jobs sau trên mỗi push/PR:
+
+| Job              | Mô tả                                         |
+| ---------------- | --------------------------------------------- |
+| `web-api-ai`     | Lint, test, build trên Node 22 và 24 (matrix) |
+| `typecheck`      | TypeScript type checking                      |
+| `security-audit` | `pnpm audit --prod`                           |
+| `e2e`            | Playwright E2E tests với PostgreSQL service   |
+| `docker-build`   | Build Docker images (chỉ trên push to main)   |
+| `mobile`         | Flutter analyze + test                        |
+
+Renovate bot tự động tạo PR cập nhật dependencies và bật auto-merge cho minor/patch.
+
+## Kiến trúc
+
+Xem thêm:
+
+- [`docs/adr/`](docs/adr/) — Architecture Decision Records
+- [`docs/er-diagram.md`](docs/er-diagram.md) — Entity-Relationship diagram
+- [`.kiro/specs/wanderviet-travel-platform/design.md`](.kiro/specs/wanderviet-travel-platform/design.md) — Technical design
+
+## Lưu ý quan trọng
+
+- **Thanh toán**: Tất cả luồng thanh toán là mock/demo. Không bao giờ lưu thông tin thẻ thật.
+- **AI Chatbot**: Runtime không yêu cầu OpenAI API key. Sử dụng Ollama local.
+- **Secrets**: Không commit `.env` vào git. Xem `.gitignore`.
+- **Dữ liệu**: Dữ liệu tour và điểm đến là mẫu/demo. Không phản ánh thông tin thực tế.
+
+## License
+
+MIT
+
+---
+
+_WanderViet — Khám phá Việt Nam và thế giới theo cách của bạn._

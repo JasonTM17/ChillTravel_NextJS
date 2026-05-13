@@ -1,66 +1,62 @@
-"use client";
+'use client';
 
 /**
  * My Bookings page — Req 10, 27, 45
  * Lists the current user's bookings with status badges and cancel action.
  */
 
-import { useEffect, useState, useCallback } from "react";
-import Link from "next/link";
-import { CalendarDays, ChevronRight, Ticket } from "lucide-react";
-import { bookingApi, type Booking } from "@/lib/api";
-import {
-  CommerceSurface,
-  StatusPill,
-  TrustBanner,
-} from "@/components/commerce-primitives";
-import { PageShell } from "@/components/page-shell";
-import { formatVnd } from "@/lib/utils";
-import { AuthGuard } from "@/components/auth-guard";
+import { CalendarDays, ChevronRight, Ticket } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState, useCallback } from 'react';
+import { AuthGuard } from '@/components/auth-guard';
+import { CommerceSurface, StatusPill, TrustBanner } from '@/components/commerce-primitives';
+import { PageShell } from '@/components/page-shell';
+import { bookingApi, type Booking } from '@/lib/api';
+import { formatVnd } from '@/lib/utils';
 
 // ---------------------------------------------------------------------------
 // Status helpers
 // ---------------------------------------------------------------------------
 
-type StatusTone = "blue" | "orange" | "teal" | "gray";
+type StatusTone = 'blue' | 'orange' | 'teal' | 'gray';
 
 function bookingStatusLabel(status: string): string {
   const labels: Record<string, string> = {
-    PENDING: "Chờ xác nhận",
-    pending: "Chờ xác nhận",
-    CONFIRMED: "Đã xác nhận",
-    confirmed: "Đã xác nhận",
-    CANCELLED: "Đã hủy",
-    cancelled: "Đã hủy",
-    COMPLETED: "Hoàn thành",
-    completed: "Hoàn thành",
-    REFUNDED: "Đã hoàn tiền (demo)",
-    refunded_mock: "Đã hoàn tiền (demo)",
+    PENDING: 'Chờ xác nhận',
+    pending: 'Chờ xác nhận',
+    CONFIRMED: 'Đã xác nhận',
+    confirmed: 'Đã xác nhận',
+    CANCELLED: 'Đã hủy',
+    cancelled: 'Đã hủy',
+    COMPLETED: 'Hoàn thành',
+    completed: 'Hoàn thành',
+    REFUNDED: 'Đã hoàn tiền (demo)',
+    refunded_mock: 'Đã hoàn tiền (demo)',
   };
   return labels[status] ?? status;
 }
 
 function bookingStatusTone(status: string): StatusTone {
   const s = status.toUpperCase();
-  if (s === "PENDING") return "orange";
-  if (s === "CONFIRMED") return "teal";
-  if (s === "COMPLETED") return "blue";
-  return "gray";
+  if (s === 'PENDING') return 'orange';
+  if (s === 'CONFIRMED') return 'teal';
+  if (s === 'COMPLETED') return 'blue';
+  return 'gray';
 }
 
 function paymentStatusLabel(status: string): string {
   const labels: Record<string, string> = {
-    UNPAID: "Chưa thanh toán",
-    PAID: "Đã thanh toán",
-    FAILED: "Thanh toán thất bại",
-    REFUNDED: "Đã hoàn tiền",
+    UNPAID: 'Chưa thanh toán',
+    PAID: 'Đã thanh toán',
+    FAILED: 'Thanh toán thất bại',
+    REFUNDED: 'Đã hoàn tiền',
   };
   return labels[status] ?? status;
 }
 
 function canCancel(status: string): boolean {
   const s = status.toUpperCase();
-  return s === "PENDING" || s === "CONFIRMED";
+  return s === 'PENDING' || s === 'CONFIRMED';
 }
 
 // ---------------------------------------------------------------------------
@@ -71,10 +67,7 @@ function BookingSkeleton() {
   return (
     <div className="animate-pulse space-y-3">
       {[1, 2, 3].map((i) => (
-        <div
-          key={i}
-          className="tv-card h-28 p-5"
-        />
+        <div key={i} className="tv-card h-28 p-5" />
       ))}
     </div>
   );
@@ -84,32 +77,21 @@ function BookingSkeleton() {
 // Booking row
 // ---------------------------------------------------------------------------
 
-function BookingRow({
-  booking,
-  onCancel,
-}: {
-  booking: Booking;
-  onCancel: (code: string) => void;
-}) {
+function BookingRow({ booking, onCancel }: { booking: Booking; onCancel: (code: string) => void }) {
   const [cancelling, setCancelling] = useState(false);
 
   async function handleCancel() {
-    if (
-      !window.confirm(
-        `Bạn có chắc muốn hủy booking ${booking.bookingCode}?`
-      )
-    )
-      return;
+    if (!window.confirm(`Bạn có chắc muốn hủy booking ${booking.bookingCode}?`)) return;
     setCancelling(true);
     try {
       const res = await bookingApi.cancel(booking.bookingCode);
       if (res.success) {
         onCancel(booking.bookingCode);
       } else {
-        alert(res.message ?? "Hủy booking thất bại.");
+        alert(res.message ?? 'Hủy booking thất bại.');
       }
     } catch {
-      alert("Lỗi kết nối. Vui lòng thử lại.");
+      alert('Lỗi kết nối. Vui lòng thử lại.');
     } finally {
       setCancelling(false);
     }
@@ -120,15 +102,11 @@ function BookingRow({
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex-1 space-y-2">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-bold text-tv-blue">
-              {booking.bookingCode}
-            </span>
+            <span className="font-bold text-tv-blue">{booking.bookingCode}</span>
             <StatusPill tone={bookingStatusTone(booking.status)}>
               {bookingStatusLabel(booking.status)}
             </StatusPill>
-            <StatusPill tone="gray">
-              {paymentStatusLabel(booking.paymentStatus)}
-            </StatusPill>
+            <StatusPill tone="gray">{paymentStatusLabel(booking.paymentStatus)}</StatusPill>
           </div>
           <p className="font-bold text-tv-ink">
             {booking.tour?.title ?? `Tour #${booking.tourId}`}
@@ -136,12 +114,10 @@ function BookingRow({
           <div className="flex flex-wrap gap-4 text-sm text-tv-ink-3">
             <span className="flex items-center gap-1">
               <CalendarDays size={14} aria-hidden="true" />
-              {new Date(booking.bookingDate).toLocaleDateString("vi-VN")}
+              {new Date(booking.bookingDate).toLocaleDateString('vi-VN')}
             </span>
             <span>{booking.numberOfGuests} khách</span>
-            <span className="font-bold text-tv-orange">
-              {formatVnd(booking.totalPrice)}
-            </span>
+            <span className="font-bold text-tv-orange">{formatVnd(booking.totalPrice)}</span>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -152,7 +128,7 @@ function BookingRow({
               disabled={cancelling}
               className="rounded-tv-sm border border-red-200 bg-red-50 px-4 py-2 text-sm font-bold text-red-600 hover:bg-red-100 disabled:opacity-60"
             >
-              {cancelling ? "Đang hủy..." : "Hủy booking"}
+              {cancelling ? 'Đang hủy...' : 'Hủy booking'}
             </button>
           )}
           <Link
@@ -189,10 +165,10 @@ function MyBookingsContent() {
         setBookings(res.data.items);
         setTotalPages(res.data.totalPages ?? 1);
       } else {
-        setError(res.message ?? "Không thể tải danh sách booking.");
+        setError(res.message ?? 'Không thể tải danh sách booking.');
       }
     } catch {
-      setError("Lỗi kết nối. Vui lòng thử lại.");
+      setError('Lỗi kết nối. Vui lòng thử lại.');
     } finally {
       setFetching(false);
     }
@@ -204,17 +180,12 @@ function MyBookingsContent() {
 
   function handleCancelled(code: string) {
     setBookings((prev) =>
-      prev.map((b) =>
-        b.bookingCode === code ? { ...b, status: "CANCELLED" } : b
-      )
+      prev.map((b) => (b.bookingCode === code ? { ...b, status: 'CANCELLED' } : b)),
     );
   }
 
   return (
-    <PageShell
-      eyebrow="Tài khoản"
-      title="Lịch sử đặt tour của bạn"
-    >
+    <PageShell eyebrow="Tài khoản" title="Lịch sử đặt tour của bạn">
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
         <section className="space-y-4">
           {fetching ? (
@@ -234,9 +205,7 @@ function MyBookingsContent() {
             <CommerceSurface>
               <div className="flex flex-col items-center gap-4 py-10 text-center">
                 <Ticket size={40} className="text-tv-border" aria-hidden="true" />
-                <p className="text-lg font-bold text-tv-ink">
-                  Bạn chưa có booking nào
-                </p>
+                <p className="text-lg font-bold text-tv-ink">Bạn chưa có booking nào</p>
                 <p className="text-sm text-tv-ink-3">
                   Khám phá các tour hấp dẫn và đặt chuyến đi đầu tiên của bạn.
                 </p>
@@ -251,11 +220,7 @@ function MyBookingsContent() {
           ) : (
             <>
               {bookings.map((booking) => (
-                <BookingRow
-                  key={booking.id}
-                  booking={booking}
-                  onCancel={handleCancelled}
-                />
+                <BookingRow key={booking.id} booking={booking} onCancel={handleCancelled} />
               ))}
 
               {/* Pagination */}
@@ -293,11 +258,11 @@ function MyBookingsContent() {
             <div className="space-y-2 text-sm">
               {(
                 [
-                  ["Chờ xác nhận", "orange"],
-                  ["Đã xác nhận", "teal"],
-                  ["Hoàn thành", "blue"],
-                  ["Đã hủy", "gray"],
-                  ["Đã hoàn tiền (demo)", "gray"],
+                  ['Chờ xác nhận', 'orange'],
+                  ['Đã xác nhận', 'teal'],
+                  ['Hoàn thành', 'blue'],
+                  ['Đã hủy', 'gray'],
+                  ['Đã hoàn tiền (demo)', 'gray'],
                 ] as [string, StatusTone][]
               ).map(([label, tone]) => (
                 <div key={label} className="flex items-center gap-2">

@@ -1,5 +1,5 @@
-import { api } from "./client";
-import type { ApiSuccess, ApiPaginatedResponse, PaginationQuery } from "@vietwander/shared";
+import type { ApiSuccess, ApiPaginatedResponse, PaginationQuery } from '@vietwander/shared';
+import { api } from './client';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -44,7 +44,7 @@ export const reviewApi = {
   listByTour: (tourId: string, query?: PaginationQuery) =>
     api.get<ApiPaginatedResponse<Review>>(
       `/tours/${tourId}/reviews`,
-      query as Record<string, string | number | boolean | undefined>
+      query as Record<string, string | number | boolean | undefined>,
     ),
 
   create: (tourId: string, data: CreateReviewRequest) =>
@@ -53,6 +53,5 @@ export const reviewApi = {
   update: (id: string, data: UpdateReviewRequest) =>
     api.put<ApiSuccess<Review>>(`/reviews/${id}`, data),
 
-  remove: (id: string) =>
-    api.delete<ApiSuccess<void>>(`/reviews/${id}`),
+  remove: (id: string) => api.delete<ApiSuccess<void>>(`/reviews/${id}`),
 };

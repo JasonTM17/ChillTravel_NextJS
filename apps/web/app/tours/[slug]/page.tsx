@@ -1,9 +1,5 @@
-"use client";
+'use client';
 
-import { useEffect, useState, useCallback } from "react";
-import { use } from "react";
-import { notFound, useRouter } from "next/navigation";
-import Link from "next/link";
 import {
   ArrowRight,
   CalendarDays,
@@ -17,18 +13,21 @@ import {
   Sparkles,
   Star,
   Users,
-  type LucideIcon,
-} from "lucide-react";
-import { tourApi } from "@/lib/api/tour.api";
-import { reviewApi } from "@/lib/api/review.api";
-import { wishlistApi } from "@/lib/api/wishlist.api";
-import type { Tour, TourItinerary, TourDeparture } from "@/lib/api/tour.api";
-import type { Review } from "@/lib/api/review.api";
-import { CommerceSurface, StatusPill, TrustBanner } from "@/components/commerce-primitives";
-import { getDestinationImage } from "@/lib/destination-images";
-import { formatVnd } from "@/lib/utils";
-import { formatDateVi } from "@/lib/vietnamese";
-import { useAuth } from "@/lib/auth/auth-context";
+} from 'lucide-react';
+import Link from 'next/link';
+import { notFound, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { use } from 'react';
+import { CommerceSurface, StatusPill, TrustBanner } from '@/components/commerce-primitives';
+import { reviewApi } from '@/lib/api/review.api';
+import type { Review } from '@/lib/api/review.api';
+import { tourApi } from '@/lib/api/tour.api';
+import type { Tour, TourItinerary, TourDeparture } from '@/lib/api/tour.api';
+import { wishlistApi } from '@/lib/api/wishlist.api';
+import { useAuth } from '@/lib/auth/auth-context';
+import { getDestinationImage } from '@/lib/destination-images';
+import { formatVnd } from '@/lib/utils';
+import { formatDateVi } from '@/lib/vietnamese';
 
 // ---------------------------------------------------------------------------
 // Skeleton
@@ -40,7 +39,9 @@ function TourDetailSkeleton() {
       <section className="border-b border-[tv-border] bg-white">
         <div className="mx-auto max-w-[1180px] px-4 py-6 md:px-6">
           <div className="flex gap-2 mb-4">
-            {[1, 2, 3].map((i) => <div key={i} className="h-6 w-20 rounded-full bg-[tv-border]" />)}
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-6 w-20 rounded-full bg-[tv-border]" />
+            ))}
           </div>
           <div className="h-12 w-3/4 rounded bg-[tv-border] mb-4" />
           <div className="grid gap-3 lg:grid-cols-[1.45fr_0.75fr]">
@@ -95,9 +96,9 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
   const [wishlistLoading, setWishlistLoading] = useState(false);
 
   // Booking box state
-  const [selectedDepartureId, setSelectedDepartureId] = useState<string>("");
+  const [selectedDepartureId, setSelectedDepartureId] = useState<string>('');
   const [guests, setGuests] = useState(1);
-  const [couponCode, setCouponCode] = useState("");
+  const [couponCode, setCouponCode] = useState('');
 
   useEffect(() => {
     let cancelled = false;
@@ -126,34 +127,34 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
             const wlRes = await wishlistApi.list();
             if (!cancelled && wlRes.success) {
               const entries = wlRes.data as Array<{ id: string; itemId: string; itemType: string }>;
-              const entry = entries.find(
-                (e) => e.itemId === tourData.id && e.itemType === "TOUR"
-              );
+              const entry = entries.find((e) => e.itemId === tourData.id && e.itemType === 'TOUR');
               if (entry) setWishlistId(entry.id);
             }
           }
         } else {
-          const msg = (res as { message?: string }).message ?? "";
-          if (msg.toLowerCase().includes("not found") || msg.includes("404")) {
+          const msg = (res as { message?: string }).message ?? '';
+          if (msg.toLowerCase().includes('not found') || msg.includes('404')) {
             setNotFoundError(true);
           } else {
-            setError(msg || "Khong the tai thong tin tour.");
+            setError(msg || 'Khong the tai thong tin tour.');
           }
         }
       } catch {
-        if (!cancelled) setError("Loi ket noi. Vui long thu lai.");
+        if (!cancelled) setError('Loi ket noi. Vui long thu lai.');
       } finally {
         if (!cancelled) setLoading(false);
       }
     }
 
     void fetchAll();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [slug, isAuthenticated]);
 
   async function handleWishlistToggle() {
     if (!isAuthenticated) {
-      router.push("/login");
+      router.push('/login');
       return;
     }
     if (!tour) return;
@@ -168,9 +169,9 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
         setWishlistId(prevId);
       }
     } else {
-      setWishlistId("optimistic");
+      setWishlistId('optimistic');
       try {
-        const res = await wishlistApi.add({ itemId: tour.id, itemType: "TOUR" });
+        const res = await wishlistApi.add({ itemId: tour.id, itemType: 'TOUR' });
         if (res.success) {
           const entry = res.data as { id: string };
           setWishlistId(entry.id);
@@ -225,7 +226,7 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
   const departurePrice = selectedDeparture?.priceOverride ?? displayPrice;
   const totalPrice = departurePrice * guests;
 
-  const approvedReviews = reviews.filter((r) => r.status === "APPROVED");
+  const approvedReviews = reviews.filter((r) => r.status === 'APPROVED');
   const avgRating =
     approvedReviews.length > 0
       ? approvedReviews.reduce((sum, r) => sum + r.rating, 0) / approvedReviews.length
@@ -287,18 +288,14 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
                 disabled={wishlistLoading}
                 className={`inline-flex items-center gap-2 rounded-tv border px-4 py-3 text-sm font-bold transition ${
                   wishlistId
-                    ? "border-red-200 bg-red-50 text-red-500 hover:bg-red-100"
-                    : "border-[tv-border] bg-white text-[tv-ink-3] hover:border-red-200 hover:text-red-500"
+                    ? 'border-red-200 bg-red-50 text-red-500 hover:bg-red-100'
+                    : 'border-[tv-border] bg-white text-[tv-ink-3] hover:border-red-200 hover:text-red-500'
                 }`}
-                aria-label={wishlistId ? "Xoa khoi yeu thich" : "Them vao yeu thich"}
+                aria-label={wishlistId ? 'Xoa khoi yeu thich' : 'Them vao yeu thich'}
                 type="button"
               >
-                <Heart
-                  size={18}
-                  fill={wishlistId ? "currentColor" : "none"}
-                  aria-hidden="true"
-                />
-                {wishlistId ? "Da luu" : "Luu"}
+                <Heart size={18} fill={wishlistId ? 'currentColor' : 'none'} aria-hidden="true" />
+                {wishlistId ? 'Da luu' : 'Luu'}
               </button>
               <Link
                 href={`/ai-planner?tour=${tour.slug}`}
@@ -340,8 +337,16 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
         <div className="space-y-6">
           {/* Overview cards */}
           <div className="grid gap-4 md:grid-cols-3">
-            <InfoCard icon={Clock} title="Thoi gian" value={`${tour.durationDays} ngay ${tour.durationNights} dem`} />
-            <InfoCard icon={Users} title="So khach" value={`${tour.minGuests}${tour.maxGuests !== tour.minGuests ? `\u2013${tour.maxGuests}` : ""} nguoi`} />
+            <InfoCard
+              icon={Clock}
+              title="Thoi gian"
+              value={`${tour.durationDays} ngay ${tour.durationNights} dem`}
+            />
+            <InfoCard
+              icon={Users}
+              title="So khach"
+              value={`${tour.minGuests}${tour.maxGuests !== tour.minGuests ? `\u2013${tour.maxGuests}` : ''} nguoi`}
+            />
             <InfoCard
               icon={ShieldCheck}
               title="Gia tu"
@@ -396,9 +401,7 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
                     basePrice={displayPrice}
                     selected={selectedDepartureId === dep.id}
                     onSelect={() =>
-                      setSelectedDepartureId(
-                        selectedDepartureId === dep.id ? "" : dep.id
-                      )
+                      setSelectedDepartureId(selectedDepartureId === dep.id ? '' : dep.id)
                     }
                   />
                 ))}
@@ -487,9 +490,7 @@ function ItineraryAccordion({ item }: { item: TourItinerary }) {
 
       {open && (
         <div className="border-t border-[tv-border] bg-white px-5 py-4 space-y-3 text-sm">
-          {item.description && (
-            <p className="leading-6 text-[tv-ink-3]">{item.description}</p>
-          )}
+          {item.description && <p className="leading-6 text-[tv-ink-3]">{item.description}</p>}
           <div className="grid gap-2 sm:grid-cols-3">
             {item.meals && <DetailChip label="Bua an" value={item.meals} />}
             {item.accommodation && <DetailChip label="Luu tru" value={item.accommodation} />}
@@ -533,8 +534,8 @@ function DepartureRow({
       onClick={onSelect}
       className={`flex w-full items-center justify-between rounded-tv border px-4 py-3 text-left transition ${
         selected
-          ? "border-[tv-blue] bg-[tv-blue-light]"
-          : "border-[tv-border] bg-white hover:border-[tv-blue] hover:bg-[tv-bg]"
+          ? 'border-[tv-blue] bg-[tv-blue-light]'
+          : 'border-[tv-border] bg-white hover:border-[tv-blue] hover:bg-[tv-bg]'
       }`}
       type="button"
       aria-pressed={selected}
@@ -542,14 +543,12 @@ function DepartureRow({
       <div className="flex items-center gap-3">
         <CalendarDays
           size={18}
-          className={selected ? "text-[tv-blue]" : "text-[tv-ink-3]"}
+          className={selected ? 'text-[tv-blue]' : 'text-[tv-ink-3]'}
           aria-hidden="true"
         />
         <div>
           <p className="font-bold text-[tv-ink]">{formatDateVi(date)}</p>
-          <p className="text-xs font-bold text-[tv-ink-3]">
-            Con {departure.availableSlots} cho
-          </p>
+          <p className="text-xs font-bold text-[tv-ink-3]">Con {departure.availableSlots} cho</p>
         </div>
       </div>
       <div className="text-right">
@@ -573,12 +572,10 @@ function ReviewCard({ review }: { review: Review }) {
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[tv-blue] text-sm font-bold text-white">
-            {(review.author?.fullName ?? "U").charAt(0).toUpperCase()}
+            {(review.author?.fullName ?? 'U').charAt(0).toUpperCase()}
           </div>
           <div>
-            <p className="font-bold text-[tv-ink]">
-              {review.author?.fullName ?? "Khach hang"}
-            </p>
+            <p className="font-bold text-[tv-ink]">{review.author?.fullName ?? 'Khach hang'}</p>
             <p className="text-xs font-bold text-[tv-ink-3]">
               {formatDateVi(new Date(review.createdAt))}
             </p>
@@ -589,16 +586,14 @@ function ReviewCard({ review }: { review: Review }) {
             <Star
               key={i}
               size={14}
-              fill={i < review.rating ? "#f97316" : "none"}
-              className={i < review.rating ? "text-[#f97316]" : "text-[tv-border]"}
+              fill={i < review.rating ? '#f97316' : 'none'}
+              className={i < review.rating ? 'text-[#f97316]' : 'text-[tv-border]'}
               aria-hidden="true"
             />
           ))}
         </div>
       </div>
-      {review.title && (
-        <p className="mt-3 font-bold text-[tv-ink]">{review.title}</p>
-      )}
+      {review.title && <p className="mt-3 font-bold text-[tv-ink]">{review.title}</p>}
       <p className="mt-2 text-sm leading-6 text-[tv-ink-3]">{review.content}</p>
     </div>
   );
@@ -637,9 +632,7 @@ function BookingBox({
 }) {
   return (
     <CommerceSurface>
-      <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
-        Dat tour ngay
-      </p>
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">Dat tour ngay</p>
       <div className="mt-2 flex items-baseline gap-2">
         {hasSale && (
           <span className="text-sm font-bold text-[tv-ink-3] line-through">
@@ -674,7 +667,7 @@ function BookingBox({
               {futureDepartures.map((dep) => (
                 <option key={dep.id} value={dep.id}>
                   {formatDateVi(new Date(dep.departureDate))} — Con {dep.availableSlots} cho
-                  {dep.priceOverride != null ? ` — ${formatVnd(dep.priceOverride)}` : ""}
+                  {dep.priceOverride != null ? ` — ${formatVnd(dep.priceOverride)}` : ''}
                 </option>
               ))}
             </select>
@@ -720,9 +713,7 @@ function BookingBox({
             >
               +
             </button>
-            <span className="text-xs font-bold text-[tv-ink-3]">
-              (toi da {tour.maxGuests})
-            </span>
+            <span className="text-xs font-bold text-[tv-ink-3]">(toi da {tour.maxGuests})</span>
           </div>
         </div>
 
@@ -791,7 +782,7 @@ function InfoCard({
   icon: Icon,
   title,
   value,
-  valueClass = "",
+  valueClass = '',
 }: {
   icon: React.ElementType;
   title: string;
@@ -801,7 +792,9 @@ function InfoCard({
   return (
     <div className="rounded-tv border border-[tv-border] bg-white p-5 shadow-tv-card">
       <Icon className="text-[tv-blue]" size={20} aria-hidden="true" />
-      <h2 className="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-[tv-ink-3]">{title}</h2>
+      <h2 className="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-[tv-ink-3]">
+        {title}
+      </h2>
       <p className={`mt-2 text-lg font-bold ${valueClass}`}>{value}</p>
     </div>
   );

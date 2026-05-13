@@ -1,10 +1,10 @@
-﻿import Link from "next/link";
-import { ArrowUpRight, CalendarDays, Heart, MapPin, Star, WalletCards } from "lucide-react";
-import type { Destination } from "@vietwander/shared";
-import { getDestinationCopy } from "@/lib/destination-copy";
-import { getDestinationImage } from "@/lib/destination-images";
-import { formatVnd } from "@/lib/utils";
-import { safetyLabel, tagLabel } from "@/lib/vietnamese";
+﻿import type { Destination } from '@vietwander/shared';
+import { ArrowUpRight, CalendarDays, Heart, MapPin, Star, WalletCards } from 'lucide-react';
+import Link from 'next/link';
+import { getDestinationCopy } from '@/lib/destination-copy';
+import { getDestinationImage } from '@/lib/destination-images';
+import { formatVnd } from '@/lib/utils';
+import { safetyLabel, tagLabel } from '@/lib/vietnamese';
 
 export function DestinationCard({ destination }: { destination: Destination }) {
   const copy = getDestinationCopy(destination);
@@ -14,7 +14,7 @@ export function DestinationCard({ destination }: { destination: Destination }) {
       <div
         className="relative h-56 bg-cover bg-center"
         style={{
-          backgroundImage: `linear-gradient(180deg, rgba(7, 24, 39, 0.08) 0%, rgba(7, 24, 39, 0.68) 100%), url(${getDestinationImage(destination.slug)})`
+          backgroundImage: `linear-gradient(180deg, rgba(7, 24, 39, 0.08) 0%, rgba(7, 24, 39, 0.68) 100%), url(${getDestinationImage(destination.slug)})`,
         }}
       >
         <div className="absolute inset-x-4 top-4 flex items-center justify-between">
@@ -70,7 +70,10 @@ export function DestinationCard({ destination }: { destination: Destination }) {
 
         <div className="mt-4 flex flex-wrap gap-2">
           {destination.tags.slice(0, 3).map((tag) => (
-            <span key={tag} className="rounded-full bg-[#f5efe4] px-3 py-1 text-xs font-semibold text-[tv-ink-3]">
+            <span
+              key={tag}
+              className="rounded-full bg-[#f5efe4] px-3 py-1 text-xs font-semibold text-[tv-ink-3]"
+            >
               {tagLabel(tag)}
             </span>
           ))}

@@ -1,15 +1,15 @@
-"use client";
-import { useState, useEffect } from "react";
-import type { Lang } from "./index";
+'use client';
+import { useState, useEffect } from 'react';
+import type { Lang } from './index';
 
-const LANG_KEY = "wv_lang";
+const LANG_KEY = 'wv_lang';
 
 export function useLang() {
-  const [lang, setLangState] = useState<Lang>("vi");
+  const [lang, setLangState] = useState<Lang>('vi');
 
   useEffect(() => {
     const stored = localStorage.getItem(LANG_KEY) as Lang | null;
-    if (stored === "en" || stored === "vi") {
+    if (stored === 'en' || stored === 'vi') {
       setLangState(stored);
     }
   }, []);

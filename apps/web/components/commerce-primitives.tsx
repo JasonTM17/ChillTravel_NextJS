@@ -1,22 +1,19 @@
-import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
-import { ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { demoPaymentWarning } from "@/lib/vietnamese";
+import type { LucideIcon } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
+import { demoPaymentWarning } from '@/lib/vietnamese';
 
 /* ─── Surface card ──────────────────────────────────────────────────────────── */
 export function CommerceSurface({
   children,
-  className = "",
+  className = '',
   ...props
-}: React.ComponentPropsWithoutRef<"section">) {
+}: React.ComponentPropsWithoutRef<'section'>) {
   return (
     <section
       {...props}
-      className={cn(
-        "rounded-tv bg-white border border-tv-border shadow-tv-card p-5",
-        className
-      )}
+      className={cn('rounded-tv bg-white border border-tv-border shadow-tv-card p-5', className)}
     >
       {children}
     </section>
@@ -28,8 +25,8 @@ export function TrustBanner({ compact = false }: { compact?: boolean }) {
   return (
     <div
       className={cn(
-        "rounded-tv border border-amber-200 bg-amber-50 text-amber-800",
-        compact ? "p-3 text-tv-xs" : "p-4 text-tv-sm"
+        'rounded-tv border border-amber-200 bg-amber-50 text-amber-800',
+        compact ? 'p-3 text-tv-xs' : 'p-4 text-tv-sm',
       )}
     >
       <div className="flex items-start gap-2.5">
@@ -57,26 +54,23 @@ export function ServiceActionCard({
   title,
   description,
   href,
-  tone = "blue",
+  tone = 'blue',
 }: {
   icon: LucideIcon;
   title: string;
   description: string;
   href: string;
-  tone?: "blue" | "orange" | "teal";
+  tone?: 'blue' | 'orange' | 'teal';
 }) {
   const tones = {
-    blue: "bg-tv-blue-light text-tv-blue",
-    orange: "bg-tv-orange-light text-tv-orange-dark",
-    teal: "bg-emerald-50 text-emerald-700",
+    blue: 'bg-tv-blue-light text-tv-blue',
+    orange: 'bg-tv-orange-light text-tv-orange-dark',
+    teal: 'bg-emerald-50 text-emerald-700',
   } as const;
 
   return (
-    <Link
-      href={href}
-      className="group tv-card block p-5 hover:shadow-tv-hover transition-all"
-    >
-      <div className={cn("inline-flex rounded-tv-sm p-3", tones[tone])}>
+    <Link href={href} className="group tv-card block p-5 hover:shadow-tv-hover transition-all">
+      <div className={cn('inline-flex rounded-tv-sm p-3', tones[tone])}>
         <Icon size={22} aria-hidden="true" />
       </div>
       <h3 className="mt-4 text-tv-md font-bold text-tv-ink group-hover:text-tv-blue transition-colors">
@@ -96,23 +90,19 @@ export function CommerceMetric({
   label,
   value,
   helper,
-  tone = "blue",
+  tone = 'blue',
 }: {
   label: string;
   value: string;
   helper: string;
-  tone?: "blue" | "orange" | "teal";
+  tone?: 'blue' | 'orange' | 'teal';
 }) {
   const color =
-    tone === "orange"
-      ? "text-tv-orange"
-      : tone === "teal"
-      ? "text-emerald-600"
-      : "text-tv-blue";
+    tone === 'orange' ? 'text-tv-orange' : tone === 'teal' ? 'text-emerald-600' : 'text-tv-blue';
   return (
     <div className="tv-card p-5">
       <p className="text-tv-xs font-bold uppercase tracking-widest text-tv-ink-3">{label}</p>
-      <p className={cn("mt-2 text-3xl font-bold", color)}>{value}</p>
+      <p className={cn('mt-2 text-3xl font-bold', color)}>{value}</p>
       <p className="mt-1.5 text-tv-sm leading-relaxed text-tv-ink-3">{helper}</p>
     </div>
   );
@@ -121,23 +111,20 @@ export function CommerceMetric({
 /* ─── Status pill ────────────────────────────────────────────────────────────── */
 export function StatusPill({
   children,
-  tone = "blue",
+  tone = 'blue',
 }: {
   children: React.ReactNode;
-  tone?: "blue" | "orange" | "teal" | "gray";
+  tone?: 'blue' | 'orange' | 'teal' | 'gray';
 }) {
   const tones = {
-    blue: "bg-tv-blue-light text-tv-blue",
-    orange: "bg-tv-orange-light text-tv-orange-dark",
-    teal: "bg-emerald-50 text-emerald-700",
-    gray: "bg-tv-bg text-tv-ink-3",
+    blue: 'bg-tv-blue-light text-tv-blue',
+    orange: 'bg-tv-orange-light text-tv-orange-dark',
+    teal: 'bg-emerald-50 text-emerald-700',
+    gray: 'bg-tv-bg text-tv-ink-3',
   } as const;
   return (
     <span
-      className={cn(
-        "inline-flex rounded-full px-2.5 py-0.5 text-tv-xs font-bold",
-        tones[tone]
-      )}
+      className={cn('inline-flex rounded-full px-2.5 py-0.5 text-tv-xs font-bold', tones[tone])}
     >
       {children}
     </span>
@@ -153,7 +140,7 @@ export function OpsTable({
     detail: string;
     status: string;
     owner: string;
-    tone?: "blue" | "orange" | "teal" | "gray";
+    tone?: 'blue' | 'orange' | 'teal' | 'gray';
   }>;
 }) {
   return (
@@ -178,7 +165,7 @@ export function OpsTable({
           </div>
           <p className="text-tv-ink-2">
             <span className="text-tv-xs uppercase tracking-widest text-tv-ink-3 md:hidden">
-              Phụ trách:{" "}
+              Phụ trách:{' '}
             </span>
             {row.owner}
           </p>
@@ -199,15 +186,8 @@ export function BoundaryList({ items }: { items: string[] }) {
   return (
     <ul className="space-y-2">
       {items.map((item) => (
-        <li
-          key={item}
-          className="flex gap-2.5 rounded-tv-sm bg-tv-bg p-3 text-tv-sm text-tv-ink-2"
-        >
-          <CheckCircle2
-            className="mt-0.5 shrink-0 text-emerald-600"
-            size={16}
-            aria-hidden="true"
-          />
+        <li key={item} className="flex gap-2.5 rounded-tv-sm bg-tv-bg p-3 text-tv-sm text-tv-ink-2">
+          <CheckCircle2 className="mt-0.5 shrink-0 text-emerald-600" size={16} aria-hidden="true" />
           {item}
         </li>
       ))}

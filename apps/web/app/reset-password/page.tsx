@@ -1,13 +1,13 @@
-﻿"use client";
+﻿'use client';
 
-import { Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { LockKeyhole, AlertCircle, CheckCircle2 } from "lucide-react";
-import { z } from "zod";
-import { CommerceSurface, TrustBanner } from "@/components/commerce-primitives";
-import { PageShell } from "@/components/page-shell";
-import { authApi } from "@/lib/api/auth.api";
+import { LockKeyhole, AlertCircle, CheckCircle2 } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useState } from 'react';
+import { z } from 'zod';
+import { CommerceSurface, TrustBanner } from '@/components/commerce-primitives';
+import { PageShell } from '@/components/page-shell';
+import { authApi } from '@/lib/api/auth.api';
 
 // ---------------------------------------------------------------------------
 // Validation schema
@@ -17,13 +17,13 @@ const resetSchema = z
   .object({
     newPassword: z
       .string()
-      .min(1, "Mật khẩu không được để trống")
-      .min(8, "Mật khẩu phải có ít nhất 8 ký tự"),
-    confirmPassword: z.string().min(1, "Vui lòng xác nhận mật khẩu"),
+      .min(1, 'Mật khẩu không được để trống')
+      .min(8, 'Mật khẩu phải có ít nhất 8 ký tự'),
+    confirmPassword: z.string().min(1, 'Vui lòng xác nhận mật khẩu'),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Mật khẩu xác nhận không khớp",
-    path: ["confirmPassword"],
+    message: 'Mật khẩu xác nhận không khớp',
+    path: ['confirmPassword'],
   });
 
 type ResetFields = { newPassword: string; confirmPassword: string };
@@ -35,11 +35,11 @@ type ResetFields = { newPassword: string; confirmPassword: string };
 function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = searchParams.get("token") ?? "";
+  const token = searchParams.get('token') ?? '';
 
   const [fields, setFields] = useState<ResetFields>({
-    newPassword: "",
-    confirmPassword: "",
+    newPassword: '',
+    confirmPassword: '',
   });
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof ResetFields, string>>>({});
   const [error, setError] = useState<string | null>(null);
@@ -60,7 +60,7 @@ function ResetPasswordForm() {
     setError(null);
 
     if (!token) {
-      setError("Link đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.");
+      setError('Link đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.');
       return;
     }
 
@@ -80,14 +80,14 @@ function ResetPasswordForm() {
       const res = await authApi.resetPassword({ token, newPassword: fields.newPassword });
       if (res.success) {
         setSuccess(true);
-        setTimeout(() => router.push("/login"), 2500);
+        setTimeout(() => router.push('/login'), 2500);
       } else {
-        setError(res.message ?? "Đặt lại mật khẩu thất bại. Link có thể đã hết hạn.");
+        setError(res.message ?? 'Đặt lại mật khẩu thất bại. Link có thể đã hết hạn.');
       }
     } catch {
       // Endpoint not available yet — show demo success
       setSuccess(true);
-      setTimeout(() => router.push("/login"), 2500);
+      setTimeout(() => router.push('/login'), 2500);
     } finally {
       setIsLoading(false);
     }
@@ -126,7 +126,9 @@ function ResetPasswordForm() {
             <LockKeyhole size={22} aria-hidden="true" />
           </div>
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-ink-3]">Mật khẩu mới</p>
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-ink-3]">
+              Mật khẩu mới
+            </p>
             <h2 className="text-2xl font-bold">Tạo mật khẩu mới cho tài khoản</h2>
           </div>
         </div>
@@ -162,10 +164,13 @@ function ResetPasswordForm() {
                   placeholder="Ít nhất 8 ký tự"
                   className="rounded-tv border border-[tv-border] bg-[tv-bg] px-4 py-3 font-bold text-[tv-ink] outline-none focus:border-[tv-blue] aria-[invalid=true]:border-red-400"
                   aria-invalid={!!fieldErrors.newPassword}
-                  aria-describedby={fieldErrors.newPassword ? "newPassword-error" : undefined}
+                  aria-describedby={fieldErrors.newPassword ? 'newPassword-error' : undefined}
                 />
                 {fieldErrors.newPassword && (
-                  <span id="newPassword-error" className="flex items-center gap-1 text-xs font-bold text-red-600">
+                  <span
+                    id="newPassword-error"
+                    className="flex items-center gap-1 text-xs font-bold text-red-600"
+                  >
                     <AlertCircle size={13} aria-hidden="true" />
                     {fieldErrors.newPassword}
                   </span>
@@ -183,10 +188,15 @@ function ResetPasswordForm() {
                   placeholder="Nhập lại mật khẩu mới"
                   className="rounded-tv border border-[tv-border] bg-[tv-bg] px-4 py-3 font-bold text-[tv-ink] outline-none focus:border-[tv-blue] aria-[invalid=true]:border-red-400"
                   aria-invalid={!!fieldErrors.confirmPassword}
-                  aria-describedby={fieldErrors.confirmPassword ? "confirmPassword-error" : undefined}
+                  aria-describedby={
+                    fieldErrors.confirmPassword ? 'confirmPassword-error' : undefined
+                  }
                 />
                 {fieldErrors.confirmPassword && (
-                  <span id="confirmPassword-error" className="flex items-center gap-1 text-xs font-bold text-red-600">
+                  <span
+                    id="confirmPassword-error"
+                    className="flex items-center gap-1 text-xs font-bold text-red-600"
+                  >
                     <AlertCircle size={13} aria-hidden="true" />
                     {fieldErrors.confirmPassword}
                   </span>
@@ -198,7 +208,7 @@ function ResetPasswordForm() {
                 disabled={isLoading}
                 className="rounded-tv bg-[tv-orange] px-5 py-3 font-bold text-white transition hover:bg-[tv-orange-dark] disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {isLoading ? "Đang cập nhật…" : "Đặt lại mật khẩu"}
+                {isLoading ? 'Đang cập nhật…' : 'Đặt lại mật khẩu'}
               </button>
             </form>
 
@@ -217,12 +227,16 @@ function ResetPasswordForm() {
           <h2 className="text-xl font-bold">Yêu cầu mật khẩu</h2>
           <ul className="mt-4 space-y-3 text-sm font-bold text-[tv-ink-3]">
             {[
-              "Ít nhất 8 ký tự",
-              "Nên kết hợp chữ hoa, chữ thường và số",
-              "Không dùng mật khẩu đã dùng trước đây",
+              'Ít nhất 8 ký tự',
+              'Nên kết hợp chữ hoa, chữ thường và số',
+              'Không dùng mật khẩu đã dùng trước đây',
             ].map((req) => (
               <li key={req} className="flex items-start gap-2 rounded-tv-sm bg-[tv-bg] p-3">
-                <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[tv-blue]" aria-hidden="true" />
+                <CheckCircle2
+                  size={15}
+                  className="mt-0.5 shrink-0 text-[tv-blue]"
+                  aria-hidden="true"
+                />
                 {req}
               </li>
             ))}

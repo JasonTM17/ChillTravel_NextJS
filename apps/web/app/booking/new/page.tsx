@@ -1,4 +1,4 @@
-﻿"use client";
+﻿'use client';
 
 /**
  * Booking Form page — /booking/new
@@ -8,9 +8,6 @@
  * Flow: fill form → POST /bookings → navigate to /booking/payment?bookingId=xxx
  */
 
-import { useEffect, useState, useCallback, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import Link from "next/link";
 import {
   AlertCircle,
   CalendarDays,
@@ -24,15 +21,18 @@ import {
   Tag,
   User,
   Users,
-} from "lucide-react";
-import { AuthGuard } from "@/components/auth-guard";
-import { useAuth } from "@/lib/auth/auth-context";
-import { tourApi, type Tour, type TourDeparture } from "@/lib/api/tour.api";
-import { bookingApi, type CreateBookingGuestRequest } from "@/lib/api/booking.api";
-import { CommerceSurface, StatusPill } from "@/components/commerce-primitives";
-import { PageShell } from "@/components/page-shell";
-import { formatVnd } from "@/lib/utils";
-import { demoPaymentWarning, formatDateVi } from "@/lib/vietnamese";
+} from 'lucide-react';
+import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useEffect, useState, useCallback, Suspense } from 'react';
+import { AuthGuard } from '@/components/auth-guard';
+import { CommerceSurface, StatusPill } from '@/components/commerce-primitives';
+import { PageShell } from '@/components/page-shell';
+import { bookingApi, type CreateBookingGuestRequest } from '@/lib/api/booking.api';
+import { tourApi, type Tour, type TourDeparture } from '@/lib/api/tour.api';
+import { useAuth } from '@/lib/auth/auth-context';
+import { formatVnd } from '@/lib/utils';
+import { demoPaymentWarning, formatDateVi } from '@/lib/vietnamese';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -68,7 +68,7 @@ function DemoBanner() {
 // Stepper
 // ---------------------------------------------------------------------------
 
-const STEPS = ["Thông tin đặt tour", "Thanh toán demo", "Xác nhận"] as const;
+const STEPS = ['Thông tin đặt tour', 'Thanh toán demo', 'Xác nhận'] as const;
 
 function Stepper({ current }: { current: number }) {
   return (
@@ -81,17 +81,17 @@ function Stepper({ current }: { current: number }) {
             <span
               className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                 active
-                  ? "bg-[tv-blue] text-white ring-4 ring-[#b8ddff]"
+                  ? 'bg-[tv-blue] text-white ring-4 ring-[#b8ddff]'
                   : done
-                  ? "bg-[#0f8b7b] text-white"
-                  : "bg-[tv-border] text-[#8b99a7]"
+                    ? 'bg-[#0f8b7b] text-white'
+                    : 'bg-[tv-border] text-[#8b99a7]'
               }`}
             >
               {i + 1}
             </span>
             <span
               className={`hidden font-bold sm:inline ${
-                active ? "text-[tv-blue]" : done ? "text-[#0f8b7b]" : "text-[#8b99a7]"
+                active ? 'text-[tv-blue]' : done ? 'text-[#0f8b7b]' : 'text-[#8b99a7]'
               }`}
             >
               {step}
@@ -145,7 +145,7 @@ function GuestRow({
           <input
             type="text"
             value={guest.fullName}
-            onChange={(e) => onChange("fullName", e.target.value)}
+            onChange={(e) => onChange('fullName', e.target.value)}
             required
             className="w-full rounded-tv-sm border border-[#c8d5e3] bg-white px-3 py-2.5 text-sm font-bold text-[tv-ink] outline-none focus:border-[tv-blue] focus:ring-2 focus:ring-[tv-blue]/15"
             placeholder="Nguyễn Văn A"
@@ -157,7 +157,7 @@ function GuestRow({
           </span>
           <select
             value={guest.gender}
-            onChange={(e) => onChange("gender", e.target.value)}
+            onChange={(e) => onChange('gender', e.target.value)}
             className="w-full rounded-tv-sm border border-[#c8d5e3] bg-white px-3 py-2.5 text-sm font-bold text-[tv-ink] outline-none focus:border-[tv-blue]"
           >
             <option value="">-- Chọn --</option>
@@ -173,7 +173,7 @@ function GuestRow({
           <input
             type="date"
             value={guest.dateOfBirth}
-            onChange={(e) => onChange("dateOfBirth", e.target.value)}
+            onChange={(e) => onChange('dateOfBirth', e.target.value)}
             className="w-full rounded-tv-sm border border-[#c8d5e3] bg-white px-3 py-2.5 text-sm font-bold text-[tv-ink] outline-none focus:border-[tv-blue]"
           />
         </label>
@@ -191,10 +191,10 @@ function BookingNewContent() {
   const router = useRouter();
   const { user } = useAuth();
 
-  const tourId = searchParams.get("tourId") ?? "";
-  const departureId = searchParams.get("departureId") ?? "";
-  const initialGuests = parseInt(searchParams.get("guests") ?? "1", 10);
-  const initialCoupon = searchParams.get("coupon") ?? "";
+  const tourId = searchParams.get('tourId') ?? '';
+  const departureId = searchParams.get('departureId') ?? '';
+  const initialGuests = parseInt(searchParams.get('guests') ?? '1', 10);
+  const initialCoupon = searchParams.get('coupon') ?? '';
 
   // Tour data
   const [tour, setTour] = useState<Tour | null>(null);
@@ -202,18 +202,18 @@ function BookingNewContent() {
   const [tourError, setTourError] = useState<string | null>(null);
 
   // Contact info
-  const [contactName, setContactName] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
-  const [contactPhone, setContactPhone] = useState("");
-  const [specialRequest, setSpecialRequest] = useState("");
+  const [contactName, setContactName] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [contactPhone, setContactPhone] = useState('');
+  const [specialRequest, setSpecialRequest] = useState('');
 
   // Guests
   const [guests, setGuests] = useState<GuestForm[]>(() =>
     Array.from({ length: Math.max(1, initialGuests) }, () => ({
-      fullName: "",
-      gender: "",
-      dateOfBirth: "",
-    }))
+      fullName: '',
+      gender: '',
+      dateOfBirth: '',
+    })),
   );
 
   // Coupon
@@ -228,16 +228,16 @@ function BookingNewContent() {
   // Pre-fill from user profile
   useEffect(() => {
     if (user) {
-      setContactName(user.fullName ?? "");
-      setContactEmail(user.email ?? "");
-      setContactPhone(user.phone ?? "");
+      setContactName(user.fullName ?? '');
+      setContactEmail(user.email ?? '');
+      setContactPhone(user.phone ?? '');
     }
   }, [user]);
 
   // Fetch tour
   useEffect(() => {
     if (!tourId) {
-      setTourError("Thiếu thông tin tour. Vui lòng quay lại trang tour.");
+      setTourError('Thiếu thông tin tour. Vui lòng quay lại trang tour.');
       setTourLoading(false);
       return;
     }
@@ -253,11 +253,11 @@ function BookingNewContent() {
         if (res.success) {
           setTour(res.data as Tour);
         } else {
-          setTourError("Không tìm thấy tour. Vui lòng quay lại.");
+          setTourError('Không tìm thấy tour. Vui lòng quay lại.');
         }
       })
       .catch(() => {
-        if (!cancelled) setTourError("Lỗi kết nối. Vui lòng thử lại.");
+        if (!cancelled) setTourError('Lỗi kết nối. Vui lòng thử lại.');
       })
       .finally(() => {
         if (!cancelled) setTourLoading(false);
@@ -270,7 +270,7 @@ function BookingNewContent() {
 
   // Derived values
   const selectedDeparture: TourDeparture | undefined = tour?.departures?.find(
-    (d) => d.id === departureId
+    (d) => d.id === departureId,
   );
   const displayPrice = tour
     ? (selectedDeparture?.priceOverride ?? tour.salePrice ?? tour.basePrice)
@@ -284,25 +284,20 @@ function BookingNewContent() {
   // Guest helpers
   const addGuest = useCallback(() => {
     if (!tour || guests.length >= tour.maxGuests) return;
-    setGuests((prev) => [...prev, { fullName: "", gender: "", dateOfBirth: "" }]);
+    setGuests((prev) => [...prev, { fullName: '', gender: '', dateOfBirth: '' }]);
   }, [tour, guests.length]);
 
   const removeGuest = useCallback((index: number) => {
     setGuests((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
-  const updateGuest = useCallback(
-    (index: number, field: keyof GuestForm, value: string) => {
-      setGuests((prev) =>
-        prev.map((g, i) => (i === index ? { ...g, [field]: value } : g))
-      );
-    },
-    []
-  );
+  const updateGuest = useCallback((index: number, field: keyof GuestForm, value: string) => {
+    setGuests((prev) => prev.map((g, i) => (i === index ? { ...g, [field]: value } : g)));
+  }, []);
 
   function handleApplyCoupon() {
     if (!couponCode.trim()) {
-      setCouponError("Vui lòng nhập mã giảm giá.");
+      setCouponError('Vui lòng nhập mã giảm giá.');
       return;
     }
     // Coupon validation happens server-side on submit
@@ -316,11 +311,11 @@ function BookingNewContent() {
 
     // Basic validation
     if (!contactName.trim() || !contactEmail.trim() || !contactPhone.trim()) {
-      setSubmitError("Vui lòng điền đầy đủ thông tin liên hệ.");
+      setSubmitError('Vui lòng điền đầy đủ thông tin liên hệ.');
       return;
     }
     if (guests.some((g) => !g.fullName.trim())) {
-      setSubmitError("Vui lòng điền họ tên cho tất cả khách.");
+      setSubmitError('Vui lòng điền họ tên cho tất cả khách.');
       return;
     }
 
@@ -351,11 +346,11 @@ function BookingNewContent() {
         router.push(`/booking/payment?bookingId=${booking.id}`);
       } else {
         setSubmitError(
-          (res as { message?: string }).message ?? "Đặt tour thất bại. Vui lòng thử lại."
+          (res as { message?: string }).message ?? 'Đặt tour thất bại. Vui lòng thử lại.',
         );
       }
     } catch {
-      setSubmitError("Lỗi kết nối. Vui lòng thử lại.");
+      setSubmitError('Lỗi kết nối. Vui lòng thử lại.');
     } finally {
       setSubmitting(false);
     }
@@ -379,9 +374,7 @@ function BookingNewContent() {
         <CommerceSurface>
           <div className="flex flex-col items-center gap-4 py-10 text-center">
             <AlertCircle size={40} className="text-red-400" aria-hidden="true" />
-            <p className="text-lg font-bold text-red-600">
-              {tourError ?? "Không tìm thấy tour."}
-            </p>
+            <p className="text-lg font-bold text-red-600">{tourError ?? 'Không tìm thấy tour.'}</p>
             <Link
               href="/tours"
               className="rounded-tv bg-[tv-blue] px-6 py-3 text-sm font-bold text-white"
@@ -544,9 +537,7 @@ function BookingNewContent() {
                   ✓ Mã giảm giá sẽ được áp dụng khi xác nhận đặt tour.
                 </p>
               )}
-              {couponError && (
-                <p className="mt-2 text-sm font-bold text-red-600">{couponError}</p>
-              )}
+              {couponError && <p className="mt-2 text-sm font-bold text-red-600">{couponError}</p>}
             </CommerceSurface>
 
             {/* Submit error */}
@@ -575,7 +566,9 @@ function BookingNewContent() {
                     {tour.durationDays} ngày {tour.durationNights} đêm
                   </StatusPill>
                   {tour.destination && (
-                    <StatusPill tone="gray">{tour.destination.city ?? tour.destination.name}</StatusPill>
+                    <StatusPill tone="gray">
+                      {tour.destination.city ?? tour.destination.name}
+                    </StatusPill>
                   )}
                 </div>
               </div>

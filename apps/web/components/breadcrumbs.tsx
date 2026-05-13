@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { ChevronRight, Home } from "lucide-react";
+import { ChevronRight, Home } from 'lucide-react';
+import Link from 'next/link';
 
 export interface BreadcrumbItem {
   label: string;
@@ -8,10 +8,7 @@ export interface BreadcrumbItem {
 
 export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
   return (
-    <nav
-      aria-label="Breadcrumb"
-      className="flex items-center gap-1 text-sm text-tv-ink-3"
-    >
+    <nav aria-label="Breadcrumb" className="flex items-center gap-1 text-sm text-tv-ink-3">
       <Link
         href="/"
         className="inline-flex items-center gap-1 hover:text-tv-blue"
@@ -27,9 +24,7 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
               {item.label}
             </Link>
           ) : (
-            <span className="font-bold text-tv-ink dark:text-[#eaf7ff]">
-              {item.label}
-            </span>
+            <span className="font-bold text-tv-ink dark:text-[#eaf7ff]">{item.label}</span>
           )}
         </span>
       ))}

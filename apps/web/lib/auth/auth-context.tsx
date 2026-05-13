@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 /**
  * AuthProvider and useAuth hook — WanderViet frontend auth state.
@@ -8,25 +8,9 @@
  * In production, prefer httpOnly cookies for refresh tokens.
  */
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useCallback,
-} from "react";
-import {
-  authApi,
-  type UserProfile,
-  type LoginRequest,
-  type RegisterRequest,
-} from "@/lib/api";
-import {
-  getAccessToken,
-  getRefreshToken,
-  setTokens,
-  clearTokens,
-} from "@/lib/api/client";
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { authApi, type UserProfile, type LoginRequest, type RegisterRequest } from '@/lib/api';
+import { getAccessToken, getRefreshToken, setTokens, clearTokens } from '@/lib/api/client';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -64,11 +48,13 @@ const AuthContext = createContext<AuthContextValue | null>(null);
  */
 function getTokenExpiry(token: string): number | null {
   try {
-    const parts = token.split(".");
+    const parts = token.split('.');
     if (parts.length !== 3) return null;
-    const payload = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const part = parts[1];
+    if (!part) return null;
+    const payload = part.replace(/-/g, '+').replace(/_/g, '/');
     const json = JSON.parse(atob(payload)) as { exp?: number };
-    if (typeof json.exp !== "number") return null;
+    if (typeof json.exp !== 'number') return null;
     return json.exp * 1000;
   } catch {
     return null;
@@ -105,34 +91,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Auto-refresh interval (every 5 min, refresh when < 3 min remaining)
   useEffect(() => {
-    const interval = setInterval(() => {
-      const token = getAccessToken();
-      if (!token) return;
+    const interval = setInterval(
+      () => {
+        const token = getAccessToken();
+        if (!token) return;
 
-      const expiry = getTokenExpiry(token);
-      const THREE_MINUTES = 3 * 60 * 1000;
+        const expiry = getTokenExpiry(token);
+        const THREE_MINUTES = 3 * 60 * 1000;
 
-      if (expiry !== null && expiry - Date.now() < THREE_MINUTES) {
-        const refreshToken = getRefreshToken();
-        if (!refreshToken) return;
+        if (expiry !== null && expiry - Date.now() < THREE_MINUTES) {
+          const refreshToken = getRefreshToken();
+          if (!refreshToken) return;
 
-        authApi
-          .refresh(refreshToken)
-          .then((res) => {
-            if (res.success) {
-              setTokens(res.data.accessToken, res.data.refreshToken);
-              setUser(res.data.user);
-            } else {
+          authApi
+            .refresh(refreshToken)
+            .then((res) => {
+              if (res.success) {
+                setTokens(res.data.accessToken, res.data.refreshToken);
+                setUser(res.data.user);
+              } else {
+                clearTokens();
+                setUser(null);
+              }
+            })
+            .catch(() => {
               clearTokens();
               setUser(null);
-            }
-          })
-          .catch(() => {
-            clearTokens();
-            setUser(null);
-          });
-      }
-    }, 5 * 60 * 1000);
+            });
+        }
+      },
+      5 * 60 * 1000,
+    );
 
     return () => clearInterval(interval);
   }, []);
@@ -185,8 +174,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const value: AuthContextValue = {
     user,
     isAuthenticated: !!user,
-    isAdmin: user?.role === "ADMIN",
-    isStaff: user?.role === "STAFF" || user?.role === "ADMIN",
+    isAdmin: user?.role === 'ADMIN',
+    isStaff: user?.role === 'STAFF' || user?.role === 'ADMIN',
     isLoading,
     login,
     register,
@@ -205,7 +194,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 export function useAuth(): AuthContextValue {
   const ctx = useContext(AuthContext);
   if (!ctx) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return ctx;
 }

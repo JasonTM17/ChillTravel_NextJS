@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { MapPin } from 'lucide-react';
+import Link from 'next/link';
 
 export default function NotFound() {
   return (
@@ -7,15 +7,11 @@ export default function NotFound() {
       <div className="rounded-full bg-tv-blue-light p-6">
         <MapPin className="text-tv-blue" size={48} aria-hidden="true" />
       </div>
-      <h1 className="mt-6 text-4xl font-bold text-tv-ink dark:text-[#eaf7ff]">
-        404
-      </h1>
-      <p className="mt-2 text-xl font-bold text-tv-ink-3">
-        Trang không tìm thấy
-      </p>
+      <h1 className="mt-6 text-4xl font-bold text-tv-ink dark:text-[#eaf7ff]">404</h1>
+      <p className="mt-2 text-xl font-bold text-tv-ink-3">Trang không tìm thấy</p>
       <p className="mt-3 max-w-md text-sm leading-7 text-tv-ink-3">
-        Trang bạn đang tìm kiếm không tồn tại hoặc đã bị di chuyển. Hãy quay về
-        trang chủ để tiếp tục khám phá.
+        Trang bạn đang tìm kiếm không tồn tại hoặc đã bị di chuyển. Hãy quay về trang chủ để tiếp
+        tục khám phá.
       </p>
       <Link
         href="/"

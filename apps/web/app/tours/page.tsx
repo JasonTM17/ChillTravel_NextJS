@@ -1,8 +1,5 @@
-"use client";
+'use client';
 
-import { useEffect, useState, useCallback, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import {
   ArrowRight,
   ChevronLeft,
@@ -14,41 +11,43 @@ import {
   Sparkles,
   Star,
   Tag,
-  Users,
-} from "lucide-react";
-import { tourApi } from "@/lib/api/tour.api";
-import type { Tour } from "@/lib/api/tour.api";
-import { getDestinationImage } from "@/lib/destination-images";
-import { formatVnd } from "@/lib/utils";
+} from 'lucide-react';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState, useCallback, Suspense } from 'react';
+import { tourApi } from '@/lib/api/tour.api';
+import type { Tour } from '@/lib/api/tour.api';
+import { getDestinationImage } from '@/lib/destination-images';
+import { formatVnd } from '@/lib/utils';
 
 const PAGE_SIZE = 9;
 
 const sortOptions = [
-  { label: "Phù hợp nhất", value: "" },
-  { label: "Giá thấp nhất", value: "price,asc" },
-  { label: "Giá cao nhất", value: "price,desc" },
-  { label: "Phổ biến nhất", value: "popular,desc" },
-  { label: "Đánh giá cao", value: "rating,desc" },
-  { label: "Mới nhất", value: "newest,desc" },
+  { label: 'Phù hợp nhất', value: '' },
+  { label: 'Giá thấp nhất', value: 'price,asc' },
+  { label: 'Giá cao nhất', value: 'price,desc' },
+  { label: 'Phổ biến nhất', value: 'popular,desc' },
+  { label: 'Đánh giá cao', value: 'rating,desc' },
+  { label: 'Mới nhất', value: 'newest,desc' },
 ];
 
 const categoryOptions = [
-  "Biển",
-  "Văn hóa",
-  "Ẩm thực",
-  "Núi",
-  "Nghỉ dưỡng",
-  "Phố cổ",
-  "Khám phá",
-  "Gia đình",
+  'Biển',
+  'Văn hóa',
+  'Ẩm thực',
+  'Núi',
+  'Nghỉ dưỡng',
+  'Phố cổ',
+  'Khám phá',
+  'Gia đình',
 ];
 
 const durationOptions = [
-  { label: "Tất cả", value: "" },
-  { label: "1–3 ngày", value: "3" },
-  { label: "4–7 ngày", value: "7" },
-  { label: "8–14 ngày", value: "14" },
-  { label: "Trên 14 ngày", value: "15" },
+  { label: 'Tất cả', value: '' },
+  { label: '1–3 ngày', value: '3' },
+  { label: '4–7 ngày', value: '7' },
+  { label: '8–14 ngày', value: '14' },
+  { label: 'Trên 14 ngày', value: '15' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -112,13 +111,13 @@ function ToursPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const keyword = searchParams.get("keyword") ?? "";
-  const category = searchParams.get("category") ?? "";
-  const minPrice = searchParams.get("minPrice") ?? "";
-  const maxPrice = searchParams.get("maxPrice") ?? "";
-  const duration = searchParams.get("duration") ?? "";
-  const sort = searchParams.get("sort") ?? "";
-  const page = parseInt(searchParams.get("page") ?? "0", 10);
+  const keyword = searchParams.get('keyword') ?? '';
+  const category = searchParams.get('category') ?? '';
+  const minPrice = searchParams.get('minPrice') ?? '';
+  const maxPrice = searchParams.get('maxPrice') ?? '';
+  const duration = searchParams.get('duration') ?? '';
+  const sort = searchParams.get('sort') ?? '';
+  const page = parseInt(searchParams.get('page') ?? '0', 10);
 
   const [tours, setTours] = useState<Tour[]>([]);
   const [totalElements, setTotalElements] = useState(0);
@@ -151,10 +150,10 @@ function ToursPageInner() {
         setTotalElements(paginatedData.totalElements);
         setTotalPages(paginatedData.totalPages);
       } else {
-        setError("Không thể tải danh sách tour.");
+        setError('Không thể tải danh sách tour.');
       }
     } catch {
-      setError("Lỗi kết nối. Vui lòng thử lại.");
+      setError('Lỗi kết nối. Vui lòng thử lại.');
     } finally {
       setLoading(false);
     }
@@ -173,8 +172,8 @@ function ToursPageInner() {
         params.delete(key);
       }
     }
-    if (!("page" in updates)) {
-      params.delete("page");
+    if (!('page' in updates)) {
+      params.delete('page');
     }
     router.push(`/tours?${params.toString()}`);
   }
@@ -182,7 +181,7 @@ function ToursPageInner() {
   function handleSearch(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
-    const kw = (form.elements.namedItem("keyword") as HTMLInputElement)?.value ?? "";
+    const kw = (form.elements.namedItem('keyword') as HTMLInputElement)?.value ?? '';
     updateParams({ keyword: kw });
   }
 
@@ -191,14 +190,14 @@ function ToursPageInner() {
   }
 
   function handleCategoryToggle(cat: string) {
-    updateParams({ category: category === cat ? "" : cat });
+    updateParams({ category: category === cat ? '' : cat });
   }
 
   function handleDurationChange(value: string) {
     updateParams({ duration: value });
   }
 
-  function handlePriceChange(field: "minPrice" | "maxPrice", value: string) {
+  function handlePriceChange(field: 'minPrice' | 'maxPrice', value: string) {
     updateParams({ [field]: value });
   }
 
@@ -280,8 +279,8 @@ function ToursPageInner() {
                     onClick={() => handleCategoryToggle(cat)}
                     className={`flex items-center justify-between rounded-tv-sm border px-3 py-2 text-sm font-bold transition text-left ${
                       active
-                        ? "border-tv-blue bg-tv-blue-light text-tv-blue"
-                        : "border-tv-border bg-white text-tv-ink-3 hover:border-tv-blue hover:text-tv-blue"
+                        ? 'border-tv-blue bg-tv-blue-light text-tv-blue'
+                        : 'border-tv-border bg-white text-tv-ink-3 hover:border-tv-blue hover:text-tv-blue'
                     }`}
                     type="button"
                   >
@@ -304,8 +303,8 @@ function ToursPageInner() {
                   onClick={() => handleDurationChange(opt.value)}
                   className={`rounded-tv-sm border px-3 py-2 text-xs font-bold text-left transition ${
                     duration === opt.value
-                      ? "border-tv-blue bg-tv-blue-light text-tv-blue"
-                      : "border-tv-border bg-white text-tv-ink-3 hover:border-tv-blue"
+                      ? 'border-tv-blue bg-tv-blue-light text-tv-blue'
+                      : 'border-tv-border bg-white text-tv-ink-3 hover:border-tv-blue'
                   }`}
                   type="button"
                 >
@@ -331,7 +330,7 @@ function ToursPageInner() {
                   min={0}
                   step={100000}
                   defaultValue={minPrice}
-                  onBlur={(e) => handlePriceChange("minPrice", e.target.value)}
+                  onBlur={(e) => handlePriceChange('minPrice', e.target.value)}
                   className="mt-1 w-full rounded-tv-sm border border-tv-border bg-white px-3 py-2 text-sm font-bold text-tv-ink outline-none focus:border-tv-blue"
                   placeholder="0"
                 />
@@ -346,7 +345,7 @@ function ToursPageInner() {
                   min={0}
                   step={100000}
                   defaultValue={maxPrice}
-                  onBlur={(e) => handlePriceChange("maxPrice", e.target.value)}
+                  onBlur={(e) => handlePriceChange('maxPrice', e.target.value)}
                   className="mt-1 w-full rounded-tv-sm border border-tv-border bg-white px-3 py-2 text-sm font-bold text-tv-ink outline-none focus:border-tv-blue"
                   placeholder="Không giới hạn"
                 />
@@ -357,7 +356,7 @@ function ToursPageInner() {
           {/* Clear filters */}
           {(keyword || category || minPrice || maxPrice || duration || sort) && (
             <button
-              onClick={() => router.push("/tours")}
+              onClick={() => router.push('/tours')}
               className="mt-6 w-full rounded-tv-sm border border-tv-border bg-white px-3 py-2 text-xs font-bold text-tv-ink-3 hover:border-tv-blue hover:text-tv-blue"
               type="button"
             >
@@ -376,7 +375,9 @@ function ToursPageInner() {
                   Danh sách tour
                 </p>
                 <h1 className="mt-1 text-2xl font-bold">
-                  {loading ? "Đang tải..." : `${totalElements} tour${keyword ? ` cho "${keyword}"` : ""}`}
+                  {loading
+                    ? 'Đang tải...'
+                    : `${totalElements} tour${keyword ? ` cho "${keyword}"` : ''}`}
                 </h1>
                 <p className="mt-1 text-sm text-tv-ink-3">Dữ liệu thật từ hệ thống.</p>
               </div>
@@ -387,8 +388,8 @@ function ToursPageInner() {
                     onClick={() => handleSortChange(option.value)}
                     className={`rounded-full border px-3 py-2 text-xs font-bold ${
                       sort === option.value
-                        ? "border-tv-blue bg-tv-blue-light text-tv-blue"
-                        : "border-tv-border bg-white text-tv-ink-3"
+                        ? 'border-tv-blue bg-tv-blue-light text-tv-blue'
+                        : 'border-tv-border bg-white text-tv-ink-3'
                     }`}
                     type="button"
                   >
@@ -410,7 +411,7 @@ function ToursPageInner() {
                 ))}
               </div>
             ) : tours.length === 0 ? (
-              <EmptyResults onClear={() => router.push("/tours")} />
+              <EmptyResults onClear={() => router.push('/tours')} />
             ) : (
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {tours.map((tour) => (
@@ -421,11 +422,7 @@ function ToursPageInner() {
           </div>
 
           {!loading && !error && totalPages > 1 && (
-            <Pagination
-              page={page}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
+            <Pagination page={page} totalPages={totalPages} onPageChange={handlePageChange} />
           )}
         </section>
       </section>
@@ -548,9 +545,7 @@ function EmptyResults({ onClear }: { onClear: () => void }) {
     <div className="rounded-tv border border-dashed border-tv-border bg-white p-10 text-center">
       <MapPin className="mx-auto text-tv-blue" size={34} aria-hidden="true" />
       <h2 className="mt-4 text-2xl font-bold">Chưa có tour phù hợp.</h2>
-      <p className="mt-2 text-tv-ink-3">
-        Thử thay đổi từ khóa, loại tour hoặc khoảng giá.
-      </p>
+      <p className="mt-2 text-tv-ink-3">Thử thay đổi từ khóa, loại tour hoặc khoảng giá.</p>
       <button
         onClick={onClear}
         className="mt-5 inline-flex rounded-tv-sm bg-tv-blue px-5 py-3 font-bold text-white"
@@ -590,22 +585,19 @@ function Pagination({
 
       <div className="flex gap-1">
         {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
-          const pageNum =
-            totalPages <= 7
-              ? i
-              : Math.max(0, Math.min(page - 3, totalPages - 7)) + i;
+          const pageNum = totalPages <= 7 ? i : Math.max(0, Math.min(page - 3, totalPages - 7)) + i;
           return (
             <button
               key={pageNum}
               onClick={() => onPageChange(pageNum)}
               className={`h-9 w-9 rounded-tv-sm text-sm font-bold transition ${
                 pageNum === page
-                  ? "bg-tv-blue text-white"
-                  : "border border-tv-border bg-white text-tv-ink-3 hover:bg-tv-blue-light"
+                  ? 'bg-tv-blue text-white'
+                  : 'border border-tv-border bg-white text-tv-ink-3 hover:bg-tv-blue-light'
               }`}
               type="button"
               aria-label={`Trang ${pageNum + 1}`}
-              aria-current={pageNum === page ? "page" : undefined}
+              aria-current={pageNum === page ? 'page' : undefined}
             >
               {pageNum + 1}
             </button>

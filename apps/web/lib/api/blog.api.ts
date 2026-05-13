@@ -1,5 +1,5 @@
-import { api } from "./client";
-import type { ApiSuccess, ApiPaginatedResponse, PaginationQuery } from "@vietwander/shared";
+import type { ApiSuccess, ApiPaginatedResponse, PaginationQuery } from '@vietwander/shared';
+import { api } from './client';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -39,10 +39,9 @@ export interface BlogQuery extends PaginationQuery {
 export const blogApi = {
   list: (query?: BlogQuery) =>
     api.get<ApiPaginatedResponse<BlogPost>>(
-      "/blogs",
-      query as Record<string, string | number | boolean | undefined>
+      '/blogs',
+      query as Record<string, string | number | boolean | undefined>,
     ),
 
-  getBySlug: (slug: string) =>
-    api.get<ApiSuccess<BlogPost>>(`/blogs/${slug}`),
+  getBySlug: (slug: string) => api.get<ApiSuccess<BlogPost>>(`/blogs/${slug}`),
 };

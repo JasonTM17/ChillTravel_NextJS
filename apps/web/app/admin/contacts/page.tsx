@@ -1,16 +1,20 @@
-﻿"use client";
+﻿'use client';
 
-import { useState, useEffect, useCallback } from "react";
-import { adminApi } from "@/lib/api/admin.api";
-import type { ContactRequest } from "@/lib/api/contact.api";
+import { useState, useEffect, useCallback } from 'react';
+import { adminApi } from '@/lib/api/admin.api';
+import type { ContactRequest } from '@/lib/api/contact.api';
 
 // ─── Toast ───────────────────────────────────────────────────────────────────
-type ToastType = "success" | "error";
-interface ToastMsg { id: number; type: ToastType; text: string }
+type ToastType = 'success' | 'error';
+interface ToastMsg {
+  id: number;
+  type: ToastType;
+  text: string;
+}
 
 function useToast() {
   const [toasts, setToasts] = useState<ToastMsg[]>([]);
-  const show = useCallback((text: string, type: ToastType = "success") => {
+  const show = useCallback((text: string, type: ToastType = 'success') => {
     const id = Date.now();
     setToasts((p) => [...p, { id, type, text }]);
     setTimeout(() => setToasts((p) => p.filter((t) => t.id !== id)), 3500);
@@ -22,7 +26,10 @@ function ToastContainer({ toasts }: { toasts: ToastMsg[] }) {
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
       {toasts.map((t) => (
-        <div key={t.id} className={`rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg ${t.type === "success" ? "bg-[tv-blue]" : "bg-red-500"}`}>
+        <div
+          key={t.id}
+          className={`rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg ${t.type === 'success' ? 'bg-[tv-blue]' : 'bg-red-500'}`}
+        >
           {t.text}
         </div>
       ))}
@@ -33,17 +40,21 @@ function ToastContainer({ toasts }: { toasts: ToastMsg[] }) {
 // ─── Status Badge ─────────────────────────────────────────────────────────────
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, string> = {
-    NEW: "bg-blue-100 text-blue-700",
-    IN_PROGRESS: "bg-yellow-100 text-yellow-700",
-    RESOLVED: "bg-green-100 text-green-700",
-    CLOSED: "bg-gray-100 text-gray-600",
+    NEW: 'bg-blue-100 text-blue-700',
+    IN_PROGRESS: 'bg-yellow-100 text-yellow-700',
+    RESOLVED: 'bg-green-100 text-green-700',
+    CLOSED: 'bg-gray-100 text-gray-600',
   };
   const labels: Record<string, string> = {
-    NEW: "Mới", IN_PROGRESS: "Đang xử lý",
-    RESOLVED: "Đã giải quyết", CLOSED: "Đóng",
+    NEW: 'Mới',
+    IN_PROGRESS: 'Đang xử lý',
+    RESOLVED: 'Đã giải quyết',
+    CLOSED: 'Đóng',
   };
   return (
-    <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${map[status] ?? "bg-gray-100 text-gray-600"}`}>
+    <span
+      className={`rounded-full px-2 py-0.5 text-xs font-semibold ${map[status] ?? 'bg-gray-100 text-gray-600'}`}
+    >
       {labels[status] ?? status}
     </span>
   );
@@ -51,21 +62,30 @@ function StatusBadge({ status }: { status: string }) {
 
 // ─── Detail Drawer ────────────────────────────────────────────────────────────
 function ContactDrawer({
-  contact, onClose, onUpdate,
+  contact,
+  onClose,
+  onUpdate,
 }: {
   contact: ContactRequest;
   onClose: () => void;
-  onUpdate: (id: string, data: { status?: string; assignedTo?: string; adminNote?: string }) => Promise<void>;
+  onUpdate: (
+    id: string,
+    data: { status?: string; assignedTo?: string; adminNote?: string },
+  ) => Promise<void>;
 }) {
   const [status, setStatus] = useState(contact.status);
-  const [assignedTo, setAssignedTo] = useState(contact.assignedTo ?? "");
-  const [adminNote, setAdminNote] = useState(contact.adminNote ?? "");
+  const [assignedTo, setAssignedTo] = useState(contact.assignedTo ?? '');
+  const [adminNote, setAdminNote] = useState(contact.adminNote ?? '');
   const [saving, setSaving] = useState(false);
 
   async function handleSave() {
     setSaving(true);
     try {
-      await onUpdate(contact.id, { status, assignedTo: assignedTo || undefined, adminNote: adminNote || undefined });
+      await onUpdate(contact.id, {
+        status,
+        assignedTo: assignedTo || undefined,
+        adminNote: adminNote || undefined,
+      });
     } finally {
       setSaving(false);
     }
@@ -73,10 +93,15 @@ function ContactDrawer({
 
   return (
     <div className="fixed inset-0 z-40 flex justify-end bg-black/40" onClick={onClose}>
-      <div className="h-full w-full max-w-md overflow-y-auto bg-white p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="h-full w-full max-w-md overflow-y-auto bg-white p-6 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-bold text-[tv-blue]">Chi tiết liên hệ</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl font-bold">×</button>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl font-bold">
+            ×
+          </button>
         </div>
 
         <div className="space-y-4">
@@ -148,7 +173,7 @@ function ContactDrawer({
             disabled={saving}
             className="w-full rounded-tv-sm bg-[tv-orange] py-2.5 text-sm font-bold text-white hover:bg-orange-600 disabled:opacity-60"
           >
-            {saving ? "Đang lưu..." : "Lưu thay đổi"}
+            {saving ? 'Đang lưu...' : 'Lưu thay đổi'}
           </button>
         </div>
       </div>
@@ -162,7 +187,7 @@ export default function AdminContactsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [drawer, setDrawer] = useState<ContactRequest | null>(null);
-  const [statusFilter, setStatusFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState('');
   const { toasts, show } = useToast();
 
   const load = useCallback(async () => {
@@ -172,22 +197,27 @@ export default function AdminContactsPage() {
       const res = await adminApi.contacts.list({ size: 100, status: statusFilter || undefined });
       setItems(res.data?.items ?? []);
     } catch {
-      setError("Không thể tải danh sách liên hệ.");
+      setError('Không thể tải danh sách liên hệ.');
     } finally {
       setLoading(false);
     }
   }, [statusFilter]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
-  async function handleUpdate(id: string, data: { status?: string; assignedTo?: string; adminNote?: string }) {
+  async function handleUpdate(
+    id: string,
+    data: { status?: string; assignedTo?: string; adminNote?: string },
+  ) {
     try {
       await adminApi.contacts.updateStatus(id, data);
-      show("Cập nhật thành công!");
-      setItems((p) => p.map((c) => c.id === id ? { ...c, ...data } : c));
-      if (drawer?.id === id) setDrawer((prev) => prev ? { ...prev, ...data } : null);
+      show('Cập nhật thành công!');
+      setItems((p) => p.map((c) => (c.id === id ? { ...c, ...data } : c)));
+      if (drawer?.id === id) setDrawer((prev) => (prev ? { ...prev, ...data } : null));
     } catch {
-      show("Không thể cập nhật. Vui lòng thử lại.", "error");
+      show('Không thể cập nhật. Vui lòng thử lại.', 'error');
     }
   }
 
@@ -217,7 +247,11 @@ export default function AdminContactsPage() {
 
       <div className="rounded-tv bg-white shadow">
         {loading ? (
-          <div className="space-y-3 p-6">{[...Array(5)].map((_, i) => <div key={i} className="h-10 animate-pulse rounded-lg bg-gray-100" />)}</div>
+          <div className="space-y-3 p-6">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="h-10 animate-pulse rounded-lg bg-gray-100" />
+            ))}
+          </div>
         ) : error ? (
           <div className="p-8 text-center text-red-500">{error}</div>
         ) : items.length === 0 ? (
@@ -241,14 +275,19 @@ export default function AdminContactsPage() {
                   <tr key={item.id} className="border-b last:border-0 hover:bg-gray-50">
                     <td className="px-4 py-3 font-semibold text-gray-900">{item.name}</td>
                     <td className="px-4 py-3 text-gray-600">{item.email}</td>
-                    <td className="px-4 py-3 text-gray-600">{item.destinationInterested ?? "—"}</td>
-                    <td className="px-4 py-3"><StatusBadge status={item.status} /></td>
-                    <td className="px-4 py-3 text-gray-600">{item.assignedTo ?? "—"}</td>
+                    <td className="px-4 py-3 text-gray-600">{item.destinationInterested ?? '—'}</td>
+                    <td className="px-4 py-3">
+                      <StatusBadge status={item.status} />
+                    </td>
+                    <td className="px-4 py-3 text-gray-600">{item.assignedTo ?? '—'}</td>
                     <td className="px-4 py-3 text-gray-500 text-xs">
-                      {new Date(item.createdAt).toLocaleDateString("vi-VN")}
+                      {new Date(item.createdAt).toLocaleDateString('vi-VN')}
                     </td>
                     <td className="px-4 py-3 text-right">
-                      <button onClick={() => setDrawer(item)} className="rounded-lg bg-[tv-blue-light] px-3 py-1 text-xs font-semibold text-[tv-blue] hover:bg-blue-100">
+                      <button
+                        onClick={() => setDrawer(item)}
+                        className="rounded-lg bg-[tv-blue-light] px-3 py-1 text-xs font-semibold text-[tv-blue] hover:bg-blue-100"
+                      >
                         Xem
                       </button>
                     </td>
@@ -261,11 +300,7 @@ export default function AdminContactsPage() {
       </div>
 
       {drawer && (
-        <ContactDrawer
-          contact={drawer}
-          onClose={() => setDrawer(null)}
-          onUpdate={handleUpdate}
-        />
+        <ContactDrawer contact={drawer} onClose={() => setDrawer(null)} onUpdate={handleUpdate} />
       )}
     </div>
   );

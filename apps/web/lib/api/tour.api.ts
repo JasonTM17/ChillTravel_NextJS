@@ -1,5 +1,5 @@
-import { api } from "./client";
-import type { ApiSuccess, ApiPaginatedResponse } from "@vietwander/shared";
+import type { ApiSuccess, ApiPaginatedResponse } from '@vietwander/shared';
+import { api } from './client';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -108,13 +108,11 @@ export interface CreateTourRequest {
 export const tourApi = {
   list: (query?: TourQuery) =>
     api.get<ApiPaginatedResponse<Tour>>(
-      "/tours",
-      query as Record<string, string | number | boolean | undefined>
+      '/tours',
+      query as Record<string, string | number | boolean | undefined>,
     ),
 
-  getBySlug: (slug: string) =>
-    api.get<ApiSuccess<Tour>>(`/tours/${slug}`),
+  getBySlug: (slug: string) => api.get<ApiSuccess<Tour>>(`/tours/${slug}`),
 
-  getFeatured: () =>
-    api.get<ApiSuccess<Tour[]>>("/tours/featured"),
+  getFeatured: () => api.get<ApiSuccess<Tour[]>>('/tours/featured'),
 };

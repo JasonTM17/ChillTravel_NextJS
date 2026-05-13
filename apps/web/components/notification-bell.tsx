@@ -1,4 +1,4 @@
-﻿"use client";
+﻿'use client';
 
 /**
  * NotificationBell — navbar bell icon with unread badge + dropdown.
@@ -10,27 +10,27 @@
  * - Hidden when user is not authenticated.
  */
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { Bell } from "lucide-react";
-import { useAuth } from "@/lib/auth/auth-context";
-import { notificationApi, type Notification } from "@/lib/api/notification.api";
+import { Bell } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { notificationApi, type Notification } from '@/lib/api/notification.api';
+import { useAuth } from '@/lib/auth/auth-context';
 
 // ---------------------------------------------------------------------------
 // Type icon map
 // ---------------------------------------------------------------------------
 
 const TYPE_ICON: Record<string, string> = {
-  BOOKING_CONFIRMED: "✓",
-  BOOKING_CANCELLED: "✗",
-  BOOKING_COMPLETED: "✓",
-  REVIEW_APPROVED: "★",
-  CONTACT_REPLY: "✉",
-  SYSTEM: "ℹ",
+  BOOKING_CONFIRMED: '✓',
+  BOOKING_CANCELLED: '✗',
+  BOOKING_COMPLETED: '✓',
+  REVIEW_APPROVED: '★',
+  CONTACT_REPLY: '✉',
+  SYSTEM: 'ℹ',
 };
 
 function typeIcon(type: string): string {
-  return TYPE_ICON[type] ?? "ℹ";
+  return TYPE_ICON[type] ?? 'ℹ';
 }
 
 // ---------------------------------------------------------------------------
@@ -40,7 +40,7 @@ function typeIcon(type: string): string {
 function relativeTime(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime();
   const mins = Math.floor(diff / 60_000);
-  if (mins < 1) return "Vừa xong";
+  if (mins < 1) return 'Vừa xong';
   if (mins < 60) return `${mins} phút trước`;
   const hours = Math.floor(mins / 60);
   if (hours < 24) return `${hours} giờ trước`;
@@ -108,9 +108,9 @@ export function NotificationBell() {
       }
     }
     if (open) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
     }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [open]);
 
   // ------------------------------------------------------------------
@@ -134,7 +134,7 @@ export function NotificationBell() {
       try {
         await notificationApi.markRead(n.id);
         setNotifications((prev) =>
-          prev.map((item) => (item.id === n.id ? { ...item, isRead: true } : item))
+          prev.map((item) => (item.id === n.id ? { ...item, isRead: true } : item)),
         );
         setUnreadCount((c) => Math.max(0, c - 1));
       } catch {
@@ -162,7 +162,7 @@ export function NotificationBell() {
       <button
         type="button"
         onClick={handleToggle}
-        aria-label={`Thông báo${unreadCount > 0 ? ` — ${unreadCount} chưa đọc` : ""}`}
+        aria-label={`Thông báo${unreadCount > 0 ? ` — ${unreadCount} chưa đọc` : ''}`}
         aria-haspopup="true"
         aria-expanded={open}
         className="relative hidden rounded-tv-sm border border-[tv-border] p-2 text-[tv-ink-3] transition hover:bg-[tv-blue-light] hover:text-[tv-blue] md:inline-flex"
@@ -173,7 +173,7 @@ export function NotificationBell() {
             aria-hidden="true"
             className="absolute -right-1 -top-1 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-red-500 px-0.5 text-[10px] font-bold leading-none text-white"
           >
-            {unreadCount > 99 ? "99+" : unreadCount}
+            {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}
       </button>
@@ -198,9 +198,7 @@ export function NotificationBell() {
           {/* List */}
           <ul className="max-h-[360px] overflow-y-auto">
             {loading && notifications.length === 0 && (
-              <li className="px-4 py-6 text-center text-sm text-[tv-ink-3]">
-                Đang tải…
-              </li>
+              <li className="px-4 py-6 text-center text-sm text-[tv-ink-3]">Đang tải…</li>
             )}
             {!loading && notifications.length === 0 && (
               <li className="px-4 py-8 text-center text-sm text-[tv-ink-3]">
@@ -213,16 +211,14 @@ export function NotificationBell() {
                   type="button"
                   onClick={() => handleNotificationClick(n)}
                   className={`flex w-full items-start gap-3 px-4 py-3 text-left transition hover:bg-[tv-blue-light] ${
-                    !n.isRead ? "bg-[#f0f8ff]" : ""
+                    !n.isRead ? 'bg-[#f0f8ff]' : ''
                   }`}
                 >
                   {/* Type icon */}
                   <span
                     aria-hidden="true"
                     className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
-                      !n.isRead
-                        ? "bg-[tv-blue] text-white"
-                        : "bg-[tv-border] text-[tv-ink-3]"
+                      !n.isRead ? 'bg-[tv-blue] text-white' : 'bg-[tv-border] text-[tv-ink-3]'
                     }`}
                   >
                     {typeIcon(n.type)}
@@ -232,7 +228,7 @@ export function NotificationBell() {
                   <div className="min-w-0 flex-1">
                     <p
                       className={`truncate text-sm ${
-                        !n.isRead ? "font-bold text-[tv-ink]" : "font-medium text-[tv-ink-2]"
+                        !n.isRead ? 'font-bold text-[tv-ink]' : 'font-medium text-[tv-ink-2]'
                       }`}
                     >
                       {n.title}
@@ -259,7 +255,7 @@ export function NotificationBell() {
               type="button"
               onClick={() => {
                 setOpen(false);
-                router.push("/notifications");
+                router.push('/notifications');
               }}
               className="w-full rounded-tv-sm py-2 text-center text-sm font-bold text-[tv-blue] transition hover:bg-[tv-blue-light]"
             >

@@ -1,18 +1,18 @@
-﻿"use client";
+﻿'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { KeyRound, AlertCircle, CheckCircle2 } from "lucide-react";
-import { z } from "zod";
-import { CommerceSurface, TrustBanner } from "@/components/commerce-primitives";
-import { PageShell } from "@/components/page-shell";
+import { KeyRound, AlertCircle, CheckCircle2 } from 'lucide-react';
+import Link from 'next/link';
+import { useState } from 'react';
+import { z } from 'zod';
+import { CommerceSurface, TrustBanner } from '@/components/commerce-primitives';
+import { PageShell } from '@/components/page-shell';
 
 // ---------------------------------------------------------------------------
 // Validation schema
 // ---------------------------------------------------------------------------
 
 const forgotSchema = z.object({
-  email: z.string().min(1, "Email không được để trống").email("Email không hợp lệ"),
+  email: z.string().min(1, 'Email không được để trống').email('Email không hợp lệ'),
 });
 
 type ForgotFields = z.infer<typeof forgotSchema>;
@@ -22,7 +22,7 @@ type ForgotFields = z.infer<typeof forgotSchema>;
 // ---------------------------------------------------------------------------
 
 export default function ForgotPasswordPage() {
-  const [fields, setFields] = useState<ForgotFields>({ email: "" });
+  const [fields, setFields] = useState<ForgotFields>({ email: '' });
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof ForgotFields, string>>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -69,7 +69,9 @@ export default function ForgotPasswordPage() {
               <KeyRound size={22} aria-hidden="true" />
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-ink-3]">Đặt lại mật khẩu</p>
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-ink-3]">
+                Đặt lại mật khẩu
+              </p>
               <h2 className="text-2xl font-bold">Nhập email để nhận link đặt lại</h2>
             </div>
           </div>
@@ -80,8 +82,8 @@ export default function ForgotPasswordPage() {
               <div>
                 <p className="font-bold">Email đã được gửi (demo)</p>
                 <p className="mt-1 text-sm font-bold leading-6">
-                  Nếu email tồn tại, chúng tôi đã gửi link đặt lại mật khẩu (demo).
-                  Vui lòng kiểm tra hộp thư của bạn.
+                  Nếu email tồn tại, chúng tôi đã gửi link đặt lại mật khẩu (demo). Vui lòng kiểm
+                  tra hộp thư của bạn.
                 </p>
                 <Link
                   href="/login"
@@ -109,10 +111,13 @@ export default function ForgotPasswordPage() {
                     placeholder="ban@example.com"
                     className="rounded-tv border border-[tv-border] bg-[tv-bg] px-4 py-3 font-bold text-[tv-ink] outline-none focus:border-[tv-blue] aria-[invalid=true]:border-red-400"
                     aria-invalid={!!fieldErrors.email}
-                    aria-describedby={fieldErrors.email ? "email-error" : undefined}
+                    aria-describedby={fieldErrors.email ? 'email-error' : undefined}
                   />
                   {fieldErrors.email && (
-                    <span id="email-error" className="flex items-center gap-1 text-xs font-bold text-red-600">
+                    <span
+                      id="email-error"
+                      className="flex items-center gap-1 text-xs font-bold text-red-600"
+                    >
                       <AlertCircle size={13} aria-hidden="true" />
                       {fieldErrors.email}
                     </span>
@@ -124,12 +129,12 @@ export default function ForgotPasswordPage() {
                   disabled={isLoading}
                   className="rounded-tv bg-[tv-orange] px-5 py-3 font-bold text-white transition hover:bg-[tv-orange-dark] disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {isLoading ? "Đang gửi…" : "Gửi link đặt lại mật khẩu"}
+                  {isLoading ? 'Đang gửi…' : 'Gửi link đặt lại mật khẩu'}
                 </button>
               </form>
 
               <p className="mt-4 text-sm leading-6 text-[tv-ink-3]">
-                Nhớ mật khẩu rồi?{" "}
+                Nhớ mật khẩu rồi?{' '}
                 <Link href="/login" className="font-bold text-[tv-blue] hover:underline">
                   Đăng nhập
                 </Link>
@@ -144,12 +149,16 @@ export default function ForgotPasswordPage() {
             <h2 className="text-xl font-bold">Lưu ý</h2>
             <ul className="mt-4 space-y-3 text-sm font-bold text-[tv-ink-3]">
               {[
-                "Link đặt lại có hiệu lực trong 1 giờ.",
-                "Kiểm tra cả thư mục spam nếu không thấy email.",
-                "Mỗi link chỉ dùng được một lần.",
+                'Link đặt lại có hiệu lực trong 1 giờ.',
+                'Kiểm tra cả thư mục spam nếu không thấy email.',
+                'Mỗi link chỉ dùng được một lần.',
               ].map((note) => (
                 <li key={note} className="flex items-start gap-2 rounded-tv-sm bg-[tv-bg] p-3">
-                  <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[tv-blue]" aria-hidden="true" />
+                  <CheckCircle2
+                    size={15}
+                    className="mt-0.5 shrink-0 text-[tv-blue]"
+                    aria-hidden="true"
+                  />
                   {note}
                 </li>
               ))}

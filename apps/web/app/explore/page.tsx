@@ -1,9 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState, useCallback, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
+import type { LucideIcon } from 'lucide-react';
 import {
   ArrowRight,
   CalendarDays,
@@ -20,24 +17,26 @@ import {
   WalletCards,
   Wifi,
   ChevronLeft,
-  ChevronRight
-} from "lucide-react";
-import { destinationApi, getCountryName, getCityName } from "@/lib/api/destination.api";
-import type { Destination } from "@/lib/api/destination.api";
-import { getDestinationImage } from "@/lib/destination-images";
-import { formatVnd } from "@/lib/utils";
-import { demoPaymentWarning, formatDateVi } from "@/lib/vietnamese";
+  ChevronRight,
+} from 'lucide-react';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState, useCallback, Suspense } from 'react';
+import { destinationApi, getCountryName, getCityName } from '@/lib/api/destination.api';
+import type { Destination } from '@/lib/api/destination.api';
+import { getDestinationImage } from '@/lib/destination-images';
+import { demoPaymentWarning, formatDateVi } from '@/lib/vietnamese';
 
 const PAGE_SIZE = 9;
 
 const sortOptions = [
-  { label: "Phù hợp nhất", value: "" },
-  { label: "Đánh giá cao", value: "ratingAvg,desc" },
-  { label: "Tên A-Z", value: "name,asc" },
-  { label: "Mới nhất", value: "createdAt,desc" },
+  { label: 'Phù hợp nhất', value: '' },
+  { label: 'Đánh giá cao', value: 'ratingAvg,desc' },
+  { label: 'Tên A-Z', value: 'name,asc' },
+  { label: 'Mới nhất', value: 'createdAt,desc' },
 ];
 
-const categoryOptions = ["Biển", "Văn hóa", "Ẩm thực", "Núi", "Nghỉ dưỡng", "Phố cổ"];
+const categoryOptions = ['Biển', 'Văn hóa', 'Ẩm thực', 'Núi', 'Nghỉ dưỡng', 'Phố cổ'];
 
 // ---------------------------------------------------------------------------
 // Skeleton
@@ -56,7 +55,9 @@ function SearchResultSkeleton() {
         <div className="h-3 w-full rounded tv-skeleton" />
         <div className="h-3 w-3/4 rounded tv-skeleton" />
         <div className="flex gap-2 mt-2">
-          {[1, 2, 3, 4].map((i) => <div key={i} className="h-6 w-20 rounded-full tv-skeleton" />)}
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-6 w-20 rounded-full tv-skeleton" />
+          ))}
         </div>
       </div>
       <div className="flex flex-col justify-between border-t border-tv-border bg-tv-bg p-5 md:border-l md:border-t-0">
@@ -97,7 +98,9 @@ function ExplorePageSkeleton() {
       <section className="mx-auto grid max-w-[1180px] gap-5 px-4 py-6 lg:grid-cols-[260px_minmax(0,1fr)_300px]">
         <div className="h-96 rounded-tv border border-tv-border bg-white animate-pulse" />
         <div className="space-y-4">
-          {[1, 2, 3].map((i) => <SearchResultSkeleton key={i} />)}
+          {[1, 2, 3].map((i) => (
+            <SearchResultSkeleton key={i} />
+          ))}
         </div>
         <div className="h-64 rounded-tv border border-tv-border bg-white animate-pulse" />
       </section>
@@ -109,12 +112,12 @@ function ExplorePageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const keyword = searchParams.get("keyword") ?? searchParams.get("q") ?? "";
-  const country = searchParams.get("country") ?? "";
-  const city = searchParams.get("city") ?? "";
-  const category = searchParams.get("category") ?? "";
-  const sort = searchParams.get("sort") ?? "";
-  const page = parseInt(searchParams.get("page") ?? "0", 10);
+  const keyword = searchParams.get('keyword') ?? searchParams.get('q') ?? '';
+  const country = searchParams.get('country') ?? '';
+  const city = searchParams.get('city') ?? '';
+  const category = searchParams.get('category') ?? '';
+  const sort = searchParams.get('sort') ?? '';
+  const page = parseInt(searchParams.get('page') ?? '0', 10);
 
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [totalElements, setTotalElements] = useState(0);
@@ -141,10 +144,10 @@ function ExplorePageInner() {
         setTotalElements(res.data.totalElements);
         setTotalPages(res.data.totalPages);
       } else {
-        setError("Không thể tải danh sách điểm đến.");
+        setError('Không thể tải danh sách điểm đến.');
       }
     } catch {
-      setError("Lỗi kết nối. Vui lòng thử lại.");
+      setError('Lỗi kết nối. Vui lòng thử lại.');
     } finally {
       setLoading(false);
     }
@@ -164,8 +167,8 @@ function ExplorePageInner() {
       }
     }
     // Reset page when filters change (unless explicitly setting page)
-    if (!("page" in updates)) {
-      params.delete("page");
+    if (!('page' in updates)) {
+      params.delete('page');
     }
     router.push(`/explore?${params.toString()}`);
   }
@@ -173,7 +176,7 @@ function ExplorePageInner() {
   function handleSearch(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
-    const kw = (form.elements.namedItem("keyword") as HTMLInputElement)?.value ?? "";
+    const kw = (form.elements.namedItem('keyword') as HTMLInputElement)?.value ?? '';
     updateParams({ keyword: kw });
   }
 
@@ -182,7 +185,7 @@ function ExplorePageInner() {
   }
 
   function handleCategoryToggle(cat: string) {
-    updateParams({ category: category === cat ? "" : cat });
+    updateParams({ category: category === cat ? '' : cat });
   }
 
   function handlePageChange(newPage: number) {
@@ -216,7 +219,7 @@ function ExplorePageInner() {
             ) : loading ? (
               [1, 2, 3].map((i) => <SearchResultSkeleton key={i} />)
             ) : destinations.length === 0 ? (
-              <EmptyResults onClear={() => router.push("/explore")} />
+              <EmptyResults onClear={() => router.push('/explore')} />
             ) : (
               destinations.map((destination) => (
                 <SearchResultCard key={destination.slug} destination={destination} />
@@ -225,11 +228,7 @@ function ExplorePageInner() {
           </div>
 
           {!loading && !error && totalPages > 1 && (
-            <Pagination
-              page={page}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
+            <Pagination page={page} totalPages={totalPages} onPageChange={handlePageChange} />
           )}
         </section>
 
@@ -271,7 +270,9 @@ function EmptyResults({ onClear }: { onClear: () => void }) {
     <div className="rounded-tv border border-dashed border-tv-border bg-white p-10 text-center">
       <MapPin className="mx-auto text-tv-blue" size={34} aria-hidden="true" />
       <h2 className="mt-4 text-2xl font-bold">Chưa có lựa chọn phù hợp.</h2>
-      <p className="mt-2 text-tv-ink-3">Thử nhập thành phố, phong cách du lịch hoặc thay đổi bộ lọc.</p>
+      <p className="mt-2 text-tv-ink-3">
+        Thử nhập thành phố, phong cách du lịch hoặc thay đổi bộ lọc.
+      </p>
       <button
         onClick={onClear}
         className="mt-5 inline-flex rounded-tv-sm bg-tv-blue px-5 py-3 font-bold text-white"
@@ -287,11 +288,20 @@ function EmptyResults({ onClear }: { onClear: () => void }) {
 // Search bar
 // ---------------------------------------------------------------------------
 
-function ExploreSearch({ keyword, onSearch }: { keyword: string; onSearch: (e: React.FormEvent<HTMLFormElement>) => void }) {
+function ExploreSearch({
+  keyword,
+  onSearch,
+}: {
+  keyword: string;
+  onSearch: (e: React.FormEvent<HTMLFormElement>) => void;
+}) {
   return (
     <section className="border-b border-tv-border bg-white">
       <div className="mx-auto max-w-[1180px] px-4 py-5">
-        <form onSubmit={onSearch} className="rounded-[26px] bg-tv-blue p-3 shadow-[0_18px_42px_rgba(2,119,212,0.18)]">
+        <form
+          onSubmit={onSearch}
+          className="rounded-[26px] bg-tv-blue p-3 shadow-[0_18px_42px_rgba(2,119,212,0.18)]"
+        >
           <div className="grid gap-3 rounded-[20px] bg-white p-3 lg:grid-cols-[1.35fr_0.9fr_0.9fr_0.95fr_148px]">
             <label className="flex min-w-0 items-center gap-3 rounded-tv border border-tv-border bg-tv-bg px-4 py-3">
               <Search size={19} className="text-tv-blue" aria-hidden="true" />
@@ -305,10 +315,21 @@ function ExploreSearch({ keyword, onSearch }: { keyword: string; onSearch: (e: R
                 />
               </span>
             </label>
-            <CompactField icon={CalendarDays} label="Nhận phòng" value={formatDateVi(new Date("2026-08-12"))} />
-            <CompactField icon={CalendarDays} label="Trả phòng" value={formatDateVi(new Date("2026-08-16"))} />
+            <CompactField
+              icon={CalendarDays}
+              label="Nhận phòng"
+              value={formatDateVi(new Date('2026-08-12'))}
+            />
+            <CompactField
+              icon={CalendarDays}
+              label="Trả phòng"
+              value={formatDateVi(new Date('2026-08-16'))}
+            />
             <CompactField icon={Users} label="Khách/phòng" value="2 khách, 1 phòng" />
-            <button className="rounded-tv bg-tv-orange px-5 py-3 text-sm font-bold text-white transition hover:bg-tv-orange-dark" type="submit">
+            <button
+              className="rounded-tv bg-tv-orange px-5 py-3 text-sm font-bold text-white transition hover:bg-tv-orange-dark"
+              type="submit"
+            >
               Tìm kiếm
             </button>
           </div>
@@ -318,7 +339,15 @@ function ExploreSearch({ keyword, onSearch }: { keyword: string; onSearch: (e: R
   );
 }
 
-function CompactField({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: string }) {
+function CompactField({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+}) {
   return (
     <div className="flex min-w-0 items-center gap-3 rounded-tv border border-tv-border bg-white px-4 py-3">
       <Icon size={18} className="shrink-0 text-tv-blue" aria-hidden="true" />
@@ -349,9 +378,11 @@ function ResultsToolbar({
     <div className="rounded-tv border border-tv-border bg-white p-4 shadow-tv-card">
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">Kết quả tìm kiếm</p>
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">
+            Kết quả tìm kiếm
+          </p>
           <h1 className="mt-1 text-2xl font-bold">
-            {count} điểm đến{keyword ? ` cho "${keyword}"` : ""}
+            {count} điểm đến{keyword ? ` cho "${keyword}"` : ''}
           </h1>
           <p className="mt-1 text-sm text-tv-ink-3">Dữ liệu thật từ hệ thống.</p>
         </div>
@@ -362,8 +393,8 @@ function ResultsToolbar({
               onClick={() => onSortChange(option.value)}
               className={`rounded-full border px-3 py-2 text-xs font-bold ${
                 sort === option.value
-                  ? "border-tv-blue bg-tv-blue-light text-tv-blue"
-                  : "border-tv-border bg-white text-tv-ink-3"
+                  ? 'border-tv-blue bg-tv-blue-light text-tv-blue'
+                  : 'border-tv-border bg-white text-tv-ink-3'
               }`}
               type="button"
             >
@@ -409,8 +440,8 @@ function FilterRail({
                 onClick={() => onCategoryToggle(cat)}
                 className={`flex items-center justify-between rounded-tv-sm border px-3 py-2 text-sm font-bold transition text-left ${
                   active
-                    ? "border-tv-blue bg-tv-blue-light text-tv-blue"
-                    : "border-tv-border bg-white text-tv-ink-3 hover:border-tv-blue hover:text-tv-blue"
+                    ? 'border-tv-blue bg-tv-blue-light text-tv-blue'
+                    : 'border-tv-border bg-white text-tv-ink-3 hover:border-tv-blue hover:text-tv-blue'
                 }`}
                 type="button"
               >
@@ -434,8 +465,8 @@ function FilterRail({
               onClick={() => onSortChange(option.value)}
               className={`rounded-tv-sm border px-3 py-2 text-xs font-bold text-left transition ${
                 selectedSort === option.value
-                  ? "border-tv-blue bg-tv-blue-light text-tv-blue"
-                  : "border-tv-border bg-white text-tv-ink-3 hover:border-tv-blue"
+                  ? 'border-tv-blue bg-tv-blue-light text-tv-blue'
+                  : 'border-tv-border bg-white text-tv-ink-3 hover:border-tv-blue'
               }`}
               type="button"
             >
@@ -464,7 +495,9 @@ function SearchResultCard({ destination }: { destination: Destination }) {
       />
       <div className="min-w-0 p-5">
         <div className="flex flex-wrap items-center gap-2 text-sm">
-          <span className="rounded-full bg-tv-blue-light px-3 py-1 font-bold text-tv-blue">{getCountryName(destination)}</span>
+          <span className="rounded-full bg-tv-blue-light px-3 py-1 font-bold text-tv-blue">
+            {getCountryName(destination)}
+          </span>
           {destination.ratingAvg != null && (
             <span className="inline-flex items-center gap-1 font-bold text-[#b45309]">
               <Star size={15} fill="currentColor" aria-hidden="true" />
@@ -475,7 +508,10 @@ function SearchResultCard({ destination }: { destination: Destination }) {
             <span className="text-tv-ink-3">({destination.reviewCount} đánh giá)</span>
           )}
         </div>
-        <Link href={`/destinations/${destination.slug}`} className="mt-3 block text-2xl font-bold hover:text-tv-blue">
+        <Link
+          href={`/destinations/${destination.slug}`}
+          className="mt-3 block text-2xl font-bold hover:text-tv-blue"
+        >
           {destination.name}
         </Link>
         <p className="mt-2 line-clamp-2 text-sm leading-6 text-tv-ink-3">
@@ -492,9 +528,15 @@ function SearchResultCard({ destination }: { destination: Destination }) {
       <aside className="flex flex-col justify-between border-t border-tv-border bg-tv-bg p-5 md:border-l md:border-t-0">
         <div>
           <p className="text-xs font-bold text-tv-ink-3">Khám phá</p>
-          <p className="mt-1 text-2xl font-bold text-tv-orange">{getCityName(destination) ?? getCountryName(destination)}</p>
-          <p className="mt-1 text-xs font-bold text-tv-ink-3">{destination.bestTimeToVisit ?? "Quanh năm"}</p>
-          <p className="mt-4 rounded-full bg-[#fff3e8] px-3 py-1 text-center text-xs font-bold text-[#b45309]">Chỉ thanh toán demo</p>
+          <p className="mt-1 text-2xl font-bold text-tv-orange">
+            {getCityName(destination) ?? getCountryName(destination)}
+          </p>
+          <p className="mt-1 text-xs font-bold text-tv-ink-3">
+            {destination.bestTimeToVisit ?? 'Quanh năm'}
+          </p>
+          <p className="mt-4 rounded-full bg-[#fff3e8] px-3 py-1 text-center text-xs font-bold text-[#b45309]">
+            Chỉ thanh toán demo
+          </p>
         </div>
         <div className="mt-5 grid gap-2">
           <Link
@@ -561,12 +603,12 @@ function Pagination({
               onClick={() => onPageChange(pageNum)}
               className={`h-9 w-9 rounded-tv-sm text-sm font-bold transition ${
                 pageNum === page
-                  ? "bg-tv-blue text-white"
-                  : "border border-tv-border bg-white text-tv-ink-3 hover:bg-tv-blue-light"
+                  ? 'bg-tv-blue text-white'
+                  : 'border border-tv-border bg-white text-tv-ink-3 hover:bg-tv-blue-light'
               }`}
               type="button"
               aria-label={`Trang ${pageNum + 1}`}
-              aria-current={pageNum === page ? "page" : undefined}
+              aria-current={pageNum === page ? 'page' : undefined}
             >
               {pageNum + 1}
             </button>
@@ -595,13 +637,21 @@ function Pagination({
 function TripSidePanel({ destination }: { destination: Destination }) {
   return (
     <aside className="h-fit rounded-tv border border-tv-border bg-white p-5 shadow-tv-card lg:sticky lg:top-24">
-      <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">Tóm tắt chuyến đi</p>
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">
+        Tóm tắt chuyến đi
+      </p>
       <h2 className="mt-2 text-2xl font-bold">{destination.name}</h2>
       <div className="mt-5 space-y-3 text-sm">
         <CartRow label="Quốc gia" value={getCountryName(destination)} />
-        {getCityName(destination) && <CartRow label="Thành phố" value={getCityName(destination)!} />}
-        {destination.bestTimeToVisit && <CartRow label="Mùa đẹp" value={destination.bestTimeToVisit} />}
-        {destination.ratingAvg != null && <CartRow label="Đánh giá" value={`${destination.ratingAvg.toFixed(1)} / 5`} />}
+        {getCityName(destination) && (
+          <CartRow label="Thành phố" value={getCityName(destination)!} />
+        )}
+        {destination.bestTimeToVisit && (
+          <CartRow label="Mùa đẹp" value={destination.bestTimeToVisit} />
+        )}
+        {destination.ratingAvg != null && (
+          <CartRow label="Đánh giá" value={`${destination.ratingAvg.toFixed(1)} / 5`} />
+        )}
       </div>
       {destination.shortDescription && (
         <div className="mt-5 rounded-tv bg-tv-bg p-4">

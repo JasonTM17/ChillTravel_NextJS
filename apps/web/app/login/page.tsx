@@ -1,24 +1,21 @@
-"use client";
+'use client';
 
-import { Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { LogIn, ShieldCheck, AlertCircle } from "lucide-react";
-import { z } from "zod";
-import { CommerceSurface, TrustBanner } from "@/components/commerce-primitives";
-import { PageShell } from "@/components/page-shell";
-import { useAuth } from "@/lib/auth/auth-context";
+import { LogIn, ShieldCheck, AlertCircle } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useState } from 'react';
+import { z } from 'zod';
+import { CommerceSurface, TrustBanner } from '@/components/commerce-primitives';
+import { PageShell } from '@/components/page-shell';
+import { useAuth } from '@/lib/auth/auth-context';
 
 // ---------------------------------------------------------------------------
 // Validation schema
 // ---------------------------------------------------------------------------
 
 const loginSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Email không được để trống")
-    .email("Email không hợp lệ"),
-  password: z.string().min(1, "Mật khẩu không được để trống"),
+  email: z.string().min(1, 'Email không được để trống').email('Email không hợp lệ'),
+  password: z.string().min(1, 'Mật khẩu không được để trống'),
 });
 
 type SignInFields = z.infer<typeof loginSchema>;
@@ -28,9 +25,9 @@ type SignInFields = z.infer<typeof loginSchema>;
 // ---------------------------------------------------------------------------
 
 const accounts = [
-  "admin@wanderviet.com / Admin@123456",
-  "user@wanderviet.com / User@123456",
-  "staff@wanderviet.com / Staff@123456",
+  'admin@wanderviet.com / Admin@123456',
+  'user@wanderviet.com / User@123456',
+  'staff@wanderviet.com / Staff@123456',
 ];
 
 // ---------------------------------------------------------------------------
@@ -43,12 +40,10 @@ function SignInForm() {
   const { login } = useAuth();
 
   const [fields, setFields] = useState<SignInFields>({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
-  const [fieldErrors, setFieldErrors] = useState<
-    Partial<Record<keyof SignInFields, string>>
-  >({});
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof SignInFields, string>>>({});
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -85,16 +80,13 @@ function SignInForm() {
         password: fields.password,
       });
       if (res.success) {
-        const redirect = searchParams.get("redirect") ?? "/";
+        const redirect = searchParams.get('redirect') ?? '/';
         router.push(redirect);
       } else {
-        setError(
-          res.message ??
-            "Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.",
-        );
+        setError(res.message ?? 'Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.');
       }
     } catch {
-      setError("Đã xảy ra lỗi. Vui lòng thử lại.");
+      setError('Đã xảy ra lỗi. Vui lòng thử lại.');
     } finally {
       setIsLoading(false);
     }
@@ -108,9 +100,7 @@ function SignInForm() {
             <LogIn size={22} aria-hidden="true" />
           </div>
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">
-              Tài khoản
-            </p>
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">Tài khoản</p>
             <h2 className="text-2xl font-bold">Đăng nhập để tiếp tục</h2>
           </div>
         </div>
@@ -118,11 +108,7 @@ function SignInForm() {
         {/* Error banner */}
         {error && (
           <div className="mt-4 flex items-start gap-3 rounded-tv border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-            <AlertCircle
-              size={18}
-              className="mt-0.5 shrink-0"
-              aria-hidden="true"
-            />
+            <AlertCircle size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
             <p className="font-bold">{error}</p>
           </div>
         )}
@@ -139,7 +125,7 @@ function SignInForm() {
               placeholder="ban@example.com"
               className="rounded-tv border border-tv-border bg-tv-bg px-4 py-3 font-bold text-tv-ink outline-none focus:border-tv-blue aria-[invalid=true]:border-red-400"
               aria-invalid={!!fieldErrors.email}
-              aria-describedby={fieldErrors.email ? "email-error" : undefined}
+              aria-describedby={fieldErrors.email ? 'email-error' : undefined}
             />
             {fieldErrors.email && (
               <span id="email-error" className="text-xs font-bold text-red-600">
@@ -159,15 +145,10 @@ function SignInForm() {
               placeholder="••••••••"
               className="rounded-tv border border-tv-border bg-tv-bg px-4 py-3 font-bold text-tv-ink outline-none focus:border-tv-blue aria-[invalid=true]:border-red-400"
               aria-invalid={!!fieldErrors.password}
-              aria-describedby={
-                fieldErrors.password ? "password-error" : undefined
-              }
+              aria-describedby={fieldErrors.password ? 'password-error' : undefined}
             />
             {fieldErrors.password && (
-              <span
-                id="password-error"
-                className="text-xs font-bold text-red-600"
-              >
+              <span id="password-error" className="text-xs font-bold text-red-600">
                 {fieldErrors.password}
               </span>
             )}
@@ -187,16 +168,13 @@ function SignInForm() {
             disabled={isLoading}
             className="tv-btn-orange w-full rounded-tv py-3 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isLoading ? "Đang đăng nhập…" : "Đăng nhập"}
+            {isLoading ? 'Đang đăng nhập…' : 'Đăng nhập'}
           </button>
         </form>
 
         <p className="mt-4 text-sm leading-6 text-tv-ink-3">
-          Chưa có tài khoản?{" "}
-          <Link
-            href="/register"
-            className="font-bold text-tv-blue hover:underline"
-          >
+          Chưa có tài khoản?{' '}
+          <Link href="/register" className="font-bold text-tv-blue hover:underline">
             Đăng ký ngay
           </Link>
         </p>
@@ -218,10 +196,7 @@ function SignInForm() {
               </p>
             ))}
           </div>
-          <Link
-            href="/register"
-            className="mt-4 inline-flex font-bold text-tv-blue"
-          >
+          <Link href="/register" className="mt-4 inline-flex font-bold text-tv-blue">
             Tạo tài khoản mới
           </Link>
         </CommerceSurface>
@@ -237,11 +212,7 @@ function SignInForm() {
 export default function SignInPage() {
   return (
     <PageShell eyebrow="Truy cập tài khoản" title="Đăng nhập WanderViet">
-      <Suspense
-        fallback={
-          <div className="h-64 animate-pulse rounded-tv bg-tv-bg" />
-        }
-      >
+      <Suspense fallback={<div className="h-64 animate-pulse rounded-tv bg-tv-bg" />}>
         <SignInForm />
       </Suspense>
     </PageShell>

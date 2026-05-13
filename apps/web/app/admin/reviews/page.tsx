@@ -1,16 +1,20 @@
-﻿"use client";
+﻿'use client';
 
-import { useState, useEffect, useCallback } from "react";
-import { adminApi } from "@/lib/api/admin.api";
-import type { Review } from "@/lib/api/review.api";
+import { useState, useEffect, useCallback } from 'react';
+import { adminApi } from '@/lib/api/admin.api';
+import type { Review } from '@/lib/api/review.api';
 
 // ─── Toast ───────────────────────────────────────────────────────────────────
-type ToastType = "success" | "error";
-interface ToastMsg { id: number; type: ToastType; text: string }
+type ToastType = 'success' | 'error';
+interface ToastMsg {
+  id: number;
+  type: ToastType;
+  text: string;
+}
 
 function useToast() {
   const [toasts, setToasts] = useState<ToastMsg[]>([]);
-  const show = useCallback((text: string, type: ToastType = "success") => {
+  const show = useCallback((text: string, type: ToastType = 'success') => {
     const id = Date.now();
     setToasts((p) => [...p, { id, type, text }]);
     setTimeout(() => setToasts((p) => p.filter((t) => t.id !== id)), 3500);
@@ -22,7 +26,10 @@ function ToastContainer({ toasts }: { toasts: ToastMsg[] }) {
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
       {toasts.map((t) => (
-        <div key={t.id} className={`rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg ${t.type === "success" ? "bg-[tv-blue]" : "bg-red-500"}`}>
+        <div
+          key={t.id}
+          className={`rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg ${t.type === 'success' ? 'bg-[tv-blue]' : 'bg-red-500'}`}
+        >
           {t.text}
         </div>
       ))}
@@ -33,17 +40,21 @@ function ToastContainer({ toasts }: { toasts: ToastMsg[] }) {
 // ─── Status Badge ─────────────────────────────────────────────────────────────
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, string> = {
-    PENDING: "bg-yellow-100 text-yellow-700",
-    APPROVED: "bg-green-100 text-green-700",
-    REJECTED: "bg-red-100 text-red-600",
-    HIDDEN: "bg-gray-100 text-gray-600",
+    PENDING: 'bg-yellow-100 text-yellow-700',
+    APPROVED: 'bg-green-100 text-green-700',
+    REJECTED: 'bg-red-100 text-red-600',
+    HIDDEN: 'bg-gray-100 text-gray-600',
   };
   const labels: Record<string, string> = {
-    PENDING: "Chờ duyệt", APPROVED: "Đã duyệt",
-    REJECTED: "Từ chối", HIDDEN: "Ẩn",
+    PENDING: 'Chờ duyệt',
+    APPROVED: 'Đã duyệt',
+    REJECTED: 'Từ chối',
+    HIDDEN: 'Ẩn',
   };
   return (
-    <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${map[status] ?? "bg-gray-100 text-gray-600"}`}>
+    <span
+      className={`rounded-full px-2 py-0.5 text-xs font-semibold ${map[status] ?? 'bg-gray-100 text-gray-600'}`}
+    >
       {labels[status] ?? status}
     </span>
   );
@@ -54,7 +65,9 @@ function StarRating({ rating }: { rating: number }) {
   return (
     <span className="text-sm">
       {[1, 2, 3, 4, 5].map((s) => (
-        <span key={s} className={s <= rating ? "text-[tv-orange]" : "text-gray-200"}>★</span>
+        <span key={s} className={s <= rating ? 'text-[tv-orange]' : 'text-gray-200'}>
+          ★
+        </span>
       ))}
     </span>
   );
@@ -65,7 +78,7 @@ export default function AdminReviewsPage() {
   const [items, setItems] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [statusFilter, setStatusFilter] = useState("PENDING");
+  const [statusFilter, setStatusFilter] = useState('PENDING');
   const { toasts, show } = useToast();
 
   const load = useCallback(async () => {
@@ -75,41 +88,43 @@ export default function AdminReviewsPage() {
       const res = await adminApi.reviews.list({ size: 100, status: statusFilter || undefined });
       setItems(res.data?.items ?? []);
     } catch {
-      setError("Không thể tải danh sách đánh giá.");
+      setError('Không thể tải danh sách đánh giá.');
     } finally {
       setLoading(false);
     }
   }, [statusFilter]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   async function handleApprove(id: string) {
     try {
       await adminApi.reviews.approve(id);
-      show("Đã duyệt đánh giá.");
-      setItems((p) => p.map((r) => r.id === id ? { ...r, status: "APPROVED" } : r));
+      show('Đã duyệt đánh giá.');
+      setItems((p) => p.map((r) => (r.id === id ? { ...r, status: 'APPROVED' } : r)));
     } catch {
-      show("Không thể duyệt. Vui lòng thử lại.", "error");
+      show('Không thể duyệt. Vui lòng thử lại.', 'error');
     }
   }
 
   async function handleReject(id: string) {
     try {
       await adminApi.reviews.reject(id);
-      show("Đã từ chối đánh giá.");
-      setItems((p) => p.map((r) => r.id === id ? { ...r, status: "REJECTED" } : r));
+      show('Đã từ chối đánh giá.');
+      setItems((p) => p.map((r) => (r.id === id ? { ...r, status: 'REJECTED' } : r)));
     } catch {
-      show("Không thể từ chối. Vui lòng thử lại.", "error");
+      show('Không thể từ chối. Vui lòng thử lại.', 'error');
     }
   }
 
   async function handleHide(id: string) {
     try {
       await adminApi.reviews.hide(id);
-      show("Đã ẩn đánh giá.");
-      setItems((p) => p.map((r) => r.id === id ? { ...r, status: "HIDDEN" } : r));
+      show('Đã ẩn đánh giá.');
+      setItems((p) => p.map((r) => (r.id === id ? { ...r, status: 'HIDDEN' } : r)));
     } catch {
-      show("Không thể ẩn. Vui lòng thử lại.", "error");
+      show('Không thể ẩn. Vui lòng thử lại.', 'error');
     }
   }
 
@@ -139,7 +154,11 @@ export default function AdminReviewsPage() {
 
       <div className="rounded-tv bg-white shadow">
         {loading ? (
-          <div className="space-y-3 p-6">{[...Array(5)].map((_, i) => <div key={i} className="h-16 animate-pulse rounded-lg bg-gray-100" />)}</div>
+          <div className="space-y-3 p-6">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="h-16 animate-pulse rounded-lg bg-gray-100" />
+            ))}
+          </div>
         ) : error ? (
           <div className="p-8 text-center text-red-500">{error}</div>
         ) : items.length === 0 ? (
@@ -154,28 +173,38 @@ export default function AdminReviewsPage() {
                       <StarRating rating={item.rating} />
                       <StatusBadge status={item.status} />
                       <span className="text-xs text-gray-400">
-                        {new Date(item.createdAt).toLocaleDateString("vi-VN")}
+                        {new Date(item.createdAt).toLocaleDateString('vi-VN')}
                       </span>
                     </div>
                     {item.title && <p className="font-semibold text-gray-900">{item.title}</p>}
                     <p className="mt-1 text-sm text-gray-600 line-clamp-2">{item.content}</p>
                     <p className="mt-1 text-xs text-gray-400">
-                      Bởi: {item.author?.fullName ?? "Ẩn danh"} · Tour ID: {item.tourId.slice(0, 8)}...
+                      Bởi: {item.author?.fullName ?? 'Ẩn danh'} · Tour ID: {item.tourId.slice(0, 8)}
+                      ...
                     </p>
                   </div>
                   <div className="flex gap-2 flex-shrink-0">
-                    {item.status !== "APPROVED" && (
-                      <button onClick={() => handleApprove(item.id)} className="rounded-lg bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-700 hover:bg-green-100">
+                    {item.status !== 'APPROVED' && (
+                      <button
+                        onClick={() => handleApprove(item.id)}
+                        className="rounded-lg bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-700 hover:bg-green-100"
+                      >
                         Duyệt
                       </button>
                     )}
-                    {item.status !== "REJECTED" && (
-                      <button onClick={() => handleReject(item.id)} className="rounded-lg bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100">
+                    {item.status !== 'REJECTED' && (
+                      <button
+                        onClick={() => handleReject(item.id)}
+                        className="rounded-lg bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100"
+                      >
                         Từ chối
                       </button>
                     )}
-                    {item.status !== "HIDDEN" && (
-                      <button onClick={() => handleHide(item.id)} className="rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-600 hover:bg-gray-200">
+                    {item.status !== 'HIDDEN' && (
+                      <button
+                        onClick={() => handleHide(item.id)}
+                        className="rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-600 hover:bg-gray-200"
+                      >
                         Ẩn
                       </button>
                     )}

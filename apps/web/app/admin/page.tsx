@@ -1,4 +1,4 @@
-﻿"use client";
+﻿'use client';
 
 /**
  * Admin Dashboard Overview — Task 37
@@ -7,8 +7,20 @@
  * Requirements: Req 17, 45
  */
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import {
+  TrendingUp,
+  BookOpen,
+  Clock,
+  Users,
+  MapPin,
+  Compass,
+  Plus,
+  List,
+  MessageSquare,
+  AlertCircle,
+} from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import {
   AreaChart,
   Area,
@@ -23,66 +35,51 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
-} from "recharts";
-import {
-  TrendingUp,
-  BookOpen,
-  Clock,
-  Users,
-  MapPin,
-  Compass,
-  Plus,
-  List,
-  MessageSquare,
-  AlertCircle,
-} from "lucide-react";
-import { adminApi } from "@/lib/api/admin.api";
+} from 'recharts';
+import { CommerceSurface } from '@/components/commerce-primitives';
+import { PageShell } from '@/components/page-shell';
+import { adminApi } from '@/lib/api/admin.api';
 import type {
   DashboardSummary,
   RevenueData,
   BookingStatusCounts,
   TopTour,
   RecentActivities,
-} from "@/lib/api/admin.api";
-import { formatVnd } from "@/lib/utils";
-import { PageShell } from "@/components/page-shell";
-import { CommerceSurface } from "@/components/commerce-primitives";
+} from '@/lib/api/admin.api';
+import { formatVnd } from '@/lib/utils';
 
 // ---------------------------------------------------------------------------
 // Colour palette (Design DNA)
 // ---------------------------------------------------------------------------
 
-const BLUE = "#0064D2";
-const ORANGE = "#FF6D00";
-const TEAL = "#0f8b7b";
-const GRAY = "#767676";
+const BLUE = '#0064D2';
+const ORANGE = '#FF6D00';
+const TEAL = '#0f8b7b';
+const GRAY = '#767676';
 
 const STATUS_COLORS: Record<string, string> = {
   PENDING: ORANGE,
   CONFIRMED: BLUE,
   COMPLETED: TEAL,
-  CANCELLED: "#ef4444",
-  REFUNDED: "#a855f7",
+  CANCELLED: '#ef4444',
+  REFUNDED: '#a855f7',
 };
 
 const STATUS_LABELS: Record<string, string> = {
-  PENDING: "Chờ xác nhận",
-  CONFIRMED: "Đã xác nhận",
-  COMPLETED: "Hoàn thành",
-  CANCELLED: "Đã hủy",
-  REFUNDED: "Hoàn tiền",
+  PENDING: 'Chờ xác nhận',
+  CONFIRMED: 'Đã xác nhận',
+  COMPLETED: 'Hoàn thành',
+  CANCELLED: 'Đã hủy',
+  REFUNDED: 'Hoàn tiền',
 };
 
 // ---------------------------------------------------------------------------
 // Skeleton helpers
 // ---------------------------------------------------------------------------
 
-function SkeletonBox({ className = "" }: { className?: string }) {
+function SkeletonBox({ className = '' }: { className?: string }) {
   return (
-    <div
-      className={`animate-pulse rounded-tv-sm bg-[#e8f4fd] ${className}`}
-      aria-hidden="true"
-    />
+    <div className={`animate-pulse rounded-tv-sm bg-[#e8f4fd] ${className}`} aria-hidden="true" />
   );
 }
 
@@ -115,29 +112,23 @@ interface MetricCardProps {
   value: string;
   helper: string;
   icon: React.ReactNode;
-  tone?: "blue" | "orange" | "teal";
+  tone?: 'blue' | 'orange' | 'teal';
 }
 
-function MetricCard({ label, value, helper, icon, tone = "blue" }: MetricCardProps) {
+function MetricCard({ label, value, helper, icon, tone = 'blue' }: MetricCardProps) {
   const valueColor =
-    tone === "orange"
-      ? "text-[tv-orange]"
-      : tone === "teal"
-      ? "text-[#0f8b7b]"
-      : "text-[tv-blue]";
+    tone === 'orange' ? 'text-[tv-orange]' : tone === 'teal' ? 'text-[#0f8b7b]' : 'text-[tv-blue]';
   const iconBg =
-    tone === "orange"
-      ? "bg-[#fff3e8] text-[tv-orange]"
-      : tone === "teal"
-      ? "bg-[#e8fbf6] text-[#0f8b7b]"
-      : "bg-[tv-blue-light] text-[tv-blue]";
+    tone === 'orange'
+      ? 'bg-[#fff3e8] text-[tv-orange]'
+      : tone === 'teal'
+        ? 'bg-[#e8fbf6] text-[#0f8b7b]'
+        : 'bg-[tv-blue-light] text-[tv-blue]';
 
   return (
     <div className="rounded-tv border border-[tv-border] bg-white p-5 shadow-tv-card">
       <div className="flex items-start justify-between">
-        <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-ink-3]">
-          {label}
-        </p>
+        <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-ink-3]">{label}</p>
         <div className={`rounded-tv-sm p-2 ${iconBg}`}>{icon}</div>
       </div>
       <p className={`mt-3 text-3xl font-bold ${valueColor}`}>{value}</p>
@@ -192,16 +183,26 @@ function StatusBadge({ status }: { status: string }) {
 
 function QuickActions() {
   const actions = [
-    { href: "/admin/tours/new", label: "Thêm tour mới", icon: <Plus size={16} />, tone: "orange" },
-    { href: "/admin/destinations/new", label: "Thêm điểm đến", icon: <MapPin size={16} />, tone: "blue" },
-    { href: "/admin/bookings", label: "Quản lý đặt chỗ", icon: <List size={16} />, tone: "blue" },
-    { href: "/admin/contacts", label: "Yêu cầu tư vấn", icon: <MessageSquare size={16} />, tone: "teal" },
+    { href: '/admin/tours/new', label: 'Thêm tour mới', icon: <Plus size={16} />, tone: 'orange' },
+    {
+      href: '/admin/destinations/new',
+      label: 'Thêm điểm đến',
+      icon: <MapPin size={16} />,
+      tone: 'blue',
+    },
+    { href: '/admin/bookings', label: 'Quản lý đặt chỗ', icon: <List size={16} />, tone: 'blue' },
+    {
+      href: '/admin/contacts',
+      label: 'Yêu cầu tư vấn',
+      icon: <MessageSquare size={16} />,
+      tone: 'teal',
+    },
   ] as const;
 
   const toneClasses = {
-    blue: "bg-[tv-blue-light] text-[tv-blue] hover:bg-[#d0ecfa]",
-    orange: "bg-[#fff3e8] text-[tv-orange] hover:bg-[#ffe8d0]",
-    teal: "bg-[#e8fbf6] text-[#0f8b7b] hover:bg-[#d0f5ec]",
+    blue: 'bg-[tv-blue-light] text-[tv-blue] hover:bg-[#d0ecfa]',
+    orange: 'bg-[#fff3e8] text-[tv-orange] hover:bg-[#ffe8d0]',
+    teal: 'bg-[#e8fbf6] text-[#0f8b7b] hover:bg-[#d0f5ec]',
   };
 
   return (
@@ -251,10 +252,10 @@ function RevenueChart({ data }: { data: RevenueData[] }) {
           width={48}
         />
         <Tooltip
-          formatter={(value: number) => [formatVnd(value), "Doanh thu"]}
+          formatter={(value: number) => [formatVnd(value), 'Doanh thu']}
           contentStyle={{
             borderRadius: 12,
-            border: "1px solid #E8E8E8",
+            border: '1px solid #E8E8E8',
             fontSize: 12,
             fontWeight: 700,
           }}
@@ -308,11 +309,11 @@ function BookingsDonut({ data }: { data: BookingStatusCounts }) {
           <Tooltip
             formatter={(value: number) => [
               `${value} (${total > 0 ? ((value / total) * 100).toFixed(1) : 0}%)`,
-              "Đặt chỗ",
+              'Đặt chỗ',
             ]}
             contentStyle={{
               borderRadius: 12,
-              border: "1px solid #E8E8E8",
+              border: '1px solid #E8E8E8',
               fontSize: 12,
               fontWeight: 700,
             }}
@@ -369,21 +370,17 @@ function TopToursChart({ data }: { data: TopTour[] }) {
         />
         <Tooltip
           formatter={(value: number, name: string) =>
-            name === "revenue"
-              ? [formatVnd(value), "Doanh thu"]
-              : [value, "Lượt đặt"]
+            name === 'revenue' ? [formatVnd(value), 'Doanh thu'] : [value, 'Lượt đặt']
           }
           contentStyle={{
             borderRadius: 12,
-            border: "1px solid #E8E8E8",
+            border: '1px solid #E8E8E8',
             fontSize: 12,
             fontWeight: 700,
           }}
         />
         <Legend
-          formatter={(value: string) =>
-            value === "bookings" ? "Lượt đặt" : "Doanh thu"
-          }
+          formatter={(value: string) => (value === 'bookings' ? 'Lượt đặt' : 'Doanh thu')}
           wrapperStyle={{ fontSize: 11 }}
         />
         <Bar dataKey="bookings" fill={BLUE} radius={[0, 6, 6, 0]} barSize={14} />
@@ -396,17 +393,9 @@ function TopToursChart({ data }: { data: TopTour[] }) {
 // Recent bookings table
 // ---------------------------------------------------------------------------
 
-function RecentBookingsTable({
-  bookings,
-}: {
-  bookings: RecentActivities["recentBookings"];
-}) {
+function RecentBookingsTable({ bookings }: { bookings: RecentActivities['recentBookings'] }) {
   if (!bookings.length) {
-    return (
-      <p className="py-6 text-center text-sm text-[tv-ink-3]">
-        Chưa có đặt chỗ nào.
-      </p>
-    );
+    return <p className="py-6 text-center text-sm text-[tv-ink-3]">Chưa có đặt chỗ nào.</p>;
   }
 
   return (
@@ -423,25 +412,15 @@ function RecentBookingsTable({
         </thead>
         <tbody>
           {bookings.map((b) => (
-            <tr
-              key={b.id}
-              className="border-b border-[tv-border] last:border-b-0"
-            >
+            <tr key={b.id} className="border-b border-[tv-border] last:border-b-0">
               <td className="py-3 pr-4 font-bold text-[tv-blue]">
-                <Link
-                  href={`/admin/bookings`}
-                  className="hover:underline"
-                >
+                <Link href={`/admin/bookings`} className="hover:underline">
                   {b.bookingCode}
                 </Link>
               </td>
               <td className="py-3 pr-4 text-[tv-ink]">{b.contactName}</td>
-              <td className="py-3 pr-4 text-[tv-ink-3]">
-                {b.tour?.title ?? "—"}
-              </td>
-              <td className="py-3 pr-4 font-bold text-[tv-ink]">
-                {formatVnd(b.totalPrice)}
-              </td>
+              <td className="py-3 pr-4 text-[tv-ink-3]">{b.tour?.title ?? '—'}</td>
+              <td className="py-3 pr-4 font-bold text-[tv-ink]">{formatVnd(b.totalPrice)}</td>
               <td className="py-3">
                 <StatusBadge status={b.status} />
               </td>
@@ -465,23 +444,15 @@ const CONTACT_STATUS_COLORS: Record<string, string> = {
 };
 
 const CONTACT_STATUS_LABELS: Record<string, string> = {
-  NEW: "Mới",
-  IN_PROGRESS: "Đang xử lý",
-  RESOLVED: "Đã giải quyết",
-  CLOSED: "Đã đóng",
+  NEW: 'Mới',
+  IN_PROGRESS: 'Đang xử lý',
+  RESOLVED: 'Đã giải quyết',
+  CLOSED: 'Đã đóng',
 };
 
-function RecentContactsList({
-  contacts,
-}: {
-  contacts: RecentActivities["recentContacts"];
-}) {
+function RecentContactsList({ contacts }: { contacts: RecentActivities['recentContacts'] }) {
   if (!contacts.length) {
-    return (
-      <p className="py-6 text-center text-sm text-[tv-ink-3]">
-        Chưa có yêu cầu tư vấn nào.
-      </p>
-    );
+    return <p className="py-6 text-center text-sm text-[tv-ink-3]">Chưa có yêu cầu tư vấn nào.</p>;
   }
 
   return (
@@ -498,12 +469,10 @@ function RecentContactsList({
               <p className="truncate font-bold text-[tv-ink]">{c.name}</p>
               <p className="mt-0.5 truncate text-xs text-[tv-ink-3]">
                 {c.email}
-                {c.destinationInterested
-                  ? ` · ${c.destinationInterested}`
-                  : ""}
+                {c.destinationInterested ? ` · ${c.destinationInterested}` : ''}
               </p>
               <p className="mt-0.5 text-xs text-[tv-ink-3]">
-                {new Date(c.createdAt).toLocaleDateString("vi-VN")}
+                {new Date(c.createdAt).toLocaleDateString('vi-VN')}
               </p>
             </div>
             <span
@@ -523,18 +492,12 @@ function RecentContactsList({
 // Pending reviews list
 // ---------------------------------------------------------------------------
 
-function PendingReviewsList({
-  reviews,
-}: {
-  reviews: RecentActivities["recentReviews"];
-}) {
-  const pending = reviews.filter((r) => r.status === "PENDING");
+function PendingReviewsList({ reviews }: { reviews: RecentActivities['recentReviews'] }) {
+  const pending = reviews.filter((r) => r.status === 'PENDING');
 
   if (!pending.length) {
     return (
-      <p className="py-6 text-center text-sm text-[tv-ink-3]">
-        Không có đánh giá nào chờ duyệt.
-      </p>
+      <p className="py-6 text-center text-sm text-[tv-ink-3]">Không có đánh giá nào chờ duyệt.</p>
     );
   }
 
@@ -546,13 +509,10 @@ function PendingReviewsList({
           className="flex items-start gap-3 rounded-tv-sm border border-[tv-border] p-3"
         >
           <div className="flex-1 min-w-0">
-            <p className="truncate font-bold text-[tv-ink]">
-              {r.title ?? r.content.slice(0, 60)}
-            </p>
+            <p className="truncate font-bold text-[tv-ink]">{r.title ?? r.content.slice(0, 60)}</p>
             <p className="mt-0.5 text-xs text-[tv-ink-3]">
-              {"★".repeat(r.rating)}
-              {"☆".repeat(5 - r.rating)} ·{" "}
-              {new Date(r.createdAt).toLocaleDateString("vi-VN")}
+              {'★'.repeat(r.rating)}
+              {'☆'.repeat(5 - r.rating)} · {new Date(r.createdAt).toLocaleDateString('vi-VN')}
             </p>
           </div>
           <StatusBadge status={r.status} />
@@ -569,8 +529,7 @@ function PendingReviewsList({
 export default function AdminDashboardPage() {
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [revenue, setRevenue] = useState<RevenueData[]>([]);
-  const [bookingsByStatus, setBookingsByStatus] =
-    useState<BookingStatusCounts | null>(null);
+  const [bookingsByStatus, setBookingsByStatus] = useState<BookingStatusCounts | null>(null);
   const [topTours, setTopTours] = useState<TopTour[]>([]);
   const [activities, setActivities] = useState<RecentActivities | null>(null);
 
@@ -595,9 +554,7 @@ export default function AdminDashboardPage() {
       if (topRes.success) setTopTours(topRes.data);
       if (actRes.success) setActivities(actRes.data);
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Đã xảy ra lỗi khi tải dữ liệu."
-      );
+      setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi khi tải dữ liệu.');
     } finally {
       setLoading(false);
     }
@@ -637,33 +594,33 @@ export default function AdminDashboardPage() {
               />
               <MetricCard
                 label="Tổng đặt chỗ"
-                value={summary.totalBookings.toLocaleString("vi-VN")}
+                value={summary.totalBookings.toLocaleString('vi-VN')}
                 helper="Tất cả đặt chỗ trên hệ thống"
                 icon={<BookOpen size={18} />}
               />
               <MetricCard
                 label="Chờ xác nhận"
-                value={summary.pendingBookings.toLocaleString("vi-VN")}
+                value={summary.pendingBookings.toLocaleString('vi-VN')}
                 helper="Đặt chỗ đang chờ xử lý"
                 icon={<Clock size={18} />}
                 tone="orange"
               />
               <MetricCard
                 label="Tổng người dùng"
-                value={summary.totalUsers.toLocaleString("vi-VN")}
+                value={summary.totalUsers.toLocaleString('vi-VN')}
                 helper="Tài khoản đã đăng ký"
                 icon={<Users size={18} />}
                 tone="teal"
               />
               <MetricCard
                 label="Tổng tour"
-                value={summary.totalTours.toLocaleString("vi-VN")}
+                value={summary.totalTours.toLocaleString('vi-VN')}
                 helper="Tour đang hoạt động trên nền tảng"
                 icon={<Compass size={18} />}
               />
               <MetricCard
                 label="Điểm đến"
-                value={summary.totalDestinations.toLocaleString("vi-VN")}
+                value={summary.totalDestinations.toLocaleString('vi-VN')}
                 helper="Điểm đến đã được đăng tải"
                 icon={<MapPin size={18} />}
                 tone="teal"
@@ -679,9 +636,7 @@ export default function AdminDashboardPage() {
             <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
               Doanh thu
             </p>
-            <h2 className="mt-1 text-xl font-bold text-[tv-ink]">
-              12 tháng gần nhất
-            </h2>
+            <h2 className="mt-1 text-xl font-bold text-[tv-ink]">12 tháng gần nhất</h2>
             <div className="mt-5">
               {loading ? (
                 <ChartSkeleton height={280} />
@@ -700,18 +655,14 @@ export default function AdminDashboardPage() {
             <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
               Đặt chỗ theo trạng thái
             </p>
-            <h2 className="mt-1 text-xl font-bold text-[tv-ink]">
-              Phân bổ hiện tại
-            </h2>
+            <h2 className="mt-1 text-xl font-bold text-[tv-ink]">Phân bổ hiện tại</h2>
             <div className="mt-5">
               {loading ? (
                 <ChartSkeleton height={220} />
               ) : bookingsByStatus ? (
                 <BookingsDonut data={bookingsByStatus} />
               ) : (
-                <p className="py-16 text-center text-sm text-[tv-ink-3]">
-                  Chưa có dữ liệu.
-                </p>
+                <p className="py-16 text-center text-sm text-[tv-ink-3]">Chưa có dữ liệu.</p>
               )}
             </div>
           </CommerceSurface>
@@ -724,9 +675,7 @@ export default function AdminDashboardPage() {
               <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
                 Top tour
               </p>
-              <h2 className="mt-1 text-xl font-bold text-[tv-ink]">
-                5 tour được đặt nhiều nhất
-              </h2>
+              <h2 className="mt-1 text-xl font-bold text-[tv-ink]">5 tour được đặt nhiều nhất</h2>
             </div>
             <Link
               href="/admin/tours"
@@ -741,9 +690,7 @@ export default function AdminDashboardPage() {
             ) : topTours.length > 0 ? (
               <TopToursChart data={topTours} />
             ) : (
-              <p className="py-12 text-center text-sm text-[tv-ink-3]">
-                Chưa có dữ liệu tour.
-              </p>
+              <p className="py-12 text-center text-sm text-[tv-ink-3]">Chưa có dữ liệu tour.</p>
             )}
           </div>
         </CommerceSurface>
@@ -757,9 +704,7 @@ export default function AdminDashboardPage() {
                 <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
                   Hoạt động gần đây
                 </p>
-                <h2 className="mt-1 text-xl font-bold text-[tv-ink]">
-                  Đặt chỗ mới nhất
-                </h2>
+                <h2 className="mt-1 text-xl font-bold text-[tv-ink]">Đặt chỗ mới nhất</h2>
               </div>
               <Link
                 href="/admin/bookings"
@@ -788,9 +733,7 @@ export default function AdminDashboardPage() {
                 <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
                   Yêu cầu tư vấn
                 </p>
-                <h2 className="mt-1 text-xl font-bold text-[tv-ink]">
-                  Liên hệ gần đây
-                </h2>
+                <h2 className="mt-1 text-xl font-bold text-[tv-ink]">Liên hệ gần đây</h2>
               </div>
               <Link
                 href="/admin/contacts"
@@ -819,9 +762,7 @@ export default function AdminDashboardPage() {
                 <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
                   Kiểm duyệt
                 </p>
-                <h2 className="mt-1 text-xl font-bold text-[tv-ink]">
-                  Đánh giá chờ duyệt
-                </h2>
+                <h2 className="mt-1 text-xl font-bold text-[tv-ink]">Đánh giá chờ duyệt</h2>
               </div>
               <Link
                 href="/admin/reviews"

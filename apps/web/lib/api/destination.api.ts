@@ -1,5 +1,5 @@
-import { api } from "./client";
-import type { ApiSuccess, ApiPaginatedResponse } from "@vietwander/shared";
+import type { ApiSuccess, ApiPaginatedResponse } from '@vietwander/shared';
+import { api } from './client';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -47,15 +47,15 @@ export interface Destination {
 
 /** Safely extract country name regardless of whether API returned string or object */
 export function getCountryName(destination: Destination): string {
-  if (!destination.country) return "";
-  if (typeof destination.country === "string") return destination.country;
-  return destination.country.name ?? "";
+  if (!destination.country) return '';
+  if (typeof destination.country === 'string') return destination.country;
+  return destination.country.name ?? '';
 }
 
 /** Safely extract city name regardless of whether API returned string or object */
 export function getCityName(destination: Destination): string | null {
   if (!destination.city) return null;
-  if (typeof destination.city === "string") return destination.city;
+  if (typeof destination.city === 'string') return destination.city;
   return destination.city.name ?? null;
 }
 
@@ -87,10 +87,9 @@ export interface CreateDestinationRequest {
 export const destinationApi = {
   list: (query?: DestinationQuery) =>
     api.get<ApiPaginatedResponse<Destination>>(
-      "/destinations",
-      query as Record<string, string | number | boolean | undefined>
+      '/destinations',
+      query as Record<string, string | number | boolean | undefined>,
     ),
 
-  getBySlug: (slug: string) =>
-    api.get<ApiSuccess<Destination>>(`/destinations/${slug}`),
+  getBySlug: (slug: string) => api.get<ApiSuccess<Destination>>(`/destinations/${slug}`),
 };

@@ -1,5 +1,5 @@
-import { CatalogListing } from "@/components/catalog-listing";
-import { PageShell } from "@/components/page-shell";
+import { CatalogListing } from '@/components/catalog-listing';
+import { PageShell } from '@/components/page-shell';
 
 export default function Page() {
   return (

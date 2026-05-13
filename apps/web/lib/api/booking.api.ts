@@ -1,5 +1,5 @@
-import { api } from "./client";
-import type { ApiSuccess, ApiPaginatedResponse, PaginationQuery } from "@vietwander/shared";
+import type { ApiSuccess, ApiPaginatedResponse, PaginationQuery } from '@vietwander/shared';
+import { api } from './client';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -78,18 +78,15 @@ export interface CreateBookingRequest {
 // ---------------------------------------------------------------------------
 
 export const bookingApi = {
-  create: (data: CreateBookingRequest) =>
-    api.post<ApiSuccess<Booking>>("/bookings", data),
+  create: (data: CreateBookingRequest) => api.post<ApiSuccess<Booking>>('/bookings', data),
 
   listMine: (query?: PaginationQuery) =>
     api.get<ApiPaginatedResponse<Booking>>(
-      "/bookings/my",
-      query as Record<string, string | number | boolean | undefined>
+      '/bookings/my',
+      query as Record<string, string | number | boolean | undefined>,
     ),
 
-  getByCode: (code: string) =>
-    api.get<ApiSuccess<Booking>>(`/bookings/${code}`),
+  getByCode: (code: string) => api.get<ApiSuccess<Booking>>(`/bookings/${code}`),
 
-  cancel: (code: string) =>
-    api.put<ApiSuccess<Booking>>(`/bookings/${code}/cancel`),
+  cancel: (code: string) => api.put<ApiSuccess<Booking>>(`/bookings/${code}/cancel`),
 };

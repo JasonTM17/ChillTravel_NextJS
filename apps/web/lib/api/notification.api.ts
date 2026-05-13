@@ -1,5 +1,5 @@
-import { api } from "./client";
-import type { ApiSuccess, ApiPaginatedResponse, PaginationQuery } from "@vietwander/shared";
+import type { ApiSuccess, ApiPaginatedResponse, PaginationQuery } from '@vietwander/shared';
+import { api } from './client';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -23,13 +23,11 @@ export interface Notification {
 export const notificationApi = {
   list: (query?: PaginationQuery) =>
     api.get<ApiPaginatedResponse<Notification>>(
-      "/notifications",
-      query as Record<string, string | number | boolean | undefined>
+      '/notifications',
+      query as Record<string, string | number | boolean | undefined>,
     ),
 
-  markRead: (id: string) =>
-    api.put<ApiSuccess<Notification>>(`/notifications/${id}/read`),
+  markRead: (id: string) => api.put<ApiSuccess<Notification>>(`/notifications/${id}/read`),
 
-  markAllRead: () =>
-    api.put<ApiSuccess<{ updated: number }>>("/notifications/read-all"),
+  markAllRead: () => api.put<ApiSuccess<{ updated: number }>>('/notifications/read-all'),
 };

@@ -1,128 +1,222 @@
-import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
-import { ArrowRight, BriefcaseBusiness, CalendarDays, Clock3, Plane, Search, ShieldCheck, Users } from "lucide-react";
-import { demoPaymentWarning, flightOffers } from "@vietwander/shared";
-import { CommerceSurface, StatusPill, TrustBanner } from "@/components/commerce-primitives";
-import { PageShell } from "@/components/page-shell";
-import { formatVnd } from "@/lib/utils";
-import { formatDateVi } from "@/lib/vietnamese";
+'use client';
+
+import { Plane, Search } from 'lucide-react';
+import { useState, useMemo, useCallback } from 'react';
+import { FlightCard, type Flight } from '@/components/listing/flight-card';
+import { FlightFilterPanel, type FlightFilters } from '@/components/listing/flight-filter-panel';
+import { PageShell } from '@/components/page-shell';
+
+/* ─── Mock flight data (API will provide real data later) ──────────────────── */
+const MOCK_FLIGHTS: Flight[] = [
+  {
+    id: 'vn-101',
+    flightNumber: 'VN 101',
+    airline: 'Vietnam Airlines',
+    origin: 'HAN',
+    destination: 'DAD',
+    departureTime: '2026-08-12T06:30:00',
+    arrivalTime: '2026-08-12T07:50:00',
+    durationMin: 80,
+    stops: 0,
+    basePrice: 1_450_000,
+    taxAmount: 350_000,
+  },
+  {
+    id: 'vj-202',
+    flightNumber: 'VJ 202',
+    airline: 'VietJet Air',
+    origin: 'HAN',
+    destination: 'DAD',
+    departureTime: '2026-08-12T09:15:00',
+    arrivalTime: '2026-08-12T10:40:00',
+    durationMin: 85,
+    stops: 0,
+    basePrice: 980_000,
+    taxAmount: 280_000,
+  },
+  {
+    id: 'qh-303',
+    flightNumber: 'QH 303',
+    airline: 'Bamboo Airways',
+    origin: 'HAN',
+    destination: 'DAD',
+    departureTime: '2026-08-12T14:00:00',
+    arrivalTime: '2026-08-12T15:25:00',
+    durationMin: 85,
+    stops: 0,
+    basePrice: 1_200_000,
+    taxAmount: 300_000,
+  },
+  {
+    id: 'vn-405',
+    flightNumber: 'VN 405',
+    airline: 'Vietnam Airlines',
+    origin: 'HAN',
+    destination: 'SGN',
+    departureTime: '2026-08-12T18:30:00',
+    arrivalTime: '2026-08-12T20:40:00',
+    durationMin: 130,
+    stops: 0,
+    basePrice: 2_100_000,
+    taxAmount: 450_000,
+  },
+  {
+    id: 'vj-506',
+    flightNumber: 'VJ 506',
+    airline: 'VietJet Air',
+    origin: 'HAN',
+    destination: 'SGN',
+    departureTime: '2026-08-12T07:00:00',
+    arrivalTime: '2026-08-12T10:30:00',
+    durationMin: 210,
+    stops: 1,
+    layoverCity: 'DAD',
+    layoverMin: 60,
+    basePrice: 850_000,
+    taxAmount: 250_000,
+  },
+  {
+    id: 'qh-607',
+    flightNumber: 'QH 607',
+    airline: 'Bamboo Airways',
+    origin: 'SGN',
+    destination: 'PQC',
+    departureTime: '2026-08-12T11:45:00',
+    arrivalTime: '2026-08-12T12:45:00',
+    durationMin: 60,
+    stops: 0,
+    basePrice: 750_000,
+    taxAmount: 200_000,
+  },
+];
+
+/* ─── Filter Logic ─────────────────────────────────────────────────────────── */
+
+function getTimeBlock(isoTime: string): string {
+  const hour = new Date(isoTime).getHours();
+  if (hour < 6) return '00-06';
+  if (hour < 12) return '06-12';
+  if (hour < 18) return '12-18';
+  return '18-24';
+}
+
+function applyFlightFilters(flights: Flight[], filters: FlightFilters): Flight[] {
+  return flights.filter((flight) => {
+    if (filters.timeBlocks.length > 0) {
+      const block = getTimeBlock(flight.departureTime);
+      if (!filters.timeBlocks.includes(block)) return false;
+    }
+    if (filters.stops.length > 0) {
+      const stopBucket = Math.min(flight.stops, 2);
+      if (!filters.stops.includes(stopBucket)) return false;
+    }
+    if (filters.airlines.length > 0 && !filters.airlines.includes(flight.airline)) return false;
+    const totalPrice = flight.basePrice + flight.taxAmount;
+    if (totalPrice < filters.priceRange[0] || totalPrice > filters.priceRange[1]) return false;
+    return true;
+  });
+}
+
+/* ─── Page Component ───────────────────────────────────────────────────────── */
 
 export default function FlightsPage() {
+  const [filters, setFilters] = useState<FlightFilters>({
+    timeBlocks: [],
+    stops: [],
+    airlines: [],
+    priceRange: [0, 10_000_000],
+  });
+
+  const filteredFlights = useMemo(() => applyFlightFilters(MOCK_FLIGHTS, filters), [filters]);
+
+  const handleSelectFlight = useCallback((flight: Flight) => {
+    // Navigate to booking flow with flight data
+    window.location.href = `/booking/new?type=flight&id=${flight.id}`;
+  }, []);
+
   return (
-    <PageShell eyebrow="Vé máy bay mẫu" title="Tìm chuyến bay demo rõ giá, dễ so sánh và không dùng dữ liệu real-time">
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_330px]">
-        <section className="space-y-5">
-          <CommerceSurface className="bg-tv-blue text-white">
-            <form action="/flights" className="grid gap-3 rounded-tv bg-white p-3 text-tv-ink lg:grid-cols-[1fr_1fr_1fr_1fr_132px]">
-              <FlightField label="Từ" value="Hà Nội" icon={Plane} />
-              <FlightField label="Đến" value="Đà Nẵng" icon={Plane} />
-              <FlightField label="Ngày đi" value={formatDateVi(new Date("2026-08-12"))} icon={CalendarDays} />
-              <FlightField label="Hành khách" value="2 người lớn" icon={Users} />
-              <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-tv bg-tv-orange px-4 py-3 text-sm font-bold text-white">
-                <Search size={18} aria-hidden="true" />
-                Tìm kiếm
+    <PageShell
+      eyebrow="Vé máy bay mẫu"
+      title="Tìm chuyến bay demo rõ giá, dễ so sánh và không dùng dữ liệu real-time"
+    >
+      {/* Search bar */}
+      <div className="mb-6 rounded-tv border border-tv-border bg-white p-4 shadow-tv-card">
+        <div className="grid gap-3 md:grid-cols-[1fr_1fr_1fr_1fr_auto]">
+          <FlightField label="Từ" value="Hà Nội (HAN)" />
+          <FlightField label="Đến" value="Đà Nẵng (DAD)" />
+          <FlightField label="Ngày đi" value="12/08/2026" />
+          <FlightField label="Hành khách" value="2 người lớn" />
+          <button
+            type="button"
+            className="inline-flex items-center justify-center gap-2 rounded-tv bg-tv-orange px-5 py-3 text-sm font-bold text-white hover:bg-tv-orange-dark transition-colors"
+          >
+            <Search size={18} aria-hidden="true" />
+            Tìm kiếm
+          </button>
+        </div>
+      </div>
+
+      {/* Demo notice */}
+      <div className="mb-6 flex items-center gap-2 rounded-tv bg-amber-50 border border-amber-200 px-4 py-2.5 text-tv-sm text-amber-800">
+        <span className="font-bold">⚠️ Dữ liệu mẫu</span>
+        <span>— Giá vé và lịch bay là mock data. Kiểm tra hãng bay cho dữ liệu thật.</span>
+      </div>
+
+      {/* Main layout: filter sidebar + flight cards */}
+      <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+        {/* Filter panel */}
+        <FlightFilterPanel
+          flights={MOCK_FLIGHTS}
+          filters={filters}
+          onFiltersChange={setFilters}
+          filteredCount={filteredFlights.length}
+        />
+
+        {/* Flight results */}
+        <div className="space-y-4">
+          <p className="text-sm text-tv-ink-3">{filteredFlights.length} chuyến bay</p>
+
+          {filteredFlights.length === 0 ? (
+            <div className="rounded-tv border border-tv-border bg-white p-8 text-center">
+              <p className="text-tv-ink-3">Không tìm thấy chuyến bay phù hợp.</p>
+              <button
+                onClick={() =>
+                  setFilters({
+                    timeBlocks: [],
+                    stops: [],
+                    airlines: [],
+                    priceRange: [0, 10_000_000],
+                  })
+                }
+                className="mt-3 text-sm font-semibold text-tv-blue hover:underline"
+              >
+                Xóa bộ lọc
               </button>
-            </form>
-            <p className="mt-4 text-sm font-bold text-white/88">Giá vé bay là dữ liệu mẫu/local để trình diễn UX booking. Hãy kiểm tra hãng bay hoặc nguồn chính thức cho dữ liệu thật.</p>
-          </CommerceSurface>
-
-          <CommerceSurface>
-            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">Kết quả chuyến bay</p>
-                <h2 className="mt-2 text-2xl font-bold">3 lựa chọn demo cho tuyến phổ biến</h2>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {["Bay thẳng", "Có hành lý", "Giá thấp trước"].map((item) => (
-                  <StatusPill key={item}>{item}</StatusPill>
-                ))}
-              </div>
             </div>
-          </CommerceSurface>
-
-          <div className="space-y-4">
-            {flightOffers.map((offer) => (
-              <article key={offer.id} className="grid overflow-hidden rounded-tv border border-tv-border bg-white shadow-tv-card md:grid-cols-[minmax(0,1fr)_220px]">
-                <div className="p-5">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <StatusPill tone="blue">{offer.airline}</StatusPill>
-                    {offer.badges.map((badge) => (
-                      <StatusPill key={badge} tone={badge.includes("Không") ? "orange" : "teal"}>
-                        {badge}
-                      </StatusPill>
-                    ))}
-                  </div>
-                  <div className="mt-5 grid gap-4 md:grid-cols-[1fr_auto_1fr] md:items-center">
-                    <FlightTime city={offer.from} time={offer.departTime} />
-                    <div className="text-center">
-                      <p className="text-sm font-bold text-tv-ink-3">{offer.duration}</p>
-                      <div className="my-2 h-px w-full min-w-24 bg-tv-border" />
-                      <p className="text-xs font-bold text-tv-ink-3">{offer.stops}</p>
-                    </div>
-                    <FlightTime city={offer.to} time={offer.arriveTime} align="right" />
-                  </div>
-                  <div className="mt-5 flex flex-wrap gap-2 text-sm font-bold text-tv-ink-3">
-                    <span className="inline-flex items-center gap-2 rounded-full bg-tv-bg px-3 py-1.5">
-                      <BriefcaseBusiness size={16} className="text-tv-blue" aria-hidden="true" />
-                      {offer.baggage}
-                    </span>
-                    <span className="inline-flex items-center gap-2 rounded-full bg-[#fff3e8] px-3 py-1.5 text-[#b45309]">
-                      <ShieldCheck size={16} aria-hidden="true" />
-                      Không có dữ liệu real-time
-                    </span>
-                  </div>
-                </div>
-                <aside className="flex flex-col justify-between border-t border-tv-border bg-tv-bg p-5 md:border-l md:border-t-0">
-                  <div>
-                    <p className="text-xs font-bold text-tv-ink-3">Giá mẫu từ</p>
-                    <p className="mt-1 text-2xl font-bold text-tv-orange">{formatVnd(offer.price)}</p>
-                    <p className="mt-1 text-xs font-bold text-tv-ink-3">mỗi khách, mock fare</p>
-                  </div>
-                  <Link href="/booking/demo" className="mt-5 inline-flex items-center justify-center gap-2 rounded-tv-sm bg-tv-orange px-4 py-3 text-sm font-bold text-white">
-                    Chọn chuyến demo
-                    <ArrowRight size={16} aria-hidden="true" />
-                  </Link>
-                </aside>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <aside className="h-fit space-y-4 lg:sticky lg:top-24">
-          <TrustBanner compact />
-          <CommerceSurface>
-            <h2 className="text-xl font-bold">Cam kết dữ liệu</h2>
-            <div className="mt-4 space-y-3 text-sm font-bold leading-6 text-tv-ink-3">
-              <p>ChillTravel không khẳng định giá vé, chỗ trống, chính sách hành lý hoặc lịch bay theo thời gian thực.</p>
-              <p>{demoPaymentWarning}. Mã vé và QR chỉ là mock cho portfolio.</p>
-            </div>
-          </CommerceSurface>
-        </aside>
+          ) : (
+            filteredFlights.map((flight) => (
+              <FlightCard key={flight.id} flight={flight} onSelect={handleSelectFlight} />
+            ))
+          )}
+        </div>
       </div>
     </PageShell>
   );
 }
 
-function FlightField({ label, value, icon: Icon }: { label: string; value: string; icon: LucideIcon }) {
+/* ─── Flight Search Field ──────────────────────────────────────────────────── */
+
+function FlightField({ label, value }: { label: string; value: string }) {
   return (
     <label className="flex min-w-0 items-center gap-3 rounded-tv border border-tv-border bg-tv-bg px-4 py-3">
-      <Icon size={18} className="shrink-0 text-tv-blue" aria-hidden="true" />
+      <Plane size={18} className="shrink-0 text-tv-blue" aria-hidden="true" />
       <span className="min-w-0">
         <span className="block text-xs font-bold text-tv-ink-3">{label}</span>
-        <input defaultValue={value} className="mt-1 w-full bg-transparent font-bold outline-none" />
+        <input
+          defaultValue={value}
+          className="mt-1 w-full bg-transparent font-bold outline-none text-sm"
+        />
       </span>
     </label>
-  );
-}
-
-function FlightTime({ city, time, align = "left" }: { city: string; time: string; align?: "left" | "right" }) {
-  return (
-    <div className={align === "right" ? "text-left md:text-right" : ""}>
-      <p className="flex items-center gap-2 text-2xl font-bold md:block">
-        <Clock3 className="text-tv-blue md:hidden" size={18} aria-hidden="true" />
-        {time}
-      </p>
-      <p className="mt-1 text-sm font-bold text-tv-ink-3">{city}</p>
-    </div>
   );
 }

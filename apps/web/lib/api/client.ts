@@ -4,44 +4,43 @@
  * redirect to /login on refresh failure, query param builder.
  */
 
-import type { ApiError } from "@vietwander/shared";
+import type { ApiError } from '@vietwander/shared';
 
 // ---------------------------------------------------------------------------
 // Config
 // ---------------------------------------------------------------------------
 
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1';
 
 // ---------------------------------------------------------------------------
 // Token storage
 // ---------------------------------------------------------------------------
 
 export const TOKEN_KEYS = {
-  access: "wv_access_token",
-  refresh: "wv_refresh_token",
+  access: 'wv_access_token',
+  refresh: 'wv_refresh_token',
 } as const;
 
 /** Safe for SSR — returns null when window is not available. */
 export function getAccessToken(): string | null {
-  if (typeof window === "undefined") return null;
+  if (typeof window === 'undefined') return null;
   return localStorage.getItem(TOKEN_KEYS.access);
 }
 
 /** Safe for SSR — returns null when window is not available. */
 export function getRefreshToken(): string | null {
-  if (typeof window === "undefined") return null;
+  if (typeof window === 'undefined') return null;
   return localStorage.getItem(TOKEN_KEYS.refresh);
 }
 
 export function setTokens(access: string, refresh: string): void {
-  if (typeof window === "undefined") return;
+  if (typeof window === 'undefined') return;
   localStorage.setItem(TOKEN_KEYS.access, access);
   localStorage.setItem(TOKEN_KEYS.refresh, refresh);
 }
 
 export function clearTokens(): void {
-  if (typeof window === "undefined") return;
+  if (typeof window === 'undefined') return;
   localStorage.removeItem(TOKEN_KEYS.access);
   localStorage.removeItem(TOKEN_KEYS.refresh);
 }
@@ -65,8 +64,8 @@ async function attemptRefresh(): Promise<boolean> {
       if (!refreshToken) return false;
 
       const res = await fetch(`${API_BASE}/auth/refresh`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ refreshToken }),
       });
 
@@ -97,12 +96,12 @@ async function attemptRefresh(): Promise<boolean> {
 type QueryParams = Record<string, string | number | boolean | undefined>;
 
 function buildUrl(path: string, params?: QueryParams): string {
-  const url = path.startsWith("http") ? path : `${API_BASE}${path}`;
+  const url = path.startsWith('http') ? path : `${API_BASE}${path}`;
   if (!params) return url;
 
   const search = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
-    if (value !== undefined && value !== null && value !== "") {
+    if (value !== undefined && value !== null && value !== '') {
       search.set(key, String(value));
     }
   }
@@ -116,7 +115,7 @@ function buildUrl(path: string, params?: QueryParams): string {
 
 export async function apiFetch<T>(
   path: string,
-  options?: RequestInit & { params?: QueryParams }
+  options?: RequestInit & { params?: QueryParams },
 ): Promise<T> {
   const { params, ...fetchOptions } = options ?? {};
 
@@ -132,7 +131,7 @@ export async function apiFetch<T>(
     // Attach Bearer token (skip on SSR)
     const token = getAccessToken();
     if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
+      headers['Authorization'] = `Bearer ${token}`;
     }
 
     return headers;
@@ -148,7 +147,7 @@ export async function apiFetch<T>(
 
     if (withToken) {
       const token = getAccessToken();
-      if (token) headers["Authorization"] = `Bearer ${token}`;
+      if (token) headers['Authorization'] = `Bearer ${token}`;
     }
 
     return fetch(buildUrl(path, params), {
@@ -163,17 +162,17 @@ export async function apiFetch<T>(
   let response = await doFetch(true);
 
   // 401 → attempt token refresh once, then retry
-  if (response.status === 401 && typeof window !== "undefined") {
+  if (response.status === 401 && typeof window !== 'undefined') {
     const refreshed = await attemptRefresh();
     if (refreshed) {
       response = await doFetch(true);
     } else {
       clearTokens();
-      window.location.href = "/login";
+      window.location.href = '/login';
       // Return a typed error shape so callers don't crash before redirect
       return {
         success: false,
-        message: "Session expired. Redirecting to login.",
+        message: 'Session expired. Redirecting to login.',
         errors: [],
         timestamp: new Date().toISOString(),
       } as T;
@@ -187,7 +186,7 @@ export async function apiFetch<T>(
   } catch {
     // Non-JSON response (e.g. 204 No Content)
     if (response.ok) {
-      return { success: true, message: "OK", data: null, timestamp: new Date().toISOString() } as T;
+      return { success: true, message: 'OK', data: null, timestamp: new Date().toISOString() } as T;
     }
     const err: ApiError = {
       success: false,
@@ -206,34 +205,32 @@ export async function apiFetch<T>(
 // ---------------------------------------------------------------------------
 
 export const api = {
-  get: <T>(path: string, params?: QueryParams) =>
-    apiFetch<T>(path, { method: "GET", params }),
+  get: <T>(path: string, params?: QueryParams) => apiFetch<T>(path, { method: 'GET', params }),
 
   post: <T>(path: string, body?: unknown) =>
     apiFetch<T>(path, {
-      method: "POST",
+      method: 'POST',
       body: body !== undefined ? JSON.stringify(body) : undefined,
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     }),
 
   put: <T>(path: string, body?: unknown) =>
     apiFetch<T>(path, {
-      method: "PUT",
+      method: 'PUT',
       body: body !== undefined ? JSON.stringify(body) : undefined,
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     }),
 
   patch: <T>(path: string, body?: unknown) =>
     apiFetch<T>(path, {
-      method: "PATCH",
+      method: 'PATCH',
       body: body !== undefined ? JSON.stringify(body) : undefined,
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     }),
 
-  delete: <T>(path: string) =>
-    apiFetch<T>(path, { method: "DELETE" }),
+  delete: <T>(path: string) => apiFetch<T>(path, { method: 'DELETE' }),
 
   /** Upload FormData — do NOT set Content-Type; browser sets it with boundary. */
   upload: <T>(path: string, formData: FormData) =>
-    apiFetch<T>(path, { method: "POST", body: formData }),
+    apiFetch<T>(path, { method: 'POST', body: formData }),
 };

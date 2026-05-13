@@ -1,4 +1,4 @@
-﻿"use client";
+﻿'use client';
 
 /**
  * Mock Payment page — /booking/payment
@@ -9,9 +9,6 @@
  *       → POST /payments/mock-checkout → POST /payments/mock-callback → navigate to /booking/success/[code]
  */
 
-import { useEffect, useState, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import Link from "next/link";
 import {
   AlertCircle,
   Building2,
@@ -27,14 +24,17 @@ import {
   Smartphone,
   Users,
   WalletCards,
-} from "lucide-react";
-import { AuthGuard } from "@/components/auth-guard";
-import { bookingApi, type Booking } from "@/lib/api/booking.api";
-import { paymentApi } from "@/lib/api/payment.api";
-import { CommerceSurface, StatusPill } from "@/components/commerce-primitives";
-import { PageShell } from "@/components/page-shell";
-import { formatVnd } from "@/lib/utils";
-import { demoPaymentWarning, formatDateVi } from "@/lib/vietnamese";
+} from 'lucide-react';
+import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useEffect, useState, Suspense } from 'react';
+import { AuthGuard } from '@/components/auth-guard';
+import { CommerceSurface, StatusPill } from '@/components/commerce-primitives';
+import { PageShell } from '@/components/page-shell';
+import { bookingApi, type Booking } from '@/lib/api/booking.api';
+import { paymentApi } from '@/lib/api/payment.api';
+import { formatVnd } from '@/lib/utils';
+import { demoPaymentWarning, formatDateVi } from '@/lib/vietnamese';
 
 // ---------------------------------------------------------------------------
 // Payment methods
@@ -49,39 +49,39 @@ interface PaymentMethod {
 
 const PAYMENT_METHODS: PaymentMethod[] = [
   {
-    id: "MOCK_CARD",
-    label: "Thẻ demo",
-    description: "Token giả lập — không nhập số thẻ thật",
+    id: 'MOCK_CARD',
+    label: 'Thẻ demo',
+    description: 'Token giả lập — không nhập số thẻ thật',
     icon: CreditCard,
   },
   {
-    id: "MOCK_MOMO",
-    label: "MoMo demo",
-    description: "Ví điện tử local/mô phỏng",
+    id: 'MOCK_MOMO',
+    label: 'MoMo demo',
+    description: 'Ví điện tử local/mô phỏng',
     icon: Smartphone,
   },
   {
-    id: "MOCK_VNPAY",
-    label: "VNPay demo",
-    description: "Cổng thanh toán thử nghiệm giả lập",
+    id: 'MOCK_VNPAY',
+    label: 'VNPay demo',
+    description: 'Cổng thanh toán thử nghiệm giả lập',
     icon: WalletCards,
   },
   {
-    id: "MOCK_ZALOPAY",
-    label: "ZaloPay demo",
-    description: "Không gọi nhà cung cấp thật",
+    id: 'MOCK_ZALOPAY',
+    label: 'ZaloPay demo',
+    description: 'Không gọi nhà cung cấp thật',
     icon: QrCode,
   },
   {
-    id: "MOCK_BANK",
-    label: "Chuyển khoản demo",
-    description: "Không tạo giao dịch ngân hàng",
+    id: 'MOCK_BANK',
+    label: 'Chuyển khoản demo',
+    description: 'Không tạo giao dịch ngân hàng',
     icon: Building2,
   },
   {
-    id: "MOCK_CASH",
-    label: "Tiền mặt khi đến",
-    description: "Trạng thái xác nhận mẫu",
+    id: 'MOCK_CASH',
+    label: 'Tiền mặt khi đến',
+    description: 'Trạng thái xác nhận mẫu',
     icon: Landmark,
   },
 ];
@@ -98,8 +98,8 @@ function DemoBanner() {
         <div>
           <p className="text-lg font-bold">{demoPaymentWarning}</p>
           <p className="mt-1 text-sm font-bold text-[#9f1239]/80">
-            Mọi nhà cung cấp trong trang này là local/mô phỏng/thử nghiệm. Không phát sinh giao
-            dịch thật, không lưu số thẻ.
+            Mọi nhà cung cấp trong trang này là local/mô phỏng/thử nghiệm. Không phát sinh giao dịch
+            thật, không lưu số thẻ.
           </p>
         </div>
       </div>
@@ -111,7 +111,7 @@ function DemoBanner() {
 // Stepper
 // ---------------------------------------------------------------------------
 
-const STEPS = ["Thông tin đặt tour", "Thanh toán demo", "Xác nhận"] as const;
+const STEPS = ['Thông tin đặt tour', 'Thanh toán demo', 'Xác nhận'] as const;
 
 function Stepper({ current }: { current: number }) {
   return (
@@ -124,17 +124,17 @@ function Stepper({ current }: { current: number }) {
             <span
               className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                 active
-                  ? "bg-[tv-blue] text-white ring-4 ring-[#b8ddff]"
+                  ? 'bg-[tv-blue] text-white ring-4 ring-[#b8ddff]'
                   : done
-                  ? "bg-[#0f8b7b] text-white"
-                  : "bg-[tv-border] text-[#8b99a7]"
+                    ? 'bg-[#0f8b7b] text-white'
+                    : 'bg-[tv-border] text-[#8b99a7]'
               }`}
             >
               {i + 1}
             </span>
             <span
               className={`hidden font-bold sm:inline ${
-                active ? "text-[tv-blue]" : done ? "text-[#0f8b7b]" : "text-[#8b99a7]"
+                active ? 'text-[tv-blue]' : done ? 'text-[#0f8b7b]' : 'text-[#8b99a7]'
               }`}
             >
               {step}
@@ -172,9 +172,7 @@ function BookingSummaryCard({ booking }: { booking: Booking }) {
         <div className="space-y-2 text-sm">
           <div className="flex items-center gap-2 text-[tv-ink-3]">
             <CalendarDays size={14} className="text-[tv-blue]" aria-hidden="true" />
-            <span>
-              Ngày đặt: {formatDateVi(new Date(booking.bookingDate))}
-            </span>
+            <span>Ngày đặt: {formatDateVi(new Date(booking.bookingDate))}</span>
           </div>
           <div className="flex items-center gap-2 text-[tv-ink-3]">
             <Users size={14} className="text-[tv-blue]" aria-hidden="true" />
@@ -207,20 +205,20 @@ function PaymentContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const bookingId = searchParams.get("bookingId") ?? "";
+  const bookingId = searchParams.get('bookingId') ?? '';
 
   const [booking, setBooking] = useState<Booking | null>(null);
   const [bookingLoading, setBookingLoading] = useState(true);
   const [bookingError, setBookingError] = useState<string | null>(null);
 
-  const [selectedMethod, setSelectedMethod] = useState<string>("MOCK_CARD");
+  const [selectedMethod, setSelectedMethod] = useState<string>('MOCK_CARD');
   const [paying, setPaying] = useState(false);
   const [payError, setPayError] = useState<string | null>(null);
 
   // Fetch booking by ID — we use bookingCode from the booking object
   useEffect(() => {
     if (!bookingId) {
-      setBookingError("Thiếu thông tin booking. Vui lòng quay lại.");
+      setBookingError('Thiếu thông tin booking. Vui lòng quay lại.');
       setBookingLoading(false);
       return;
     }
@@ -241,14 +239,14 @@ function PaymentContent() {
           if (found) {
             setBooking(found);
           } else {
-            setBookingError("Không tìm thấy booking. Vui lòng kiểm tra lại.");
+            setBookingError('Không tìm thấy booking. Vui lòng kiểm tra lại.');
           }
         } else {
-          setBookingError("Không thể tải thông tin booking.");
+          setBookingError('Không thể tải thông tin booking.');
         }
       })
       .catch(() => {
-        if (!cancelled) setBookingError("Lỗi kết nối. Vui lòng thử lại.");
+        if (!cancelled) setBookingError('Lỗi kết nối. Vui lòng thử lại.');
       })
       .finally(() => {
         if (!cancelled) setBookingLoading(false);
@@ -269,7 +267,7 @@ function PaymentContent() {
       const checkoutRes = await paymentApi.mockCheckout(booking.bookingCode);
       if (!checkoutRes.success) {
         setPayError(
-          (checkoutRes as { message?: string }).message ?? "Khởi tạo thanh toán thất bại."
+          (checkoutRes as { message?: string }).message ?? 'Khởi tạo thanh toán thất bại.',
         );
         setPaying(false);
         return;
@@ -280,12 +278,12 @@ function PaymentContent() {
       // Step 2: mock-callback with SUCCESS
       const callbackRes = await paymentApi.mockCallback({
         transactionCode,
-        status: "SUCCESS",
+        status: 'SUCCESS',
       });
 
       if (!callbackRes.success) {
         setPayError(
-          (callbackRes as { message?: string }).message ?? "Xác nhận thanh toán thất bại."
+          (callbackRes as { message?: string }).message ?? 'Xác nhận thanh toán thất bại.',
         );
         setPaying(false);
         return;
@@ -295,7 +293,7 @@ function PaymentContent() {
       const code = callbackRes.data.bookingCode ?? bookingCode;
       router.push(`/booking/success/${code}`);
     } catch {
-      setPayError("Lỗi kết nối. Vui lòng thử lại.");
+      setPayError('Lỗi kết nối. Vui lòng thử lại.');
       setPaying(false);
     }
   }
@@ -319,7 +317,7 @@ function PaymentContent() {
           <div className="flex flex-col items-center gap-4 py-10 text-center">
             <AlertCircle size={40} className="text-red-400" aria-hidden="true" />
             <p className="text-lg font-bold text-red-600">
-              {bookingError ?? "Không tìm thấy booking."}
+              {bookingError ?? 'Không tìm thấy booking.'}
             </p>
             <Link
               href="/my-bookings"
@@ -367,21 +365,21 @@ function PaymentContent() {
                     onClick={() => setSelectedMethod(id)}
                     className={`flex items-center gap-3 rounded-tv border p-4 text-left transition ${
                       active
-                        ? "border-[tv-blue] bg-[tv-blue-light] ring-2 ring-[tv-blue]/10"
-                        : "border-[tv-border] bg-white hover:border-[tv-blue] hover:bg-[tv-bg]"
+                        ? 'border-[tv-blue] bg-[tv-blue-light] ring-2 ring-[tv-blue]/10'
+                        : 'border-[tv-border] bg-white hover:border-[tv-blue] hover:bg-[tv-bg]'
                     }`}
                     aria-pressed={active}
                   >
                     <span
                       className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border ${
-                        active ? "border-[tv-blue] bg-[tv-blue]" : "border-[#8b99a7]"
+                        active ? 'border-[tv-blue] bg-[tv-blue]' : 'border-[#8b99a7]'
                       }`}
                     >
                       {active && <span className="h-2 w-2 rounded-full bg-white" />}
                     </span>
                     <Icon
                       size={24}
-                      className={active ? "text-[tv-blue]" : "text-[tv-ink-3]"}
+                      className={active ? 'text-[tv-blue]' : 'text-[tv-ink-3]'}
                       aria-hidden="true"
                     />
                     <span className="min-w-0">

@@ -1,22 +1,30 @@
-"use client";
+'use client';
 
-import { useMemo, useState } from "react";
-import { moodSearch } from "@vietwander/shared";
-import { DestinationCard } from "@/components/destination-card";
-import { budgetLevelLabel, paceLabel, tagLabel } from "@/lib/vietnamese";
+import { moodSearch } from '@vietwander/shared';
+import { useMemo, useState } from 'react';
+import { DestinationCard } from '@/components/destination-card';
+import { budgetLevelLabel, paceLabel, tagLabel } from '@/lib/vietnamese';
 
-const examples = ["biển yên bình, ăn ngon, không quá đông", "chuyến biển cho gia đình, di chuyển dễ", "văn hóa và cà phê với ngân sách tầm trung"];
+const examples = [
+  'biển yên bình, ăn ngon, không quá đông',
+  'chuyến biển cho gia đình, di chuyển dễ',
+  'văn hóa và cà phê với ngân sách tầm trung',
+];
 
 export function MoodSearchPanel() {
-  const [query, setQuery] = useState("biển yên bình, ăn ngon, không quá đông");
+  const [query, setQuery] = useState('biển yên bình, ăn ngon, không quá đông');
   const result = useMemo(() => moodSearch(query), [query]);
 
   return (
     <section className="rounded-tv border border-tv-border bg-white p-5 shadow-tv-card">
       <div className="grid gap-6 lg:grid-cols-[340px_1fr]">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-tv-blue">Tìm theo cảm xúc</p>
-          <h2 className="mt-3 text-3xl font-bold leading-tight text-tv-ink">Mô tả cảm giác chuyến đi bạn muốn.</h2>
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-tv-blue">
+            Tìm theo cảm xúc
+          </p>
+          <h2 className="mt-3 text-3xl font-bold leading-tight text-tv-ink">
+            Mô tả cảm giác chuyến đi bạn muốn.
+          </h2>
           <label className="mt-5 block text-sm font-bold text-tv-ink">
             Cảm xúc, nhịp đi, món ăn, người đi cùng, ngân sách
             <textarea
@@ -39,7 +47,10 @@ export function MoodSearchPanel() {
           </div>
           <div className="mt-5 flex flex-wrap gap-2">
             {result.inferredFilters.tags.map((tag) => (
-              <span key={tag} className="rounded-full bg-[#f5efe4] px-3 py-1 text-sm font-semibold text-tv-ink-3">
+              <span
+                key={tag}
+                className="rounded-full bg-[#f5efe4] px-3 py-1 text-sm font-semibold text-tv-ink-3"
+              >
                 {tagLabel(tag)}
               </span>
             ))}

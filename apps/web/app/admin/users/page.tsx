@@ -1,16 +1,20 @@
-﻿"use client";
+﻿'use client';
 
-import { useState, useEffect, useCallback } from "react";
-import { adminApi } from "@/lib/api/admin.api";
-import type { AdminUser } from "@/lib/api/admin.api";
+import { useState, useEffect, useCallback } from 'react';
+import { adminApi } from '@/lib/api/admin.api';
+import type { AdminUser } from '@/lib/api/admin.api';
 
 // ─── Toast ───────────────────────────────────────────────────────────────────
-type ToastType = "success" | "error";
-interface ToastMsg { id: number; type: ToastType; text: string }
+type ToastType = 'success' | 'error';
+interface ToastMsg {
+  id: number;
+  type: ToastType;
+  text: string;
+}
 
 function useToast() {
   const [toasts, setToasts] = useState<ToastMsg[]>([]);
-  const show = useCallback((text: string, type: ToastType = "success") => {
+  const show = useCallback((text: string, type: ToastType = 'success') => {
     const id = Date.now();
     setToasts((p) => [...p, { id, type, text }]);
     setTimeout(() => setToasts((p) => p.filter((t) => t.id !== id)), 3500);
@@ -25,7 +29,7 @@ function ToastContainer({ toasts }: { toasts: ToastMsg[] }) {
         <div
           key={t.id}
           className={`rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg ${
-            t.type === "success" ? "bg-[tv-blue]" : "bg-red-500"
+            t.type === 'success' ? 'bg-[tv-blue]' : 'bg-red-500'
           }`}
         >
           {t.text}
@@ -38,17 +42,19 @@ function ToastContainer({ toasts }: { toasts: ToastMsg[] }) {
 // ─── Status Badges ────────────────────────────────────────────────────────────
 function UserStatusBadge({ status }: { status: string }) {
   const map: Record<string, string> = {
-    ACTIVE: "bg-green-100 text-green-700",
-    INACTIVE: "bg-gray-100 text-gray-600",
-    BANNED: "bg-red-100 text-red-600",
+    ACTIVE: 'bg-green-100 text-green-700',
+    INACTIVE: 'bg-gray-100 text-gray-600',
+    BANNED: 'bg-red-100 text-red-600',
   };
   const labels: Record<string, string> = {
-    ACTIVE: "Hoạt động",
-    INACTIVE: "Không hoạt động",
-    BANNED: "Bị khóa",
+    ACTIVE: 'Hoạt động',
+    INACTIVE: 'Không hoạt động',
+    BANNED: 'Bị khóa',
   };
   return (
-    <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${map[status] ?? "bg-gray-100 text-gray-600"}`}>
+    <span
+      className={`rounded-full px-2 py-0.5 text-xs font-semibold ${map[status] ?? 'bg-gray-100 text-gray-600'}`}
+    >
       {labels[status] ?? status}
     </span>
   );
@@ -56,17 +62,19 @@ function UserStatusBadge({ status }: { status: string }) {
 
 function RoleBadge({ role }: { role: string }) {
   const map: Record<string, string> = {
-    ADMIN: "bg-purple-100 text-purple-700",
-    STAFF: "bg-blue-100 text-blue-700",
-    USER: "bg-gray-100 text-gray-600",
+    ADMIN: 'bg-purple-100 text-purple-700',
+    STAFF: 'bg-blue-100 text-blue-700',
+    USER: 'bg-gray-100 text-gray-600',
   };
   const labels: Record<string, string> = {
-    ADMIN: "Admin",
-    STAFF: "Nhân viên",
-    USER: "Người dùng",
+    ADMIN: 'Admin',
+    STAFF: 'Nhân viên',
+    USER: 'Người dùng',
   };
   return (
-    <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${map[role] ?? "bg-gray-100 text-gray-600"}`}>
+    <span
+      className={`rounded-full px-2 py-0.5 text-xs font-semibold ${map[role] ?? 'bg-gray-100 text-gray-600'}`}
+    >
       {labels[role] ?? role}
     </span>
   );
@@ -77,8 +85,8 @@ export default function AdminUsersPage() {
   const [items, setItems] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [keyword, setKeyword] = useState("");
-  const [searchInput, setSearchInput] = useState("");
+  const [keyword, setKeyword] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
@@ -98,13 +106,15 @@ export default function AdminUsersPage() {
       setTotalPages(res.data?.totalPages ?? 0);
       setTotalElements(res.data?.totalElements ?? 0);
     } catch {
-      setError("Không thể tải danh sách người dùng.");
+      setError('Không thể tải danh sách người dùng.');
     } finally {
       setLoading(false);
     }
   }, [page, keyword]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -128,7 +138,8 @@ export default function AdminUsersPage() {
           <h1 className="text-2xl font-bold text-gray-900">Quản lý người dùng</h1>
           {totalElements > 0 && (
             <p className="mt-1 text-sm text-gray-500">
-              Tổng cộng <span className="font-semibold text-[tv-blue]">{totalElements}</span> người dùng
+              Tổng cộng <span className="font-semibold text-[tv-blue]">{totalElements}</span> người
+              dùng
             </p>
           )}
         </div>
@@ -153,7 +164,8 @@ export default function AdminUsersPage() {
 
       {/* Read-only notice */}
       <div className="mb-4 rounded-tv-sm border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-700">
-        <span className="font-semibold">Chế độ xem:</span> Danh sách người dùng chỉ đọc. Chức năng chỉnh sửa/xóa sẽ được bổ sung trong phiên bản tiếp theo.
+        <span className="font-semibold">Chế độ xem:</span> Danh sách người dùng chỉ đọc. Chức năng
+        chỉnh sửa/xóa sẽ được bổ sung trong phiên bản tiếp theo.
       </div>
 
       {/* Table */}
@@ -176,7 +188,9 @@ export default function AdminUsersPage() {
           </div>
         ) : items.length === 0 ? (
           <div className="p-8 text-center text-gray-400">
-            {keyword ? `Không tìm thấy người dùng nào với từ khóa "${keyword}".` : "Chưa có người dùng nào."}
+            {keyword
+              ? `Không tìm thấy người dùng nào với từ khóa "${keyword}".`
+              : 'Chưa có người dùng nào.'}
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -196,8 +210,8 @@ export default function AdminUsersPage() {
                 {items.map((item) => (
                   <tr key={item.id} className="border-b last:border-0 hover:bg-gray-50">
                     <td className="px-4 py-3 font-semibold text-[tv-blue]">{item.email}</td>
-                    <td className="px-4 py-3 text-gray-900">{item.fullName ?? "—"}</td>
-                    <td className="px-4 py-3 text-gray-600">{item.phone ?? "—"}</td>
+                    <td className="px-4 py-3 text-gray-900">{item.fullName ?? '—'}</td>
+                    <td className="px-4 py-3 text-gray-600">{item.phone ?? '—'}</td>
                     <td className="px-4 py-3">
                       <RoleBadge role={item.role} />
                     </td>
@@ -212,7 +226,7 @@ export default function AdminUsersPage() {
                       )}
                     </td>
                     <td className="px-4 py-3 text-xs text-gray-500">
-                      {new Date(item.createdAt).toLocaleDateString("vi-VN")}
+                      {new Date(item.createdAt).toLocaleDateString('vi-VN')}
                     </td>
                   </tr>
                 ))}

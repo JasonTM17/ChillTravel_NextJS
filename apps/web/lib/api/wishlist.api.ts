@@ -1,11 +1,11 @@
-import { api } from "./client";
-import type { ApiSuccess } from "@vietwander/shared";
+import type { ApiSuccess } from '@vietwander/shared';
+import { api } from './client';
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-export type WishlistItemType = "TOUR" | "DESTINATION";
+export type WishlistItemType = 'TOUR' | 'DESTINATION';
 
 export interface WishlistEntry {
   id: string;
@@ -27,12 +27,9 @@ export interface AddToWishlistRequest {
 // ---------------------------------------------------------------------------
 
 export const wishlistApi = {
-  list: () =>
-    api.get<ApiSuccess<WishlistEntry[]>>("/wishlist"),
+  list: () => api.get<ApiSuccess<WishlistEntry[]>>('/wishlist'),
 
-  add: (data: AddToWishlistRequest) =>
-    api.post<ApiSuccess<WishlistEntry>>("/wishlist", data),
+  add: (data: AddToWishlistRequest) => api.post<ApiSuccess<WishlistEntry>>('/wishlist', data),
 
-  remove: (id: string) =>
-    api.delete<ApiSuccess<void>>(`/wishlist/${id}`),
+  remove: (id: string) => api.delete<ApiSuccess<void>>(`/wishlist/${id}`),
 };

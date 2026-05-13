@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 interface BreadcrumbItem {
   label: string;
@@ -21,13 +21,20 @@ export function PageShell({ title, eyebrow, children, breadcrumbs }: PageShellPr
         <div className="mx-auto max-w-[1200px]">
           {/* Breadcrumbs */}
           {breadcrumbs && breadcrumbs.length > 0 && (
-            <nav aria-label="Breadcrumb" className="mb-3 flex items-center gap-1 text-tv-xs text-tv-ink-3">
-              <Link href="/" className="hover:text-tv-blue transition-colors">Trang chủ</Link>
+            <nav
+              aria-label="Breadcrumb"
+              className="mb-3 flex items-center gap-1 text-tv-xs text-tv-ink-3"
+            >
+              <Link href="/" className="hover:text-tv-blue transition-colors">
+                Trang chủ
+              </Link>
               {breadcrumbs.map((item, i) => (
                 <span key={i} className="flex items-center gap-1">
                   <ChevronRight size={12} />
                   {item.href ? (
-                    <Link href={item.href} className="hover:text-tv-blue transition-colors">{item.label}</Link>
+                    <Link href={item.href} className="hover:text-tv-blue transition-colors">
+                      {item.label}
+                    </Link>
                   ) : (
                     <span className="text-tv-ink-2 font-semibold">{item.label}</span>
                   )}
@@ -41,9 +48,7 @@ export function PageShell({ title, eyebrow, children, breadcrumbs }: PageShellPr
       </section>
 
       {/* Page content */}
-      <section className="mx-auto max-w-[1200px] px-4 py-6 md:px-6 md:py-8">
-        {children}
-      </section>
+      <section className="mx-auto max-w-[1200px] px-4 py-6 md:px-6 md:py-8">{children}</section>
     </main>
   );
 }

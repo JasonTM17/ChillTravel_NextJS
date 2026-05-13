@@ -1,5 +1,5 @@
-import { api } from "./client";
-import type { ApiSuccess } from "@vietwander/shared";
+import type { ApiSuccess } from '@vietwander/shared';
+import { api } from './client';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -37,7 +37,7 @@ export const paymentApi = {
    * Message will include: "Thanh toán demo — không phát sinh giao dịch thật"
    */
   mockCheckout: (bookingCode: string) =>
-    api.post<ApiSuccess<MockCheckoutResponse>>("/payments/mock-checkout", {
+    api.post<ApiSuccess<MockCheckoutResponse>>('/payments/mock-checkout', {
       bookingCode,
     }),
 
@@ -46,5 +46,5 @@ export const paymentApi = {
    * Updates Payment + Booking status atomically.
    */
   mockCallback: (data: MockCallbackRequest) =>
-    api.post<ApiSuccess<MockCallbackResponse>>("/payments/mock-callback", data),
+    api.post<ApiSuccess<MockCallbackResponse>>('/payments/mock-callback', data),
 };

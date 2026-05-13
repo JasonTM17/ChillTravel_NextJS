@@ -1,5 +1,5 @@
-import { api } from "./client";
-import type { ApiSuccess } from "@vietwander/shared";
+import type { ApiSuccess } from '@vietwander/shared';
+import { api } from './client';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -33,5 +33,5 @@ export interface SubmitContactRequest {
 
 export const contactApi = {
   submit: (data: SubmitContactRequest) =>
-    api.post<ApiSuccess<ContactRequest>>("/contact-requests", data),
+    api.post<ApiSuccess<ContactRequest>>('/contact-requests', data),
 };

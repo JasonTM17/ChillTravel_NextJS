@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { UserPlus, AlertCircle, CheckCircle2 } from "lucide-react";
-import { z } from "zod";
-import { CommerceSurface, StatusPill, TrustBanner } from "@/components/commerce-primitives";
-import { PageShell } from "@/components/page-shell";
-import { useAuth } from "@/lib/auth/auth-context";
+import { UserPlus, AlertCircle, CheckCircle2 } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { z } from 'zod';
+import { CommerceSurface, StatusPill, TrustBanner } from '@/components/commerce-primitives';
+import { PageShell } from '@/components/page-shell';
+import { useAuth } from '@/lib/auth/auth-context';
 
 // ---------------------------------------------------------------------------
 // Validation schema
 // ---------------------------------------------------------------------------
 
 const registerSchema = z.object({
-  fullName: z.string().min(1, "Tên không được để trống").min(2, "Tên phải có ít nhất 2 ký tự"),
-  email: z.string().min(1, "Email không được để trống").email("Email không hợp lệ"),
+  fullName: z.string().min(1, 'Tên không được để trống').min(2, 'Tên phải có ít nhất 2 ký tự'),
+  email: z.string().min(1, 'Email không được để trống').email('Email không hợp lệ'),
   password: z
     .string()
-    .min(1, "Mật khẩu không được để trống")
-    .min(8, "Mật khẩu phải có ít nhất 8 ký tự"),
+    .min(1, 'Mật khẩu không được để trống')
+    .min(8, 'Mật khẩu phải có ít nhất 8 ký tự'),
   phone: z.string().optional(),
 });
 
@@ -34,10 +34,10 @@ export default function SignUpPage() {
   const { register } = useAuth();
 
   const [fields, setFields] = useState<SignUpFields>({
-    fullName: "",
-    email: "",
-    password: "",
-    phone: "",
+    fullName: '',
+    email: '',
+    password: '',
+    phone: '',
   });
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof SignUpFields, string>>>({});
   const [error, setError] = useState<string | null>(null);
@@ -77,12 +77,12 @@ export default function SignUpPage() {
       };
       const res = await register(payload);
       if (res.success) {
-        router.push("/");
+        router.push('/');
       } else {
-        setError(res.message ?? "Đăng ký thất bại. Vui lòng thử lại.");
+        setError(res.message ?? 'Đăng ký thất bại. Vui lòng thử lại.');
       }
     } catch {
-      setError("Đã xảy ra lỗi. Vui lòng thử lại.");
+      setError('Đã xảy ra lỗi. Vui lòng thử lại.');
     } finally {
       setIsLoading(false);
     }
@@ -97,7 +97,9 @@ export default function SignUpPage() {
               <UserPlus size={22} aria-hidden="true" />
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">Tài khoản mới</p>
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">
+                Tài khoản mới
+              </p>
               <h2 className="text-2xl font-bold">Tạo tài khoản để khám phá</h2>
             </div>
           </div>
@@ -122,10 +124,12 @@ export default function SignUpPage() {
                 placeholder="Nguyễn Văn A"
                 className="rounded-tv border border-tv-border bg-tv-bg px-4 py-3 font-bold text-tv-ink outline-none focus:border-tv-blue aria-[invalid=true]:border-red-400"
                 aria-invalid={!!fieldErrors.fullName}
-                aria-describedby={fieldErrors.fullName ? "fullName-error" : undefined}
+                aria-describedby={fieldErrors.fullName ? 'fullName-error' : undefined}
               />
               {fieldErrors.fullName && (
-                <span id="fullName-error" className="text-xs font-bold text-red-600">{fieldErrors.fullName}</span>
+                <span id="fullName-error" className="text-xs font-bold text-red-600">
+                  {fieldErrors.fullName}
+                </span>
               )}
             </label>
 
@@ -140,10 +144,12 @@ export default function SignUpPage() {
                 placeholder="ban@example.com"
                 className="rounded-tv border border-tv-border bg-tv-bg px-4 py-3 font-bold text-tv-ink outline-none focus:border-tv-blue aria-[invalid=true]:border-red-400"
                 aria-invalid={!!fieldErrors.email}
-                aria-describedby={fieldErrors.email ? "email-error" : undefined}
+                aria-describedby={fieldErrors.email ? 'email-error' : undefined}
               />
               {fieldErrors.email && (
-                <span id="email-error" className="text-xs font-bold text-red-600">{fieldErrors.email}</span>
+                <span id="email-error" className="text-xs font-bold text-red-600">
+                  {fieldErrors.email}
+                </span>
               )}
             </label>
 
@@ -158,10 +164,12 @@ export default function SignUpPage() {
                 placeholder="Ít nhất 8 ký tự"
                 className="rounded-tv border border-tv-border bg-tv-bg px-4 py-3 font-bold text-tv-ink outline-none focus:border-tv-blue aria-[invalid=true]:border-red-400"
                 aria-invalid={!!fieldErrors.password}
-                aria-describedby={fieldErrors.password ? "password-error" : undefined}
+                aria-describedby={fieldErrors.password ? 'password-error' : undefined}
               />
               {fieldErrors.password && (
-                <span id="password-error" className="text-xs font-bold text-red-600">{fieldErrors.password}</span>
+                <span id="password-error" className="text-xs font-bold text-red-600">
+                  {fieldErrors.password}
+                </span>
               )}
             </label>
 
@@ -183,12 +191,12 @@ export default function SignUpPage() {
               disabled={isLoading}
               className="tv-btn-orange w-full rounded-tv py-3 disabled:cursor-not-allowed disabled:opacity-60 md:col-span-2"
             >
-              {isLoading ? "Đang tạo tài khoản…" : "Tạo tài khoản"}
+              {isLoading ? 'Đang tạo tài khoản…' : 'Tạo tài khoản'}
             </button>
           </form>
 
           <p className="mt-4 text-sm leading-6 text-tv-ink-3">
-            Đã có tài khoản?{" "}
+            Đã có tài khoản?{' '}
             <Link href="/login" className="font-bold text-tv-blue hover:underline">
               Đăng nhập
             </Link>
@@ -200,18 +208,24 @@ export default function SignUpPage() {
           <CommerceSurface>
             <h2 className="text-xl font-bold">Sau khi đăng ký</h2>
             <div className="mt-4 flex flex-wrap gap-2">
-              {["Đặt tour", "Yêu thích", "Lịch trình", "Đánh giá"].map((item) => (
-                <StatusPill key={item} tone="teal">{item}</StatusPill>
+              {['Đặt tour', 'Yêu thích', 'Lịch trình', 'Đánh giá'].map((item) => (
+                <StatusPill key={item} tone="teal">
+                  {item}
+                </StatusPill>
               ))}
             </div>
             <ul className="mt-4 space-y-2">
               {[
-                "Đặt tour và theo dõi booking",
-                "Lưu điểm đến yêu thích",
-                "Viết đánh giá sau chuyến đi",
+                'Đặt tour và theo dõi booking',
+                'Lưu điểm đến yêu thích',
+                'Viết đánh giá sau chuyến đi',
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2 text-sm font-bold text-tv-ink-3">
-                  <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[#0f8b7b]" aria-hidden="true" />
+                  <CheckCircle2
+                    size={16}
+                    className="mt-0.5 shrink-0 text-[#0f8b7b]"
+                    aria-hidden="true"
+                  />
                   {item}
                 </li>
               ))}

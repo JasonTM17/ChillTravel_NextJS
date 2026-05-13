@@ -1,27 +1,20 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { use } from "react";
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
+import type { LucideIcon } from 'lucide-react';
+import { ArrowRight, CalendarDays, MapPin, MessageCircle, ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { use } from 'react';
+import { CommerceSurface, StatusPill, TrustBanner } from '@/components/commerce-primitives';
+import { destinationApi, getCountryName, getCityName } from '@/lib/api/destination.api';
+import type { Destination } from '@/lib/api/destination.api';
 import {
-  ArrowRight,
-  CalendarDays,
-  MapPin,
-  MapPinned,
-  MessageCircle,
-  ShieldCheck,
-  Star,
-  Utensils,
-  WalletCards
-} from "lucide-react";
-import { destinationApi, getCountryName, getCityName } from "@/lib/api/destination.api";
-import type { Destination } from "@/lib/api/destination.api";
-import { BoundaryList, CommerceSurface, StatusPill, TrustBanner } from "@/components/commerce-primitives";
-import { getDestinationImage, getExperienceDealImage, getStayDealImage } from "@/lib/destination-images";
-import { formatVnd } from "@/lib/utils";
-import { demoPaymentWarning } from "@/lib/vietnamese";
+  getDestinationImage,
+  getExperienceDealImage,
+  getStayDealImage,
+} from '@/lib/destination-images';
+import { demoPaymentWarning } from '@/lib/vietnamese';
 
 // ---------------------------------------------------------------------------
 // Skeleton
@@ -34,7 +27,9 @@ function DestinationDetailSkeleton() {
         <div className="mx-auto max-w-[1180px] px-4 py-6 md:px-6">
           <div className="flex flex-col gap-4">
             <div className="flex gap-2">
-              {[1, 2, 3].map((i) => <div key={i} className="h-6 w-20 rounded-full bg-[tv-border]" />)}
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-6 w-20 rounded-full bg-[tv-border]" />
+              ))}
             </div>
             <div className="h-12 w-3/4 rounded bg-[tv-border]" />
             <div className="h-4 w-full max-w-2xl rounded bg-[tv-border]" />
@@ -105,22 +100,24 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
           setDestination(res.data);
         } else {
           // Check if it's a 404-style error
-          const msg = (res as { message?: string }).message ?? "";
-          if (msg.toLowerCase().includes("not found") || msg.includes("404")) {
+          const msg = (res as { message?: string }).message ?? '';
+          if (msg.toLowerCase().includes('not found') || msg.includes('404')) {
             setNotFoundError(true);
           } else {
-            setError(msg || "Không thể tải thông tin điểm đến.");
+            setError(msg || 'Không thể tải thông tin điểm đến.');
           }
         }
       } catch {
-        if (!cancelled) setError("Lỗi kết nối. Vui lòng thử lại.");
+        if (!cancelled) setError('Lỗi kết nối. Vui lòng thử lại.');
       } finally {
         if (!cancelled) setLoading(false);
       }
     }
 
     void fetchDestination();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [slug]);
 
   if (loading) return <DestinationDetailSkeleton />;
@@ -130,7 +127,10 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
       <main className="min-h-screen bg-[tv-bg] flex items-center justify-center">
         <div className="rounded-tv border border-dashed border-red-200 bg-red-50 p-10 text-center max-w-md">
           <p className="text-lg font-bold text-red-600">{error}</p>
-          <Link href="/explore" className="mt-4 inline-flex rounded-tv-sm bg-[tv-blue] px-5 py-2.5 font-bold text-white hover:bg-[tv-blue-dark]">
+          <Link
+            href="/explore"
+            className="mt-4 inline-flex rounded-tv-sm bg-[tv-blue] px-5 py-2.5 font-bold text-white hover:bg-[tv-blue-dark]"
+          >
             Quay lại khám phá
           </Link>
         </div>
@@ -154,10 +154,16 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
             <div>
               <div className="flex flex-wrap gap-2">
                 <StatusPill>{getCountryName(destination)}</StatusPill>
-                {getCityName(destination) && <StatusPill tone="teal">{getCityName(destination)}</StatusPill>}
-                {destination.category && <StatusPill tone="orange">{destination.category}</StatusPill>}
+                {getCityName(destination) && (
+                  <StatusPill tone="teal">{getCityName(destination)}</StatusPill>
+                )}
+                {destination.category && (
+                  <StatusPill tone="orange">{destination.category}</StatusPill>
+                )}
               </div>
-              <h1 className="mt-4 text-4xl font-bold leading-tight md:text-6xl">{destination.name}</h1>
+              <h1 className="mt-4 text-4xl font-bold leading-tight md:text-6xl">
+                {destination.name}
+              </h1>
               <p className="mt-3 max-w-3xl text-base leading-7 text-[tv-ink-3]">
                 {destination.shortDescription ?? destination.description}
               </p>
@@ -183,7 +189,9 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
           <div className="mt-6 grid gap-3 lg:grid-cols-[1.45fr_0.75fr]">
             <div
               className="min-h-[320px] rounded-[28px] bg-cover bg-center shadow-tv-hover"
-              style={{ backgroundImage: `linear-gradient(180deg, rgba(7,24,39,0.02), rgba(7,24,39,0.18)), url(${galleryImages[0]})` }}
+              style={{
+                backgroundImage: `linear-gradient(180deg, rgba(7,24,39,0.02), rgba(7,24,39,0.18)), url(${galleryImages[0]})`,
+              }}
               aria-label={`Ảnh du lịch ${destination.name}`}
             />
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
@@ -191,8 +199,14 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
                 <div
                   key={image}
                   className="min-h-[154px] rounded-[24px] bg-cover bg-center shadow-tv-card"
-                  style={{ backgroundImage: `linear-gradient(180deg, rgba(7,24,39,0.02), rgba(7,24,39,0.12)), url(${image})` }}
-                  aria-label={index === 0 ? `Gợi ý lưu trú tại ${destination.name}` : `Gợi ý trải nghiệm tại ${destination.name}`}
+                  style={{
+                    backgroundImage: `linear-gradient(180deg, rgba(7,24,39,0.02), rgba(7,24,39,0.12)), url(${image})`,
+                  }}
+                  aria-label={
+                    index === 0
+                      ? `Gợi ý lưu trú tại ${destination.name}`
+                      : `Gợi ý trải nghiệm tại ${destination.name}`
+                  }
                 />
               ))}
             </div>
@@ -207,7 +221,11 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
               <InfoCard icon={CalendarDays} title="Mùa đẹp" value={destination.bestTimeToVisit} />
             )}
             <InfoCard icon={ShieldCheck} title="An toàn" value="Tốt" />
-            <InfoCard icon={MapPin} title="Vị trí" value={getCityName(destination) ?? getCountryName(destination)} />
+            <InfoCard
+              icon={MapPin}
+              title="Vị trí"
+              value={getCityName(destination) ?? getCountryName(destination)}
+            />
           </div>
 
           <CommerceSurface>
@@ -240,8 +258,12 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
             <h2 className="text-2xl font-bold">Thông tin điểm đến</h2>
             <div className="mt-4 space-y-3 text-sm">
               <InfoRow label="Quốc gia" value={getCountryName(destination)} />
-              {getCityName(destination) && <InfoRow label="Thành phố" value={getCityName(destination)!} />}
-              {destination.bestTimeToVisit && <InfoRow label="Thời điểm lý tưởng" value={destination.bestTimeToVisit} />}
+              {getCityName(destination) && (
+                <InfoRow label="Thành phố" value={getCityName(destination)!} />
+              )}
+              {destination.bestTimeToVisit && (
+                <InfoRow label="Thời điểm lý tưởng" value={destination.bestTimeToVisit} />
+              )}
               {destination.ratingAvg != null && (
                 <InfoRow
                   label="Đánh giá"
@@ -255,11 +277,15 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
         <aside className="h-fit space-y-4 lg:sticky lg:top-24">
           <TrustBanner />
           <CommerceSurface>
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">Tóm tắt đặt chỗ</p>
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
+              Tóm tắt đặt chỗ
+            </p>
             <h2 className="mt-2 text-2xl font-bold">{destination.name}</h2>
             <div className="mt-5 space-y-3 text-sm">
               <SideRow label="Quốc gia" value={getCountryName(destination)} />
-              {getCityName(destination) && <SideRow label="Thành phố" value={getCityName(destination)!} />}
+              {getCityName(destination) && (
+                <SideRow label="Thành phố" value={getCityName(destination)!} />
+              )}
               {destination.ratingAvg != null && (
                 <SideRow label="Đánh giá" value={`${destination.ratingAvg.toFixed(1)} / 5`} />
               )}
@@ -271,7 +297,9 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
               Xem ưu đãi demo
               <ArrowRight size={18} aria-hidden="true" />
             </Link>
-            <p className="mt-3 text-center text-xs font-bold text-[#b45309]">{demoPaymentWarning}</p>
+            <p className="mt-3 text-center text-xs font-bold text-[#b45309]">
+              {demoPaymentWarning}
+            </p>
           </CommerceSurface>
 
           {destination.images && destination.images.length > 0 && (
@@ -299,11 +327,21 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
 // Sub-components
 // ---------------------------------------------------------------------------
 
-function InfoCard({ icon: Icon, title, value }: { icon: LucideIcon; title: string; value: string }) {
+function InfoCard({
+  icon: Icon,
+  title,
+  value,
+}: {
+  icon: LucideIcon;
+  title: string;
+  value: string;
+}) {
   return (
     <div className="rounded-tv border border-[tv-border] bg-white p-5 shadow-tv-card">
       <Icon className="text-[tv-blue]" aria-hidden="true" />
-      <h2 className="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-[tv-ink-3]">{title}</h2>
+      <h2 className="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-[tv-ink-3]">
+        {title}
+      </h2>
       <p className="mt-2 text-lg font-bold">{value}</p>
     </div>
   );

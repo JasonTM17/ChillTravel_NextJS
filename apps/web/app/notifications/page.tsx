@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 /**
  * /notifications — Full notifications page with pagination.
@@ -9,27 +9,35 @@
  * - Paginated list with type icon, title, body, timestamp.
  */
 
-import { useEffect, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { Bell, CheckCheck } from "lucide-react";
-import { useAuth } from "@/lib/auth/auth-context";
-import { notificationApi, type Notification } from "@/lib/api/notification.api";
+import { Bell, CheckCheck } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState, useCallback } from 'react';
+import { notificationApi, type Notification } from '@/lib/api/notification.api';
+import { useAuth } from '@/lib/auth/auth-context';
 
 // ---------------------------------------------------------------------------
 // Type icon + label map
 // ---------------------------------------------------------------------------
 
 const TYPE_META: Record<string, { icon: string; label: string; color: string }> = {
-  BOOKING_CONFIRMED: { icon: "✓", label: "Đặt tour thành công", color: "bg-green-100 text-green-700" },
-  BOOKING_CANCELLED: { icon: "✗", label: "Đặt tour bị hủy", color: "bg-red-100 text-red-600" },
-  BOOKING_COMPLETED: { icon: "✓", label: "Tour hoàn thành", color: "bg-blue-100 text-blue-700" },
-  REVIEW_APPROVED: { icon: "★", label: "Đánh giá được duyệt", color: "bg-yellow-100 text-yellow-700" },
-  CONTACT_REPLY: { icon: "✉", label: "Phản hồi liên hệ", color: "bg-purple-100 text-purple-700" },
-  SYSTEM: { icon: "ℹ", label: "Hệ thống", color: "bg-tv-blue-light text-tv-blue" },
+  BOOKING_CONFIRMED: {
+    icon: '✓',
+    label: 'Đặt tour thành công',
+    color: 'bg-green-100 text-green-700',
+  },
+  BOOKING_CANCELLED: { icon: '✗', label: 'Đặt tour bị hủy', color: 'bg-red-100 text-red-600' },
+  BOOKING_COMPLETED: { icon: '✓', label: 'Tour hoàn thành', color: 'bg-blue-100 text-blue-700' },
+  REVIEW_APPROVED: {
+    icon: '★',
+    label: 'Đánh giá được duyệt',
+    color: 'bg-yellow-100 text-yellow-700',
+  },
+  CONTACT_REPLY: { icon: '✉', label: 'Phản hồi liên hệ', color: 'bg-purple-100 text-purple-700' },
+  SYSTEM: { icon: 'ℹ', label: 'Hệ thống', color: 'bg-tv-blue-light text-tv-blue' },
 };
 
 function typeMeta(type: string) {
-  return TYPE_META[type] ?? { icon: "ℹ", label: type, color: "bg-tv-blue-light text-tv-blue" };
+  return TYPE_META[type] ?? { icon: 'ℹ', label: type, color: 'bg-tv-blue-light text-tv-blue' };
 }
 
 // ---------------------------------------------------------------------------
@@ -39,13 +47,13 @@ function typeMeta(type: string) {
 function relativeTime(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime();
   const mins = Math.floor(diff / 60_000);
-  if (mins < 1) return "Vừa xong";
+  if (mins < 1) return 'Vừa xong';
   if (mins < 60) return `${mins} phút trước`;
   const hours = Math.floor(mins / 60);
   if (hours < 24) return `${hours} giờ trước`;
   const days = Math.floor(hours / 24);
   if (days < 30) return `${days} ngày trước`;
-  return new Date(iso).toLocaleDateString("vi-VN");
+  return new Date(iso).toLocaleDateString('vi-VN');
 }
 
 // ---------------------------------------------------------------------------
@@ -86,7 +94,7 @@ export default function NotificationsPage() {
   // Redirect if not authenticated
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      router.replace("/login");
+      router.replace('/login');
     }
   }, [authLoading, isAuthenticated, router]);
 
@@ -103,15 +111,15 @@ export default function NotificationsPage() {
           setTotalPages(res.data.totalPages);
           setTotalElements(res.data.totalElements);
         } else {
-          setError("Không thể tải thông báo. Vui lòng thử lại.");
+          setError('Không thể tải thông báo. Vui lòng thử lại.');
         }
       } catch {
-        setError("Không thể tải thông báo. Vui lòng thử lại.");
+        setError('Không thể tải thông báo. Vui lòng thử lại.');
       } finally {
         setLoading(false);
       }
     },
-    [isAuthenticated]
+    [isAuthenticated],
   );
 
   useEffect(() => {
@@ -137,7 +145,7 @@ export default function NotificationsPage() {
       try {
         await notificationApi.markRead(n.id);
         setNotifications((prev) =>
-          prev.map((item) => (item.id === n.id ? { ...item, isRead: true } : item))
+          prev.map((item) => (item.id === n.id ? { ...item, isRead: true } : item)),
         );
       } catch {
         // Ignore
@@ -197,7 +205,7 @@ export default function NotificationsPage() {
             className="inline-flex items-center gap-2 rounded-tv-sm border border-tv-border px-3 py-2 text-sm font-bold text-tv-blue transition hover:bg-tv-blue-light disabled:opacity-50"
           >
             <CheckCheck size={16} aria-hidden="true" />
-            {markingAll ? "Đang xử lý…" : "Đánh dấu tất cả đã đọc"}
+            {markingAll ? 'Đang xử lý…' : 'Đánh dấu tất cả đã đọc'}
           </button>
         )}
       </div>
@@ -252,8 +260,8 @@ export default function NotificationsPage() {
                   onClick={() => handleClick(n)}
                   className={`flex w-full items-start gap-4 rounded-tv border p-4 text-left transition hover:shadow-md ${
                     !n.isRead
-                      ? "border-tv-blue bg-tv-blue-light hover:bg-[#dce9f8]"
-                      : "border-tv-border bg-white hover:bg-tv-bg"
+                      ? 'border-tv-blue bg-tv-blue-light hover:bg-[#dce9f8]'
+                      : 'border-tv-border bg-white hover:bg-tv-bg'
                   }`}
                 >
                   {/* Type icon */}
@@ -269,7 +277,7 @@ export default function NotificationsPage() {
                     <div className="flex items-start justify-between gap-2">
                       <p
                         className={`text-sm ${
-                          !n.isRead ? "font-bold text-tv-ink" : "font-bold text-tv-ink-2"
+                          !n.isRead ? 'font-bold text-tv-ink' : 'font-bold text-tv-ink-2'
                         }`}
                       >
                         {n.title}
@@ -283,7 +291,9 @@ export default function NotificationsPage() {
                     </div>
                     <p className="mt-1 text-sm text-tv-ink-3">{n.body}</p>
                     <div className="mt-2 flex items-center gap-2">
-                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${meta.color}`}>
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${meta.color}`}
+                      >
                         {meta.label}
                       </span>
                       <span className="text-[11px] text-tv-ink-3">{relativeTime(n.createdAt)}</span>

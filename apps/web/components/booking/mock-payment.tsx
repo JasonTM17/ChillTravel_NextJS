@@ -172,7 +172,7 @@ export function MockPayment({ initialData, onDataChange, onSuccess, onFailure, c
         <div className="rounded-tv border border-border bg-white p-4 space-y-4">
           <div>
             <label htmlFor="card-number" className="block text-xs font-bold text-muted-ink mb-1.5">
-              Card Number
+              Số thẻ
             </label>
             <input
               id="card-number"
@@ -192,7 +192,7 @@ export function MockPayment({ initialData, onDataChange, onSuccess, onFailure, c
                 htmlFor="card-expiry"
                 className="block text-xs font-bold text-muted-ink mb-1.5"
               >
-                Expiry
+                Hết hạn
               </label>
               <input
                 id="card-expiry"
@@ -228,7 +228,7 @@ export function MockPayment({ initialData, onDataChange, onSuccess, onFailure, c
       {method === 'bank-transfer' && (
         <div className="rounded-tv border border-border bg-white p-4">
           <p className="text-sm text-muted-ink">
-            Demo bank transfer — no real transaction will occur.
+            Chuyển khoản demo — không phát sinh giao dịch thật.
           </p>
           <div className="mt-3 rounded-tv-sm bg-sky-surface p-3 text-xs text-ink space-y-1">
             <p>
@@ -247,7 +247,7 @@ export function MockPayment({ initialData, onDataChange, onSuccess, onFailure, c
       {/* E-wallet info */}
       {method === 'e-wallet' && (
         <div className="rounded-tv border border-border bg-white p-4">
-          <p className="text-sm text-muted-ink">Demo e-wallet — select to simulate payment.</p>
+          <p className="text-sm text-muted-ink">Ví điện tử demo — chọn để mô phỏng thanh toán.</p>
           <div className="mt-3 flex gap-3">
             {['MoMo', 'ZaloPay', 'VNPay'].map((wallet) => (
               <div
@@ -276,7 +276,7 @@ export function MockPayment({ initialData, onDataChange, onSuccess, onFailure, c
         {processing ? (
           <span className="flex items-center justify-center gap-2">
             <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-            Processing...
+            Đang xử lý...
           </span>
         ) : (
           t.booking.confirmPayment

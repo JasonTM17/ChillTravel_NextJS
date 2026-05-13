@@ -236,7 +236,7 @@ function DefaultSelectStep({
     <div className="rounded-tv border border-border bg-white p-5 space-y-4">
       <h3 className="text-tv-md font-bold text-ink">{t.booking.stepSelect}</h3>
       <p className="text-sm text-muted-ink">
-        Select your service, dates, and number of guests to continue.
+        Chọn dịch vụ, ngày và số khách để tiếp tục.
       </p>
       <button
         type="button"
@@ -269,7 +269,7 @@ function DefaultDetailsStep({
   return (
     <div className="rounded-tv border border-border bg-white p-5 space-y-4">
       <h3 className="text-tv-md font-bold text-ink">{t.booking.stepDetails}</h3>
-      <p className="text-sm text-muted-ink">Fill in traveler details to proceed to payment.</p>
+      <p className="text-sm text-muted-ink">Điền thông tin hành khách để tiến hành thanh toán.</p>
       <button
         type="button"
         onClick={onNext}

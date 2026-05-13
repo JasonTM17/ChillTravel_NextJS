@@ -73,32 +73,32 @@ export function PassengerForm({ onSubmit }: PassengerFormProps) {
 
       // Full name: 1-100 chars, required
       if (!data.fullName.trim()) {
-        errs.fullName = t.flight.fullName + ' is required';
+        errs.fullName = t.flight.fullName + ' là bắt buộc';
       } else if (data.fullName.trim().length > 100) {
-        errs.fullName = 'Max 100 characters';
+        errs.fullName = 'Tối đa 100 ký tự';
       }
 
       // Date of birth: valid past date, required
       if (!data.dateOfBirth) {
-        errs.dateOfBirth = t.flight.dateOfBirth + ' is required';
+        errs.dateOfBirth = t.flight.dateOfBirth + ' là bắt buộc';
       } else {
         const dob = new Date(data.dateOfBirth);
         const now = new Date();
         if (isNaN(dob.getTime()) || dob >= now) {
-          errs.dateOfBirth = 'Must be a valid past date';
+          errs.dateOfBirth = 'Phải là ngày trong quá khứ';
         }
       }
 
       // Nationality: required
       if (!data.nationality) {
-        errs.nationality = t.flight.nationality + ' is required';
+        errs.nationality = t.flight.nationality + ' là bắt buộc';
       }
 
       // Passport number: 6-9 alphanumeric, required
       if (!data.passportNumber.trim()) {
-        errs.passportNumber = t.flight.passportNumber + ' is required';
+        errs.passportNumber = t.flight.passportNumber + ' là bắt buộc';
       } else if (!PASSPORT_REGEX.test(data.passportNumber.trim())) {
-        errs.passportNumber = '6-9 alphanumeric characters';
+        errs.passportNumber = '6-9 ký tự chữ và số';
       }
 
       return errs;
@@ -181,7 +181,7 @@ export function PassengerForm({ onSubmit }: PassengerFormProps) {
       </div>
 
       <p className="mt-1 text-xs text-muted-ink">
-        Demo data only — no real passenger information is stored
+        Dữ liệu demo — không lưu trữ thông tin hành khách thật
       </p>
 
       <div className="mt-5 space-y-4">

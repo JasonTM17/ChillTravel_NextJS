@@ -98,7 +98,7 @@ export function BookingConfirmation({
 
         {/* Service name */}
         <div className="flex justify-between items-center">
-          <span className="text-sm text-muted-ink">Service</span>
+          <span className="text-sm text-muted-ink">Dịch vụ</span>
           <span className="text-sm font-semibold text-ink">{serviceName}</span>
         </div>
 

@@ -392,27 +392,24 @@ function HeroSearch() {
           Đặt tour, khách sạn và vé máy bay dễ dàng
         </h1>
 
-        {/* Search card */}
-        <div className="rounded-tv-lg bg-white p-4 shadow-tv-modal">
+        {/* Search card — entire card is clickable, linking to hotels search */}
+        <Link
+          href="/hotels?destination=Đà+Nẵng"
+          className="block rounded-tv-lg bg-white p-4 shadow-tv-modal hover:shadow-tv-modal/80 hover:ring-2 hover:ring-tv-blue/20 transition-all cursor-pointer"
+        >
           <div className="grid gap-3 md:grid-cols-[1fr_180px_180px_160px_auto]">
             {/* Destination */}
             <div className="tv-search-field">
-              <label htmlFor="dest">Điểm đến</label>
+              <span className="text-tv-xs text-tv-ink-3">Điểm đến</span>
               <div className="flex items-center gap-2 mt-1">
                 <MapPin size={16} className="shrink-0 text-tv-blue" />
-                <input
-                  id="dest"
-                  name="keyword"
-                  defaultValue="Đà Nẵng"
-                  placeholder="Nhập điểm đến..."
-                  className="w-full text-tv-base font-semibold text-tv-ink outline-none bg-transparent"
-                />
+                <span className="w-full text-tv-base font-semibold text-tv-ink">Đà Nẵng</span>
               </div>
             </div>
 
             {/* Check-in */}
             <div className="tv-search-field">
-              <label>Nhận phòng</label>
+              <span className="text-tv-xs text-tv-ink-3">Nhận phòng</span>
               <div className="flex items-center gap-2 mt-1">
                 <CalendarDays size={16} className="shrink-0 text-tv-blue" />
                 <span className="value text-tv-base font-semibold">12 thg 8, 2026</span>
@@ -421,7 +418,7 @@ function HeroSearch() {
 
             {/* Check-out */}
             <div className="tv-search-field">
-              <label>Trả phòng</label>
+              <span className="text-tv-xs text-tv-ink-3">Trả phòng</span>
               <div className="flex items-center gap-2 mt-1">
                 <CalendarDays size={16} className="shrink-0 text-tv-blue" />
                 <span className="value text-tv-base font-semibold">16 thg 8, 2026</span>
@@ -430,7 +427,7 @@ function HeroSearch() {
 
             {/* Guests */}
             <div className="tv-search-field">
-              <label>Khách</label>
+              <span className="text-tv-xs text-tv-ink-3">Khách</span>
               <div className="flex items-center gap-2 mt-1">
                 <Users size={16} className="shrink-0 text-tv-blue" />
                 <span className="value text-tv-base font-semibold">2 khách, 1 phòng</span>
@@ -438,29 +435,27 @@ function HeroSearch() {
             </div>
 
             {/* Search button */}
-            <Link
-              href="/hotels?destination=Đà+Nẵng&checkIn=2026-08-12&checkOut=2026-08-16&rooms=1&guests=2"
-              className="flex items-center justify-center gap-2 rounded-tv bg-tv-orange px-6 py-3 text-tv-base font-bold text-white hover:bg-tv-orange-dark transition-colors"
+            <span
+              className="flex items-center justify-center gap-2 rounded-tv bg-tv-orange px-6 py-3 text-tv-base font-bold text-white"
             >
               <Search size={18} />
               <span className="hidden md:inline">Tìm kiếm</span>
-            </Link>
+            </span>
           </div>
 
           {/* Quick search tags */}
           <div className="mt-3 flex flex-wrap gap-2">
             <span className="text-tv-xs text-tv-ink-3 self-center">Tìm nhanh:</span>
             {['Đà Nẵng', 'Phú Quốc', 'Hội An', 'Sapa', 'Hà Nội', 'Tokyo', 'Bangkok'].map((city) => (
-              <Link
+              <span
                 key={city}
-                href={`/explore?keyword=${encodeURIComponent(city)}`}
-                className="rounded-full border border-tv-border bg-tv-bg px-3 py-1 text-tv-xs font-semibold text-tv-ink-2 hover:border-tv-blue hover:text-tv-blue transition-colors"
+                className="rounded-full border border-tv-border bg-tv-bg px-3 py-1 text-tv-xs font-semibold text-tv-ink-2"
               >
                 {city}
-              </Link>
+              </span>
             ))}
           </div>
-        </div>
+        </Link>
       </div>
     </div>
   );
@@ -501,7 +496,7 @@ function PromoBanner() {
       <div className="flex items-center justify-between mb-3">
         <h2 className="tv-section-title">Ưu đãi hôm nay</h2>
         <Link
-          href="/"
+          href="/tours"
           className="flex items-center gap-1 text-tv-sm font-semibold text-tv-blue hover:underline"
         >
           Xem tất cả <ChevronRight size={14} />
@@ -509,7 +504,7 @@ function PromoBanner() {
       </div>
       <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
         {promos.map((promo) => (
-          <Link key={promo.code} href="/" className="tv-card overflow-hidden group">
+          <Link key={promo.code} href="/tours" className="tv-card overflow-hidden group">
             <div className={`bg-gradient-to-br ${promo.bg} p-4 text-white`}>
               <span className={`tv-badge bg-white/20 text-white text-tv-xs`}>{promo.badge}</span>
               <p className="mt-2 font-bold text-tv-base leading-tight">{promo.title}</p>
@@ -815,7 +810,9 @@ function SiteFooter() {
           </p>
           <div className="flex flex-wrap gap-3">
             <a
-              href="#"
+              href="https://apps.apple.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-tv-sm border border-white/20 bg-white/5 px-4 py-2 text-tv-xs text-white/70 hover:bg-white/10 transition-colors"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
@@ -824,7 +821,9 @@ function SiteFooter() {
               App Store
             </a>
             <a
-              href="#"
+              href="https://play.google.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-tv-sm border border-white/20 bg-white/5 px-4 py-2 text-tv-xs text-white/70 hover:bg-white/10 transition-colors"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">

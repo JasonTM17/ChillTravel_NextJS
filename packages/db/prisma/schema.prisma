@@ -649,6 +649,7 @@ model Review {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
+  @@index([tourId])
   @@index([tourId, status])
   @@index([destinationId, status])
   @@index([userId])

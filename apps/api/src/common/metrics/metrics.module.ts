@@ -60,10 +60,27 @@ import { MetricsInterceptor } from './metrics.interceptor';
     MetricsInterceptor,
     HeapMetricsService,
     DbMetricsService,
-    HTTP_REQUEST_DURATION_METRIC,
-    HTTP_REQUESTS_TOTAL_METRIC,
-    NODEJS_HEAP_SIZE_USED_METRIC,
-    DB_QUERY_DURATION_METRIC,
+    makeHistogramProvider({
+      name: HTTP_REQUEST_DURATION_METRIC,
+      help: 'Duration of HTTP requests in seconds',
+      labelNames: ['route', 'method', 'status_code'],
+      buckets: [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10],
+    }),
+    makeCounterProvider({
+      name: HTTP_REQUESTS_TOTAL_METRIC,
+      help: 'Total number of HTTP requests',
+      labelNames: ['route', 'method', 'status_code'],
+    }),
+    makeGaugeProvider({
+      name: NODEJS_HEAP_SIZE_USED_METRIC,
+      help: 'Node.js heap size used in bytes',
+    }),
+    makeHistogramProvider({
+      name: DB_QUERY_DURATION_METRIC,
+      help: 'Duration of database queries in seconds',
+      labelNames: ['operation'],
+      buckets: [0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5],
+    }),
   ],
 })
 export class MetricsModule {}

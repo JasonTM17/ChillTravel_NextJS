@@ -1,4 +1,4 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger } from '@nestjs/common';
 
 /**
  * Stub EmailService — logs to console only.
@@ -18,7 +18,7 @@ export class EmailService {
 
   sendBookingStatusUpdate(to: string, bookingCode: string, status: string): void {
     this.logger.log(
-      `[EMAIL] to=${to} subject="Booking Status Update" bookingCode=${bookingCode} status=${status}`
+      `[EMAIL] to=${to} subject="Booking Status Update" bookingCode=${bookingCode} status=${status}`,
     );
   }
 

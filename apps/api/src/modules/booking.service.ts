@@ -2,14 +2,15 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
-  NotFoundException
-} from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
-import { EmailService } from "../common/services/email.service";
-import { generateBookingCode } from "../common/utils/booking-code.util";
-import { buildPagination } from "../common/dto/paginated-response.dto";
-import type { PaginationQueryDto } from "../common/dto/pagination.dto";
-import type { CreateBookingDto } from "./booking/dto/create-booking.dto";
+  NotFoundException,
+} from '@nestjs/common';
+import { buildPagination } from '../common/dto/paginated-response.dto';
+import type { PaginationQueryDto } from '../common/dto/pagination.dto';
+import { EmailService } from '../common/services/email.service';
+import { generateBookingCode } from '../common/utils/booking-code.util';
+import { PrismaService } from '../prisma/prisma.service';
+import type { CreateBookingDto } from './booking/dto/create-booking.dto';
+import type { CreateDemoBookingDto } from './bookings/dto/create-demo-booking.dto';
 
 /**
  * BookingService — real implementation (Task 13, Req 10, 35, Design §5.2, §7).
@@ -24,7 +25,7 @@ import type { CreateBookingDto } from "./booking/dto/create-booking.dto";
 export class BookingService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly emailService: EmailService
+    private readonly emailService: EmailService,
   ) {}
 
   // ---------------------------------------------------------------------------
@@ -34,28 +35,28 @@ export class BookingService {
   async createBooking(userId: string, dto: CreateBookingDto) {
     // 1. Find tour (throw 404 if not found or DELETED/INACTIVE)
     const tour = await this.prisma.tour.findUnique({
-      where: { id: dto.tourId }
+      where: { id: dto.tourId },
     });
 
-    if (!tour || tour.status === "DELETED" || tour.status === "INACTIVE") {
-      throw new BadRequestException("Tour không khả dụng");
+    if (!tour || tour.status === 'DELETED' || tour.status === 'INACTIVE') {
+      throw new BadRequestException('Tour không khả dụng');
     }
 
     // 2. Check available slots
     let departure = null;
     if (dto.departureId) {
       departure = await this.prisma.tourDeparture.findUnique({
-        where: { id: dto.departureId }
+        where: { id: dto.departureId },
       });
       if (!departure || departure.tourId !== tour.id) {
-        throw new BadRequestException("Ngày khởi hành không hợp lệ");
+        throw new BadRequestException('Ngày khởi hành không hợp lệ');
       }
       if (dto.numberOfGuests > departure.availableSlots) {
-        throw new BadRequestException("Không đủ chỗ cho ngày khởi hành này");
+        throw new BadRequestException('Không đủ chỗ cho ngày khởi hành này');
       }
     } else {
       if (dto.numberOfGuests > tour.availableSlots) {
-        throw new BadRequestException("Không đủ chỗ");
+        throw new BadRequestException('Không đủ chỗ');
       }
     }
 
@@ -69,37 +70,35 @@ export class BookingService {
 
     if (dto.couponCode) {
       const coupon = await this.prisma.coupon.findUnique({
-        where: { code: dto.couponCode }
+        where: { code: dto.couponCode },
       });
 
       if (!coupon) {
-        throw new BadRequestException("Mã giảm giá không hợp lệ");
+        throw new BadRequestException('Mã giảm giá không hợp lệ');
       }
 
       const now = new Date();
 
       if (!coupon.isActive) {
-        throw new BadRequestException("Mã giảm giá không còn hiệu lực");
+        throw new BadRequestException('Mã giảm giá không còn hiệu lực');
       }
       if (coupon.validFrom > now || coupon.validTo < now) {
-        throw new BadRequestException("Mã giảm giá đã hết hạn hoặc chưa có hiệu lực");
+        throw new BadRequestException('Mã giảm giá đã hết hạn hoặc chưa có hiệu lực');
       }
       if (coupon.usageLimit !== null && coupon.usedCount >= coupon.usageLimit) {
-        throw new BadRequestException("Mã giảm giá đã hết lượt sử dụng");
+        throw new BadRequestException('Mã giảm giá đã hết lượt sử dụng');
       }
       if (totalBeforeDiscount < coupon.minBookingAmount) {
         throw new BadRequestException(
-          `Đơn hàng tối thiểu ${coupon.minBookingAmount.toLocaleString()} VND để dùng mã này`
+          `Đơn hàng tối thiểu ${coupon.minBookingAmount.toLocaleString()} VND để dùng mã này`,
         );
       }
 
       // Compute discount
-      if (coupon.discountType === "PERCENT") {
+      if (coupon.discountType === 'PERCENT') {
         const raw = Math.floor((coupon.discountValue / 100) * totalBeforeDiscount);
         discountAmount =
-          coupon.maxDiscountAmount !== null
-            ? Math.min(raw, coupon.maxDiscountAmount)
-            : raw;
+          coupon.maxDiscountAmount !== null ? Math.min(raw, coupon.maxDiscountAmount) : raw;
       } else {
         // FIXED
         discountAmount = Math.min(coupon.discountValue, totalBeforeDiscount);
@@ -138,12 +137,12 @@ export class BookingService {
           totalAmount,
           discountAmount,
           specialRequest: dto.specialRequest ?? null,
-          status: "pending",
-          paymentStatus: "pending",
-          paymentMethod: "MOCK_CARD",
+          status: 'pending',
+          paymentStatus: 'pending',
+          paymentMethod: 'MOCK_CARD',
           isDemo: true,
-          bookingDate: new Date()
-        }
+          bookingDate: new Date(),
+        },
       });
 
       // Create BookingGuest records
@@ -154,8 +153,8 @@ export class BookingService {
             fullName: g.fullName,
             dateOfBirth: g.dateOfBirth ? new Date(g.dateOfBirth) : null,
             gender: g.gender ?? null,
-            note: g.note ?? null
-          }))
+            note: g.note ?? null,
+          })),
         });
       }
 
@@ -163,18 +162,18 @@ export class BookingService {
       await tx.payment.create({
         data: {
           bookingId: newBooking.id,
-          provider: "MOCK",
+          provider: 'MOCK',
           amount: totalAmount,
-          currency: "VND",
-          status: "pending"
-        }
+          currency: 'VND',
+          status: 'pending',
+        },
       });
 
       // Increment coupon usedCount if coupon was applied
       if (couponId) {
         await tx.coupon.update({
           where: { id: couponId },
-          data: { usedCount: { increment: 1 } }
+          data: { usedCount: { increment: 1 } },
         });
       }
 
@@ -198,16 +197,16 @@ export class BookingService {
             slug: true,
             imageUrl: true,
             durationDays: true,
-            durationNights: true
-          }
+            durationNights: true,
+          },
         },
         departure: true,
         guests: true,
         payment: true,
         coupon: {
-          select: { id: true, code: true, discountType: true, discountValue: true }
-        }
-      }
+          select: { id: true, code: true, discountType: true, discountValue: true },
+        },
+      },
     });
   }
 
@@ -225,7 +224,7 @@ export class BookingService {
         where: { userId },
         skip,
         take: size,
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: 'desc' },
         include: {
           tour: {
             select: {
@@ -234,18 +233,18 @@ export class BookingService {
               slug: true,
               imageUrl: true,
               durationDays: true,
-              durationNights: true
-            }
+              durationNights: true,
+            },
           },
           departure: {
-            select: { id: true, departureDate: true, returnDate: true }
+            select: { id: true, departureDate: true, returnDate: true },
           },
           payment: {
-            select: { id: true, status: true, amount: true, paidAt: true }
-          }
-        }
+            select: { id: true, status: true, amount: true, paidAt: true },
+          },
+        },
       }),
-      this.prisma.booking.count({ where: { userId } })
+      this.prisma.booking.count({ where: { userId } }),
     ]);
 
     return buildPagination(items, page, size, totalElements);
@@ -268,24 +267,24 @@ export class BookingService {
             durationDays: true,
             durationNights: true,
             basePrice: true,
-            salePrice: true
-          }
+            salePrice: true,
+          },
         },
         departure: true,
         guests: true,
         payment: true,
         coupon: {
-          select: { id: true, code: true, discountType: true, discountValue: true }
-        }
-      }
+          select: { id: true, code: true, discountType: true, discountValue: true },
+        },
+      },
     });
 
     if (!booking) {
-      throw new NotFoundException("Không tìm thấy booking");
+      throw new NotFoundException('Không tìm thấy booking');
     }
 
     if (booking.userId !== userId) {
-      throw new ForbiddenException("Bạn không có quyền xem booking này");
+      throw new ForbiddenException('Bạn không có quyền xem booking này');
     }
 
     return booking;
@@ -297,60 +296,60 @@ export class BookingService {
 
   async cancelBooking(userId: string, bookingCode: string) {
     const booking = await this.prisma.booking.findUnique({
-      where: { bookingCode }
+      where: { bookingCode },
     });
 
     if (!booking) {
-      throw new NotFoundException("Không tìm thấy booking");
+      throw new NotFoundException('Không tìm thấy booking');
     }
 
     if (booking.userId !== userId) {
-      throw new ForbiddenException("Bạn không có quyền hủy booking này");
+      throw new ForbiddenException('Bạn không có quyền hủy booking này');
     }
 
-    if (booking.status === "completed" || booking.status === "cancelled") {
-      throw new BadRequestException("Không thể hủy booking này");
+    if (booking.status === 'completed' || booking.status === 'cancelled') {
+      throw new BadRequestException('Không thể hủy booking này');
     }
 
-    if (booking.status === "refunded_mock") {
-      throw new BadRequestException("Không thể hủy booking này");
+    if (booking.status === 'refunded_mock') {
+      throw new BadRequestException('Không thể hủy booking này');
     }
 
     // State machine
-    if (booking.status === "pending") {
+    if (booking.status === 'pending') {
       // PENDING → CANCELLED (no slot restore)
       const updated = await this.prisma.booking.update({
         where: { id: booking.id },
-        data: { status: "cancelled" },
+        data: { status: 'cancelled' },
         include: {
           tour: {
-            select: { id: true, title: true, slug: true, imageUrl: true }
+            select: { id: true, title: true, slug: true, imageUrl: true },
           },
-          payment: true
-        }
+          payment: true,
+        },
       });
       return updated;
     }
 
-    if (booking.status === "confirmed") {
+    if (booking.status === 'confirmed') {
       // CONFIRMED → CANCELLED + restore slots
       const updated = await this.prisma.$transaction(async (tx) => {
         const cancelledBooking = await tx.booking.update({
           where: { id: booking.id },
-          data: { status: "cancelled" },
+          data: { status: 'cancelled' },
           include: {
             tour: {
-              select: { id: true, title: true, slug: true, imageUrl: true }
+              select: { id: true, title: true, slug: true, imageUrl: true },
             },
-            payment: true
-          }
+            payment: true,
+          },
         });
 
         // Restore tour.availableSlots
         if (booking.tourId && booking.numberOfGuests) {
           await tx.tour.update({
             where: { id: booking.tourId },
-            data: { availableSlots: { increment: booking.numberOfGuests } }
+            data: { availableSlots: { increment: booking.numberOfGuests } },
           });
         }
 
@@ -358,7 +357,7 @@ export class BookingService {
         if (booking.departureId && booking.numberOfGuests) {
           await tx.tourDeparture.update({
             where: { id: booking.departureId },
-            data: { availableSlots: { increment: booking.numberOfGuests } }
+            data: { availableSlots: { increment: booking.numberOfGuests } },
           });
         }
 
@@ -368,7 +367,89 @@ export class BookingService {
       return updated;
     }
 
-    throw new BadRequestException("Không thể hủy booking này");
+    throw new BadRequestException('Không thể hủy booking này');
+  }
+
+  // ---------------------------------------------------------------------------
+  // Create Demo Booking (public, no auth required)
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Creates a demo booking confirmation without requiring authentication.
+   * Generates a WV-YYYYMMDD-XXXXXX reference code and optionally validates
+   * a coupon code to compute discount.
+   *
+   * IMPORTANT: This is demo-only. No real payment is processed.
+   */
+  async createDemoBooking(dto: CreateDemoBookingDto) {
+    let discountAmount = 0;
+    let couponInfo: { code: string; discountType: string; discountValue: number } | null = null;
+
+    // Validate coupon if provided
+    if (dto.couponCode) {
+      const normalised = dto.couponCode.toUpperCase().trim();
+      const coupon = await this.prisma.coupon.findUnique({
+        where: { code: normalised },
+      });
+
+      if (!coupon) {
+        throw new BadRequestException('Mã giảm giá không hợp lệ');
+      }
+
+      const now = new Date();
+
+      if (!coupon.isActive) {
+        throw new BadRequestException('Mã giảm giá không còn hiệu lực');
+      }
+      if (coupon.validFrom > now || coupon.validTo < now) {
+        throw new BadRequestException('Mã giảm giá đã hết hạn hoặc chưa có hiệu lực');
+      }
+      if (coupon.usageLimit !== null && coupon.usedCount >= coupon.usageLimit) {
+        throw new BadRequestException('Mã giảm giá đã hết lượt sử dụng');
+      }
+      if (dto.totalAmount < coupon.minBookingAmount) {
+        throw new BadRequestException(
+          `Đơn hàng tối thiểu ${coupon.minBookingAmount.toLocaleString()} VND để dùng mã này`,
+        );
+      }
+
+      // Compute discount
+      if (coupon.discountType === 'PERCENT') {
+        const raw = Math.floor((coupon.discountValue / 100) * dto.totalAmount);
+        discountAmount =
+          coupon.maxDiscountAmount !== null ? Math.min(raw, coupon.maxDiscountAmount) : raw;
+      } else {
+        discountAmount = Math.min(coupon.discountValue, dto.totalAmount);
+      }
+
+      couponInfo = {
+        code: coupon.code,
+        discountType: coupon.discountType,
+        discountValue: coupon.discountValue,
+      };
+    }
+
+    // Generate reference code
+    const referenceCode = generateBookingCode();
+    const finalAmount = dto.totalAmount - discountAmount;
+
+    return {
+      referenceCode,
+      status: 'confirmed',
+      serviceType: dto.serviceType,
+      serviceId: dto.serviceId,
+      departureDate: dto.departureDate,
+      guests: dto.guests,
+      totalAmount: dto.totalAmount,
+      discountAmount,
+      finalAmount,
+      coupon: couponInfo,
+      paymentStatus: 'confirmed_mock',
+      paymentMethod: 'MOCK_CARD',
+      isDemo: true,
+      warning: 'Thanh toán demo — không phát sinh giao dịch thật',
+      createdAt: new Date().toISOString(),
+    };
   }
 
   // ---------------------------------------------------------------------------
@@ -379,15 +460,15 @@ export class BookingService {
   create(input: { itemName: string; amount: number; method: string }) {
     const suffix = Date.now().toString().slice(-6);
     return {
-      id: "book_" + suffix,
-      bookingCode: "CT-" + suffix,
-      status: "confirmed",
+      id: 'book_' + suffix,
+      bookingCode: 'CT-' + suffix,
+      status: 'confirmed',
       totalAmount: input.amount,
-      currency: "VND",
-      paymentStatus: "confirmed_mock",
+      currency: 'VND',
+      paymentStatus: 'confirmed_mock',
       paymentMethod: input.method,
       isDemo: true,
-      warning: "Thanh toán demo — không phát sinh giao dịch thật"
+      warning: 'Thanh toán demo — không phát sinh giao dịch thật',
     };
   }
 
@@ -395,15 +476,15 @@ export class BookingService {
   find(code: string) {
     return {
       bookingCode: code,
-      status: "confirmed",
-      paymentStatus: "confirmed_mock",
+      status: 'confirmed',
+      paymentStatus: 'confirmed_mock',
       isDemo: true,
-      warning: "Thanh toán demo — không phát sinh giao dịch thật"
+      warning: 'Thanh toán demo — không phát sinh giao dịch thật',
     };
   }
 
   /** @deprecated Use cancelBooking() instead */
   cancel(id: string) {
-    return { id, status: "cancelled", paymentStatus: "refunded_mock", isDemo: true };
+    return { id, status: 'cancelled', paymentStatus: 'refunded_mock', isDemo: true };
   }
 }

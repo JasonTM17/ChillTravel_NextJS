@@ -1,13 +1,9 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException
-} from "@nestjs/common";
-import { PrismaService } from "../../prisma/prisma.service";
-import { AuditService } from "../../common/services/audit.service";
-import { buildPagination } from "../../common/dto/paginated-response.dto";
-import type { PaginationQueryDto } from "../../common/dto/pagination.dto";
-import type { CreateReviewDto } from "./dto/create-review.dto";
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { buildPagination } from '../../common/dto/paginated-response.dto';
+import type { PaginationQueryDto } from '../../common/dto/pagination.dto';
+import { AuditService } from '../../common/services/audit.service';
+import { PrismaService } from '../../prisma/prisma.service';
+import type { CreateReviewDto } from './dto/create-review.dto';
 
 /**
  * ReviewService — business logic for reviews.
@@ -26,7 +22,7 @@ import type { CreateReviewDto } from "./dto/create-review.dto";
 export class ReviewService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly auditService: AuditService
+    private readonly auditService: AuditService,
   ) {}
 
   // ---------------------------------------------------------------------------
@@ -40,17 +36,17 @@ export class ReviewService {
 
     const [items, totalElements] = await Promise.all([
       this.prisma.review.findMany({
-        where: { tourId, status: "APPROVED" },
+        where: { tourId, status: 'APPROVED' },
         skip,
         take: size,
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: 'desc' },
         include: {
           user: {
-            select: { id: true, fullName: true, avatarUrl: true }
-          }
-        }
+            select: { id: true, fullName: true, avatarUrl: true },
+          },
+        },
       }),
-      this.prisma.review.count({ where: { tourId, status: "APPROVED" } })
+      this.prisma.review.count({ where: { tourId, status: 'APPROVED' } }),
     ]);
 
     return buildPagination(items, page, size, totalElements);
@@ -63,8 +59,8 @@ export class ReviewService {
   async create(userId: string, tourId: string, dto: CreateReviewDto) {
     // Check tour exists
     const tour = await this.prisma.tour.findUnique({ where: { id: tourId } });
-    if (!tour || tour.status === "DELETED") {
-      throw new NotFoundException("Tour không tồn tại");
+    if (!tour || tour.status === 'DELETED') {
+      throw new NotFoundException('Tour không tồn tại');
     }
 
     // Check user has at least one COMPLETED booking for this tour
@@ -72,14 +68,12 @@ export class ReviewService {
       where: {
         userId,
         tourId,
-        status: "completed"
-      }
+        status: 'completed',
+      },
     });
 
     if (!completedBooking) {
-      throw new ForbiddenException(
-        "Bạn chỉ có thể đánh giá tour sau khi hoàn thành chuyến đi"
-      );
+      throw new ForbiddenException('Bạn chỉ có thể đánh giá tour sau khi hoàn thành chuyến đi');
     }
 
     const review = await this.prisma.review.create({
@@ -89,16 +83,16 @@ export class ReviewService {
         rating: dto.rating,
         title: dto.title ?? null,
         content: dto.content,
-        status: "PENDING"
+        status: 'PENDING',
       },
       include: {
         user: {
-          select: { id: true, fullName: true, avatarUrl: true }
+          select: { id: true, fullName: true, avatarUrl: true },
         },
         tour: {
-          select: { id: true, title: true, slug: true }
-        }
-      }
+          select: { id: true, title: true, slug: true },
+        },
+      },
     });
 
     return review;
@@ -112,11 +106,11 @@ export class ReviewService {
     const review = await this.prisma.review.findUnique({ where: { id: reviewId } });
 
     if (!review) {
-      throw new NotFoundException("Không tìm thấy đánh giá");
+      throw new NotFoundException('Không tìm thấy đánh giá');
     }
 
     if (review.userId !== userId) {
-      throw new ForbiddenException("Bạn không có quyền chỉnh sửa đánh giá này");
+      throw new ForbiddenException('Bạn không có quyền chỉnh sửa đánh giá này');
     }
 
     const updated = await this.prisma.review.update({
@@ -124,16 +118,16 @@ export class ReviewService {
       data: {
         ...(dto.rating !== undefined && { rating: dto.rating }),
         ...(dto.title !== undefined && { title: dto.title }),
-        ...(dto.content !== undefined && { content: dto.content })
+        ...(dto.content !== undefined && { content: dto.content }),
       },
       include: {
         user: {
-          select: { id: true, fullName: true, avatarUrl: true }
+          select: { id: true, fullName: true, avatarUrl: true },
         },
         tour: {
-          select: { id: true, title: true, slug: true }
-        }
-      }
+          select: { id: true, title: true, slug: true },
+        },
+      },
     });
 
     return updated;
@@ -147,11 +141,11 @@ export class ReviewService {
     const review = await this.prisma.review.findUnique({ where: { id: reviewId } });
 
     if (!review) {
-      throw new NotFoundException("Không tìm thấy đánh giá");
+      throw new NotFoundException('Không tìm thấy đánh giá');
     }
 
     if (review.userId !== userId) {
-      throw new ForbiddenException("Bạn không có quyền xóa đánh giá này");
+      throw new ForbiddenException('Bạn không có quyền xóa đánh giá này');
     }
 
     await this.prisma.review.delete({ where: { id: reviewId } });
@@ -168,7 +162,7 @@ export class ReviewService {
 
     const where: Record<string, unknown> = {};
     if (query.status) {
-      where["status"] = query.status;
+      where['status'] = query.status;
     }
 
     const [items, totalElements] = await Promise.all([
@@ -176,17 +170,17 @@ export class ReviewService {
         where,
         skip,
         take: size,
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: 'desc' },
         include: {
           user: {
-            select: { id: true, fullName: true, email: true, avatarUrl: true }
+            select: { id: true, fullName: true, email: true, avatarUrl: true },
           },
           tour: {
-            select: { id: true, title: true, slug: true }
-          }
-        }
+            select: { id: true, title: true, slug: true },
+          },
+        },
       }),
-      this.prisma.review.count({ where })
+      this.prisma.review.count({ where }),
     ]);
 
     return buildPagination(items, page, size, totalElements);
@@ -199,24 +193,24 @@ export class ReviewService {
   async approve(reviewId: string, actorId: string) {
     const review = await this.prisma.review.findUnique({ where: { id: reviewId } });
     if (!review) {
-      throw new NotFoundException("Không tìm thấy đánh giá");
+      throw new NotFoundException('Không tìm thấy đánh giá');
     }
 
     const updated = await this.prisma.review.update({
       where: { id: reviewId },
-      data: { status: "APPROVED" },
+      data: { status: 'APPROVED' },
       include: {
         user: { select: { id: true, fullName: true, email: true } },
-        tour: { select: { id: true, title: true, slug: true } }
-      }
+        tour: { select: { id: true, title: true, slug: true } },
+      },
     });
 
     await this.auditService.log({
       actorId,
-      action: "APPROVE_REVIEW",
-      resourceType: "Review",
+      action: 'APPROVE_REVIEW',
+      resourceType: 'Review',
       resourceId: reviewId,
-      metadata: { tourId: review.tourId, userId: review.userId }
+      metadata: { tourId: review.tourId, userId: review.userId },
     });
 
     return updated;
@@ -229,24 +223,24 @@ export class ReviewService {
   async reject(reviewId: string, actorId: string) {
     const review = await this.prisma.review.findUnique({ where: { id: reviewId } });
     if (!review) {
-      throw new NotFoundException("Không tìm thấy đánh giá");
+      throw new NotFoundException('Không tìm thấy đánh giá');
     }
 
     const updated = await this.prisma.review.update({
       where: { id: reviewId },
-      data: { status: "REJECTED" },
+      data: { status: 'REJECTED' },
       include: {
         user: { select: { id: true, fullName: true, email: true } },
-        tour: { select: { id: true, title: true, slug: true } }
-      }
+        tour: { select: { id: true, title: true, slug: true } },
+      },
     });
 
     await this.auditService.log({
       actorId,
-      action: "REJECT_REVIEW",
-      resourceType: "Review",
+      action: 'REJECT_REVIEW',
+      resourceType: 'Review',
       resourceId: reviewId,
-      metadata: { tourId: review.tourId, userId: review.userId }
+      metadata: { tourId: review.tourId, userId: review.userId },
     });
 
     return updated;
@@ -259,24 +253,24 @@ export class ReviewService {
   async hide(reviewId: string, actorId: string) {
     const review = await this.prisma.review.findUnique({ where: { id: reviewId } });
     if (!review) {
-      throw new NotFoundException("Không tìm thấy đánh giá");
+      throw new NotFoundException('Không tìm thấy đánh giá');
     }
 
     const updated = await this.prisma.review.update({
       where: { id: reviewId },
-      data: { status: "HIDDEN" },
+      data: { status: 'HIDDEN' },
       include: {
         user: { select: { id: true, fullName: true, email: true } },
-        tour: { select: { id: true, title: true, slug: true } }
-      }
+        tour: { select: { id: true, title: true, slug: true } },
+      },
     });
 
     await this.auditService.log({
       actorId,
-      action: "HIDE_REVIEW",
-      resourceType: "Review",
+      action: 'HIDE_REVIEW',
+      resourceType: 'Review',
       resourceId: reviewId,
-      metadata: { tourId: review.tourId, userId: review.userId }
+      metadata: { tourId: review.tourId, userId: review.userId },
     });
 
     return updated;

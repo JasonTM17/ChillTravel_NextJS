@@ -1,4 +1,4 @@
-import slugify from "slugify";
+import slugify from 'slugify';
 
 /**
  * Vietnamese diacritics → ASCII mapping beyond what slugify handles.
@@ -11,8 +11,8 @@ import slugify from "slugify";
  * See design §5.4 slug utility.
  */
 const VIETNAMESE_CHAR_MAP: Record<string, string> = {
-  đ: "d",
-  Đ: "D"
+  đ: 'd',
+  Đ: 'D',
 };
 
 /**
@@ -25,16 +25,16 @@ const VIETNAMESE_CHAR_MAP: Record<string, string> = {
  *   generateSlug("")             // ""
  */
 export function generateSlug(text: string | null | undefined): string {
-  if (!text) return "";
+  if (!text) return '';
   const normalized = text
-    .split("")
+    .split('')
     .map((ch) => VIETNAMESE_CHAR_MAP[ch] ?? ch)
-    .join("");
+    .join('');
   return slugify(normalized, {
     lower: true,
     strict: true,
     trim: true,
-    locale: "vi"
+    locale: 'vi',
   });
 }
 
@@ -51,17 +51,15 @@ export function generateSlug(text: string | null | undefined): string {
 export async function ensureUniqueSlug(
   baseSlug: string,
   exists: (slug: string) => Promise<boolean>,
-  maxAttempts = 100
+  maxAttempts = 100,
 ): Promise<string> {
   if (!baseSlug) {
-    throw new Error("ensureUniqueSlug: baseSlug must be non-empty");
+    throw new Error('ensureUniqueSlug: baseSlug must be non-empty');
   }
   if (!(await exists(baseSlug))) return baseSlug;
   for (let i = 1; i <= maxAttempts; i++) {
     const candidate = `${baseSlug}-${i}`;
     if (!(await exists(candidate))) return candidate;
   }
-  throw new Error(
-    `ensureUniqueSlug: exhausted ${maxAttempts} attempts for base "${baseSlug}"`
-  );
+  throw new Error(`ensureUniqueSlug: exhausted ${maxAttempts} attempts for base "${baseSlug}"`);
 }

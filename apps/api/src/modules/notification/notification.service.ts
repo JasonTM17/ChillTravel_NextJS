@@ -1,12 +1,8 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException
-} from "@nestjs/common";
-import { NotificationType } from "@vietwander/db";
-import { PrismaService } from "../../prisma/prisma.service";
-import { buildPagination } from "../../common/dto/paginated-response.dto";
-import type { NotificationQueryDto } from "./dto/notification-query.dto";
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { NotificationType } from '@vietwander/db';
+import { buildPagination } from '../../common/dto/paginated-response.dto';
+import { PrismaService } from '../../prisma/prisma.service';
+import type { NotificationQueryDto } from './dto/notification-query.dto';
 
 /**
  * NotificationService — in-app notification business logic.
@@ -42,9 +38,9 @@ export class NotificationService {
         where,
         skip,
         take: size,
-        orderBy: { createdAt: "desc" }
+        orderBy: { createdAt: 'desc' },
       }),
-      this.prisma.notification.count({ where })
+      this.prisma.notification.count({ where }),
     ]);
 
     return buildPagination(items, page, size, totalElements);
@@ -56,15 +52,15 @@ export class NotificationService {
 
   async markRead(userId: string, notificationId: string) {
     const notification = await this.prisma.notification.findUnique({
-      where: { id: notificationId }
+      where: { id: notificationId },
     });
 
     if (!notification) {
-      throw new NotFoundException("Không tìm thấy thông báo");
+      throw new NotFoundException('Không tìm thấy thông báo');
     }
 
     if (notification.userId !== userId) {
-      throw new ForbiddenException("Bạn không có quyền truy cập thông báo này");
+      throw new ForbiddenException('Bạn không có quyền truy cập thông báo này');
     }
 
     if (notification.read) {
@@ -74,7 +70,7 @@ export class NotificationService {
 
     return this.prisma.notification.update({
       where: { id: notificationId },
-      data: { read: true }
+      data: { read: true },
     });
   }
 
@@ -85,7 +81,7 @@ export class NotificationService {
   async markAllRead(userId: string): Promise<{ count: number }> {
     const result = await this.prisma.notification.updateMany({
       where: { userId, read: false },
-      data: { read: true }
+      data: { read: true },
     });
 
     return { count: result.count };
@@ -95,13 +91,7 @@ export class NotificationService {
   // create — create a notification record (called by other services)
   // ---------------------------------------------------------------------------
 
-  async create(
-    userId: string,
-    type: NotificationType,
-    title: string,
-    body: string,
-    link?: string
-  ) {
+  async create(userId: string, type: NotificationType, title: string, body: string, link?: string) {
     return this.prisma.notification.create({
       data: {
         userId,
@@ -109,8 +99,8 @@ export class NotificationService {
         title,
         body,
         link: link ?? null,
-        read: false
-      }
+        read: false,
+      },
     });
   }
 }

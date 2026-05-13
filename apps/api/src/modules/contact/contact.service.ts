@@ -1,9 +1,9 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { PrismaService } from "../../prisma/prisma.service";
-import { buildPagination } from "../../common/dto/paginated-response.dto";
-import type { PaginationQueryDto } from "../../common/dto/pagination.dto";
-import type { CreateContactDto } from "./dto/create-contact.dto";
-import type { UpdateContactStatusDto } from "./dto/update-contact-status.dto";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { buildPagination } from '../../common/dto/paginated-response.dto';
+import type { PaginationQueryDto } from '../../common/dto/pagination.dto';
+import { PrismaService } from '../../prisma/prisma.service';
+import type { CreateContactDto } from './dto/create-contact.dto';
+import type { UpdateContactStatusDto } from './dto/update-contact-status.dto';
 
 /**
  * ContactService — business logic for contact requests.
@@ -31,8 +31,8 @@ export class ContactService {
         phone: dto.phone ?? null,
         destinationInterested: dto.destinationInterested ?? null,
         message: dto.message,
-        status: "NEW"
-      }
+        status: 'NEW',
+      },
     });
 
     return contact;
@@ -49,7 +49,7 @@ export class ContactService {
 
     const where: Record<string, unknown> = {};
     if (query.status) {
-      where["status"] = query.status;
+      where['status'] = query.status;
     }
 
     const [items, totalElements] = await Promise.all([
@@ -57,9 +57,9 @@ export class ContactService {
         where,
         skip,
         take: size,
-        orderBy: { createdAt: "desc" }
+        orderBy: { createdAt: 'desc' },
       }),
-      this.prisma.contactRequest.count({ where })
+      this.prisma.contactRequest.count({ where }),
     ]);
 
     return buildPagination(items, page, size, totalElements);
@@ -72,16 +72,18 @@ export class ContactService {
   async updateStatus(id: string, dto: UpdateContactStatusDto) {
     const existing = await this.prisma.contactRequest.findUnique({ where: { id } });
     if (!existing) {
-      throw new NotFoundException("Không tìm thấy yêu cầu liên hệ");
+      throw new NotFoundException('Không tìm thấy yêu cầu liên hệ');
     }
 
     const updated = await this.prisma.contactRequest.update({
       where: { id },
       data: {
-        ...(dto.status !== undefined && { status: dto.status as "NEW" | "IN_PROGRESS" | "RESOLVED" | "CLOSED" }),
+        ...(dto.status !== undefined && {
+          status: dto.status as 'NEW' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED',
+        }),
         ...(dto.assignedTo !== undefined && { assignedTo: dto.assignedTo }),
-        ...(dto.adminNote !== undefined && { adminNote: dto.adminNote })
-      }
+        ...(dto.adminNote !== undefined && { adminNote: dto.adminNote }),
+      },
     });
 
     return updated;

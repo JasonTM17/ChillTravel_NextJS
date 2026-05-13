@@ -1,8 +1,8 @@
-import { mkdir, unlink } from "node:fs/promises";
-import { join } from "node:path";
-import { BadRequestException, Injectable, Logger } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { v4 as uuidv4 } from "uuid";
+import { mkdir, unlink } from 'node:fs/promises';
+import { join } from 'node:path';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Abstraction interface for upload operations.
@@ -16,7 +16,7 @@ export interface IUploadService {
 }
 
 /** Allowed MIME types for image uploads. */
-const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const;
 
 /** Default max file size: 5 MB */
 const DEFAULT_MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -40,12 +40,12 @@ export class LocalUploadService implements IUploadService {
   private readonly maxFileSize: number;
 
   constructor(private readonly config: ConfigService) {
-    const rawDir = this.config?.get<string>("UPLOAD_DIR") ?? "./uploads";
+    const rawDir = this.config?.get<string>('UPLOAD_DIR') ?? './uploads';
     this.uploadDir = join(process.cwd(), rawDir);
 
-    const rawMax = this.config?.get<number | string>("MAX_FILE_SIZE");
+    const rawMax = this.config?.get<number | string>('MAX_FILE_SIZE');
     this.maxFileSize =
-      rawMax !== undefined && rawMax !== null && rawMax !== ""
+      rawMax !== undefined && rawMax !== null && rawMax !== ''
         ? Number(rawMax)
         : DEFAULT_MAX_FILE_SIZE;
   }
@@ -57,13 +57,11 @@ export class LocalUploadService implements IUploadService {
    * @returns An object containing the public URL and the generated filename.
    * @throws BadRequestException if the MIME type or size is invalid.
    */
-  async uploadImage(
-    file: Express.Multer.File
-  ): Promise<{ url: string; filename: string }> {
+  async uploadImage(file: Express.Multer.File): Promise<{ url: string; filename: string }> {
     // Validate MIME type
     if (!(ALLOWED_MIME_TYPES as readonly string[]).includes(file.mimetype)) {
       throw new BadRequestException(
-        `Loại file không hợp lệ. Chỉ chấp nhận: jpg, png, webp (nhận được: ${file.mimetype})`
+        `Loại file không hợp lệ. Chỉ chấp nhận: jpg, png, webp (nhận được: ${file.mimetype})`,
       );
     }
 
@@ -71,7 +69,7 @@ export class LocalUploadService implements IUploadService {
     if (file.size > this.maxFileSize) {
       const maxMb = (this.maxFileSize / (1024 * 1024)).toFixed(0);
       throw new BadRequestException(
-        `File quá lớn. Kích thước tối đa là ${maxMb}MB (nhận được: ${(file.size / (1024 * 1024)).toFixed(2)}MB)`
+        `File quá lớn. Kích thước tối đa là ${maxMb}MB (nhận được: ${(file.size / (1024 * 1024)).toFixed(2)}MB)`,
       );
     }
 
@@ -84,14 +82,14 @@ export class LocalUploadService implements IUploadService {
     const destPath = join(this.uploadDir, filename);
 
     // Write file buffer to disk
-    const { writeFile } = await import("node:fs/promises");
+    const { writeFile } = await import('node:fs/promises');
     await writeFile(destPath, file.buffer);
 
     this.logger.log(`Image uploaded: ${filename} (${file.size} bytes)`);
 
     return {
       url: `/uploads/${filename}`,
-      filename
+      filename,
     };
   }
 
@@ -117,14 +115,14 @@ export class LocalUploadService implements IUploadService {
 
   private mimeToExt(mime: string): string {
     switch (mime) {
-      case "image/jpeg":
-        return "jpg";
-      case "image/png":
-        return "png";
-      case "image/webp":
-        return "webp";
+      case 'image/jpeg':
+        return 'jpg';
+      case 'image/png':
+        return 'png';
+      case 'image/webp':
+        return 'webp';
       default:
-        return "bin";
+        return 'bin';
     }
   }
 }

@@ -1,17 +1,13 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException
-} from "@nestjs/common";
-import { PrismaService } from "../../prisma/prisma.service";
-import { generateSlug, ensureUniqueSlug } from "../../common/utils/slug.util";
-import { buildPagination } from "../../common/dto/paginated-response.dto";
-import type { TourQueryDto } from "./dto/tour-query.dto";
-import type { CreateTourDto } from "./dto/create-tour.dto";
-import type { UpdateTourDto } from "./dto/update-tour.dto";
-import type { CreateItineraryDto } from "./dto/create-itinerary.dto";
-import type { CreateDepartureDto } from "./dto/create-departure.dto";
-import type { ApiPaginated } from "@vietwander/shared";
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import type { ApiPaginated } from '@vietwander/shared';
+import { buildPagination } from '../../common/dto/paginated-response.dto';
+import { generateSlug, ensureUniqueSlug } from '../../common/utils/slug.util';
+import { PrismaService } from '../../prisma/prisma.service';
+import type { CreateDepartureDto } from './dto/create-departure.dto';
+import type { CreateItineraryDto } from './dto/create-itinerary.dto';
+import type { CreateTourDto } from './dto/create-tour.dto';
+import type { TourQueryDto } from './dto/tour-query.dto';
+import type { UpdateTourDto } from './dto/update-tour.dto';
 
 /**
  * TourService — business logic for tours, itinerary, and departures.
@@ -31,32 +27,32 @@ export class TourService {
     const skip = page * size;
 
     // Build where clause — only ACTIVE tours
-    const where: Record<string, unknown> = { status: "ACTIVE" };
+    const where: Record<string, unknown> = { status: 'ACTIVE' };
 
     if (query.keyword) {
-      where["OR"] = [
-        { title: { contains: query.keyword, mode: "insensitive" } },
-        { description: { contains: query.keyword, mode: "insensitive" } }
+      where['OR'] = [
+        { title: { contains: query.keyword, mode: 'insensitive' } },
+        { description: { contains: query.keyword, mode: 'insensitive' } },
       ];
     }
 
     if (query.category) {
-      where["category"] = { contains: query.category, mode: "insensitive" };
+      where['category'] = { contains: query.category, mode: 'insensitive' };
     }
 
     if (query.minPrice !== undefined || query.maxPrice !== undefined) {
       const priceFilter: Record<string, number> = {};
-      if (query.minPrice !== undefined) priceFilter["gte"] = query.minPrice;
-      if (query.maxPrice !== undefined) priceFilter["lte"] = query.maxPrice;
-      where["basePrice"] = priceFilter;
+      if (query.minPrice !== undefined) priceFilter['gte'] = query.minPrice;
+      if (query.maxPrice !== undefined) priceFilter['lte'] = query.maxPrice;
+      where['basePrice'] = priceFilter;
     }
 
     if (query.duration !== undefined) {
-      where["durationDays"] = query.duration;
+      where['durationDays'] = query.duration;
     }
 
     if (query.destinationId) {
-      where["destinationId"] = query.destinationId;
+      where['destinationId'] = query.destinationId;
     }
 
     // Build orderBy based on sortBy param
@@ -64,7 +60,7 @@ export class TourService {
 
     // For rating sort we need a different approach (raw aggregation)
     // For popular sort we use _count on bookings
-    if (query.sortBy === "rating") {
+    if (query.sortBy === 'rating') {
       // Fetch all matching IDs with avg rating, then paginate
       return this.findAllSortedByRating(where, page, size);
     }
@@ -77,10 +73,10 @@ export class TourService {
         orderBy,
         include: {
           destination: { select: { id: true, name: true, slug: true } },
-          images: { orderBy: { sortOrder: "asc" }, take: 1 }
-        }
+          images: { orderBy: { sortOrder: 'asc' }, take: 1 },
+        },
       }),
-      this.prisma.tour.count({ where })
+      this.prisma.tour.count({ where }),
     ]);
 
     return buildPagination(items, page, size, totalElements);
@@ -92,12 +88,12 @@ export class TourService {
   private async findAllSortedByRating(
     where: Record<string, unknown>,
     page: number,
-    size: number
+    size: number,
   ): Promise<ApiPaginated<unknown>> {
     // Get all matching tour IDs
     const allTours = await this.prisma.tour.findMany({
       where,
-      select: { id: true }
+      select: { id: true },
     });
 
     const tourIds = allTours.map((t) => t.id);
@@ -109,12 +105,12 @@ export class TourService {
 
     // Compute avg ratings for all matching tours
     const ratings = await this.prisma.review.groupBy({
-      by: ["tourId"],
+      by: ['tourId'],
       where: {
         tourId: { in: tourIds },
-        status: "APPROVED"
+        status: 'APPROVED',
       },
-      _avg: { rating: true }
+      _avg: { rating: true },
     });
 
     const ratingMap = new Map<string, number>();
@@ -123,9 +119,7 @@ export class TourService {
     }
 
     // Sort tour IDs by avg rating desc
-    const sortedIds = tourIds.sort(
-      (a, b) => (ratingMap.get(b) ?? 0) - (ratingMap.get(a) ?? 0)
-    );
+    const sortedIds = tourIds.sort((a, b) => (ratingMap.get(b) ?? 0) - (ratingMap.get(a) ?? 0));
 
     // Paginate
     const pagedIds = sortedIds.slice(page * size, page * size + size);
@@ -138,15 +132,13 @@ export class TourService {
       where: { id: { in: pagedIds } },
       include: {
         destination: { select: { id: true, name: true, slug: true } },
-        images: { orderBy: { sortOrder: "asc" }, take: 1 }
-      }
+        images: { orderBy: { sortOrder: 'asc' }, take: 1 },
+      },
     });
 
     // Re-sort to match the sorted order
     const itemMap = new Map(items.map((t) => [t.id, t]));
-    const orderedItems = pagedIds
-      .map((id) => itemMap.get(id))
-      .filter(Boolean);
+    const orderedItems = pagedIds.map((id) => itemMap.get(id)).filter(Boolean);
 
     return buildPagination(orderedItems, page, size, totalElements);
   }
@@ -157,13 +149,13 @@ export class TourService {
 
   async findFeatured(): Promise<unknown[]> {
     const tours = await this.prisma.tour.findMany({
-      where: { featured: true, status: "ACTIVE" },
+      where: { featured: true, status: 'ACTIVE' },
       take: 8,
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
       include: {
         destination: { select: { id: true, name: true, slug: true } },
-        images: { orderBy: { sortOrder: "asc" }, take: 1 }
-      }
+        images: { orderBy: { sortOrder: 'asc' }, take: 1 },
+      },
     });
     return tours;
   }
@@ -177,20 +169,20 @@ export class TourService {
       where: { slug },
       include: {
         destination: { select: { id: true, name: true, slug: true } },
-        images: { orderBy: { sortOrder: "asc" } },
-        itinerary: { orderBy: { dayNumber: "asc" } },
+        images: { orderBy: { sortOrder: 'asc' } },
+        itinerary: { orderBy: { dayNumber: 'asc' } },
         departures: {
           where: {
-            status: "OPEN",
-            departureDate: { gte: new Date() }
+            status: 'OPEN',
+            departureDate: { gte: new Date() },
           },
-          orderBy: { departureDate: "asc" }
-        }
-      }
+          orderBy: { departureDate: 'asc' },
+        },
+      },
     });
 
-    if (!tour || tour.status === "DELETED") {
-      throw new NotFoundException("Tour not found");
+    if (!tour || tour.status === 'DELETED') {
+      throw new NotFoundException('Tour not found');
     }
 
     const avgRating = await this.computeAvgRating(tour.id);
@@ -205,20 +197,20 @@ export class TourService {
   async create(dto: CreateTourDto): Promise<unknown> {
     // Validate destination exists
     const destination = await this.prisma.destination.findUnique({
-      where: { id: dto.destinationId }
+      where: { id: dto.destinationId },
     });
-    if (!destination || destination.status === "DELETED") {
-      throw new NotFoundException("Destination not found");
+    if (!destination || destination.status === 'DELETED') {
+      throw new NotFoundException('Destination not found');
     }
 
     // Validate price
     if (dto.basePrice < 0) {
-      throw new BadRequestException("basePrice must be >= 0");
+      throw new BadRequestException('basePrice must be >= 0');
     }
 
     // Validate maxGuests
     if (dto.maxGuests < 1) {
-      throw new BadRequestException("maxGuests must be > 0");
+      throw new BadRequestException('maxGuests must be > 0');
     }
 
     // Validate date range if both provided
@@ -226,7 +218,7 @@ export class TourService {
       const start = new Date(dto.startDate);
       const end = new Date(dto.endDate);
       if (start >= end) {
-        throw new BadRequestException("startDate must be before endDate");
+        throw new BadRequestException('startDate must be before endDate');
       }
     }
 
@@ -234,7 +226,7 @@ export class TourService {
     const baseSlug = generateSlug(dto.title);
     const slug = await ensureUniqueSlug(baseSlug, async (candidate) => {
       const existing = await this.prisma.tour.findUnique({
-        where: { slug: candidate }
+        where: { slug: candidate },
       });
       return !!existing;
     });
@@ -258,11 +250,11 @@ export class TourService {
         featured: dto.featured ?? false,
         imageUrl: dto.imageUrl ?? null,
         category: dto.category ?? null,
-        status: "ACTIVE"
+        status: 'ACTIVE',
       },
       include: {
-        destination: { select: { id: true, name: true, slug: true } }
-      }
+        destination: { select: { id: true, name: true, slug: true } },
+      },
     });
 
     return tour;
@@ -274,28 +266,28 @@ export class TourService {
 
   async update(id: string, dto: UpdateTourDto): Promise<unknown> {
     const existing = await this.prisma.tour.findUnique({ where: { id } });
-    if (!existing || existing.status === "DELETED") {
-      throw new NotFoundException("Tour not found");
+    if (!existing || existing.status === 'DELETED') {
+      throw new NotFoundException('Tour not found');
     }
 
     // Validate destination if changed
     if (dto.destinationId && dto.destinationId !== existing.destinationId) {
       const destination = await this.prisma.destination.findUnique({
-        where: { id: dto.destinationId }
+        where: { id: dto.destinationId },
       });
-      if (!destination || destination.status === "DELETED") {
-        throw new NotFoundException("Destination not found");
+      if (!destination || destination.status === 'DELETED') {
+        throw new NotFoundException('Destination not found');
       }
     }
 
     // Validate price if provided
     if (dto.basePrice !== undefined && dto.basePrice < 0) {
-      throw new BadRequestException("basePrice must be >= 0");
+      throw new BadRequestException('basePrice must be >= 0');
     }
 
     // Validate maxGuests if provided
     if (dto.maxGuests !== undefined && dto.maxGuests < 1) {
-      throw new BadRequestException("maxGuests must be > 0");
+      throw new BadRequestException('maxGuests must be > 0');
     }
 
     // Validate date range if both provided
@@ -305,7 +297,7 @@ export class TourService {
       const start = new Date(startDate);
       const end = new Date(endDate);
       if (start >= end) {
-        throw new BadRequestException("startDate must be before endDate");
+        throw new BadRequestException('startDate must be before endDate');
       }
     }
 
@@ -316,7 +308,7 @@ export class TourService {
       slug = await ensureUniqueSlug(baseSlug, async (candidate) => {
         if (candidate === existing.slug) return false;
         const found = await this.prisma.tour.findUnique({
-          where: { slug: candidate }
+          where: { slug: candidate },
         });
         return !!found;
       });
@@ -337,15 +329,17 @@ export class TourService {
         ...(dto.maxGuests !== undefined && { maxGuests: dto.maxGuests }),
         ...(dto.minGuests !== undefined && { minGuests: dto.minGuests }),
         ...(dto.availableSlots !== undefined && { availableSlots: dto.availableSlots }),
-        ...(dto.startDate !== undefined && { startDate: dto.startDate ? new Date(dto.startDate) : null }),
+        ...(dto.startDate !== undefined && {
+          startDate: dto.startDate ? new Date(dto.startDate) : null,
+        }),
         ...(dto.endDate !== undefined && { endDate: dto.endDate ? new Date(dto.endDate) : null }),
         ...(dto.featured !== undefined && { featured: dto.featured }),
         ...(dto.imageUrl !== undefined && { imageUrl: dto.imageUrl }),
-        ...(dto.category !== undefined && { category: dto.category })
+        ...(dto.category !== undefined && { category: dto.category }),
       },
       include: {
-        destination: { select: { id: true, name: true, slug: true } }
-      }
+        destination: { select: { id: true, name: true, slug: true } },
+      },
     });
 
     return updated;
@@ -357,13 +351,13 @@ export class TourService {
 
   async softDelete(id: string): Promise<void> {
     const existing = await this.prisma.tour.findUnique({ where: { id } });
-    if (!existing || existing.status === "DELETED") {
-      throw new NotFoundException("Tour not found");
+    if (!existing || existing.status === 'DELETED') {
+      throw new NotFoundException('Tour not found');
     }
 
     await this.prisma.tour.update({
       where: { id },
-      data: { status: "DELETED" }
+      data: { status: 'DELETED' },
     });
   }
 
@@ -373,8 +367,8 @@ export class TourService {
 
   async addItinerary(tourId: string, dto: CreateItineraryDto): Promise<unknown> {
     const tour = await this.prisma.tour.findUnique({ where: { id: tourId } });
-    if (!tour || tour.status === "DELETED") {
-      throw new NotFoundException("Tour not found");
+    if (!tour || tour.status === 'DELETED') {
+      throw new NotFoundException('Tour not found');
     }
 
     // Upsert by (tourId, dayNumber)
@@ -387,27 +381,24 @@ export class TourService {
         description: dto.description ?? null,
         meals: dto.meals ?? null,
         accommodation: dto.accommodation ?? null,
-        activities: dto.activities ?? null
+        activities: dto.activities ?? null,
       },
       update: {
         title: dto.title,
         description: dto.description ?? null,
         meals: dto.meals ?? null,
         accommodation: dto.accommodation ?? null,
-        activities: dto.activities ?? null
-      }
+        activities: dto.activities ?? null,
+      },
     });
 
     return itinerary;
   }
 
-  async updateItinerary(
-    id: string,
-    dto: Partial<CreateItineraryDto>
-  ): Promise<unknown> {
+  async updateItinerary(id: string, dto: Partial<CreateItineraryDto>): Promise<unknown> {
     const existing = await this.prisma.tourItinerary.findUnique({ where: { id } });
     if (!existing) {
-      throw new NotFoundException("Itinerary item not found");
+      throw new NotFoundException('Itinerary item not found');
     }
 
     const updated = await this.prisma.tourItinerary.update({
@@ -418,8 +409,8 @@ export class TourService {
         ...(dto.description !== undefined && { description: dto.description }),
         ...(dto.meals !== undefined && { meals: dto.meals }),
         ...(dto.accommodation !== undefined && { accommodation: dto.accommodation }),
-        ...(dto.activities !== undefined && { activities: dto.activities })
-      }
+        ...(dto.activities !== undefined && { activities: dto.activities }),
+      },
     });
 
     return updated;
@@ -428,7 +419,7 @@ export class TourService {
   async deleteItinerary(id: string): Promise<void> {
     const existing = await this.prisma.tourItinerary.findUnique({ where: { id } });
     if (!existing) {
-      throw new NotFoundException("Itinerary item not found");
+      throw new NotFoundException('Itinerary item not found');
     }
 
     await this.prisma.tourItinerary.delete({ where: { id } });
@@ -440,8 +431,8 @@ export class TourService {
 
   async addDeparture(tourId: string, dto: CreateDepartureDto): Promise<unknown> {
     const tour = await this.prisma.tour.findUnique({ where: { id: tourId } });
-    if (!tour || tour.status === "DELETED") {
-      throw new NotFoundException("Tour not found");
+    if (!tour || tour.status === 'DELETED') {
+      throw new NotFoundException('Tour not found');
     }
 
     const departure = await this.prisma.tourDeparture.create({
@@ -451,31 +442,30 @@ export class TourService {
         returnDate: dto.returnDate ? new Date(dto.returnDate) : null,
         availableSlots: dto.availableSlots,
         priceOverride: dto.priceOverride ?? null,
-        status: dto.status ?? "OPEN"
-      }
+        status: dto.status ?? 'OPEN',
+      },
     });
 
     return departure;
   }
 
-  async updateDeparture(
-    id: string,
-    dto: Partial<CreateDepartureDto>
-  ): Promise<unknown> {
+  async updateDeparture(id: string, dto: Partial<CreateDepartureDto>): Promise<unknown> {
     const existing = await this.prisma.tourDeparture.findUnique({ where: { id } });
     if (!existing) {
-      throw new NotFoundException("Tour departure not found");
+      throw new NotFoundException('Tour departure not found');
     }
 
     const updated = await this.prisma.tourDeparture.update({
       where: { id },
       data: {
         ...(dto.departureDate !== undefined && { departureDate: new Date(dto.departureDate) }),
-        ...(dto.returnDate !== undefined && { returnDate: dto.returnDate ? new Date(dto.returnDate) : null }),
+        ...(dto.returnDate !== undefined && {
+          returnDate: dto.returnDate ? new Date(dto.returnDate) : null,
+        }),
         ...(dto.availableSlots !== undefined && { availableSlots: dto.availableSlots }),
         ...(dto.priceOverride !== undefined && { priceOverride: dto.priceOverride }),
-        ...(dto.status !== undefined && { status: dto.status })
-      }
+        ...(dto.status !== undefined && { status: dto.status }),
+      },
     });
 
     return updated;
@@ -484,7 +474,7 @@ export class TourService {
   async deleteDeparture(id: string): Promise<void> {
     const existing = await this.prisma.tourDeparture.findUnique({ where: { id } });
     if (!existing) {
-      throw new NotFoundException("Tour departure not found");
+      throw new NotFoundException('Tour departure not found');
     }
 
     await this.prisma.tourDeparture.delete({ where: { id } });
@@ -500,8 +490,8 @@ export class TourService {
    */
   private async computeAvgRating(tourId: string): Promise<number | null> {
     const result = await this.prisma.review.aggregate({
-      where: { tourId, status: "APPROVED" },
-      _avg: { rating: true }
+      where: { tourId, status: 'APPROVED' },
+      _avg: { rating: true },
     });
     return result._avg.rating;
   }
@@ -511,18 +501,18 @@ export class TourService {
    * popular sort uses _count on bookings (desc).
    */
   private buildOrderBy(
-    sortBy?: "price" | "popular" | "rating" | "newest"
+    sortBy?: 'price' | 'popular' | 'rating' | 'newest',
   ): Record<string, unknown> | Record<string, unknown>[] {
     switch (sortBy) {
-      case "price":
-        return { basePrice: "asc" };
-      case "popular":
-        return { bookings: { _count: "desc" } };
-      case "newest":
-        return { createdAt: "desc" };
+      case 'price':
+        return { basePrice: 'asc' };
+      case 'popular':
+        return { bookings: { _count: 'desc' } };
+      case 'newest':
+        return { createdAt: 'desc' };
       default:
         // Default: newest
-        return { createdAt: "desc" };
+        return { createdAt: 'desc' };
     }
   }
 }

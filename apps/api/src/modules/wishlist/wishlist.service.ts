@@ -1,10 +1,6 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException
-} from "@nestjs/common";
-import { PrismaService } from "../../prisma/prisma.service";
-import type { AddWishlistDto } from "./dto/add-wishlist.dto";
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
+import type { AddWishlistDto } from './dto/add-wishlist.dto';
 
 /**
  * WishlistService — business logic for the user wishlist.
@@ -29,13 +25,13 @@ export class WishlistService {
   async list(userId: string) {
     const entries = await this.prisma.wishlistEntry.findMany({
       where: { userId },
-      orderBy: { createdAt: "desc" }
+      orderBy: { createdAt: 'desc' },
     });
 
     // Populate tour or destination info for each entry
     const populated = await Promise.all(
       entries.map(async (entry) => {
-        if (entry.itemType === "TOUR") {
+        if (entry.itemType === 'TOUR') {
           const tour = await this.prisma.tour.findUnique({
             where: { id: entry.itemId },
             select: {
@@ -48,9 +44,9 @@ export class WishlistService {
               durationDays: true,
               status: true,
               destination: {
-                select: { id: true, name: true, city: true, country: true }
-              }
-            }
+                select: { id: true, name: true, city: true, country: true },
+              },
+            },
           });
           return { ...entry, item: tour };
         } else {
@@ -64,12 +60,12 @@ export class WishlistService {
               city: true,
               country: true,
               category: true,
-              status: true
-            }
+              status: true,
+            },
           });
           return { ...entry, item: destination };
         }
-      })
+      }),
     );
 
     return populated;
@@ -86,9 +82,9 @@ export class WishlistService {
         userId_itemId_itemType: {
           userId,
           itemId: dto.itemId,
-          itemType: dto.itemType
-        }
-      }
+          itemType: dto.itemType,
+        },
+      },
     });
 
     if (existing) {
@@ -100,8 +96,8 @@ export class WishlistService {
       data: {
         userId,
         itemId: dto.itemId,
-        itemType: dto.itemType
-      }
+        itemType: dto.itemType,
+      },
     });
 
     return entry;
@@ -113,17 +109,15 @@ export class WishlistService {
 
   async remove(userId: string, entryId: string): Promise<void> {
     const entry = await this.prisma.wishlistEntry.findUnique({
-      where: { id: entryId }
+      where: { id: entryId },
     });
 
     if (!entry) {
-      throw new NotFoundException("Không tìm thấy mục trong danh sách yêu thích");
+      throw new NotFoundException('Không tìm thấy mục trong danh sách yêu thích');
     }
 
     if (entry.userId !== userId) {
-      throw new ForbiddenException(
-        "Bạn không có quyền xóa mục này khỏi danh sách yêu thích"
-      );
+      throw new ForbiddenException('Bạn không có quyền xóa mục này khỏi danh sách yêu thích');
     }
 
     await this.prisma.wishlistEntry.delete({ where: { id: entryId } });

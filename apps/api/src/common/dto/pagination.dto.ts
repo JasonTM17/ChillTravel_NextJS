@@ -1,11 +1,7 @@
-import { ApiPropertyOptional } from "@nestjs/swagger";
-import { Transform, Type } from "class-transformer";
-import { IsInt, IsOptional, IsString, Max, Min } from "class-validator";
-import {
-  DEFAULT_PAGE,
-  DEFAULT_PAGE_SIZE,
-  type PaginationQuery
-} from "@vietwander/shared";
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, type PaginationQuery } from '@vietwander/shared';
+import { Transform, Type } from 'class-transformer';
+import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
 /** Upper bound on page size to prevent clients exhausting DB resources. */
 export const MAX_PAGE_SIZE = 100;
@@ -26,8 +22,8 @@ export const MAX_PAGE_SIZE = 100;
 export class PaginationQueryDto implements PaginationQuery {
   @ApiPropertyOptional({
     default: DEFAULT_PAGE,
-    description: "Zero-based page index",
-    minimum: 0
+    description: 'Zero-based page index',
+    minimum: 0,
   })
   @IsOptional()
   @Type(() => Number)
@@ -37,9 +33,9 @@ export class PaginationQueryDto implements PaginationQuery {
 
   @ApiPropertyOptional({
     default: DEFAULT_PAGE_SIZE,
-    description: "Page size (items per page)",
+    description: 'Page size (items per page)',
     minimum: 1,
-    maximum: MAX_PAGE_SIZE
+    maximum: MAX_PAGE_SIZE,
   })
   @IsOptional()
   @Type(() => Number)
@@ -51,13 +47,11 @@ export class PaginationQueryDto implements PaginationQuery {
   @ApiPropertyOptional({
     description:
       'Sort expression using "field,direction" syntax (e.g. "createdAt,desc"). ' +
-      "Pass the parameter multiple times for multi-column sorting.",
-    example: "createdAt,desc"
+      'Pass the parameter multiple times for multi-column sorting.',
+    example: 'createdAt,desc',
   })
   @IsOptional()
-  @Transform(({ value }) =>
-    Array.isArray(value) ? value.map((v) => String(v)) : String(value)
-  )
+  @Transform(({ value }) => (Array.isArray(value) ? value.map((v) => String(v)) : String(value)))
   @IsString({ each: true })
   sort?: string | string[];
 }

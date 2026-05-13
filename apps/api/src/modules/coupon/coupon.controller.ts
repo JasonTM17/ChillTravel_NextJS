@@ -8,20 +8,14 @@ import {
   Param,
   Post,
   Put,
-  Query
-} from "@nestjs/common";
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiParam,
-  ApiResponse,
-  ApiTags
-} from "@nestjs/swagger";
-import { Roles } from "../../common/decorators/roles.decorator";
-import { PaginationQueryDto } from "../../common/dto/pagination.dto";
-import { CouponService } from "./coupon.service";
-import { CreateCouponDto } from "./dto/create-coupon.dto";
-import { UpdateCouponDto } from "./dto/update-coupon.dto";
+  Query,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { PaginationQueryDto } from '../../common/dto/pagination.dto';
+import { CouponService } from './coupon.service';
+import { CreateCouponDto } from './dto/create-coupon.dto';
+import { UpdateCouponDto } from './dto/update-coupon.dto';
 
 /**
  * CouponController — admin CRUD endpoints for coupon management.
@@ -36,10 +30,10 @@ import { UpdateCouponDto } from "./dto/update-coupon.dto";
  *
  * Req 35 / Design §18.1 Coupon model.
  */
-@ApiTags("Coupons")
+@ApiTags('Coupons')
 @ApiBearerAuth()
-@Roles("ADMIN")
-@Controller("admin/coupons")
+@Roles('ADMIN')
+@Controller('admin/coupons')
 export class CouponController {
   constructor(private readonly couponService: CouponService) {}
 
@@ -55,14 +49,14 @@ export class CouponController {
    */
   @Get()
   @ApiOperation({
-    summary: "List all coupons (Admin)",
+    summary: 'List all coupons (Admin)',
     description:
-      "Returns a paginated list of all coupons with usage statistics (usedCount, usageLimit). " +
-      "Ordered by creation date (newest first). Requires ADMIN role."
+      'Returns a paginated list of all coupons with usage statistics (usedCount, usageLimit). ' +
+      'Ordered by creation date (newest first). Requires ADMIN role.',
   })
-  @ApiResponse({ status: 200, description: "Paginated list of coupons" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden — ADMIN role required" })
+  @ApiResponse({ status: 200, description: 'Paginated list of coupons' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden — ADMIN role required' })
   adminList(@Query() query: PaginationQueryDto) {
     return this.couponService.adminList(query);
   }
@@ -80,16 +74,16 @@ export class CouponController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
-    summary: "Create coupon (Admin)",
+    summary: 'Create coupon (Admin)',
     description:
-      "Creates a new coupon. The code is automatically normalised to uppercase. " +
-      "Returns 409 Conflict if a coupon with the same code already exists. Requires ADMIN role."
+      'Creates a new coupon. The code is automatically normalised to uppercase. ' +
+      'Returns 409 Conflict if a coupon with the same code already exists. Requires ADMIN role.',
   })
-  @ApiResponse({ status: 201, description: "Coupon created successfully" })
-  @ApiResponse({ status: 400, description: "Validation error — check required fields" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden — ADMIN role required" })
-  @ApiResponse({ status: 409, description: "Conflict — coupon code already exists" })
+  @ApiResponse({ status: 201, description: 'Coupon created successfully' })
+  @ApiResponse({ status: 400, description: 'Validation error — check required fields' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden — ADMIN role required' })
+  @ApiResponse({ status: 409, description: 'Conflict — coupon code already exists' })
   adminCreate(@Body() dto: CreateCouponDto) {
     return this.couponService.adminCreate(dto);
   }
@@ -104,21 +98,21 @@ export class CouponController {
    * Returns 409 if the new code conflicts with an existing coupon.
    * Req 35 — requires ADMIN role.
    */
-  @Put(":id")
+  @Put(':id')
   @ApiOperation({
-    summary: "Update coupon (Admin)",
+    summary: 'Update coupon (Admin)',
     description:
-      "Updates an existing coupon. All fields are optional — only provided fields are updated. " +
-      "If the code is changed, it is normalised to uppercase and checked for conflicts. Requires ADMIN role."
+      'Updates an existing coupon. All fields are optional — only provided fields are updated. ' +
+      'If the code is changed, it is normalised to uppercase and checked for conflicts. Requires ADMIN role.',
   })
-  @ApiParam({ name: "id", description: "Coupon ID" })
-  @ApiResponse({ status: 200, description: "Coupon updated successfully" })
-  @ApiResponse({ status: 400, description: "Validation error" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden — ADMIN role required" })
-  @ApiResponse({ status: 404, description: "Coupon not found" })
-  @ApiResponse({ status: 409, description: "Conflict — coupon code already exists" })
-  adminUpdate(@Param("id") id: string, @Body() dto: UpdateCouponDto) {
+  @ApiParam({ name: 'id', description: 'Coupon ID' })
+  @ApiResponse({ status: 200, description: 'Coupon updated successfully' })
+  @ApiResponse({ status: 400, description: 'Validation error' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden — ADMIN role required' })
+  @ApiResponse({ status: 404, description: 'Coupon not found' })
+  @ApiResponse({ status: 409, description: 'Conflict — coupon code already exists' })
+  adminUpdate(@Param('id') id: string, @Body() dto: UpdateCouponDto) {
     return this.couponService.adminUpdate(id, dto);
   }
 
@@ -132,20 +126,20 @@ export class CouponController {
    * delete is appropriate (no soft-delete needed).
    * Req 35 — requires ADMIN role.
    */
-  @Delete(":id")
+  @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({
-    summary: "Delete coupon (Admin)",
+    summary: 'Delete coupon (Admin)',
     description:
-      "Permanently deletes a coupon. This is a hard delete — the record is removed from the database. " +
-      "Requires ADMIN role."
+      'Permanently deletes a coupon. This is a hard delete — the record is removed from the database. ' +
+      'Requires ADMIN role.',
   })
-  @ApiParam({ name: "id", description: "Coupon ID" })
-  @ApiResponse({ status: 204, description: "Coupon deleted successfully" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden — ADMIN role required" })
-  @ApiResponse({ status: 404, description: "Coupon not found" })
-  async adminDelete(@Param("id") id: string) {
+  @ApiParam({ name: 'id', description: 'Coupon ID' })
+  @ApiResponse({ status: 204, description: 'Coupon deleted successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden — ADMIN role required' })
+  @ApiResponse({ status: 404, description: 'Coupon not found' })
+  async adminDelete(@Param('id') id: string) {
     await this.couponService.adminDelete(id);
   }
 }

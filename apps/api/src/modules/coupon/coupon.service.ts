@@ -2,13 +2,13 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
-  NotFoundException
-} from "@nestjs/common";
-import { PrismaService } from "../../prisma/prisma.service";
-import { buildPagination } from "../../common/dto/paginated-response.dto";
-import type { PaginationQueryDto } from "../../common/dto/pagination.dto";
-import type { CreateCouponDto } from "./dto/create-coupon.dto";
-import type { UpdateCouponDto } from "./dto/update-coupon.dto";
+  NotFoundException,
+} from '@nestjs/common';
+import { buildPagination } from '../../common/dto/paginated-response.dto';
+import type { PaginationQueryDto } from '../../common/dto/pagination.dto';
+import { PrismaService } from '../../prisma/prisma.service';
+import type { CreateCouponDto } from './dto/create-coupon.dto';
+import type { UpdateCouponDto } from './dto/update-coupon.dto';
 
 /**
  * CouponService — admin CRUD + coupon validation helper.
@@ -41,7 +41,7 @@ export class CouponService {
       this.prisma.coupon.findMany({
         skip,
         take: size,
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: 'desc' },
         select: {
           id: true,
           code: true,
@@ -55,10 +55,10 @@ export class CouponService {
           validFrom: true,
           validTo: true,
           isActive: true,
-          createdAt: true
-        }
+          createdAt: true,
+        },
       }),
-      this.prisma.coupon.count()
+      this.prisma.coupon.count(),
     ]);
 
     return buildPagination(items, page, size, totalElements);
@@ -90,8 +90,8 @@ export class CouponService {
         usedCount: 0,
         validFrom: new Date(dto.validFrom),
         validTo: new Date(dto.validTo),
-        isActive: dto.isActive ?? true
-      }
+        isActive: dto.isActive ?? true,
+      },
     });
   }
 
@@ -103,7 +103,7 @@ export class CouponService {
     // Ensure coupon exists
     const coupon = await this.prisma.coupon.findUnique({ where: { id } });
     if (!coupon) {
-      throw new NotFoundException("Không tìm thấy mã giảm giá");
+      throw new NotFoundException('Không tìm thấy mã giảm giá');
     }
 
     // If code is being changed, check for conflicts
@@ -130,8 +130,8 @@ export class CouponService {
         ...(dto.usageLimit !== undefined && { usageLimit: dto.usageLimit }),
         ...(dto.validFrom !== undefined && { validFrom: new Date(dto.validFrom) }),
         ...(dto.validTo !== undefined && { validTo: new Date(dto.validTo) }),
-        ...(dto.isActive !== undefined && { isActive: dto.isActive })
-      }
+        ...(dto.isActive !== undefined && { isActive: dto.isActive }),
+      },
     });
   }
 
@@ -142,7 +142,7 @@ export class CouponService {
   async adminDelete(id: string): Promise<void> {
     const coupon = await this.prisma.coupon.findUnique({ where: { id } });
     if (!coupon) {
-      throw new NotFoundException("Không tìm thấy mã giảm giá");
+      throw new NotFoundException('Không tìm thấy mã giảm giá');
     }
 
     await this.prisma.coupon.delete({ where: { id } });
@@ -170,45 +170,43 @@ export class CouponService {
    */
   async validateAndApply(
     code: string,
-    bookingAmount: number
+    bookingAmount: number,
   ): Promise<{ couponId: string; discountAmount: number }> {
     const normalised = code.toUpperCase();
 
     const coupon = await this.prisma.coupon.findUnique({ where: { code: normalised } });
 
     if (!coupon) {
-      throw new BadRequestException("Mã giảm giá không hợp lệ");
+      throw new BadRequestException('Mã giảm giá không hợp lệ');
     }
 
     const now = new Date();
 
     if (!coupon.isActive) {
-      throw new BadRequestException("Mã giảm giá không còn hiệu lực");
+      throw new BadRequestException('Mã giảm giá không còn hiệu lực');
     }
 
     if (coupon.validFrom > now || coupon.validTo < now) {
-      throw new BadRequestException("Mã giảm giá đã hết hạn hoặc chưa có hiệu lực");
+      throw new BadRequestException('Mã giảm giá đã hết hạn hoặc chưa có hiệu lực');
     }
 
     if (coupon.usageLimit !== null && coupon.usedCount >= coupon.usageLimit) {
-      throw new BadRequestException("Mã giảm giá đã hết lượt sử dụng");
+      throw new BadRequestException('Mã giảm giá đã hết lượt sử dụng');
     }
 
     if (bookingAmount < coupon.minBookingAmount) {
       throw new BadRequestException(
-        `Đơn hàng tối thiểu ${coupon.minBookingAmount.toLocaleString()} VND để dùng mã này`
+        `Đơn hàng tối thiểu ${coupon.minBookingAmount.toLocaleString()} VND để dùng mã này`,
       );
     }
 
     // Compute discount
     let discountAmount: number;
 
-    if (coupon.discountType === "PERCENT") {
+    if (coupon.discountType === 'PERCENT') {
       const raw = Math.floor((coupon.discountValue / 100) * bookingAmount);
       discountAmount =
-        coupon.maxDiscountAmount !== null
-          ? Math.min(raw, coupon.maxDiscountAmount)
-          : raw;
+        coupon.maxDiscountAmount !== null ? Math.min(raw, coupon.maxDiscountAmount) : raw;
     } else {
       // FIXED — cannot exceed the booking amount itself
       discountAmount = Math.min(coupon.discountValue, bookingAmount);

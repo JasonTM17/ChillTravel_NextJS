@@ -1,6 +1,6 @@
-import { Injectable, Logger } from "@nestjs/common";
-import { Prisma } from "@vietwander/db";
-import { PrismaService } from "../../prisma/prisma.service";
+import { Injectable, Logger } from '@nestjs/common';
+import { Prisma } from '@vietwander/db';
+import { PrismaService } from '../../prisma/prisma.service';
 
 /**
  * AuditService — writes admin action records to the AuditLog table.
@@ -31,14 +31,12 @@ export class AuditService {
           entity: params.resourceType,
           resourceType: params.resourceType,
           resourceId: params.resourceId ?? null,
-          metadata: params.metadata
-            ? (params.metadata as Prisma.InputJsonValue)
-            : Prisma.JsonNull
-        }
+          metadata: params.metadata ? (params.metadata as Prisma.InputJsonValue) : Prisma.JsonNull,
+        },
       });
     } catch (err) {
       // Non-blocking — log error but don't fail the request
-      this.logger.error("Failed to write audit log", err);
+      this.logger.error('Failed to write audit log', err);
     }
   }
 }

@@ -1,14 +1,14 @@
-import "reflect-metadata";
-import { join } from "node:path";
-import { ConfigService } from "@nestjs/config";
-import { NestFactory } from "@nestjs/core";
-import type { NestExpressApplication } from "@nestjs/platform-express";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import helmet from "helmet";
-import { Logger } from "nestjs-pino";
-import { AppModule } from "./modules/app.module";
-import { configureApiApp } from "./modules/api.setup";
-import type { NodeEnv } from "./config/env.validation";
+import 'reflect-metadata';
+import { join } from 'node:path';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import helmet from 'helmet';
+import { Logger } from 'nestjs-pino';
+import type { NodeEnv } from './config/env.validation';
+import { configureApiApp } from './modules/api.setup';
+import { AppModule } from './modules/app.module';
 
 /**
  * Entry point for the WanderViet API.
@@ -32,24 +32,24 @@ async function bootstrap(): Promise<void> {
   configureApiApp(app);
 
   const config = app.get(ConfigService);
-  const frontendUrl = config.get<string>("FRONTEND_URL") ?? "http://localhost:3000";
-  const port = config.get<number>("PORT") ?? 4000;
-  const nodeEnv = config.get<NodeEnv>("NODE_ENV") ?? "development";
+  const frontendUrl = config.get<string>('FRONTEND_URL') ?? 'http://localhost:3000';
+  const port = config.get<number>('PORT') ?? 4000;
+  const nodeEnv = config.get<NodeEnv>('NODE_ENV') ?? 'development';
 
   app.use(helmet());
   app.enableCors({
     origin: frontendUrl,
     credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "x-request-id"]
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-request-id'],
   });
 
   // Serve uploaded files as static assets at /uploads/* (Req 18, Design §9)
-  const uploadDir = config.get<string>("UPLOAD_DIR") ?? "./uploads";
-  app.useStaticAssets(join(process.cwd(), uploadDir), { prefix: "/uploads" });
+  const uploadDir = config.get<string>('UPLOAD_DIR') ?? './uploads';
+  app.useStaticAssets(join(process.cwd(), uploadDir), { prefix: '/uploads' });
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle("WanderViet Travel Platform API")
+    .setTitle('WanderViet Travel Platform API')
     .setDescription(
       `## WanderViet Travel Platform — REST API v1
 
@@ -79,45 +79,45 @@ All endpoints return a unified envelope:
 \`\`\`json
 { "success": true, "message": "OK", "data": {}, "timestamp": "..." }
 \`\`\`
-Errors: \`{ "success": false, "message": "...", "errors": [{...}], "timestamp": "..." }\``
+Errors: \`{ "success": false, "message": "...", "errors": [{...}], "timestamp": "..." }\``,
     )
-    .setVersion("1.0.0")
-    .setContact("WanderViet Team", "https://wanderviet.com", "support@wanderviet.com")
-    .setLicense("MIT", "https://opensource.org/licenses/MIT")
+    .setVersion('1.0.0')
+    .setContact('WanderViet Team', 'https://wanderviet.com', 'support@wanderviet.com')
+    .setLicense('MIT', 'https://opensource.org/licenses/MIT')
     .addBearerAuth(
       {
-        type: "http",
-        scheme: "bearer",
-        bearerFormat: "JWT",
-        name: "Authorization",
-        description: "Enter JWT access token",
-        in: "header"
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        description: 'Enter JWT access token',
+        in: 'header',
       },
-      "JWT"
+      'JWT',
     )
-    .addTag("Auth", "Authentication — register, login, refresh, logout, profile")
-    .addTag("Destinations", "Travel destinations — public browse + admin CRUD")
-    .addTag("Tours", "Tours — public search/filter + admin CRUD + itinerary + departures")
-    .addTag("Bookings", "Bookings — create, list, cancel (user endpoints)")
-    .addTag("Admin — Bookings", "Admin booking management — list all, update status")
-    .addTag("Payment", "Mock payment — checkout + callback (demo only)")
-    .addTag("Reviews", "Tour reviews — public list + user create/update + admin moderation")
-    .addTag("Wishlist", "User wishlist — add/remove/list tours and destinations")
-    .addTag("Blog", "Blog CMS — public read + admin CRUD")
-    .addTag("Contact", "Contact requests — public submit + admin triage")
-    .addTag("Upload", "Image upload — local disk storage (admin only)")
-    .addTag("Notifications", "In-app notifications — list, mark read")
-    .addTag("Coupons", "Coupon management — admin CRUD + validation")
-    .addTag("Admin — Dashboard", "Admin dashboard — summary, revenue, top tours, recent activities")
-    .addTag("Health", "Health check endpoints for liveness and readiness probes")
+    .addTag('Auth', 'Authentication — register, login, refresh, logout, profile')
+    .addTag('Destinations', 'Travel destinations — public browse + admin CRUD')
+    .addTag('Tours', 'Tours — public search/filter + admin CRUD + itinerary + departures')
+    .addTag('Bookings', 'Bookings — create, list, cancel (user endpoints)')
+    .addTag('Admin — Bookings', 'Admin booking management — list all, update status')
+    .addTag('Payment', 'Mock payment — checkout + callback (demo only)')
+    .addTag('Reviews', 'Tour reviews — public list + user create/update + admin moderation')
+    .addTag('Wishlist', 'User wishlist — add/remove/list tours and destinations')
+    .addTag('Blog', 'Blog CMS — public read + admin CRUD')
+    .addTag('Contact', 'Contact requests — public submit + admin triage')
+    .addTag('Upload', 'Image upload — local disk storage (admin only)')
+    .addTag('Notifications', 'In-app notifications — list, mark read')
+    .addTag('Coupons', 'Coupon management — admin CRUD + validation')
+    .addTag('Admin — Dashboard', 'Admin dashboard — summary, revenue, top tours, recent activities')
+    .addTag('Health', 'Health check endpoints for liveness and readiness probes')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup("api/docs", app, document);
+  SwaggerModule.setup('api/docs', app, document);
 
   await app.listen(port);
 
   logger.log(
-    `WanderViet API listening on http://localhost:${port}/api/v1 (env=${nodeEnv}, cors=${frontendUrl})`
+    `WanderViet API listening on http://localhost:${port}/api/v1 (env=${nodeEnv}, cors=${frontendUrl})`,
   );
 }
 

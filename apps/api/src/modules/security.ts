@@ -3,12 +3,20 @@
  * This file is kept temporarily for backward compatibility during migration.
  * Will be removed in a later task.
  */
-import { CanActivate, ExecutionContext, ForbiddenException, Injectable, SetMetadata, UnauthorizedException, createParamDecorator } from "@nestjs/common";
-import { Reflector } from "@nestjs/core";
-import { type Role } from "@vietwander/shared";
-import jwt from "jsonwebtoken";
+import {
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable,
+  SetMetadata,
+  UnauthorizedException,
+  createParamDecorator,
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { type Role } from '@vietwander/shared';
+import jwt from 'jsonwebtoken';
 
-export const ROLES_KEY = "vietwander:roles";
+export const ROLES_KEY = 'vietwander:roles';
 
 export type AuthUser = {
   sub: string;
@@ -33,16 +41,19 @@ export class JwtAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<RequestWithUser>();
     const authorization = request.headers.authorization;
     const value = Array.isArray(authorization) ? authorization[0] : authorization;
-    const token = value?.startsWith("Bearer ") ? value.slice("Bearer ".length) : undefined;
+    const token = value?.startsWith('Bearer ') ? value.slice('Bearer '.length) : undefined;
 
     if (!token) {
-      throw new UnauthorizedException("Bearer token required");
+      throw new UnauthorizedException('Bearer token required');
     }
 
     try {
-      const payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET ?? "local_access_secret_change_me") as Partial<AuthUser>;
+      const payload = jwt.verify(
+        token,
+        process.env.JWT_ACCESS_SECRET ?? 'local_access_secret_change_me',
+      ) as Partial<AuthUser>;
       if (!payload.sub || !isRole(payload.role)) {
-        throw new UnauthorizedException("Invalid access token");
+        throw new UnauthorizedException('Invalid access token');
       }
       request.user = { sub: payload.sub, role: payload.role };
       return true;
@@ -50,7 +61,7 @@ export class JwtAuthGuard implements CanActivate {
       if (error instanceof UnauthorizedException) {
         throw error;
       }
-      throw new UnauthorizedException("Invalid access token");
+      throw new UnauthorizedException('Invalid access token');
     }
   }
 }
@@ -60,22 +71,25 @@ export class RolesGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const roles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [context.getHandler(), context.getClass()]);
+    const roles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
     if (!roles?.length) {
       return true;
     }
 
     const request = context.switchToHttp().getRequest<RequestWithUser>();
     if (!request.user) {
-      throw new UnauthorizedException("Authenticated user required");
+      throw new UnauthorizedException('Authenticated user required');
     }
     if (!roles.includes(request.user.role)) {
-      throw new ForbiddenException("Insufficient role");
+      throw new ForbiddenException('Insufficient role');
     }
     return true;
   }
 }
 
 function isRole(value: unknown): value is Role {
-  return value === "USER" || value === "HOST" || value === "GUIDE" || value === "ADMIN";
+  return value === 'USER' || value === 'HOST' || value === 'GUIDE' || value === 'ADMIN';
 }

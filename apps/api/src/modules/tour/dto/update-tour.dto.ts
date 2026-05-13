@@ -1,5 +1,5 @@
-import { PartialType } from "@nestjs/swagger";
-import { CreateTourDto } from "./create-tour.dto";
+import { PartialType } from '@nestjs/swagger';
+import { CreateTourDto } from './create-tour.dto';
 
 /**
  * DTO for updating an existing tour.

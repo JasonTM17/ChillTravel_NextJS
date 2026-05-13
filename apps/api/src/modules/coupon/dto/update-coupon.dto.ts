@@ -1,5 +1,5 @@
-import { PartialType } from "@nestjs/swagger";
-import { CreateCouponDto } from "./create-coupon.dto";
+import { PartialType } from '@nestjs/swagger';
+import { CreateCouponDto } from './create-coupon.dto';
 
 /**
  * DTO for updating an existing coupon.

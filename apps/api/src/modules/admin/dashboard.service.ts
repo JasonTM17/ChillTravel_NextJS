@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../../prisma/prisma.service";
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
 
 /**
  * DashboardService — aggregated statistics for the Admin Dashboard.
@@ -31,30 +31,24 @@ export class DashboardService {
    * }
    */
   async getSummary() {
-    const [
-      revenueAgg,
-      totalBookings,
-      pendingBookings,
-      totalUsers,
-      totalTours,
-      totalDestinations
-    ] = await Promise.all([
-      // Revenue = sum of totalAmount where paymentStatus = confirmed_mock
-      this.prisma.booking.aggregate({
-        _sum: { totalAmount: true },
-        where: { paymentStatus: "confirmed_mock" }
-      }),
-      // All bookings
-      this.prisma.booking.count(),
-      // Pending bookings
-      this.prisma.booking.count({ where: { status: "pending" } }),
-      // Active users
-      this.prisma.user.count({ where: { status: "ACTIVE" } }),
-      // Active tours
-      this.prisma.tour.count({ where: { status: "ACTIVE" } }),
-      // Active destinations
-      this.prisma.destination.count({ where: { status: "ACTIVE" } })
-    ]);
+    const [revenueAgg, totalBookings, pendingBookings, totalUsers, totalTours, totalDestinations] =
+      await Promise.all([
+        // Revenue = sum of totalAmount where paymentStatus = confirmed_mock
+        this.prisma.booking.aggregate({
+          _sum: { totalAmount: true },
+          where: { paymentStatus: 'confirmed_mock' },
+        }),
+        // All bookings
+        this.prisma.booking.count(),
+        // Pending bookings
+        this.prisma.booking.count({ where: { status: 'pending' } }),
+        // Active users
+        this.prisma.user.count({ where: { status: 'ACTIVE' } }),
+        // Active tours
+        this.prisma.tour.count({ where: { status: 'ACTIVE' } }),
+        // Active destinations
+        this.prisma.destination.count({ where: { status: 'ACTIVE' } }),
+      ]);
 
     return {
       totalRevenue: revenueAgg._sum.totalAmount ?? 0,
@@ -62,7 +56,7 @@ export class DashboardService {
       pendingBookings,
       totalUsers,
       totalTours,
-      totalDestinations
+      totalDestinations,
     };
   }
 
@@ -86,14 +80,12 @@ export class DashboardService {
     for (let i = 11; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const yyyy = d.getFullYear();
-      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
       months.push(`${yyyy}-${mm}`);
     }
 
     // Raw query: group confirmed_mock bookings by YYYY-MM
-    const rows = await this.prisma.$queryRaw<
-      Array<{ month: string; revenue: bigint }>
-    >`
+    const rows = await this.prisma.$queryRaw<Array<{ month: string; revenue: bigint }>>`
       SELECT
         TO_CHAR("createdAt", 'YYYY-MM') AS month,
         SUM("totalAmount")              AS revenue
@@ -115,7 +107,7 @@ export class DashboardService {
     // Merge with the full 12-month list (fill zeros for missing months)
     return months.map((month) => ({
       month,
-      revenue: revenueMap.get(month) ?? 0
+      revenue: revenueMap.get(month) ?? 0,
     }));
   }
 
@@ -135,18 +127,10 @@ export class DashboardService {
    * }
    */
   async getBookingsByStatus() {
-    const statuses = [
-      "pending",
-      "confirmed",
-      "cancelled",
-      "completed",
-      "refunded_mock"
-    ] as const;
+    const statuses = ['pending', 'confirmed', 'cancelled', 'completed', 'refunded_mock'] as const;
 
     const counts = await Promise.all(
-      statuses.map((status) =>
-        this.prisma.booking.count({ where: { status } })
-      )
+      statuses.map((status) => this.prisma.booking.count({ where: { status } })),
     );
 
     return {
@@ -154,7 +138,7 @@ export class DashboardService {
       confirmed: counts[1],
       cancelled: counts[2],
       completed: counts[3],
-      refunded_mock: counts[4]
+      refunded_mock: counts[4],
     };
   }
 
@@ -170,19 +154,17 @@ export class DashboardService {
   async getTopTours(limit = 10) {
     // Use Prisma groupBy on Booking.tourId to count bookings per tour
     const grouped = await this.prisma.booking.groupBy({
-      by: ["tourId"],
+      by: ['tourId'],
       _count: { id: true },
       where: { tourId: { not: null } },
-      orderBy: { _count: { id: "desc" } },
-      take: limit
+      orderBy: { _count: { id: 'desc' } },
+      take: limit,
     });
 
     if (grouped.length === 0) return [];
 
     // Fetch tour details for the grouped tour IDs
-    const tourIds = grouped
-      .map((g) => g.tourId)
-      .filter((id): id is string => id !== null);
+    const tourIds = grouped.map((g) => g.tourId).filter((id): id is string => id !== null);
 
     const tours = await this.prisma.tour.findMany({
       where: { id: { in: tourIds } },
@@ -190,8 +172,8 @@ export class DashboardService {
         id: true,
         title: true,
         slug: true,
-        imageUrl: true
-      }
+        imageUrl: true,
+      },
     });
 
     // Build a lookup map
@@ -207,7 +189,7 @@ export class DashboardService {
           title: tour.title,
           slug: tour.slug,
           imageUrl: tour.imageUrl,
-          bookingCount: g._count.id
+          bookingCount: g._count.id,
         };
       });
   }
@@ -226,7 +208,7 @@ export class DashboardService {
     const [recentBookings, recentContacts, pendingReviews] = await Promise.all([
       this.prisma.booking.findMany({
         take: 10,
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: 'desc' },
         select: {
           id: true,
           bookingCode: true,
@@ -238,16 +220,16 @@ export class DashboardService {
           contactEmail: true,
           createdAt: true,
           user: {
-            select: { id: true, email: true, fullName: true }
+            select: { id: true, email: true, fullName: true },
           },
           tour: {
-            select: { id: true, title: true, slug: true, imageUrl: true }
-          }
-        }
+            select: { id: true, title: true, slug: true, imageUrl: true },
+          },
+        },
       }),
       this.prisma.contactRequest.findMany({
         take: 5,
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: 'desc' },
         select: {
           id: true,
           name: true,
@@ -256,13 +238,13 @@ export class DashboardService {
           message: true,
           status: true,
           destinationInterested: true,
-          createdAt: true
-        }
+          createdAt: true,
+        },
       }),
       this.prisma.review.findMany({
         take: 5,
-        where: { status: "PENDING" },
-        orderBy: { createdAt: "desc" },
+        where: { status: 'PENDING' },
+        orderBy: { createdAt: 'desc' },
         select: {
           id: true,
           rating: true,
@@ -271,19 +253,19 @@ export class DashboardService {
           status: true,
           createdAt: true,
           user: {
-            select: { id: true, email: true, fullName: true }
+            select: { id: true, email: true, fullName: true },
           },
           tour: {
-            select: { id: true, title: true, slug: true }
-          }
-        }
-      })
+            select: { id: true, title: true, slug: true },
+          },
+        },
+      }),
     ]);
 
     return {
       recentBookings,
       recentContacts,
-      pendingReviews
+      pendingReviews,
     };
   }
 
@@ -301,9 +283,9 @@ export class DashboardService {
     const where = keyword
       ? {
           OR: [
-            { email: { contains: keyword, mode: "insensitive" as const } },
-            { fullName: { contains: keyword, mode: "insensitive" as const } }
-          ]
+            { email: { contains: keyword, mode: 'insensitive' as const } },
+            { fullName: { contains: keyword, mode: 'insensitive' as const } },
+          ],
         }
       : {};
 
@@ -312,7 +294,7 @@ export class DashboardService {
         where,
         skip,
         take: size,
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: 'desc' },
         select: {
           id: true,
           email: true,
@@ -321,10 +303,10 @@ export class DashboardService {
           role: true,
           status: true,
           emailVerified: true,
-          createdAt: true
-        }
+          createdAt: true,
+        },
       }),
-      this.prisma.user.count({ where })
+      this.prisma.user.count({ where }),
     ]);
 
     const totalPages = Math.ceil(totalElements / size);
@@ -335,7 +317,7 @@ export class DashboardService {
       totalElements,
       totalPages,
       hasNext: page < totalPages - 1,
-      hasPrevious: page > 0
+      hasPrevious: page > 0,
     };
   }
 }

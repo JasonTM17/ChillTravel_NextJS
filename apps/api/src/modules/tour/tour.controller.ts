@@ -8,23 +8,17 @@ import {
   Param,
   Post,
   Put,
-  Query
-} from "@nestjs/common";
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiParam,
-  ApiResponse,
-  ApiTags
-} from "@nestjs/swagger";
-import { Public } from "../../common/decorators/public.decorator";
-import { Roles } from "../../common/decorators/roles.decorator";
-import { TourService } from "./tour.service";
-import { TourQueryDto } from "./dto/tour-query.dto";
-import { CreateTourDto } from "./dto/create-tour.dto";
-import { UpdateTourDto } from "./dto/update-tour.dto";
-import { CreateItineraryDto } from "./dto/create-itinerary.dto";
-import { CreateDepartureDto } from "./dto/create-departure.dto";
+  Query,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Public } from '../../common/decorators/public.decorator';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { CreateDepartureDto } from './dto/create-departure.dto';
+import { CreateItineraryDto } from './dto/create-itinerary.dto';
+import { CreateTourDto } from './dto/create-tour.dto';
+import { TourQueryDto } from './dto/tour-query.dto';
+import { UpdateTourDto } from './dto/update-tour.dto';
+import { TourService } from './tour.service';
 
 /**
  * TourController — public browsing + admin CRUD for tours, itinerary, and departures.
@@ -37,7 +31,7 @@ import { CreateDepartureDto } from "./dto/create-departure.dto";
  *
  * Design §3.3 Tours, §18.1 TourDeparture / Req 8, 9, 21, 34.
  */
-@ApiTags("Tours")
+@ApiTags('Tours')
 @Controller()
 export class TourController {
   constructor(private readonly tourService: TourService) {}
@@ -51,14 +45,14 @@ export class TourController {
    * List tours with optional filters, sort, and pagination.
    * Req 8 — public, no auth required.
    */
-  @Get("tours")
+  @Get('tours')
   @Public()
   @ApiOperation({
-    summary: "List tours",
+    summary: 'List tours',
     description:
-      "Returns a paginated list of ACTIVE tours. Supports filtering by keyword, category, price range, duration, and destination. Sort options: price, popular, rating, newest."
+      'Returns a paginated list of ACTIVE tours. Supports filtering by keyword, category, price range, duration, and destination. Sort options: price, popular, rating, newest.',
   })
-  @ApiResponse({ status: 200, description: "Paginated list of tours" })
+  @ApiResponse({ status: 200, description: 'Paginated list of tours' })
   findAll(@Query() query: TourQueryDto) {
     return this.tourService.findAll(query);
   }
@@ -69,13 +63,13 @@ export class TourController {
    * MUST be registered BEFORE /tours/:slug to avoid routing conflict.
    * Req 8 — public, no auth required.
    */
-  @Get("tours/featured")
+  @Get('tours/featured')
   @Public()
   @ApiOperation({
-    summary: "Get featured tours",
-    description: "Returns up to 8 featured ACTIVE tours for homepage display."
+    summary: 'Get featured tours',
+    description: 'Returns up to 8 featured ACTIVE tours for homepage display.',
   })
-  @ApiResponse({ status: 200, description: "List of featured tours" })
+  @ApiResponse({ status: 200, description: 'List of featured tours' })
   findFeatured() {
     return this.tourService.findFeatured();
   }
@@ -85,17 +79,17 @@ export class TourController {
    * Get tour detail by slug with images, itinerary, departures, and avg rating.
    * Req 8 — public, no auth required.
    */
-  @Get("tours/:slug")
+  @Get('tours/:slug')
   @Public()
   @ApiOperation({
-    summary: "Get tour by slug",
+    summary: 'Get tour by slug',
     description:
-      "Returns full tour detail including images, itinerary (ordered by day), open future departures, and average rating from APPROVED reviews."
+      'Returns full tour detail including images, itinerary (ordered by day), open future departures, and average rating from APPROVED reviews.',
   })
-  @ApiParam({ name: "slug", description: "URL-friendly tour identifier" })
-  @ApiResponse({ status: 200, description: "Tour detail" })
-  @ApiResponse({ status: 404, description: "Tour not found" })
-  findBySlug(@Param("slug") slug: string) {
+  @ApiParam({ name: 'slug', description: 'URL-friendly tour identifier' })
+  @ApiResponse({ status: 200, description: 'Tour detail' })
+  @ApiResponse({ status: 404, description: 'Tour not found' })
+  findBySlug(@Param('slug') slug: string) {
     return this.tourService.findBySlug(slug);
   }
 
@@ -108,19 +102,19 @@ export class TourController {
    * Create a new tour.
    * Req 9 — requires ADMIN role.
    */
-  @Post("admin/tours")
-  @Roles("ADMIN")
+  @Post('admin/tours')
+  @Roles('ADMIN')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: "Create tour (Admin)",
+    summary: 'Create tour (Admin)',
     description:
-      "Creates a new tour. Slug is auto-generated from title. Validates destination exists, price >= 0, maxGuests > 0."
+      'Creates a new tour. Slug is auto-generated from title. Validates destination exists, price >= 0, maxGuests > 0.',
   })
-  @ApiResponse({ status: 201, description: "Tour created" })
-  @ApiResponse({ status: 400, description: "Validation error" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden — ADMIN role required" })
-  @ApiResponse({ status: 404, description: "Destination not found" })
+  @ApiResponse({ status: 201, description: 'Tour created' })
+  @ApiResponse({ status: 400, description: 'Validation error' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden — ADMIN role required' })
+  @ApiResponse({ status: 404, description: 'Destination not found' })
   create(@Body() dto: CreateTourDto) {
     return this.tourService.create(dto);
   }
@@ -130,21 +124,21 @@ export class TourController {
    * Update an existing tour.
    * Req 9 — requires ADMIN role.
    */
-  @Put("admin/tours/:id")
-  @Roles("ADMIN")
+  @Put('admin/tours/:id')
+  @Roles('ADMIN')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: "Update tour (Admin)",
+    summary: 'Update tour (Admin)',
     description:
-      "Updates tour fields. Slug is regenerated only if title changes. Validates destination if changed."
+      'Updates tour fields. Slug is regenerated only if title changes. Validates destination if changed.',
   })
-  @ApiParam({ name: "id", description: "Tour ID" })
-  @ApiResponse({ status: 200, description: "Tour updated" })
-  @ApiResponse({ status: 400, description: "Validation error" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden — ADMIN role required" })
-  @ApiResponse({ status: 404, description: "Tour or destination not found" })
-  update(@Param("id") id: string, @Body() dto: UpdateTourDto) {
+  @ApiParam({ name: 'id', description: 'Tour ID' })
+  @ApiResponse({ status: 200, description: 'Tour updated' })
+  @ApiResponse({ status: 400, description: 'Validation error' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden — ADMIN role required' })
+  @ApiResponse({ status: 404, description: 'Tour or destination not found' })
+  update(@Param('id') id: string, @Body() dto: UpdateTourDto) {
     return this.tourService.update(id, dto);
   }
 
@@ -153,20 +147,20 @@ export class TourController {
    * Soft-delete a tour (sets status=DELETED).
    * Req 9, 21 — requires ADMIN role.
    */
-  @Delete("admin/tours/:id")
-  @Roles("ADMIN")
+  @Delete('admin/tours/:id')
+  @Roles('ADMIN')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: "Soft-delete tour (Admin)",
-    description: "Sets tour status to DELETED. The record is not removed from the database."
+    summary: 'Soft-delete tour (Admin)',
+    description: 'Sets tour status to DELETED. The record is not removed from the database.',
   })
-  @ApiParam({ name: "id", description: "Tour ID" })
-  @ApiResponse({ status: 204, description: "Tour deleted" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden — ADMIN role required" })
-  @ApiResponse({ status: 404, description: "Tour not found" })
-  async softDelete(@Param("id") id: string) {
+  @ApiParam({ name: 'id', description: 'Tour ID' })
+  @ApiResponse({ status: 204, description: 'Tour deleted' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden — ADMIN role required' })
+  @ApiResponse({ status: 404, description: 'Tour not found' })
+  async softDelete(@Param('id') id: string) {
     await this.tourService.softDelete(id);
   }
 
@@ -179,21 +173,21 @@ export class TourController {
    * Add or upsert an itinerary day for a tour.
    * Req 9 — requires ADMIN role.
    */
-  @Post("admin/tours/:id/itinerary")
-  @Roles("ADMIN")
+  @Post('admin/tours/:id/itinerary')
+  @Roles('ADMIN')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: "Add/upsert itinerary day (Admin)",
+    summary: 'Add/upsert itinerary day (Admin)',
     description:
-      "Adds or updates an itinerary day for the tour. Upserted by (tourId, dayNumber) unique constraint."
+      'Adds or updates an itinerary day for the tour. Upserted by (tourId, dayNumber) unique constraint.',
   })
-  @ApiParam({ name: "id", description: "Tour ID" })
-  @ApiResponse({ status: 201, description: "Itinerary day added/updated" })
-  @ApiResponse({ status: 400, description: "Validation error" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden — ADMIN role required" })
-  @ApiResponse({ status: 404, description: "Tour not found" })
-  addItinerary(@Param("id") id: string, @Body() dto: CreateItineraryDto) {
+  @ApiParam({ name: 'id', description: 'Tour ID' })
+  @ApiResponse({ status: 201, description: 'Itinerary day added/updated' })
+  @ApiResponse({ status: 400, description: 'Validation error' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden — ADMIN role required' })
+  @ApiResponse({ status: 404, description: 'Tour not found' })
+  addItinerary(@Param('id') id: string, @Body() dto: CreateItineraryDto) {
     return this.tourService.addItinerary(id, dto);
   }
 
@@ -202,20 +196,20 @@ export class TourController {
    * Update an itinerary item by its ID.
    * Req 9 — requires ADMIN role.
    */
-  @Put("admin/tour-itinerary/:id")
-  @Roles("ADMIN")
+  @Put('admin/tour-itinerary/:id')
+  @Roles('ADMIN')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: "Update itinerary item (Admin)",
-    description: "Updates an existing tour itinerary item by its ID."
+    summary: 'Update itinerary item (Admin)',
+    description: 'Updates an existing tour itinerary item by its ID.',
   })
-  @ApiParam({ name: "id", description: "TourItinerary ID" })
-  @ApiResponse({ status: 200, description: "Itinerary item updated" })
-  @ApiResponse({ status: 400, description: "Validation error" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden — ADMIN role required" })
-  @ApiResponse({ status: 404, description: "Itinerary item not found" })
-  updateItinerary(@Param("id") id: string, @Body() dto: CreateItineraryDto) {
+  @ApiParam({ name: 'id', description: 'TourItinerary ID' })
+  @ApiResponse({ status: 200, description: 'Itinerary item updated' })
+  @ApiResponse({ status: 400, description: 'Validation error' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden — ADMIN role required' })
+  @ApiResponse({ status: 404, description: 'Itinerary item not found' })
+  updateItinerary(@Param('id') id: string, @Body() dto: CreateItineraryDto) {
     return this.tourService.updateItinerary(id, dto);
   }
 
@@ -224,20 +218,20 @@ export class TourController {
    * Delete an itinerary item by its ID.
    * Req 9 — requires ADMIN role.
    */
-  @Delete("admin/tour-itinerary/:id")
-  @Roles("ADMIN")
+  @Delete('admin/tour-itinerary/:id')
+  @Roles('ADMIN')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: "Delete itinerary item (Admin)",
-    description: "Deletes a tour itinerary item by its ID."
+    summary: 'Delete itinerary item (Admin)',
+    description: 'Deletes a tour itinerary item by its ID.',
   })
-  @ApiParam({ name: "id", description: "TourItinerary ID" })
-  @ApiResponse({ status: 204, description: "Itinerary item deleted" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden — ADMIN role required" })
-  @ApiResponse({ status: 404, description: "Itinerary item not found" })
-  async deleteItinerary(@Param("id") id: string) {
+  @ApiParam({ name: 'id', description: 'TourItinerary ID' })
+  @ApiResponse({ status: 204, description: 'Itinerary item deleted' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden — ADMIN role required' })
+  @ApiResponse({ status: 404, description: 'Itinerary item not found' })
+  async deleteItinerary(@Param('id') id: string) {
     await this.tourService.deleteItinerary(id);
   }
 
@@ -250,20 +244,20 @@ export class TourController {
    * Add a departure for a tour.
    * Req 34 — requires ADMIN role.
    */
-  @Post("admin/tours/:id/departures")
-  @Roles("ADMIN")
+  @Post('admin/tours/:id/departures')
+  @Roles('ADMIN')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: "Add tour departure (Admin)",
-    description: "Creates a new departure for the specified tour."
+    summary: 'Add tour departure (Admin)',
+    description: 'Creates a new departure for the specified tour.',
   })
-  @ApiParam({ name: "id", description: "Tour ID" })
-  @ApiResponse({ status: 201, description: "Departure created" })
-  @ApiResponse({ status: 400, description: "Validation error" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden — ADMIN role required" })
-  @ApiResponse({ status: 404, description: "Tour not found" })
-  addDeparture(@Param("id") id: string, @Body() dto: CreateDepartureDto) {
+  @ApiParam({ name: 'id', description: 'Tour ID' })
+  @ApiResponse({ status: 201, description: 'Departure created' })
+  @ApiResponse({ status: 400, description: 'Validation error' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden — ADMIN role required' })
+  @ApiResponse({ status: 404, description: 'Tour not found' })
+  addDeparture(@Param('id') id: string, @Body() dto: CreateDepartureDto) {
     return this.tourService.addDeparture(id, dto);
   }
 
@@ -272,20 +266,20 @@ export class TourController {
    * Update a tour departure by its ID.
    * Req 34 — requires ADMIN role.
    */
-  @Put("admin/tour-departures/:id")
-  @Roles("ADMIN")
+  @Put('admin/tour-departures/:id')
+  @Roles('ADMIN')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: "Update tour departure (Admin)",
-    description: "Updates an existing tour departure by its ID."
+    summary: 'Update tour departure (Admin)',
+    description: 'Updates an existing tour departure by its ID.',
   })
-  @ApiParam({ name: "id", description: "TourDeparture ID" })
-  @ApiResponse({ status: 200, description: "Departure updated" })
-  @ApiResponse({ status: 400, description: "Validation error" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden — ADMIN role required" })
-  @ApiResponse({ status: 404, description: "Departure not found" })
-  updateDeparture(@Param("id") id: string, @Body() dto: CreateDepartureDto) {
+  @ApiParam({ name: 'id', description: 'TourDeparture ID' })
+  @ApiResponse({ status: 200, description: 'Departure updated' })
+  @ApiResponse({ status: 400, description: 'Validation error' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden — ADMIN role required' })
+  @ApiResponse({ status: 404, description: 'Departure not found' })
+  updateDeparture(@Param('id') id: string, @Body() dto: CreateDepartureDto) {
     return this.tourService.updateDeparture(id, dto);
   }
 
@@ -294,20 +288,20 @@ export class TourController {
    * Delete a tour departure by its ID.
    * Req 34 — requires ADMIN role.
    */
-  @Delete("admin/tour-departures/:id")
-  @Roles("ADMIN")
+  @Delete('admin/tour-departures/:id')
+  @Roles('ADMIN')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: "Delete tour departure (Admin)",
-    description: "Deletes a tour departure by its ID."
+    summary: 'Delete tour departure (Admin)',
+    description: 'Deletes a tour departure by its ID.',
   })
-  @ApiParam({ name: "id", description: "TourDeparture ID" })
-  @ApiResponse({ status: 204, description: "Departure deleted" })
-  @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 403, description: "Forbidden — ADMIN role required" })
-  @ApiResponse({ status: 404, description: "Departure not found" })
-  async deleteDeparture(@Param("id") id: string) {
+  @ApiParam({ name: 'id', description: 'TourDeparture ID' })
+  @ApiResponse({ status: 204, description: 'Departure deleted' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden — ADMIN role required' })
+  @ApiResponse({ status: 404, description: 'Departure not found' })
+  async deleteDeparture(@Param('id') id: string) {
     await this.tourService.deleteDeparture(id);
   }
 }

@@ -1,6 +1,6 @@
-import { Injectable, Logger } from "@nestjs/common";
-import { appendFile, mkdir } from "node:fs/promises";
-import { join } from "node:path";
+import { appendFile, mkdir } from 'node:fs/promises';
+import { join } from 'node:path';
+import { Injectable, Logger } from '@nestjs/common';
 
 /**
  * IErrorTracker — abstraction for error tracking.
@@ -17,20 +17,20 @@ export interface IErrorTracker {
 @Injectable()
 export class LocalErrorTracker implements IErrorTracker {
   private readonly logger = new Logger(LocalErrorTracker.name);
-  private readonly logDir = join(process.cwd(), "logs");
-  private readonly logFile = join(this.logDir, "errors.jsonl");
+  private readonly logDir = join(process.cwd(), 'logs');
+  private readonly logFile = join(this.logDir, 'errors.jsonl');
 
   capture(error: Error, context?: Record<string, unknown>): void {
     const entry = JSON.stringify({
       timestamp: new Date().toISOString(),
       message: error.message,
       stack: error.stack,
-      context: context ?? {}
+      context: context ?? {},
     });
 
     // Fire-and-forget — never block the request
     void mkdir(this.logDir, { recursive: true })
-      .then(() => appendFile(this.logFile, entry + "\n"))
+      .then(() => appendFile(this.logFile, entry + '\n'))
       .catch((err) => this.logger.warn(`Failed to write error log: ${String(err)}`));
   }
 

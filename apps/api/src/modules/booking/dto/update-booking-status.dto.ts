@@ -1,5 +1,5 @@
-import { IsIn, IsString } from "class-validator";
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsIn, IsString } from 'class-validator';
 
 /**
  * DTO for updating a booking's status (Admin).
@@ -7,11 +7,11 @@ import { ApiProperty } from "@nestjs/swagger";
  */
 export class UpdateBookingStatusDto {
   @ApiProperty({
-    enum: ["pending", "confirmed", "cancelled", "completed", "refunded_mock"],
-    example: "confirmed"
+    enum: ['pending', 'confirmed', 'cancelled', 'completed', 'refunded_mock'],
+    example: 'confirmed',
   })
   @IsString()
-  @IsIn(["pending", "confirmed", "cancelled", "completed", "refunded_mock"])
+  @IsIn(['pending', 'confirmed', 'cancelled', 'completed', 'refunded_mock'])
   status!: string;
 }
 
@@ -21,10 +21,10 @@ export class UpdateBookingStatusDto {
  */
 export class UpdatePaymentStatusDto {
   @ApiProperty({
-    enum: ["pending", "confirmed_mock", "failed_mock", "refunded_mock"],
-    example: "confirmed_mock"
+    enum: ['pending', 'confirmed_mock', 'failed_mock', 'refunded_mock'],
+    example: 'confirmed_mock',
   })
   @IsString()
-  @IsIn(["pending", "confirmed_mock", "failed_mock", "refunded_mock"])
+  @IsIn(['pending', 'confirmed_mock', 'failed_mock', 'refunded_mock'])
   paymentStatus!: string;
 }

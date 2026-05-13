@@ -1,5 +1,5 @@
-import { IsIn, IsOptional, IsString } from "class-validator";
-import { ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsIn, IsOptional, IsString } from 'class-validator';
 
 /**
  * DTO for admin triage actions on a contact request.
@@ -8,26 +8,26 @@ import { ApiPropertyOptional } from "@nestjs/swagger";
  */
 export class UpdateContactStatusDto {
   @ApiPropertyOptional({
-    enum: ["NEW", "IN_PROGRESS", "RESOLVED", "CLOSED"],
-    description: "New status for the contact request",
-    example: "IN_PROGRESS"
+    enum: ['NEW', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'],
+    description: 'New status for the contact request',
+    example: 'IN_PROGRESS',
   })
   @IsOptional()
   @IsString()
-  @IsIn(["NEW", "IN_PROGRESS", "RESOLVED", "CLOSED"])
+  @IsIn(['NEW', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'])
   status?: string;
 
   @ApiPropertyOptional({
-    description: "Staff member ID or name to assign this request to",
-    example: "staff@wanderviet.com"
+    description: 'Staff member ID or name to assign this request to',
+    example: 'staff@wanderviet.com',
   })
   @IsOptional()
   @IsString()
   assignedTo?: string;
 
   @ApiPropertyOptional({
-    description: "Internal admin note for this contact request",
-    example: "Đã gọi điện tư vấn, khách hàng quan tâm tour Hội An."
+    description: 'Internal admin note for this contact request',
+    example: 'Đã gọi điện tư vấn, khách hàng quan tâm tour Hội An.',
   })
   @IsOptional()
   @IsString()

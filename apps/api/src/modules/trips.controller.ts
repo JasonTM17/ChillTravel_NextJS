@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Patch, Post } from "@nestjs/common";
-import { IsArray, IsOptional, IsString, MaxLength } from "class-validator";
-import { envelope } from "@vietwander/shared";
-import { Public } from "../common/decorators/public.decorator";
-import { TripsService } from "./trips.service";
+import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
+import { envelope } from '@vietwander/shared';
+import { IsArray, IsOptional, IsString, MaxLength } from 'class-validator';
+import { Public } from '../common/decorators/public.decorator';
+import { TripsService } from './trips.service';
 
 class ProfileUpdateDto {
   @IsOptional()
@@ -45,43 +45,60 @@ class TripCreateDto {
   dayNotes?: string[];
 }
 
-@Controller("me")
+@Controller('me')
 @Public()
 export class TripsController {
   constructor(private readonly tripsService: TripsService) {}
 
-  @Get("profile")
+  @Get('profile')
   profile() {
-    return envelope({ displayName: "ChillTravel Demo User", travelStyle: "Culture Seeker", language: "vi" });
+    return envelope({
+      displayName: 'ChillTravel Demo User',
+      travelStyle: 'Culture Seeker',
+      language: 'vi',
+    });
   }
 
-  @Patch("profile")
+  @Patch('profile')
   updateProfile(@Body() body: ProfileUpdateDto = {}) {
-    return envelope({ updated: true, profile: body }, "Profile updated in local demo");
+    return envelope({ updated: true, profile: body }, 'Profile updated in local demo');
   }
 
-  @Get("wishlist")
+  @Get('wishlist')
   wishlist() {
-    return envelope(this.tripsService.wishlist(), "Wishlist loaded");
+    return envelope(this.tripsService.wishlist(), 'Wishlist loaded');
   }
 
-  @Post("wishlist")
+  @Post('wishlist')
   saveWishlist(@Body() body: WishlistSaveDto = {}) {
-    return envelope({ saved: true, destinationSlug: body.destinationSlug ?? "da-nang" }, "Wishlist item saved");
+    return envelope(
+      { saved: true, destinationSlug: body.destinationSlug ?? 'da-nang' },
+      'Wishlist item saved',
+    );
   }
 
-  @Get("trips")
+  @Get('trips')
   trips() {
-    return envelope(this.tripsService.trips(), "Trips loaded");
+    return envelope(this.tripsService.trips(), 'Trips loaded');
   }
 
-  @Post("trips")
+  @Post('trips')
   createTrip(@Body() body: TripCreateDto = {}) {
-    return envelope({ id: "trip_new", title: body.title ?? "Vietnam demo trip", shareUrl: "/trips/public/trip_new" }, "Trip saved");
+    return envelope(
+      {
+        id: 'trip_new',
+        title: body.title ?? 'Vietnam demo trip',
+        shareUrl: '/trips/public/trip_new',
+      },
+      'Trip saved',
+    );
   }
 
-  @Get("bookings")
+  @Get('bookings')
   bookings() {
-    return envelope([{ bookingCode: "VW-DEMO1", status: "confirmed", isDemo: true }], "User bookings loaded");
+    return envelope(
+      [{ bookingCode: 'VW-DEMO1', status: 'confirmed', isDemo: true }],
+      'User bookings loaded',
+    );
   }
 }

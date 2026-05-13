@@ -1,4 +1,4 @@
-import { randomBytes } from "node:crypto";
+import { randomBytes } from 'node:crypto';
 
 /**
  * Booking code format: `WV-YYYYMMDD-XXXXXX`
@@ -16,10 +16,10 @@ import { randomBytes } from "node:crypto";
  */
 export function generateBookingCode(now: Date = new Date()): string {
   const yyyy = now.getUTCFullYear();
-  const mm = String(now.getUTCMonth() + 1).padStart(2, "0");
-  const dd = String(now.getUTCDate()).padStart(2, "0");
+  const mm = String(now.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(now.getUTCDate()).padStart(2, '0');
   const datePart = `${yyyy}${mm}${dd}`;
-  const randomPart = randomBytes(3).toString("hex").toUpperCase();
+  const randomPart = randomBytes(3).toString('hex').toUpperCase();
   return `WV-${datePart}-${randomPart}`;
 }
 

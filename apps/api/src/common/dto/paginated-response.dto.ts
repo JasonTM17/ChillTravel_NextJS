@@ -1,8 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import {
-  buildPaginatedResponse,
-  type ApiPaginated
-} from "@vietwander/shared";
+import { ApiProperty } from '@nestjs/swagger';
+import { buildPaginatedResponse, type ApiPaginated } from '@vietwander/shared';
 
 /**
  * Swagger-friendly wrapper class that mirrors the structural
@@ -15,19 +12,19 @@ import {
  * Design §3.2.
  */
 export class PaginatedResponseDto<T> implements ApiPaginated<T> {
-  @ApiProperty({ isArray: true, description: "Page items" })
+  @ApiProperty({ isArray: true, description: 'Page items' })
   items!: T[];
 
-  @ApiProperty({ description: "Zero-based page index", example: 0 })
+  @ApiProperty({ description: 'Zero-based page index', example: 0 })
   page!: number;
 
-  @ApiProperty({ description: "Page size", example: 10 })
+  @ApiProperty({ description: 'Page size', example: 10 })
   size!: number;
 
-  @ApiProperty({ description: "Total matching elements across all pages" })
+  @ApiProperty({ description: 'Total matching elements across all pages' })
   totalElements!: number;
 
-  @ApiProperty({ description: "Total number of pages" })
+  @ApiProperty({ description: 'Total number of pages' })
   totalPages!: number;
 
   @ApiProperty()
@@ -45,7 +42,7 @@ export function buildPagination<T>(
   items: T[],
   page: number,
   size: number,
-  totalElements: number
+  totalElements: number,
 ): ApiPaginated<T> {
   return buildPaginatedResponse(items, page, size, totalElements);
 }

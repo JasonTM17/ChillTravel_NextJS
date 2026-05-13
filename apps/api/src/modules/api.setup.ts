@@ -1,4 +1,4 @@
-import { ValidationPipe, type INestApplication } from "@nestjs/common";
+import { ValidationPipe, type INestApplication } from '@nestjs/common';
 
 /**
  * Paths that must remain reachable at the root URL (no `/api/v1` prefix).
@@ -8,14 +8,14 @@ import { ValidationPipe, type INestApplication } from "@nestjs/common";
  * - Health / metrics endpoints live at the root so Kubernetes-style probes
  *   (Req 32) don't need version pinning.
  */
-export const API_GLOBAL_PREFIX = "api/v1";
+export const API_GLOBAL_PREFIX = 'api/v1';
 export const API_PREFIX_EXCLUDE = [
-  "api/docs",
-  "api/docs-json",
-  "health",
-  "health/live",
-  "health/ready",
-  "metrics"
+  'api/docs',
+  'api/docs-json',
+  'health',
+  'health/live',
+  'health/ready',
+  'metrics',
 ];
 
 /**
@@ -33,7 +33,7 @@ export function configureApiApp(app: INestApplication): void {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
-      transformOptions: { enableImplicitConversion: true }
-    })
+      transformOptions: { enableImplicitConversion: true },
+    }),
   );
 }

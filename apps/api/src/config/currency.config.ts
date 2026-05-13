@@ -19,10 +19,7 @@ export const SUPPORTED_CURRENCIES = Object.keys(CURRENCY_RATES);
  * Convert a VND amount to the target currency.
  * Returns the original amount if the currency is not supported.
  */
-export function convertFromVnd(
-  amountVnd: number,
-  targetCurrency: string,
-): number {
+export function convertFromVnd(amountVnd: number, targetCurrency: string): number {
   const rate = CURRENCY_RATES[targetCurrency.toUpperCase()];
   if (!rate || rate === 1) return amountVnd;
   return Math.round(amountVnd / rate);

@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { PrismaService } from "../../prisma/prisma.service";
-import { buildPagination } from "../../common/dto/paginated-response.dto";
-import { generateSlug, ensureUniqueSlug } from "../../common/utils/slug.util";
-import type { PaginationQueryDto } from "../../common/dto/pagination.dto";
-import type { CreateBlogDto } from "./dto/create-blog.dto";
-import type { UpdateBlogDto } from "./dto/update-blog.dto";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { buildPagination } from '../../common/dto/paginated-response.dto';
+import type { PaginationQueryDto } from '../../common/dto/pagination.dto';
+import { generateSlug, ensureUniqueSlug } from '../../common/utils/slug.util';
+import { PrismaService } from '../../prisma/prisma.service';
+import type { CreateBlogDto } from './dto/create-blog.dto';
+import type { UpdateBlogDto } from './dto/update-blog.dto';
 
 /**
  * BlogService — business logic for blog posts.
@@ -33,9 +33,9 @@ export class BlogService {
     const size = query.size ?? 10;
     const skip = page * size;
 
-    const where: Record<string, unknown> = { status: "PUBLISHED" };
+    const where: Record<string, unknown> = { status: 'PUBLISHED' };
     if (query.category) {
-      where["category"] = query.category;
+      where['category'] = query.category;
     }
 
     const [items, totalElements] = await Promise.all([
@@ -43,14 +43,14 @@ export class BlogService {
         where,
         skip,
         take: size,
-        orderBy: { publishedAt: "desc" },
+        orderBy: { publishedAt: 'desc' },
         include: {
           author: {
-            select: { id: true, fullName: true, avatarUrl: true }
-          }
-        }
+            select: { id: true, fullName: true, avatarUrl: true },
+          },
+        },
       }),
-      this.prisma.blogPost.count({ where })
+      this.prisma.blogPost.count({ where }),
     ]);
 
     return buildPagination(items, page, size, totalElements);
@@ -65,13 +65,13 @@ export class BlogService {
       where: { slug },
       include: {
         author: {
-          select: { id: true, fullName: true, avatarUrl: true }
-        }
-      }
+          select: { id: true, fullName: true, avatarUrl: true },
+        },
+      },
     });
 
-    if (!post || post.status !== "PUBLISHED") {
-      throw new NotFoundException("Không tìm thấy bài viết");
+    if (!post || post.status !== 'PUBLISHED') {
+      throw new NotFoundException('Không tìm thấy bài viết');
     }
 
     return post;
@@ -85,12 +85,11 @@ export class BlogService {
     const baseSlug = generateSlug(dto.title);
     const slug = await ensureUniqueSlug(
       baseSlug,
-      async (s) => !!(await this.prisma.blogPost.findUnique({ where: { slug: s } }))
+      async (s) => !!(await this.prisma.blogPost.findUnique({ where: { slug: s } })),
     );
 
-    const status = dto.status ?? "DRAFT";
-    const publishedAt =
-      status === "PUBLISHED" ? new Date() : null;
+    const status = dto.status ?? 'DRAFT';
+    const publishedAt = status === 'PUBLISHED' ? new Date() : null;
 
     const post = await this.prisma.blogPost.create({
       data: {
@@ -102,13 +101,13 @@ export class BlogService {
         category: dto.category ?? null,
         status,
         authorId,
-        publishedAt
+        publishedAt,
       },
       include: {
         author: {
-          select: { id: true, fullName: true, avatarUrl: true }
-        }
-      }
+          select: { id: true, fullName: true, avatarUrl: true },
+        },
+      },
     });
 
     return post;
@@ -120,8 +119,8 @@ export class BlogService {
 
   async adminUpdate(id: string, dto: UpdateBlogDto) {
     const existing = await this.prisma.blogPost.findUnique({ where: { id } });
-    if (!existing || existing.status === "DELETED") {
-      throw new NotFoundException("Không tìm thấy bài viết");
+    if (!existing || existing.status === 'DELETED') {
+      throw new NotFoundException('Không tìm thấy bài viết');
     }
 
     // Regenerate slug if title changes
@@ -132,14 +131,14 @@ export class BlogService {
         baseSlug,
         async (s) =>
           !!(await this.prisma.blogPost.findFirst({
-            where: { slug: s, NOT: { id } }
-          }))
+            where: { slug: s, NOT: { id } },
+          })),
       );
     }
 
     // Set publishedAt when transitioning to PUBLISHED for the first time
     let publishedAt = existing.publishedAt;
-    if (dto.status === "PUBLISHED" && !existing.publishedAt) {
+    if (dto.status === 'PUBLISHED' && !existing.publishedAt) {
       publishedAt = new Date();
     }
 
@@ -153,13 +152,13 @@ export class BlogService {
         ...(dto.coverImageUrl !== undefined && { coverImageUrl: dto.coverImageUrl }),
         ...(dto.category !== undefined && { category: dto.category }),
         ...(dto.status !== undefined && { status: dto.status }),
-        publishedAt
+        publishedAt,
       },
       include: {
         author: {
-          select: { id: true, fullName: true, avatarUrl: true }
-        }
-      }
+          select: { id: true, fullName: true, avatarUrl: true },
+        },
+      },
     });
 
     return updated;
@@ -171,13 +170,13 @@ export class BlogService {
 
   async adminSoftDelete(id: string): Promise<void> {
     const existing = await this.prisma.blogPost.findUnique({ where: { id } });
-    if (!existing || existing.status === "DELETED") {
-      throw new NotFoundException("Không tìm thấy bài viết");
+    if (!existing || existing.status === 'DELETED') {
+      throw new NotFoundException('Không tìm thấy bài viết');
     }
 
     await this.prisma.blogPost.update({
       where: { id },
-      data: { status: "DELETED" }
+      data: { status: 'DELETED' },
     });
   }
 
@@ -193,9 +192,9 @@ export class BlogService {
     // Exclude DELETED by default unless explicitly requested
     const where: Record<string, unknown> = {};
     if (query.status) {
-      where["status"] = query.status;
+      where['status'] = query.status;
     } else {
-      where["status"] = { not: "DELETED" };
+      where['status'] = { not: 'DELETED' };
     }
 
     const [items, totalElements] = await Promise.all([
@@ -203,14 +202,14 @@ export class BlogService {
         where,
         skip,
         take: size,
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: 'desc' },
         include: {
           author: {
-            select: { id: true, fullName: true, avatarUrl: true }
-          }
-        }
+            select: { id: true, fullName: true, avatarUrl: true },
+          },
+        },
       }),
-      this.prisma.blogPost.count({ where })
+      this.prisma.blogPost.count({ where }),
     ]);
 
     return buildPagination(items, page, size, totalElements);

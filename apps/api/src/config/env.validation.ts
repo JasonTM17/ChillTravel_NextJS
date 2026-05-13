@@ -11,7 +11,7 @@
  */
 
 /** Allowed values for `NODE_ENV`. */
-export const NODE_ENVS = ["development", "test", "production"] as const;
+export const NODE_ENVS = ['development', 'test', 'production'] as const;
 export type NodeEnv = (typeof NODE_ENVS)[number];
 
 /** Typed shape produced by {@link validateEnv}. */
@@ -29,15 +29,15 @@ export interface WanderViewerEnv {
 
 /** Keys the consumer can request with typed config getters. */
 export const ENV_KEYS = {
-  NODE_ENV: "NODE_ENV",
-  PORT: "PORT",
-  DATABASE_URL: "DATABASE_URL",
-  JWT_ACCESS_SECRET: "JWT_ACCESS_SECRET",
-  JWT_REFRESH_SECRET: "JWT_REFRESH_SECRET",
-  JWT_ACCESS_EXPIRATION: "JWT_ACCESS_EXPIRATION",
-  JWT_REFRESH_EXPIRATION: "JWT_REFRESH_EXPIRATION",
-  FRONTEND_URL: "FRONTEND_URL",
-  UPLOAD_DIR: "UPLOAD_DIR"
+  NODE_ENV: 'NODE_ENV',
+  PORT: 'PORT',
+  DATABASE_URL: 'DATABASE_URL',
+  JWT_ACCESS_SECRET: 'JWT_ACCESS_SECRET',
+  JWT_REFRESH_SECRET: 'JWT_REFRESH_SECRET',
+  JWT_ACCESS_EXPIRATION: 'JWT_ACCESS_EXPIRATION',
+  JWT_REFRESH_EXPIRATION: 'JWT_REFRESH_EXPIRATION',
+  FRONTEND_URL: 'FRONTEND_URL',
+  UPLOAD_DIR: 'UPLOAD_DIR',
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -48,33 +48,29 @@ function requireString(
   config: Record<string, unknown>,
   key: string,
   errors: string[],
-  opts: { minLength?: number } = {}
+  opts: { minLength?: number } = {},
 ): string | undefined {
   const raw = config[key];
-  if (raw === undefined || raw === null || raw === "") {
+  if (raw === undefined || raw === null || raw === '') {
     errors.push(`Missing required env var ${key}`);
     return undefined;
   }
-  if (typeof raw !== "string") {
+  if (typeof raw !== 'string') {
     errors.push(`Env var ${key} must be a string`);
     return undefined;
   }
   if (opts.minLength !== undefined && raw.length < opts.minLength) {
     errors.push(
-      `Env var ${key} must be at least ${opts.minLength} characters (received ${raw.length})`
+      `Env var ${key} must be at least ${opts.minLength} characters (received ${raw.length})`,
     );
     return undefined;
   }
   return raw;
 }
 
-function optionalString(
-  config: Record<string, unknown>,
-  key: string,
-  fallback: string
-): string {
+function optionalString(config: Record<string, unknown>, key: string, fallback: string): string {
   const raw = config[key];
-  if (raw === undefined || raw === null || raw === "") {
+  if (raw === undefined || raw === null || raw === '') {
     return fallback;
   }
   return String(raw);
@@ -84,10 +80,10 @@ function optionalNumber(
   config: Record<string, unknown>,
   key: string,
   fallback: number,
-  errors: string[]
+  errors: string[],
 ): number {
   const raw = config[key];
-  if (raw === undefined || raw === null || raw === "") {
+  if (raw === undefined || raw === null || raw === '') {
     return fallback;
   }
   const parsed = Number(raw);
@@ -103,17 +99,15 @@ function optionalEnum<T extends string>(
   key: string,
   allowed: readonly T[],
   fallback: T,
-  errors: string[]
+  errors: string[],
 ): T {
   const raw = config[key];
-  if (raw === undefined || raw === null || raw === "") {
+  if (raw === undefined || raw === null || raw === '') {
     return fallback;
   }
   const value = String(raw) as T;
   if (!allowed.includes(value)) {
-    errors.push(
-      `Env var ${key} must be one of: ${allowed.join(", ")} (received "${String(raw)}")`
-    );
+    errors.push(`Env var ${key} must be one of: ${allowed.join(', ')} (received "${String(raw)}")`);
     return fallback;
   }
   return value;
@@ -142,40 +136,32 @@ function optionalEnum<T extends string>(
  * Returns a normalized record merged back into `ConfigService` (NestJS
  * uses whatever this function returns as the active config map).
  */
-export function validateEnv(
-  config: Record<string, unknown>
-): Record<string, unknown> {
+export function validateEnv(config: Record<string, unknown>): Record<string, unknown> {
   const errors: string[] = [];
 
   const databaseUrl = requireString(config, ENV_KEYS.DATABASE_URL, errors);
   const accessSecret = requireString(config, ENV_KEYS.JWT_ACCESS_SECRET, errors, {
-    minLength: 16
+    minLength: 16,
   });
   const refreshSecret = requireString(config, ENV_KEYS.JWT_REFRESH_SECRET, errors, {
-    minLength: 16
+    minLength: 16,
   });
 
   const nodeEnv = optionalEnum<NodeEnv>(
     config,
     ENV_KEYS.NODE_ENV,
     NODE_ENVS,
-    "development",
-    errors
+    'development',
+    errors,
   );
   const port = optionalNumber(config, ENV_KEYS.PORT, 4000, errors);
-  const accessExp = optionalString(config, ENV_KEYS.JWT_ACCESS_EXPIRATION, "15m");
-  const refreshExp = optionalString(config, ENV_KEYS.JWT_REFRESH_EXPIRATION, "7d");
-  const frontendUrl = optionalString(
-    config,
-    ENV_KEYS.FRONTEND_URL,
-    "http://localhost:3000"
-  );
-  const uploadDir = optionalString(config, ENV_KEYS.UPLOAD_DIR, "./uploads");
+  const accessExp = optionalString(config, ENV_KEYS.JWT_ACCESS_EXPIRATION, '15m');
+  const refreshExp = optionalString(config, ENV_KEYS.JWT_REFRESH_EXPIRATION, '7d');
+  const frontendUrl = optionalString(config, ENV_KEYS.FRONTEND_URL, 'http://localhost:3000');
+  const uploadDir = optionalString(config, ENV_KEYS.UPLOAD_DIR, './uploads');
 
   if (errors.length > 0) {
-    throw new Error(
-      `Invalid environment configuration:\n  - ${errors.join("\n  - ")}`
-    );
+    throw new Error(`Invalid environment configuration:\n  - ${errors.join('\n  - ')}`);
   }
 
   // All validated values re-injected so downstream ConfigService.get<T>()
@@ -190,6 +176,6 @@ export function validateEnv(
     [ENV_KEYS.JWT_ACCESS_EXPIRATION]: accessExp,
     [ENV_KEYS.JWT_REFRESH_EXPIRATION]: refreshExp,
     [ENV_KEYS.FRONTEND_URL]: frontendUrl,
-    [ENV_KEYS.UPLOAD_DIR]: uploadDir
+    [ENV_KEYS.UPLOAD_DIR]: uploadDir,
   };
 }

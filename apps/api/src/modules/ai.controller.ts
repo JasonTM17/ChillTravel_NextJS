@@ -1,6 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
-import { Type } from "class-transformer";
-import { ArrayMinSize, IsArray, IsBoolean, IsIn, IsInt, IsOptional, IsString, Max, MaxLength, Min, MinLength } from "class-validator";
+import { Body, Controller, Post } from '@nestjs/common';
 import {
   envelope,
   type AiBudgetEstimateRequest,
@@ -12,10 +10,24 @@ import {
   type AiReindexRequest,
   type BudgetSimulationInput,
   type TravelQuizAnswer,
-  type TravelStyle
-} from "@vietwander/shared";
-import { Public } from "../common/decorators/public.decorator";
-import { AiService } from "./ai.service";
+  type TravelStyle,
+} from '@vietwander/shared';
+import { Type } from 'class-transformer';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsBoolean,
+  IsIn,
+  IsInt,
+  IsOptional,
+  IsString,
+  Max,
+  MaxLength,
+  Min,
+  MinLength,
+} from 'class-validator';
+import { Public } from '../common/decorators/public.decorator';
+import { AiService } from './ai.service';
 
 class ChatDto implements AiChatRequest {
   @IsString()
@@ -55,7 +67,16 @@ class CompareDto implements AiCompareRequest {
   slugs!: string[];
 
   @IsOptional()
-  @IsIn(["Food Hunter", "Culture Seeker", "Beach Lover", "Mountain Adventurer", "Luxury Escaper", "Budget Backpacker", "Family Planner", "World Wanderer"])
+  @IsIn([
+    'Food Hunter',
+    'Culture Seeker',
+    'Beach Lover',
+    'Mountain Adventurer',
+    'Luxury Escaper',
+    'Budget Backpacker',
+    'Family Planner',
+    'World Wanderer',
+  ])
   style?: TravelStyle;
 }
 
@@ -90,17 +111,17 @@ class BudgetDto implements BudgetSimulationInput {
   @Max(60)
   days!: number;
 
-  @IsIn(["hostel", "comfort", "boutique", "luxury"])
-  hotelLevel!: BudgetSimulationInput["hotelLevel"];
+  @IsIn(['hostel', 'comfort', 'boutique', 'luxury'])
+  hotelLevel!: BudgetSimulationInput['hotelLevel'];
 
-  @IsIn(["street", "balanced", "premium"])
-  foodLevel!: BudgetSimulationInput["foodLevel"];
+  @IsIn(['street', 'balanced', 'premium'])
+  foodLevel!: BudgetSimulationInput['foodLevel'];
 
-  @IsIn(["public", "mixed", "private"])
-  transportLevel!: BudgetSimulationInput["transportLevel"];
+  @IsIn(['public', 'mixed', 'private'])
+  transportLevel!: BudgetSimulationInput['transportLevel'];
 
-  @IsIn(["slow", "balanced", "packed"])
-  activityLevel!: BudgetSimulationInput["activityLevel"];
+  @IsIn(['slow', 'balanced', 'packed'])
+  activityLevel!: BudgetSimulationInput['activityLevel'];
 }
 
 class PersonalityDto implements AiPersonalityRequest {
@@ -122,53 +143,59 @@ class ReindexDto implements AiReindexRequest {
   force?: boolean;
 }
 
-@Controller("ai")
+@Controller('ai')
 @Public()
 export class AiController {
   constructor(private readonly ai: AiService) {}
 
-  @Post("chat")
+  @Post('chat')
   async chat(@Body() body: ChatDto) {
-    return envelope(await this.ai.chat(body.message, body.contextSlug), "Local AI gateway response");
+    return envelope(
+      await this.ai.chat(body.message, body.contextSlug),
+      'Local AI gateway response',
+    );
   }
 
-  @Post("chat/stream")
+  @Post('chat/stream')
   async stream(@Body() body: ChatDto) {
-    return envelope(await this.ai.chat(body.message, body.contextSlug), "Streaming is mocked by the API; web can consume ai-service SSE for local runtime.");
+    return envelope(
+      await this.ai.chat(body.message, body.contextSlug),
+      'Streaming is mocked by the API; web can consume ai-service SSE for local runtime.',
+    );
   }
 
-  @Post("itinerary")
+  @Post('itinerary')
   async itinerary(@Body() body: ItineraryDto) {
-    return envelope(await this.ai.itinerary(body), "Itinerary generated");
+    return envelope(await this.ai.itinerary(body), 'Itinerary generated');
   }
 
-  @Post("budget")
+  @Post('budget')
   budget(@Body() body: BudgetEstimateDto = {}) {
-    return envelope(this.ai.budget(body.destinationSlug, body.travelers), "Budget estimated");
+    return envelope(this.ai.budget(body.destinationSlug, body.travelers), 'Budget estimated');
   }
 
-  @Post("budget/simulate")
+  @Post('budget/simulate')
   simulateBudget(@Body() body: BudgetDto) {
-    return envelope(this.ai.simulateBudget(body), "Budget simulation updated");
+    return envelope(this.ai.simulateBudget(body), 'Budget simulation updated');
   }
 
-  @Post("compare")
+  @Post('compare')
   compare(@Body() body: CompareDto) {
-    return envelope(this.ai.compare(body.slugs, body.style), "Destinations compared");
+    return envelope(this.ai.compare(body.slugs, body.style), 'Destinations compared');
   }
 
-  @Post("personality")
+  @Post('personality')
   personality(@Body() body: PersonalityDto) {
-    return envelope(this.ai.personality(body.answers), "Travel personality detected");
+    return envelope(this.ai.personality(body.answers), 'Travel personality detected');
   }
 
-  @Post("mood-search")
+  @Post('mood-search')
   moodSearch(@Body() body: MoodSearchDto) {
-    return envelope(this.ai.moodSearch(body.query), "Mood search converted into filters");
+    return envelope(this.ai.moodSearch(body.query), 'Mood search converted into filters');
   }
 
-  @Post("reindex")
+  @Post('reindex')
   async reindex(@Body() body: ReindexDto = {}) {
-    return envelope(await this.ai.reindex(body.force === true), "AI reindex queued");
+    return envelope(await this.ai.reindex(body.force === true), 'AI reindex queued');
   }
 }

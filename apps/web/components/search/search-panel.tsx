@@ -1,6 +1,7 @@
 'use client';
 
 import { Hotel, Plane, Map, Sparkles, Clock, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import { useLocale } from '@/lib/i18n';
 import { FlightSearchForm } from './flight-search-form';
@@ -81,11 +82,15 @@ export function SearchPanel() {
     setRecentSearches(updated);
   }, []);
 
+  const router = useRouter();
+
   const handleSearch = useCallback(() => {
-    // Placeholder: will be implemented with actual form logic in next tasks
-    // eslint-disable-next-line no-console
-    console.log(`Search triggered for tab: ${activeTab}`);
-  }, [activeTab]);
+    if (activeTab === 'tours') {
+      router.push('/tours');
+    } else if (activeTab === 'experiences') {
+      router.push('/experiences');
+    }
+  }, [activeTab, router]);
 
   // ─── Shared search panel content ──────────────────────────────────────────
 

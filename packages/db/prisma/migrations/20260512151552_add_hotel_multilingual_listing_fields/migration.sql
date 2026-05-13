@@ -1,0 +1,16 @@
+-- AlterTable
+ALTER TABLE "HotelMock" ADD COLUMN     "address" TEXT,
+ADD COLUMN     "amenities" TEXT[],
+ADD COLUMN     "descriptionEn" TEXT,
+ADD COLUMN     "descriptionJa" TEXT,
+ADD COLUMN     "descriptionVi" TEXT,
+ADD COLUMN     "distanceFromCenter" DOUBLE PRECISION,
+ADD COLUMN     "imageUrls" TEXT[],
+ADD COLUMN     "latitude" DOUBLE PRECISION,
+ADD COLUMN     "longitude" DOUBLE PRECISION,
+ADD COLUMN     "nameEn" TEXT,
+ADD COLUMN     "nameJa" TEXT,
+ADD COLUMN     "propertyType" TEXT,
+ADD COLUMN     "reviewCount" INTEGER DEFAULT 0,
+ADD COLUMN     "reviewScore" DOUBLE PRECISION DEFAULT 7.0,
+ADD COLUMN     "starRating" INTEGER DEFAULT 3;

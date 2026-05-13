@@ -348,6 +348,25 @@ model HotelMock {
   rating        Float
   rooms         RoomMock[]
 
+  // --- Multilingual fields ---
+  nameEn        String?
+  nameJa        String?
+  descriptionVi String?
+  descriptionEn String?
+  descriptionJa String?
+
+  // --- Listing fields ---
+  address            String?
+  starRating         Int?     @default(3)   // 1-5
+  reviewScore        Float?   @default(7.0) // 0.0-10.0
+  reviewCount        Int?     @default(0)
+  amenities          String[] // ["wifi", "pool", "parking", ...]
+  propertyType       String?  // "hotel" | "resort" | "villa" | "hostel"
+  distanceFromCenter Float?   // km
+  imageUrls          String[]
+  latitude           Float?
+  longitude          Float?
+
   destination Destination @relation(fields: [destinationId], references: [id])
 }
 
@@ -568,6 +587,43 @@ model Coupon {
   bookings Booking[]
 
   @@index([isActive, validFrom, validTo])
+}
+
+// =============================================================================
+// PROMOTIONS (Traveloka-style promo banners + flash sales)
+// =============================================================================
+
+model PromoBanner {
+  id        String   @id @default(cuid())
+  titleVi   String
+  titleEn   String
+  titleJa   String
+  imageUrl  String
+  linkUrl   String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime @default(now())
+
+  @@index([isActive, startDate, endDate])
+}
+
+model FlashSaleItem {
+  id              String   @id @default(cuid())
+  itemType        String   // "hotel" | "tour" | "flight"
+  itemId          String
+  originalPrice   Int
+  salePrice       Int
+  discountPercent Int
+  startTime       DateTime
+  endTime         DateTime
+  maxQuantity     Int      @default(10)
+  soldCount       Int      @default(0)
+  isActive        Boolean  @default(true)
+
+  @@index([isActive, endTime])
+  @@index([itemType, itemId])
 }
 
 // =============================================================================
@@ -803,4 +859,41 @@ model Notification {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, read, createdAt])
+}
+
+// =============================================================================
+// FLIGHT MOCK DATA (Traveloka-style flight listing)
+// =============================================================================
+
+model AirlineMock {
+  id      String       @id @default(cuid())
+  code    String       @unique // e.g. "VN", "VJ", "QH"
+  nameVi  String
+  nameEn  String
+  nameJa  String
+  logoUrl String?
+  flights FlightMock[]
+}
+
+model FlightMock {
+  id             String   @id @default(cuid())
+  flightNumber   String   @unique
+  airlineId      String
+  origin         String   // airport code e.g. "SGN"
+  destination    String   // airport code e.g. "HAN"
+  departureTime  DateTime
+  arrivalTime    DateTime
+  durationMin    Int      // duration in minutes
+  stops          Int      @default(0)
+  layoverCity    String?
+  layoverMin     Int?     // layover duration in minutes
+  cabinClass     String   @default("economy")
+  basePrice      Int      // VND
+  taxAmount      Int      // VND
+  seatsAvailable Int      @default(180)
+
+  airline AirlineMock @relation(fields: [airlineId], references: [id])
+
+  @@index([origin, destination, departureTime])
+  @@index([cabinClass])
 }

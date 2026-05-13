@@ -1,1 +1,42 @@
+# ──────────────────────────────────────────────────────────────
+# Pre-commit hook: Block forbidden files, then run lint-staged
+# ──────────────────────────────────────────────────────────────
+
+# 1. Check staged files against forbidden patterns
+FORBIDDEN_PATTERNS='(^|/)\.env($|\.)|(^|/)node_modules/|(^|/)dist/|(^|/)\.next/|(^|/)coverage/|\.key$|\.pem$'
+
+STAGED_FILES=$(git diff --cached --name-only)
+
+if [ -n "$STAGED_FILES" ]; then
+  BLOCKED_FILES=$(echo "$STAGED_FILES" | grep -E "$FORBIDDEN_PATTERNS" || true)
+
+  if [ -n "$BLOCKED_FILES" ]; then
+    echo ""
+    echo "🚫 COMMIT BLOCKED: Forbidden files detected in staging area"
+    echo ""
+    echo "The following files match forbidden patterns and must NOT be committed:"
+    echo ""
+    echo "$BLOCKED_FILES" | while IFS= read -r file; do
+      echo "  ❌ $file"
+    done
+    echo ""
+    echo "Forbidden patterns:"
+    echo "  • **/.env, **/.env.*       (secrets/environment config)"
+    echo "  • **/node_modules/**       (dependencies — use .gitignore)"
+    echo "  • **/dist/**               (build output)"
+    echo "  • **/.next/**              (Next.js build cache)"
+    echo "  • **/coverage/**           (test coverage reports)"
+    echo "  • **/*.key, **/*.pem       (private keys/certificates)"
+    echo ""
+    echo "To fix:"
+    echo "  git reset HEAD <file>      # unstage the file"
+    echo "  git rm --cached <file>     # remove from git tracking"
+    echo ""
+    echo "If the file is not in .gitignore, add it there first."
+    echo ""
+    exit 1
+  fi
+fi
+
+# 2. Run lint-staged (format staged files)
 pnpm lint-staged

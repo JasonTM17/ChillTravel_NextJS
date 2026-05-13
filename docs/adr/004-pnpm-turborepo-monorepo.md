@@ -45,8 +45,8 @@ Use **pnpm workspaces** for package management and **Turborepo** for task orches
 
 ```yaml
 packages:
-  - "apps/*"
-  - "packages/*"
+  - 'apps/*'
+  - 'packages/*'
 ```
 
 Each package has its own `package.json` with a scoped name (`@vietwander/api`, `@vietwander/web`, `@vietwander/shared`, `@vietwander/db`). Cross-package dependencies use workspace protocol:

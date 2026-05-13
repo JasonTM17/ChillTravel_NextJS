@@ -8,16 +8,16 @@
  * Design §18.7 / Req 40.
  */
 
-import http from "k6/http";
-import { check, sleep } from "k6";
-import { Rate, Trend } from "k6/metrics";
+import http from 'k6/http';
+import { check, sleep } from 'k6';
+import { Rate, Trend } from 'k6/metrics';
 
 // ---------------------------------------------------------------------------
 // Custom metrics
 // ---------------------------------------------------------------------------
 
-const errorRate = new Rate("error_rate");
-const tourListDuration = new Trend("tour_list_duration", true);
+const errorRate = new Rate('error_rate');
+const tourListDuration = new Trend('tour_list_duration', true);
 
 // ---------------------------------------------------------------------------
 // Test options
@@ -25,10 +25,10 @@ const tourListDuration = new Trend("tour_list_duration", true);
 
 export const options = {
   vus: 100,
-  duration: "30s",
+  duration: '30s',
   thresholds: {
-    http_req_duration: ["p(95)<500"],
-    error_rate: ["rate<0.05"],
+    http_req_duration: ['p(95)<500'],
+    error_rate: ['rate<0.05'],
   },
 };
 
@@ -36,16 +36,16 @@ export const options = {
 // Test scenario
 // ---------------------------------------------------------------------------
 
-const BASE_URL = __ENV.BASE_URL || "http://localhost:4000";
+const BASE_URL = __ENV.BASE_URL || 'http://localhost:4000';
 
 export default function () {
   const res = http.get(`${BASE_URL}/api/v1/tours?page=0&size=12`, {
-    headers: { Accept: "application/json" },
+    headers: { Accept: 'application/json' },
   });
 
   const ok = check(res, {
-    "status is 200": (r) => r.status === 200,
-    "response has success:true": (r) => {
+    'status is 200': (r) => r.status === 200,
+    'response has success:true': (r) => {
       try {
         const body = JSON.parse(r.body);
         return body.success === true;
@@ -53,7 +53,7 @@ export default function () {
         return false;
       }
     },
-    "p95 < 500ms": (r) => r.timings.duration < 500,
+    'p95 < 500ms': (r) => r.timings.duration < 500,
   });
 
   errorRate.add(!ok);

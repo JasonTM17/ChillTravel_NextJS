@@ -22,21 +22,21 @@ WanderViet is a portfolio-grade full-stack travel platform built with modern tec
 
 ## Key Features
 
-| Module | Description |
-|--------|-------------|
-| Auth | Register, login, JWT access+refresh, password change, account lockout |
-| Destinations | Browse, search, detail pages, admin CRUD |
-| Tours | Search/filter/sort, itineraries, departures, admin CRUD |
-| Booking | Book tours, manage bookings, code format WV-YYYYMMDD-XXXXXX |
-| Payment | Mock checkout + callback (demo only) |
-| Reviews | Tour reviews, admin approve/reject/hide |
-| Wishlist | Save tours and destinations |
-| Blog | CMS with DRAFT/PUBLISHED workflow |
-| Contact | Contact form, admin triage |
-| Admin | Dashboard with revenue, top tours, full module management |
-| Notifications | In-app notifications, mark as read |
-| Coupons | Discount codes, PERCENT/FIXED, usage limits |
-| AI Concierge | Local chatbot (Ollama + RAG + Qdrant), no cloud API key needed |
+| Module        | Description                                                           |
+| ------------- | --------------------------------------------------------------------- |
+| Auth          | Register, login, JWT access+refresh, password change, account lockout |
+| Destinations  | Browse, search, detail pages, admin CRUD                              |
+| Tours         | Search/filter/sort, itineraries, departures, admin CRUD               |
+| Booking       | Book tours, manage bookings, code format WV-YYYYMMDD-XXXXXX           |
+| Payment       | Mock checkout + callback (demo only)                                  |
+| Reviews       | Tour reviews, admin approve/reject/hide                               |
+| Wishlist      | Save tours and destinations                                           |
+| Blog          | CMS with DRAFT/PUBLISHED workflow                                     |
+| Contact       | Contact form, admin triage                                            |
+| Admin         | Dashboard with revenue, top tours, full module management             |
+| Notifications | In-app notifications, mark as read                                    |
+| Coupons       | Discount codes, PERCENT/FIXED, usage limits                           |
+| AI Concierge  | Local chatbot (Ollama + RAG + Qdrant), no cloud API key needed        |
 
 ## System Requirements
 
@@ -64,6 +64,7 @@ cp .env.example .env
 ```
 
 Required variables:
+
 ```dotenv
 DATABASE_URL=postgresql://vietwander:vietwander@localhost:5432/vietwander
 JWT_ACCESS_SECRET=<random string, min 32 chars>
@@ -114,16 +115,17 @@ docker pull nguyenson1710/wanderviet-web:latest
 ```
 
 Run with Docker Compose:
+
 ```bash
 docker compose -f infra/docker/docker-compose.yml up -d
 ```
 
 ## Demo Accounts
 
-| Email | Password | Role |
-|-------|----------|------|
+| Email                | Password     | Role  |
+| -------------------- | ------------ | ----- |
 | admin@wanderviet.com | Admin@123456 | ADMIN |
-| user@wanderviet.com | User@123456 | USER |
+| user@wanderviet.com  | User@123456  | USER  |
 | staff@wanderviet.com | Staff@123456 | STAFF |
 
 ## API Documentation
@@ -172,18 +174,19 @@ pnpm storybook        # Run Storybook at http://localhost:6006
 
 ### Continuous Integration (on every push/PR)
 
-| Job | Description |
-|-----|-------------|
-| `web-api-ai` | Lint, test, build on Node 22 and 24 (matrix) |
-| `typecheck` | TypeScript type checking |
-| `security-audit` | `pnpm audit --prod` |
-| `e2e` | Playwright E2E tests with PostgreSQL service |
-| `docker-build` | Build Docker images (push to main only) |
-| `mobile` | Flutter analyze + test |
+| Job              | Description                                  |
+| ---------------- | -------------------------------------------- |
+| `web-api-ai`     | Lint, test, build on Node 22 and 24 (matrix) |
+| `typecheck`      | TypeScript type checking                     |
+| `security-audit` | `pnpm audit --prod`                          |
+| `e2e`            | Playwright E2E tests with PostgreSQL service |
+| `docker-build`   | Build Docker images (push to main only)      |
+| `mobile`         | Flutter analyze + test                       |
 
 ### Continuous Deployment (on version tags)
 
 When a `v*` tag is pushed, the CD workflow automatically:
+
 1. Builds multi-stage Docker images for API and Web
 2. Pushes to Docker Hub with version tag + `latest`
 3. Uses GitHub Actions cache for faster builds
@@ -193,6 +196,7 @@ Renovate bot automatically creates PRs for dependency updates with auto-merge fo
 ## Architecture
 
 See also:
+
 - [`docs/adr/`](docs/adr/) — Architecture Decision Records
 - [`docs/er-diagram.md`](docs/er-diagram.md) — Entity-Relationship diagram
 - [`docs/architecture.md`](docs/architecture.md) — System overview
@@ -210,4 +214,4 @@ MIT
 
 ---
 
-*WanderViet — Explore Vietnam and the world, your way.*
+_WanderViet — Explore Vietnam and the world, your way._

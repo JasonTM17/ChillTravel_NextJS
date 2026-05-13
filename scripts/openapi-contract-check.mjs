@@ -16,18 +16,18 @@
  * Design §18.5 / Req 47.
  */
 
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
-import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, "..");
+const ROOT = join(__dirname, '..');
 
-const API_URL = process.env.API_URL ?? "http://localhost:4000";
+const API_URL = process.env.API_URL ?? 'http://localhost:4000';
 const SPEC_URL = `${API_URL}/api/docs-json`;
-const SNAPSHOT_FILE = join(ROOT, "packages", "shared", "openapi.snapshot.json");
+const SNAPSHOT_FILE = join(ROOT, 'packages', 'shared', 'openapi.snapshot.json');
 
-const UPDATE_MODE = process.argv.includes("--update");
+const UPDATE_MODE = process.argv.includes('--update');
 
 async function fetchSpec() {
   const res = await fetch(SPEC_URL);
@@ -40,7 +40,7 @@ function extractPaths(spec) {
   for (const [path, methods] of Object.entries(spec.paths ?? {})) {
     result[path] = {};
     for (const [method, op] of Object.entries(methods)) {
-      if (!["get", "post", "put", "patch", "delete"].includes(method)) continue;
+      if (!['get', 'post', 'put', 'patch', 'delete'].includes(method)) continue;
       result[path][method] = {
         operationId: op.operationId,
         parameters: (op.parameters ?? [])
@@ -75,18 +75,14 @@ function findBreakingChanges(snapshot, current) {
       }
       // Check for removed required parameters
       for (const param of snapOp.parameters) {
-        if (param.endsWith(":true") && !currOp.parameters.includes(param)) {
-          breaking.push(
-            `REMOVED required param: ${param} from ${method.toUpperCase()} ${path}`,
-          );
+        if (param.endsWith(':true') && !currOp.parameters.includes(param)) {
+          breaking.push(`REMOVED required param: ${param} from ${method.toUpperCase()} ${path}`);
         }
       }
       // Check for removed response codes
       for (const code of snapOp.responses) {
         if (!currOp.responses.includes(code)) {
-          warnings.push(
-            `REMOVED response ${code} from ${method.toUpperCase()} ${path}`,
-          );
+          warnings.push(`REMOVED response ${code} from ${method.toUpperCase()} ${path}`);
         }
       }
     }
@@ -114,41 +110,39 @@ async function main() {
     currentSpec = await fetchSpec();
   } catch (err) {
     console.error(`Failed to fetch spec: ${err.message}`);
-    console.error("Make sure the API is running on port 4000.");
+    console.error('Make sure the API is running on port 4000.');
     process.exit(1);
   }
 
   if (UPDATE_MODE) {
-    writeFileSync(SNAPSHOT_FILE, JSON.stringify(currentSpec, null, 2), "utf8");
+    writeFileSync(SNAPSHOT_FILE, JSON.stringify(currentSpec, null, 2), 'utf8');
     console.log(`Snapshot updated: ${SNAPSHOT_FILE}`);
     return;
   }
 
   if (!existsSync(SNAPSHOT_FILE)) {
-    console.log("No snapshot found. Creating initial snapshot...");
-    writeFileSync(SNAPSHOT_FILE, JSON.stringify(currentSpec, null, 2), "utf8");
+    console.log('No snapshot found. Creating initial snapshot...');
+    writeFileSync(SNAPSHOT_FILE, JSON.stringify(currentSpec, null, 2), 'utf8');
     console.log(`Snapshot created: ${SNAPSHOT_FILE}`);
     return;
   }
 
-  const snapshot = JSON.parse(readFileSync(SNAPSHOT_FILE, "utf8"));
+  const snapshot = JSON.parse(readFileSync(SNAPSHOT_FILE, 'utf8'));
   const { breaking, warnings } = findBreakingChanges(snapshot, currentSpec);
 
   if (warnings.length > 0) {
-    console.log("\n⚠️  Warnings (non-breaking changes):");
+    console.log('\n⚠️  Warnings (non-breaking changes):');
     for (const w of warnings) console.log(`  - ${w}`);
   }
 
   if (breaking.length > 0) {
-    console.error("\n❌ Breaking changes detected:");
+    console.error('\n❌ Breaking changes detected:');
     for (const b of breaking) console.error(`  - ${b}`);
-    console.error(
-      "\nUpdate the snapshot with: node scripts/openapi-contract-check.mjs --update",
-    );
+    console.error('\nUpdate the snapshot with: node scripts/openapi-contract-check.mjs --update');
     process.exit(1);
   }
 
-  console.log("✅ No breaking changes detected.");
+  console.log('✅ No breaking changes detected.');
 }
 
 main().catch((err) => {

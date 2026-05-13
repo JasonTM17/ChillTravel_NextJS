@@ -1,9 +1,8 @@
-import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "../packages/db/generated/client/client";
+import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaClient } from '../packages/db/generated/client/client';
 
 const connectionString =
-  process.env.DATABASE_URL ??
-  "postgresql://vietwander:vietwander@localhost:5433/vietwander";
+  process.env.DATABASE_URL ?? 'postgresql://vietwander:vietwander@localhost:5433/vietwander';
 
 const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
 

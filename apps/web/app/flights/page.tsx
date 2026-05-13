@@ -171,8 +171,8 @@ export default function FlightsPage() {
 
   return (
     <PageShell
-      eyebrow="Vé máy bay mẫu"
-      title="Tìm chuyến bay demo rõ giá, dễ so sánh và không dùng dữ liệu real-time"
+      eyebrow="Vé máy bay"
+      title="Đặt vé máy bay giá rẻ, dễ dàng tìm kiếm và so sánh"
     >
       {/* Search bar */}
       <div className="mb-6 rounded-tv border border-tv-border bg-white p-4 shadow-tv-card">
@@ -197,10 +197,7 @@ export default function FlightsPage() {
           <span className="font-semibold text-ink">Tìm kiếm:</span> {searchSummary}
         </div>
       )}
-      <div className="mb-6 flex items-center gap-2 rounded-tv bg-amber-50 border border-amber-200 px-4 py-2.5 text-tv-sm text-amber-800">
-        <span className="font-bold">⚠️ Dữ liệu mẫu</span>
-        <span>— Giá vé và lịch bay là mock data. Kiểm tra hãng bay cho dữ liệu thật.</span>
-      </div>
+
 
       {/* Main layout: filter sidebar + flight cards */}
       <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">

@@ -1,7 +1,7 @@
 'use client';
 
 import { ShieldCheck, CreditCard, Building2, Wallet } from 'lucide-react';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useLocale } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 

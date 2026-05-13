@@ -405,7 +405,7 @@ function HeroSearch({ t }: { t: TranslationNamespace }) {
           {t.home.heroTitle}
         </h1>
 
-        {/* Search card — interactive Traveloka-style */}
+        {/* Search card — interactive OTA-style */}
         <div className="rounded-tv-lg bg-white p-4 shadow-tv-modal">
           <div className="grid gap-3 md:grid-cols-[1fr_180px_180px_160px_auto]">
             {/* Destination — editable input */}

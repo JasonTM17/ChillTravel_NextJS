@@ -1,7 +1,7 @@
+import type { CallHandler, ExecutionContext } from '@nestjs/common';
+import { of, throwError } from 'rxjs';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MetricsInterceptor } from './metrics.interceptor';
-import { of, throwError } from 'rxjs';
-import type { CallHandler, ExecutionContext } from '@nestjs/common';
 
 describe('MetricsInterceptor', () => {
   let interceptor: MetricsInterceptor;

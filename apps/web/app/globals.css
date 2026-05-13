@@ -5,12 +5,12 @@
 /* ─── Traveloka-inspired Design System ─────────────────────────────────────── */
 :root {
   /* Primary palette */
-  --tv-blue: #0064d2;
-  --tv-blue-dark: #004ea2;
-  --tv-blue-light: #e8f1fb;
-  --tv-orange: #ff6d00;
-  --tv-orange-dark: #e55a00;
-  --tv-orange-light: #fff3e8;
+  --tv-blue: #2563eb;
+  --tv-blue-dark: #1d4ed8;
+  --tv-blue-light: #eff6ff;
+  --tv-orange: #ff5a5f;
+  --tv-orange-dark: #e0484d;
+  --tv-orange-light: #ffeff0;
 
   /* Neutrals */
   --tv-bg: #f5f5f5;
@@ -89,15 +89,15 @@ a {
 .tv-card {
   background: var(--tv-surface);
   border: 1px solid var(--tv-border);
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   transition:
-    box-shadow 0.2s,
-    transform 0.2s;
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 .tv-card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
 }
 
 /* Button primary (blue) */
@@ -233,9 +233,10 @@ a {
 
 /* Section header */
 .tv-section-title {
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 800;
   color: var(--tv-ink);
+  letter-spacing: -0.02em;
   margin: 0;
 }
 
@@ -244,10 +245,10 @@ a {
   display: inline-block;
   font-size: 11px;
   font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
 }
 .tv-badge-red {
   background: #ffebee;

@@ -539,7 +539,7 @@ function StickyPriceSummary({
               href={`/booking/${destinationSlug}?hotel=${hotelSlug}&room=${selectedRoomId}`}
               className="mt-5 flex w-full items-center justify-center gap-2 rounded-tv bg-orange-cta px-5 py-4 font-bold text-white transition-colors hover:bg-orange-cta/90"
             >
-              Đặt phòng demo
+              Đặt phòng ngay
               <ChevronRight size={18} aria-hidden="true" />
             </Link>
           ) : (
@@ -548,7 +548,7 @@ function StickyPriceSummary({
               className="mt-5 flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-tv bg-gray-300 px-5 py-4 font-bold text-gray-500"
               aria-label={t.hotel.selectRoomFirst}
             >
-              Đặt phòng demo
+              Đặt phòng ngay
               <ChevronRight size={18} aria-hidden="true" />
             </button>
           )}
@@ -620,8 +620,7 @@ export default function HotelDetailPage() {
 
           {/* Hotel Title Section */}
           <div className="mt-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <StatusPill tone="blue">{hotel.district}</StatusPill>
+            <div className="flex flex-wrap items-center gap-2 mt-4">
               <span className="inline-flex items-center gap-1 text-sm font-bold text-orange-cta">
                 <Star size={16} fill="currentColor" aria-hidden="true" />
                 {hotel.rating.toFixed(1)} ({hotel.reviewCount} {t.hotel.reviews})
@@ -707,14 +706,14 @@ export default function HotelDetailPage() {
               href={`/booking/${hotel.destinationSlug}?hotel=${hotel.slug}&room=${selectedRoomId}`}
               className="rounded-tv bg-orange-cta px-6 py-3 text-sm font-bold text-white"
             >
-              Đặt phòng demo
+              Đặt phòng ngay
             </Link>
           ) : (
             <button
               disabled
               className="cursor-not-allowed rounded-tv bg-gray-300 px-6 py-3 text-sm font-bold text-gray-500"
             >
-              Đặt phòng demo
+              Đặt phòng ngay
             </button>
           )}
         </div>

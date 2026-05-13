@@ -4,6 +4,8 @@ import {
   makeGaugeProvider,
   makeHistogramProvider,
 } from '@willsoto/nestjs-prometheus';
+import { DbMetricsService } from './db-metrics.service';
+import { HeapMetricsService } from './heap-metrics.service';
 import {
   DB_QUERY_DURATION_METRIC,
   HTTP_REQUEST_DURATION_METRIC,
@@ -11,8 +13,6 @@ import {
   NODEJS_HEAP_SIZE_USED_METRIC,
 } from './metrics.constants';
 import { MetricsInterceptor } from './metrics.interceptor';
-import { HeapMetricsService } from './heap-metrics.service';
-import { DbMetricsService } from './db-metrics.service';
 
 /**
  * MetricsModule — registers custom Prometheus metrics for the WanderViet API.

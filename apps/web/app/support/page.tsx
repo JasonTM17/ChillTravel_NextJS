@@ -129,7 +129,7 @@ export default function SupportPage() {
                 aria-hidden="true"
               />
               <p className="text-sm font-bold leading-6 text-tv-ink-3">
-                {demoPaymentWarning}. ChillTravel không yêu cầu gửi ảnh thẻ, mã OTP thật hoặc thông
+                {demoPaymentWarning}. WanderViet không yêu cầu gửi ảnh thẻ, mã OTP thật hoặc thông
                 tin ngân hàng thật.
               </p>
             </div>

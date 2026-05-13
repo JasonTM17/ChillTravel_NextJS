@@ -1,7 +1,7 @@
 'use client';
 
 import { Star, X, SlidersHorizontal, SearchX } from 'lucide-react';
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useLocale } from '@/lib/i18n';
 import type { AmenityType } from './hotel-card';
 

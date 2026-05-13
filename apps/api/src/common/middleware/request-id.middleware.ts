@@ -1,5 +1,5 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 
 /**
  * Minimal request/response interfaces matching Express signatures.

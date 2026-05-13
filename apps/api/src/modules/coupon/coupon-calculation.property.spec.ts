@@ -1,7 +1,6 @@
 // Feature: wanderviet-pro-upgrade-plan, Property 2: Coupon Calculation Invariants
-import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
-
+import { describe, it, expect } from 'vitest';
 import {
   couponInputArb,
   couponPercentArb,

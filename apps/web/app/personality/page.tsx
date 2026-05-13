@@ -3,7 +3,7 @@ import { PageShell } from '@/components/page-shell';
 
 export default function PersonalityPage() {
   return (
-    <PageShell eyebrow="Phong cách du lịch" title="Để ChillTravel hiểu cách bạn thật sự muốn đi">
+    <PageShell eyebrow="Phong cách du lịch" title="Để WanderViet hiểu cách bạn thật sự muốn đi">
       <PersonalityQuiz />
     </PageShell>
   );

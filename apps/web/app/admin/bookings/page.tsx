@@ -1,5 +1,6 @@
-﻿'use client';
+'use client';
 
+import { Inbox } from 'lucide-react';
 import { useState, useEffect, useCallback } from 'react';
 import { adminApi } from '@/lib/api/admin.api';
 import type { Booking } from '@/lib/api/booking.api';
@@ -329,7 +330,13 @@ export default function AdminBookingsPage() {
         ) : error ? (
           <div className="p-8 text-center text-red-500">{error}</div>
         ) : items.length === 0 ? (
-          <div className="p-8 text-center text-gray-400">Không có đặt chỗ nào.</div>
+          <div className="flex flex-col items-center justify-center p-16 text-center">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-50">
+              <Inbox className="h-8 w-8 text-gray-400" strokeWidth={1.5} />
+            </div>
+            <p className="text-base font-bold text-gray-900">Chưa có đặt chỗ nào</p>
+            <p className="mt-1 text-sm text-gray-500">Hiện tại không có dữ liệu phù hợp với bộ lọc.</p>
+          </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">

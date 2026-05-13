@@ -55,7 +55,7 @@ export default async function BookingPage({ params }: { params: Promise<{ id: st
         <div className="mx-auto flex max-w-[1180px] items-center justify-between gap-4 px-4 py-5">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">
-              Thanh toán ChillTravel
+              Thanh toán WanderViet
             </p>
             <h1 className="mt-1 text-2xl font-bold md:text-3xl">
               Thanh toán & xác nhận đặt chỗ demo

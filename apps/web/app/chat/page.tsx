@@ -10,7 +10,7 @@ export default async function ChatPage() {
   return (
     <PageShell
       eyebrow="Trợ lý chuyến đi"
-      title="Hỏi ChillTravel để nhận câu trả lời có nguồn, có lịch trình và ranh giới rõ ràng"
+      title="Hỏi WanderViet để nhận câu trả lời có nguồn, có lịch trình và ranh giới rõ ràng"
     >
       <LocalChatConcierge initialAnswer={answer} />
     </PageShell>

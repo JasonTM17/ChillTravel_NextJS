@@ -1,4 +1,4 @@
-﻿import Image from 'next/image';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export function BrandLogo({ compact = false }: { compact?: boolean }) {
@@ -6,7 +6,7 @@ export function BrandLogo({ compact = false }: { compact?: boolean }) {
     <Link
       href="/"
       className="flex min-w-fit items-center gap-3"
-      aria-label="Về trang chủ ChillTravel"
+      aria-label="Về trang chủ WanderViet"
     >
       <Image
         src="/brand/logo-mark-islands.png"
@@ -18,7 +18,7 @@ export function BrandLogo({ compact = false }: { compact?: boolean }) {
       />
       {!compact ? (
         <span className="leading-tight">
-          <span className="block text-base font-bold text-[tv-ink]">ChillTravel</span>
+          <span className="block text-base font-bold text-[tv-ink]">WanderViet</span>
           <span className="block text-[11px] font-bold text-[tv-ink-3]">Du lịch thông minh</span>
         </span>
       ) : null}

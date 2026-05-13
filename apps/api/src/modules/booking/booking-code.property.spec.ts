@@ -1,7 +1,6 @@
 // Feature: wanderviet-pro-upgrade-plan, Property 1: Booking Code Format Invariant
-import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
-
+import { describe, it, expect } from 'vitest';
 import { PBT_NUM_RUNS } from '../../test-utils/pbt-helpers';
 import { generateBookingCode, BOOKING_CODE_REGEX } from './utils/booking-code';
 

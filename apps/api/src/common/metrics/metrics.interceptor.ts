@@ -1,7 +1,7 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
-import { Observable, tap } from 'rxjs';
 import type { Counter, Histogram } from 'prom-client';
+import { Observable, tap } from 'rxjs';
 import {
   HTTP_REQUEST_DURATION_METRIC,
   HTTP_REQUESTS_TOTAL_METRIC,

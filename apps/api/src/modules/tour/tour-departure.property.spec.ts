@@ -1,7 +1,6 @@
 // Feature: wanderviet-pro-upgrade-plan, Property 3: Tour Departure Date Range
-import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
-
+import { describe, it, expect } from 'vitest';
 import { PBT_NUM_RUNS, validDateArb } from '../../test-utils/pbt-helpers';
 import {
   validateDeparture,

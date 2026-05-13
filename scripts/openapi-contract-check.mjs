@@ -5,6 +5,7 @@
  * Compares the current OpenAPI spec against a saved snapshot.
  * Fails on breaking changes (removed fields, changed types).
  * Warns on additions (new fields, new endpoints).
+ * Fails if spec differs from snapshot without a CHANGELOG.md entry.
  *
  * Usage:
  *   # Update snapshot:
@@ -13,12 +14,13 @@
  *   # Check for breaking changes:
  *   node scripts/openapi-contract-check.mjs
  *
- * Design §18.5 / Req 47.
+ * Design §3 Contract Testing / Req 3.9
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execSync } from 'node:child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -26,6 +28,7 @@ const ROOT = join(__dirname, '..');
 const API_URL = process.env.API_URL ?? 'http://localhost:4000';
 const SPEC_URL = `${API_URL}/api/docs-json`;
 const SNAPSHOT_FILE = join(ROOT, 'packages', 'shared', 'openapi.snapshot.json');
+const CHANGELOG_FILE = join(ROOT, 'CHANGELOG.md');
 
 const UPDATE_MODE = process.argv.includes('--update');
 
@@ -104,6 +107,56 @@ function findBreakingChanges(snapshot, current) {
   return { breaking, warnings };
 }
 
+/**
+ * Checks whether the spec has changed compared to the snapshot.
+ * Uses a deep JSON comparison (serialized form).
+ */
+function hasSpecChanged(snapshot, current) {
+  return JSON.stringify(snapshot) !== JSON.stringify(current);
+}
+
+/**
+ * Checks if CHANGELOG.md has a new entry compared to the last committed version.
+ * Returns true if there's a new entry (uncommitted changes to CHANGELOG.md or
+ * the file has content beyond what was in the last commit).
+ */
+function hasChangelogEntry() {
+  if (!existsSync(CHANGELOG_FILE)) {
+    return false;
+  }
+
+  try {
+    // Check if CHANGELOG.md has uncommitted changes (staged or unstaged)
+    const gitStatus = execSync('git status --porcelain CHANGELOG.md', {
+      cwd: ROOT,
+      encoding: 'utf8',
+    }).trim();
+
+    if (gitStatus.length > 0) {
+      // CHANGELOG.md has been modified — new entry present
+      return true;
+    }
+
+    // Check if CHANGELOG.md was modified in the current branch compared to main
+    // This handles the case where CHANGELOG was already committed in the same PR
+    try {
+      const diffOutput = execSync('git diff main -- CHANGELOG.md', {
+        cwd: ROOT,
+        encoding: 'utf8',
+      }).trim();
+      return diffOutput.length > 0;
+    } catch {
+      // If main doesn't exist or git diff fails, check if file has content
+      const content = readFileSync(CHANGELOG_FILE, 'utf8').trim();
+      return content.length > 0;
+    }
+  } catch {
+    // If git is not available, just check if the file exists and has content
+    const content = readFileSync(CHANGELOG_FILE, 'utf8').trim();
+    return content.length > 0;
+  }
+}
+
 async function main() {
   let currentSpec;
   try {
@@ -129,6 +182,7 @@ async function main() {
 
   const snapshot = JSON.parse(readFileSync(SNAPSHOT_FILE, 'utf8'));
   const { breaking, warnings } = findBreakingChanges(snapshot, currentSpec);
+  const specChanged = hasSpecChanged(snapshot, currentSpec);
 
   if (warnings.length > 0) {
     console.log('\n⚠️  Warnings (non-breaking changes):');
@@ -142,7 +196,20 @@ async function main() {
     process.exit(1);
   }
 
-  console.log('✅ No breaking changes detected.');
+  // Req 3.9: Fail if spec differs from snapshot without CHANGELOG entry
+  if (specChanged) {
+    const hasEntry = hasChangelogEntry();
+    if (!hasEntry) {
+      console.error('\n❌ OpenAPI spec has changed but no CHANGELOG.md entry found.');
+      console.error('   Please add a CHANGELOG.md entry describing the API changes.');
+      console.error('   Then update the snapshot: node scripts/openapi-contract-check.mjs --update');
+      process.exit(1);
+    }
+    console.log('\n⚠️  OpenAPI spec has changed (CHANGELOG entry found — OK).');
+    console.log('   Remember to update the snapshot: node scripts/openapi-contract-check.mjs --update');
+  } else {
+    console.log('✅ No spec changes detected.');
+  }
 }
 
 main().catch((err) => {

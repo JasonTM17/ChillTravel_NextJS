@@ -10,17 +10,17 @@ import type {
   TravelPersonalityResult,
   TravelQuizAnswer,
   TravelStyle,
-  TripPlan
-} from "./types";
+  TripPlan,
+} from './types';
 
 export type PaymentMethod =
-  | "MOCK_CARD"
-  | "MOCK_MOMO"
-  | "MOCK_VNPAY"
-  | "MOCK_ZALOPAY"
-  | "MOCK_PAYPAL"
-  | "MOCK_BANK_TRANSFER"
-  | "CASH_ON_ARRIVAL";
+  | 'MOCK_CARD'
+  | 'MOCK_MOMO'
+  | 'MOCK_VNPAY'
+  | 'MOCK_ZALOPAY'
+  | 'MOCK_PAYPAL'
+  | 'MOCK_BANK_TRANSFER'
+  | 'CASH_ON_ARRIVAL';
 
 export interface ApiErrorEnvelope {
   success: false;
@@ -60,7 +60,7 @@ export interface DestinationListQuery {
   q?: string;
   style?: string;
   country?: string;
-  sort?: "cheapest" | "popular";
+  sort?: 'cheapest' | 'popular';
 }
 
 export interface BookingCreateRequest {
@@ -72,10 +72,10 @@ export interface BookingCreateRequest {
 export interface BookingMock {
   id: string;
   bookingCode: string;
-  status: "pending" | "confirmed" | "cancelled" | "refunded_mock";
+  status: 'pending' | 'confirmed' | 'cancelled' | 'refunded_mock';
   totalAmount: number;
-  currency: "VND";
-  paymentStatus: "pending" | "confirmed_mock" | "failed_mock" | "refunded_mock";
+  currency: 'VND';
+  paymentStatus: 'pending' | 'confirmed_mock' | 'failed_mock' | 'refunded_mock';
   paymentMethod: PaymentMethod | string;
   isDemo: true;
   warning: string;
@@ -130,7 +130,10 @@ export interface ChillTravelApiContract {
   };
   booking: {
     create: { request: BookingCreateRequest; response: BookingMock };
-    confirmPayment: { request: PaymentConfirmRequest; response: Pick<BookingMock, "bookingCode" | "paymentStatus" | "warning"> };
+    confirmPayment: {
+      request: PaymentConfirmRequest;
+      response: Pick<BookingMock, 'bookingCode' | 'paymentStatus' | 'warning'>;
+    };
   };
   ai: {
     chat: { request: AiChatRequest; response: AiChatStructuredAnswer };

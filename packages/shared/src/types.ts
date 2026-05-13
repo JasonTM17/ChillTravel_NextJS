@@ -1,14 +1,14 @@
-export type Role = "USER" | "HOST" | "GUIDE" | "ADMIN";
+export type Role = 'USER' | 'HOST' | 'GUIDE' | 'ADMIN';
 
 export type TravelStyle =
-  | "Food Hunter"
-  | "Culture Seeker"
-  | "Beach Lover"
-  | "Mountain Adventurer"
-  | "Luxury Escaper"
-  | "Budget Backpacker"
-  | "Family Planner"
-  | "World Wanderer";
+  | 'Food Hunter'
+  | 'Culture Seeker'
+  | 'Beach Lover'
+  | 'Mountain Adventurer'
+  | 'Luxury Escaper'
+  | 'Budget Backpacker'
+  | 'Family Planner'
+  | 'World Wanderer';
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -40,12 +40,12 @@ export interface Destination {
   bestTimeToVisit: string;
   budgetMin: number;
   budgetMax: number;
-  currency: "VND";
+  currency: 'VND';
   travelStyles: string[];
   tags: string[];
   latitude: number;
   longitude: number;
-  safetyLevel: "low" | "medium" | "high";
+  safetyLevel: 'low' | 'medium' | 'high';
   cultureNotes: string[];
   foodHighlights: string[];
   ratingAvg: number;
@@ -71,7 +71,7 @@ export interface TripPlan {
   destination: string;
   durationDays: number;
   style: string;
-  budgetLevel: "budget" | "mid-range" | "luxury";
+  budgetLevel: 'budget' | 'mid-range' | 'luxury';
   days: ItineraryDay[];
   budgetBreakdown: {
     hotel: number;
@@ -88,8 +88,8 @@ export interface AiCitation {
   sourceId: string;
   chunkId: string;
   url?: string;
-  trustTier?: "official" | "curated" | "sample";
-  language?: "vi" | "en";
+  trustTier?: 'official' | 'curated' | 'sample';
+  language?: 'vi' | 'en';
 }
 
 export interface AiAnswer {
@@ -97,16 +97,16 @@ export interface AiAnswer {
   answer: string;
   citations: AiCitation[];
   itineraryDraft?: TripPlan;
-  toolCalls: Array<{ name: string; status: "ok" | "error"; summary: string }>;
-  safety: { grounded: boolean; confidence: "low" | "medium" | "high" };
+  toolCalls: Array<{ name: string; status: 'ok' | 'error'; summary: string }>;
+  safety: { grounded: boolean; confidence: 'low' | 'medium' | 'high' };
 }
 
 export interface AiProviderStatus {
-  runtime: "local";
-  chatProvider: "ollama" | "sample";
+  runtime: 'local';
+  chatProvider: 'ollama' | 'sample';
   model: string;
-  embeddingProvider: "ollama" | "sample";
-  vectorDb: "qdrant" | "sample";
+  embeddingProvider: 'ollama' | 'sample';
+  vectorDb: 'qdrant' | 'sample';
   available: boolean;
   fallback: boolean;
   requiresOpenAiApiKey: false;
@@ -120,7 +120,12 @@ export interface AiClarifyingQuestion {
 }
 
 export interface AiQuickAction {
-  id: "save_answer" | "convert_to_itinerary" | "add_destination" | "estimate_budget" | "reindex_knowledge";
+  id:
+    | 'save_answer'
+    | 'convert_to_itinerary'
+    | 'add_destination'
+    | 'estimate_budget'
+    | 'reindex_knowledge';
   label: string;
   href?: string;
 }
@@ -140,7 +145,7 @@ export interface AiChatStructuredAnswer {
   safetyNotes: string[];
   culturalNotes: string[];
   citations: AiCitation[];
-  toolCalls: Array<{ name: string; status: "ok" | "error"; summary: string }>;
+  toolCalls: Array<{ name: string; status: 'ok' | 'error'; summary: string }>;
   quickActions: AiQuickAction[];
   provider: AiProviderStatus;
   realtimeWarning?: string;
@@ -150,15 +155,15 @@ export interface RagKnowledgeChunk {
   chunkId: string;
   sourceId: string;
   destinationSlug?: string;
-  language: "vi" | "en";
-  trustTier: "official" | "curated" | "sample";
+  language: 'vi' | 'en';
+  trustTier: 'official' | 'curated' | 'sample';
   content: string;
 }
 
 export interface RagReindexResult {
-  status: "ready" | "fallback" | "queued";
-  vectorDb: "qdrant";
-  retrievalBackend: "qdrant" | "sample";
+  status: 'ready' | 'fallback' | 'queued';
+  vectorDb: 'qdrant';
+  retrievalBackend: 'qdrant' | 'sample';
   collection: string;
   embeddingModel: string;
   documents: number;
@@ -186,17 +191,17 @@ export interface BudgetSimulationInput {
   destinationSlug: string;
   travelers: number;
   days: number;
-  hotelLevel: "hostel" | "comfort" | "boutique" | "luxury";
-  foodLevel: "street" | "balanced" | "premium";
-  transportLevel: "public" | "mixed" | "private";
-  activityLevel: "slow" | "balanced" | "packed";
+  hotelLevel: 'hostel' | 'comfort' | 'boutique' | 'luxury';
+  foodLevel: 'street' | 'balanced' | 'premium';
+  transportLevel: 'public' | 'mixed' | 'private';
+  activityLevel: 'slow' | 'balanced' | 'packed';
 }
 
 export interface BudgetSimulationResult {
   destination: string;
   total: number;
   perPerson: number;
-  currency: "VND";
+  currency: 'VND';
   breakdown: {
     hotel: number;
     food: number;
@@ -226,8 +231,8 @@ export interface MoodSearchResult {
   inferredFilters: {
     tags: string[];
     styles: string[];
-    pace: "chill" | "balanced" | "packed";
-    budget: "budget" | "mid-range" | "luxury";
+    pace: 'chill' | 'balanced' | 'packed';
+    budget: 'budget' | 'mid-range' | 'luxury';
   };
   destinations: Destination[];
 }

@@ -28,11 +28,11 @@
 // RoleName
 // ---------------------------------------------------------------------------
 
-export const ROLE_NAMES = ["USER", "HOST", "GUIDE", "ADMIN", "STAFF"] as const;
+export const ROLE_NAMES = ['USER', 'HOST', 'GUIDE', 'ADMIN', 'STAFF'] as const;
 export type RoleName = (typeof ROLE_NAMES)[number];
 
 /** Canonical WanderViet role labels (design §3.x). */
-export const CANONICAL_ROLE_NAMES = ["USER", "ADMIN", "STAFF"] as const;
+export const CANONICAL_ROLE_NAMES = ['USER', 'ADMIN', 'STAFF'] as const;
 export type CanonicalRoleName = (typeof CANONICAL_ROLE_NAMES)[number];
 
 /**
@@ -41,15 +41,15 @@ export type CanonicalRoleName = (typeof CANONICAL_ROLE_NAMES)[number];
  */
 export function toCanonicalRoleName(role: RoleName): CanonicalRoleName {
   switch (role) {
-    case "HOST":
-    case "GUIDE":
-    case "STAFF":
-      return "STAFF";
-    case "ADMIN":
-      return "ADMIN";
-    case "USER":
+    case 'HOST':
+    case 'GUIDE':
+    case 'STAFF':
+      return 'STAFF';
+    case 'ADMIN':
+      return 'ADMIN';
+    case 'USER':
     default:
-      return "USER";
+      return 'USER';
   }
 }
 
@@ -58,111 +58,99 @@ export function toCanonicalRoleName(role: RoleName): CanonicalRoleName {
 // ---------------------------------------------------------------------------
 
 export const BOOKING_STATUSES = [
-  "pending",
-  "confirmed",
-  "cancelled",
-  "completed",
-  "refunded_mock",
+  'pending',
+  'confirmed',
+  'cancelled',
+  'completed',
+  'refunded_mock',
 ] as const;
 export type BookingStatus = (typeof BOOKING_STATUSES)[number];
 
 /** Canonical WanderViet booking status labels returned in API responses. */
 export const BOOKING_STATUS_CANONICAL = {
-  pending: "PENDING",
-  confirmed: "CONFIRMED",
-  cancelled: "CANCELLED",
-  completed: "COMPLETED",
-  refunded_mock: "REFUNDED",
+  pending: 'PENDING',
+  confirmed: 'CONFIRMED',
+  cancelled: 'CANCELLED',
+  completed: 'COMPLETED',
+  refunded_mock: 'REFUNDED',
 } as const;
-export type CanonicalBookingStatus =
-  (typeof BOOKING_STATUS_CANONICAL)[BookingStatus];
+export type CanonicalBookingStatus = (typeof BOOKING_STATUS_CANONICAL)[BookingStatus];
 
 // ---------------------------------------------------------------------------
 // PaymentStatus (legacy lowercase values retained)
 // ---------------------------------------------------------------------------
 
 export const PAYMENT_STATUSES = [
-  "pending",
-  "confirmed_mock",
-  "failed_mock",
-  "refunded_mock",
+  'pending',
+  'confirmed_mock',
+  'failed_mock',
+  'refunded_mock',
 ] as const;
 export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
 
 /** Canonical WanderViet payment status labels returned in API responses. */
 export const PAYMENT_STATUS_CANONICAL = {
-  pending: "UNPAID",
-  confirmed_mock: "PAID",
-  failed_mock: "FAILED",
-  refunded_mock: "REFUNDED",
+  pending: 'UNPAID',
+  confirmed_mock: 'PAID',
+  failed_mock: 'FAILED',
+  refunded_mock: 'REFUNDED',
 } as const;
-export type CanonicalPaymentStatus =
-  (typeof PAYMENT_STATUS_CANONICAL)[PaymentStatus];
+export type CanonicalPaymentStatus = (typeof PAYMENT_STATUS_CANONICAL)[PaymentStatus];
 
 // ---------------------------------------------------------------------------
 // UserStatus
 // ---------------------------------------------------------------------------
 
-export const USER_STATUSES = ["ACTIVE", "INACTIVE", "BANNED"] as const;
+export const USER_STATUSES = ['ACTIVE', 'INACTIVE', 'BANNED'] as const;
 export type UserStatus = (typeof USER_STATUSES)[number];
 
 // ---------------------------------------------------------------------------
 // DestinationStatus
 // ---------------------------------------------------------------------------
 
-export const DESTINATION_STATUSES = ["ACTIVE", "INACTIVE", "DELETED"] as const;
+export const DESTINATION_STATUSES = ['ACTIVE', 'INACTIVE', 'DELETED'] as const;
 export type DestinationStatus = (typeof DESTINATION_STATUSES)[number];
 
 // ---------------------------------------------------------------------------
 // TourStatus
 // ---------------------------------------------------------------------------
 
-export const TOUR_STATUSES = ["ACTIVE", "INACTIVE", "DELETED"] as const;
+export const TOUR_STATUSES = ['ACTIVE', 'INACTIVE', 'DELETED'] as const;
 export type TourStatus = (typeof TOUR_STATUSES)[number];
 
 // ---------------------------------------------------------------------------
 // ReviewStatus
 // ---------------------------------------------------------------------------
 
-export const REVIEW_STATUSES = [
-  "PENDING",
-  "APPROVED",
-  "REJECTED",
-  "HIDDEN",
-] as const;
+export const REVIEW_STATUSES = ['PENDING', 'APPROVED', 'REJECTED', 'HIDDEN'] as const;
 export type ReviewStatus = (typeof REVIEW_STATUSES)[number];
 
 // ---------------------------------------------------------------------------
 // BlogStatus
 // ---------------------------------------------------------------------------
 
-export const BLOG_STATUSES = ["DRAFT", "PUBLISHED", "DELETED"] as const;
+export const BLOG_STATUSES = ['DRAFT', 'PUBLISHED', 'DELETED'] as const;
 export type BlogStatus = (typeof BLOG_STATUSES)[number];
 
 // ---------------------------------------------------------------------------
 // ContactStatus
 // ---------------------------------------------------------------------------
 
-export const CONTACT_STATUSES = [
-  "NEW",
-  "IN_PROGRESS",
-  "RESOLVED",
-  "CLOSED",
-] as const;
+export const CONTACT_STATUSES = ['NEW', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'] as const;
 export type ContactStatus = (typeof CONTACT_STATUSES)[number];
 
 // ---------------------------------------------------------------------------
 // WishlistItemType
 // ---------------------------------------------------------------------------
 
-export const WISHLIST_ITEM_TYPES = ["TOUR", "DESTINATION"] as const;
+export const WISHLIST_ITEM_TYPES = ['TOUR', 'DESTINATION'] as const;
 export type WishlistItemType = (typeof WISHLIST_ITEM_TYPES)[number];
 
 // ---------------------------------------------------------------------------
 // CouponDiscountType
 // ---------------------------------------------------------------------------
 
-export const COUPON_DISCOUNT_TYPES = ["PERCENT", "FIXED"] as const;
+export const COUPON_DISCOUNT_TYPES = ['PERCENT', 'FIXED'] as const;
 export type CouponDiscountType = (typeof COUPON_DISCOUNT_TYPES)[number];
 
 // ---------------------------------------------------------------------------
@@ -170,11 +158,11 @@ export type CouponDiscountType = (typeof COUPON_DISCOUNT_TYPES)[number];
 // ---------------------------------------------------------------------------
 
 export const NOTIFICATION_TYPES = [
-  "BOOKING_CONFIRMED",
-  "BOOKING_CANCELLED",
-  "BOOKING_COMPLETED",
-  "REVIEW_APPROVED",
-  "CONTACT_REPLY",
-  "SYSTEM",
+  'BOOKING_CONFIRMED',
+  'BOOKING_CANCELLED',
+  'BOOKING_COMPLETED',
+  'REVIEW_APPROVED',
+  'CONTACT_REPLY',
+  'SYSTEM',
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];

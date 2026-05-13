@@ -6,6 +6,8 @@
     "e2e": "playwright test",
     "e2e:headed": "playwright test --headed",
     "e2e:ui": "playwright test --ui",
+    "e2e:shard-1": "playwright test --shard=1/2",
+    "e2e:shard-2": "playwright test --shard=2/2",
     "report": "playwright show-report"
   },
   "devDependencies": {

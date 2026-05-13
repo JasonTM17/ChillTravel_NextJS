@@ -13,6 +13,7 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from '../../common/decorators/public.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { Audit } from '../../common/decorators/audit.decorator';
 import { CreateDepartureDto } from './dto/create-departure.dto';
 import { CreateItineraryDto } from './dto/create-itinerary.dto';
 import { CreateTourDto } from './dto/create-tour.dto';
@@ -105,6 +106,7 @@ export class TourController {
   @Post('admin/tours')
   @Roles('ADMIN')
   @ApiBearerAuth()
+  @Audit('ADMIN_CREATE_TOUR', 'Tour')
   @ApiOperation({
     summary: 'Create tour (Admin)',
     description:
@@ -127,6 +129,7 @@ export class TourController {
   @Put('admin/tours/:id')
   @Roles('ADMIN')
   @ApiBearerAuth()
+  @Audit('ADMIN_UPDATE_TOUR', 'Tour')
   @ApiOperation({
     summary: 'Update tour (Admin)',
     description:
@@ -151,6 +154,7 @@ export class TourController {
   @Roles('ADMIN')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBearerAuth()
+  @Audit('ADMIN_DELETE_TOUR', 'Tour')
   @ApiOperation({
     summary: 'Soft-delete tour (Admin)',
     description: 'Sets tour status to DELETED. The record is not removed from the database.',

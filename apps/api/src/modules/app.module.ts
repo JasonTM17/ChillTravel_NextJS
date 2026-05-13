@@ -12,6 +12,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { GlobalExceptionFilter } from '../common/filters/global-exception.filter';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
+import { AuditInterceptor } from '../common/interceptors/audit.interceptor';
 import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
 import { AuditService } from '../common/services/audit.service';
 import { EmailService } from '../common/services/email.service';
@@ -203,6 +204,7 @@ import { WishlistService } from './wishlist/wishlist.service';
     { provide: APP_GUARD, useClass: RolesGuard },
     { provide: APP_GUARD, useClass: CustomThrottlerGuard },
     { provide: APP_INTERCEPTOR, useClass: ResponseInterceptor },
+    { provide: APP_INTERCEPTOR, useClass: AuditInterceptor },
     { provide: APP_FILTER, useClass: GlobalExceptionFilter },
   ],
 })

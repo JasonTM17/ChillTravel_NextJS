@@ -12,6 +12,7 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Public } from '../../common/decorators/public.decorator';
+import { AuditService } from '../../common/services/audit.service';
 import { EmailService } from '../../common/services/email.service';
 import type { AuthenticatedUser } from '../../common/strategies/jwt.strategy';
 import { PrismaService } from '../../prisma/prisma.service';
@@ -35,6 +36,7 @@ export class PaymentController {
   constructor(
     private readonly prisma: PrismaService,
     private readonly emailService: EmailService,
+    private readonly auditService: AuditService,
   ) {}
 
   /**
@@ -187,6 +189,20 @@ export class PaymentController {
           'CONFIRMED',
         );
       }
+
+      // 4. Log PAYMENT_MOCK_COMPLETED audit event (Req 4.9)
+      void this.auditService.log({
+        actorId: booking.user?.id,
+        action: 'PAYMENT_MOCK_COMPLETED',
+        resourceType: 'Payment',
+        resourceId: payment.id,
+        metadata: {
+          bookingId: booking.id,
+          bookingCode: booking.bookingCode,
+          transactionCode: dto.transactionCode,
+          amount: payment.amount,
+        },
+      });
 
       return {
         bookingCode: booking.bookingCode,

@@ -133,6 +133,14 @@ export class AuthService {
     });
 
     if (!passwordValid) {
+      // Log LOGIN_FAILED audit event (Req 4.9)
+      void this.auditService.log({
+        actorId: user.id,
+        action: 'LOGIN_FAILED',
+        resourceType: 'Auth',
+        metadata: { email: dto.email, ipAddress },
+      });
+
       // Check if we should lock the account
       const windowStart = new Date(Date.now() - LOCKOUT_WINDOW_MS);
       const recentFailures = await this.prisma.loginAttempt.count({
@@ -154,6 +162,14 @@ export class AuthService {
 
       throw new UnauthorizedException('Invalid email or password');
     }
+
+    // Log LOGIN_SUCCESS audit event (Req 4.9)
+    void this.auditService.log({
+      actorId: user.id,
+      action: 'LOGIN_SUCCESS',
+      resourceType: 'Auth',
+      metadata: { email: dto.email, ipAddress },
+    });
 
     return this.generateTokensAndRespond(user);
   }
@@ -279,6 +295,14 @@ export class AuthService {
     await this.prisma.refreshToken.updateMany({
       where: { userId, revoked: false },
       data: { revoked: true },
+    });
+
+    // Log PASSWORD_CHANGED audit event (Req 4.9)
+    void this.auditService.log({
+      actorId: userId,
+      action: 'PASSWORD_CHANGED',
+      resourceType: 'Auth',
+      metadata: { userId },
     });
   }
 

@@ -13,6 +13,7 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from '../common/decorators/public.decorator';
 import { Roles } from '../common/decorators/roles.decorator';
+import { Audit } from '../common/decorators/audit.decorator';
 import { AddDestinationImageDto } from './destination/dto/add-destination-image.dto';
 import { CreateDestinationDto } from './destination/dto/create-destination.dto';
 import { DestinationQueryDto } from './destination/dto/destination-query.dto';
@@ -84,6 +85,7 @@ export class DestinationsController {
   @Post('admin/destinations')
   @Roles('ADMIN')
   @ApiBearerAuth()
+  @Audit('ADMIN_CREATE_DESTINATION', 'Destination')
   @ApiOperation({
     summary: 'Create destination (Admin)',
     description:
@@ -105,6 +107,7 @@ export class DestinationsController {
   @Put('admin/destinations/:id')
   @Roles('ADMIN')
   @ApiBearerAuth()
+  @Audit('ADMIN_UPDATE_DESTINATION', 'Destination')
   @ApiOperation({
     summary: 'Update destination (Admin)',
     description: 'Updates destination fields. Slug is regenerated only if name changes.',
@@ -128,6 +131,7 @@ export class DestinationsController {
   @Roles('ADMIN')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBearerAuth()
+  @Audit('ADMIN_DELETE_DESTINATION', 'Destination')
   @ApiOperation({
     summary: 'Soft-delete destination (Admin)',
     description: 'Sets destination status to DELETED. The record is not removed from the database.',

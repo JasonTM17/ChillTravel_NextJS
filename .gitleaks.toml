@@ -1,0 +1,63 @@
+# Gitleaks configuration for WanderViet
+# Custom rules to detect secrets and sensitive patterns
+# Reference: https://github.com/gitleaks/gitleaks
+
+title = "WanderViet Gitleaks Config"
+
+[allowlist]
+  paths = [
+    '''\.env\.example$''',
+    '''\.gitleaks\.toml$''',
+  ]
+
+[[rules]]
+  id = "jwt-secret"
+  description = "JWT Secret"
+  regex = '''(?i)(jwt[_-]?secret|jwt[_-]?key)\s*[=:]\s*['"]?[A-Za-z0-9+/=]{16,}['"]?'''
+  tags = ["secret", "jwt"]
+
+[[rules]]
+  id = "aws-access-key"
+  description = "AWS Access Key ID"
+  regex = '''(?:AKIA|ASIA)[0-9A-Z]{16}'''
+  tags = ["secret", "aws"]
+
+[[rules]]
+  id = "aws-secret-key"
+  description = "AWS Secret Access Key"
+  regex = '''(?i)(aws[_-]?secret[_-]?access[_-]?key)\s*[=:]\s*['"]?[A-Za-z0-9+/=]{40}['"]?'''
+  tags = ["secret", "aws"]
+
+[[rules]]
+  id = "openai-api-key"
+  description = "OpenAI API Key"
+  regex = '''sk-[A-Za-z0-9]{20,}'''
+  tags = ["secret", "openai"]
+
+[[rules]]
+  id = "google-api-key"
+  description = "Google API Key"
+  regex = '''AIza[0-9A-Za-z\-_]{35}'''
+  tags = ["secret", "google"]
+
+[[rules]]
+  id = "generic-secret-env"
+  description = "Generic secret environment variable (*_SECRET=)"
+  regex = '''(?i)[A-Z_]*SECRET\s*[=:]\s*['"]?[^\s'"]{8,}['"]?'''
+  tags = ["secret", "generic"]
+  [rules.allowlist]
+    paths = [
+      '''\.env\.example$''',
+      '''\.github/workflows/.*\.yml$''',
+    ]
+
+[[rules]]
+  id = "generic-token-env"
+  description = "Generic token environment variable (*_TOKEN=)"
+  regex = '''(?i)[A-Z_]*TOKEN\s*[=:]\s*['"]?[^\s'"]{8,}['"]?'''
+  tags = ["secret", "generic"]
+  [rules.allowlist]
+    paths = [
+      '''\.env\.example$''',
+      '''\.github/workflows/.*\.yml$''',
+    ]

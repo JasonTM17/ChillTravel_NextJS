@@ -6,9 +6,9 @@ services:
       POSTGRES_PASSWORD: vietwander
       POSTGRES_DB: vietwander
     ports:
-      - "5433:5432"
+      - '5433:5432'
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U vietwander"]
+      test: ['CMD-SHELL', 'pg_isready -U vietwander']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -16,20 +16,20 @@ services:
   redis:
     image: redis:8.6-alpine
     ports:
-      - "6379:6379"
+      - '6379:6379'
 
   qdrant:
     image: qdrant/qdrant:v1.16.2
     ports:
-      - "6333:6333"
-      - "6334:6334"
+      - '6333:6333'
+      - '6334:6334'
 
   api:
     build:
       context: ../..
       dockerfile: apps/api/Dockerfile
     ports:
-      - "4000:4000"
+      - '4000:4000'
     env_file:
       - ../../.env.example
     restart: unless-stopped
@@ -46,7 +46,7 @@ services:
     volumes:
       - ../..:/workspace
     ports:
-      - "8010:8010"
+      - '8010:8010'
     environment:
       OLLAMA_BASE_URL: http://host.docker.internal:11434
       QDRANT_URL: http://qdrant:6333
@@ -58,7 +58,7 @@ services:
       context: ../..
       dockerfile: apps/web/Dockerfile
     ports:
-      - "3000:3000"
+      - '3000:3000'
     env_file:
       - ../../.env.example
     restart: unless-stopped

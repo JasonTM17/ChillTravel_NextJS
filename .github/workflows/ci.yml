@@ -27,7 +27,7 @@ jobs:
       - run: pnpm docker:config
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          python-version: '3.12'
       - run: python -m unittest discover apps/ai-service/tests
 
   security-audit:

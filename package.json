@@ -42,6 +42,7 @@
     "tsx": "^4.21.0",
     "turbo": "^2.6.3",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.59.3"
+    "typescript-eslint": "^8.59.3",
+    "vitest": "^4.1.6"
   }
 }

@@ -3,6 +3,7 @@ import { Be_Vietnam_Pro } from 'next/font/google';
 import './globals.css';
 import { MobileBottomNav } from '@/components/layout/mobile-bottom-nav';
 import { SiteHeader } from '@/components/site-header';
+import { WebVitalsReporter } from '@/components/web-vitals-reporter';
 import { AuthProvider } from '@/lib/auth/auth-context';
 import { LocaleProvider } from '@/lib/i18n';
 
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <MobileBottomNav />
           </LocaleProvider>
         </AuthProvider>
+        <WebVitalsReporter />
       </body>
     </html>
   );

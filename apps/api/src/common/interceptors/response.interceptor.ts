@@ -1,6 +1,6 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
-import { Observable, map } from "rxjs";
-import { successResponse, type ApiPaginated, type ApiSuccess } from "@vietwander/shared";
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { successResponse, type ApiPaginated } from '@vietwander/shared';
+import { Observable, map } from 'rxjs';
 
 /**
  * Shapes the interceptor recognises as "already wrapped" and therefore
@@ -16,10 +16,10 @@ import { successResponse, type ApiPaginated, type ApiSuccess } from "@vietwander
  */
 function isAlreadyWrapped(value: unknown): boolean {
   return (
-    typeof value === "object" &&
+    typeof value === 'object' &&
     value !== null &&
-    "success" in value &&
-    typeof (value as { success: unknown }).success === "boolean"
+    'success' in value &&
+    typeof (value as { success: unknown }).success === 'boolean'
   );
 }
 
@@ -31,13 +31,13 @@ function isAlreadyWrapped(value: unknown): boolean {
  *     { success, message, data: { items, page, size, ... }, timestamp }
  */
 function isRawPaginated(value: unknown): value is ApiPaginated<unknown> {
-  if (typeof value !== "object" || value === null) return false;
+  if (typeof value !== 'object' || value === null) return false;
   const candidate = value as Record<string, unknown>;
   return (
     Array.isArray(candidate.items) &&
-    typeof candidate.page === "number" &&
-    typeof candidate.size === "number" &&
-    typeof candidate.totalElements === "number"
+    typeof candidate.page === 'number' &&
+    typeof candidate.size === 'number' &&
+    typeof candidate.totalElements === 'number'
   );
 }
 
@@ -64,7 +64,7 @@ export class ResponseInterceptor implements NestInterceptor {
           return successResponse(value);
         }
         return successResponse(value);
-      })
+      }),
     );
   }
 }

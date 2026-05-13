@@ -1,40 +1,29 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import {
-  Bell,
-  ChevronDown,
-  Globe,
-  HelpCircle,
-  LogIn,
-  Menu,
-  UserRound,
-  X,
-} from "lucide-react";
-import { useState } from "react";
-import { BrandLogo } from "@/components/brand-logo";
-import { useAuth } from "@/lib/auth/auth-context";
+import { Bell, ChevronDown, HelpCircle, LogIn, Menu, UserRound, X } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import { BrandLogo } from '@/components/brand-logo';
+import { LanguageSwitcher } from '@/components/language-switcher';
+import { useAuth } from '@/lib/auth/auth-context';
 
 /* ─── Top utility bar (above main header) ─────────────────────────────────── */
-const topLinks = [
-  { label: "Hỗ trợ", href: "/support", icon: HelpCircle },
-  { label: "Tiếng Việt", href: "#", icon: Globe },
-] as const;
+const topLinks = [{ label: 'Hỗ trợ', href: '/support', icon: HelpCircle }] as const;
 
 /* ─── Main navigation tabs ────────────────────────────────────────────────── */
 const mainNav = [
-  { label: "Khách sạn", href: "/hotels" },
-  { label: "Vé máy bay", href: "/flights" },
-  { label: "Tour du lịch", href: "/tours" },
-  { label: "Hoạt động", href: "/experiences" },
-  { label: "Bản đồ", href: "/map" },
-  { label: "Ưu đãi", href: "/explore" },
+  { label: 'Khách sạn', href: '/hotels' },
+  { label: 'Vé máy bay', href: '/flights' },
+  { label: 'Tour du lịch', href: '/tours' },
+  { label: 'Hoạt động', href: '/experiences' },
+  { label: 'Bản đồ', href: '/map' },
+  { label: 'Ưu đãi', href: '/explore' },
 ] as const;
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout: _logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -59,6 +48,8 @@ export function SiteHeader() {
                 {label}
               </Link>
             ))}
+
+            <LanguageSwitcher />
 
             {isAuthenticated ? (
               <div className="flex items-center gap-3">
@@ -101,15 +92,16 @@ export function SiteHeader() {
           {/* Nav tabs — desktop */}
           <nav className="hidden flex-1 items-center md:flex" aria-label="Điều hướng chính">
             {mainNav.map(({ label, href }) => {
-              const active = pathname === href || pathname.startsWith(href + "/");
+              const active = pathname === href || pathname.startsWith(href + '/');
               return (
                 <Link
                   key={label}
                   href={href}
                   className={`relative inline-flex h-14 items-center px-3 text-tv-base font-semibold transition-colors whitespace-nowrap
-                    ${active
-                      ? "text-tv-blue after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[3px] after:bg-tv-blue after:rounded-t"
-                      : "text-tv-ink-2 hover:text-tv-blue"
+                    ${
+                      active
+                        ? 'text-tv-blue after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[3px] after:bg-tv-blue after:rounded-t'
+                        : 'text-tv-ink-2 hover:text-tv-blue'
                     }`}
                 >
                   {label}
@@ -146,10 +138,18 @@ export function SiteHeader() {
             <hr className="my-2 border-tv-border" />
             {!isAuthenticated && (
               <>
-                <Link href="/login" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-4 py-3 text-tv-base font-bold text-tv-blue">
+                <Link
+                  href="/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-2 px-4 py-3 text-tv-base font-bold text-tv-blue"
+                >
                   <LogIn size={16} /> Đăng nhập
                 </Link>
-                <Link href="/register" onClick={() => setMobileOpen(false)} className="mx-4 mb-2 flex items-center justify-center rounded-tv bg-tv-blue py-2.5 text-tv-base font-bold text-white">
+                <Link
+                  href="/register"
+                  onClick={() => setMobileOpen(false)}
+                  className="mx-4 mb-2 flex items-center justify-center rounded-tv bg-tv-blue py-2.5 text-tv-base font-bold text-white"
+                >
                   Đăng ký
                 </Link>
               </>

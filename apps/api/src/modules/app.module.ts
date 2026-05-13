@@ -5,6 +5,7 @@ import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ScheduleModule } from '@nestjs/schedule';
+import { TerminusModule } from '@nestjs/terminus';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { CustomThrottlerGuard } from '../common/guards/custom-throttler.guard';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
@@ -185,6 +186,7 @@ import { WishlistService } from './wishlist/wishlist.service';
       },
     }),
     PrismaModule,
+    TerminusModule,
     PrometheusModule.register({
       defaultMetrics: { enabled: true },
       path: '/metrics',

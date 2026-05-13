@@ -17,6 +17,12 @@ function hashToken(token: string): string {
   return createHash('sha256').update(token).digest('hex');
 }
 
+function makeAudit() {
+  return {
+    log: vi.fn().mockResolvedValue(undefined),
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Mock factories
 // ---------------------------------------------------------------------------
@@ -122,13 +128,15 @@ describe('AuthService', () => {
   let jwt: ReturnType<typeof makeJwt>;
   let config: ReturnType<typeof makeConfig>;
   let email: ReturnType<typeof makeEmail>;
+  let audit: ReturnType<typeof makeAudit>;
 
   beforeEach(() => {
     prisma = makePrisma();
     jwt = makeJwt();
     config = makeConfig();
     email = makeEmail();
-    service = new AuthService(prisma as any, jwt as any, config as any, email as any);
+    audit = makeAudit();
+    service = new AuthService(prisma as any, jwt as any, config as any, email as any, audit as any);
   });
 
   // -------------------------------------------------------------------------
@@ -286,14 +294,31 @@ describe('AuthService', () => {
       );
     });
 
-    it('throws UnauthorizedException for revoked refresh token', async () => {
+    it('throws UnauthorizedException for revoked refresh token and revokes ALL user tokens (reuse detection)', async () => {
       prisma.refreshToken.findUnique.mockResolvedValue({
         ...MOCK_REFRESH_TOKEN_ROW,
         revoked: true,
       });
+      prisma.refreshToken.updateMany.mockResolvedValue({ count: 3 });
 
       await expect(service.refresh({ refreshToken: RAW_REFRESH_TOKEN })).rejects.toThrow(
         UnauthorizedException,
+      );
+
+      // All user's active tokens must be revoked
+      expect(prisma.refreshToken.updateMany).toHaveBeenCalledWith({
+        where: { userId: 'user-id-1', revoked: false },
+        data: { revoked: true },
+      });
+
+      // Audit log must be written with REFRESH_TOKEN_REUSE event
+      expect(audit.log).toHaveBeenCalledWith(
+        expect.objectContaining({
+          actorId: 'user-id-1',
+          action: 'REFRESH_TOKEN_REUSE',
+          resourceType: 'RefreshToken',
+          resourceId: 'rt-id-1',
+        }),
       );
     });
 

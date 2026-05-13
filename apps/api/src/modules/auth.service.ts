@@ -10,6 +10,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
+import { AuditService } from '../common/services/audit.service';
 import { EmailService } from '../common/services/email.service';
 import { PrismaService } from '../prisma/prisma.service';
 import type { AuthResponseDto, UserProfileDto } from './auth/dto/auth-response.dto';
@@ -45,6 +46,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly emailService: EmailService,
+    private readonly auditService: AuditService,
   ) {}
 
   // ---------------------------------------------------------------------------
@@ -165,11 +167,31 @@ export class AuthService {
 
     const stored = await this.prisma.refreshToken.findUnique({ where: { tokenHash } });
 
-    if (!stored || stored.revoked || stored.expiresAt < new Date()) {
+    if (!stored || stored.expiresAt < new Date()) {
       throw new UnauthorizedException('Invalid or expired refresh token');
     }
 
-    // Revoke old token
+    // Reuse detection: if the token was already revoked (used), someone is
+    // replaying a previously-rotated token. Revoke ALL tokens for this user.
+    if (stored.revoked) {
+      await this.prisma.refreshToken.updateMany({
+        where: { userId: stored.userId, revoked: false },
+        data: { revoked: true },
+      });
+
+      // Log REFRESH_TOKEN_REUSE audit event
+      void this.auditService.log({
+        actorId: stored.userId,
+        action: 'REFRESH_TOKEN_REUSE',
+        resourceType: 'RefreshToken',
+        resourceId: stored.id,
+        metadata: { tokenId: stored.id, detectedAt: new Date().toISOString() },
+      });
+
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+
+    // Normal rotation: revoke old token, issue new one
     await this.prisma.refreshToken.update({
       where: { id: stored.id },
       data: { revoked: true },

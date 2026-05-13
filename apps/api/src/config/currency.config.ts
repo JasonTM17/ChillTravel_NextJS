@@ -1,6 +1,7 @@
 /**
  * Currency conversion configuration.
- * Hardcoded rates for demo — TODO: integrate live exchange rate API.
+ * Static exchange rates for demo purposes. In production, integrate a live
+ * rate provider (e.g., exchangerate-api.com).
  *
  * Req 36 / Design §18.5.
  */

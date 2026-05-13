@@ -169,25 +169,25 @@ export function PassengerForm({ onSubmit }: PassengerFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-[#D9ECFB] bg-white p-5 shadow-[0_2px_12px_rgba(2,119,212,0.08)]"
+      className="rounded-tv-xl border border-border bg-white p-5 shadow-card"
       noValidate
     >
       {/* Header with DEMO badge */}
       <div className="flex items-center gap-3">
-        <h3 className="text-sm font-bold text-[#071827]">{t.flight.passengerInfo}</h3>
-        <span className="rounded bg-[#FF6D1A] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+        <h3 className="text-sm font-bold text-ink">{t.flight.passengerInfo}</h3>
+        <span className="rounded bg-orange-cta px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
           DEMO
         </span>
       </div>
 
-      <p className="mt-1 text-xs text-[#476273]">
+      <p className="mt-1 text-xs text-muted-ink">
         Demo data only — no real passenger information is stored
       </p>
 
       <div className="mt-5 space-y-4">
         {/* Full Name */}
         <div>
-          <label htmlFor="passenger-fullname" className="block text-sm font-medium text-[#071827]">
+          <label htmlFor="passenger-fullname" className="block text-sm font-medium text-ink">
             {t.flight.fullName} <span className="text-red-500">*</span>
           </label>
           <input
@@ -198,10 +198,10 @@ export function PassengerForm({ onSubmit }: PassengerFormProps) {
             onBlur={() => handleBlur('fullName')}
             maxLength={100}
             placeholder="Nguyen Van A"
-            className={`mt-1 w-full rounded-lg border px-3 py-2.5 text-sm text-[#071827] placeholder:text-[#476273]/50 focus:outline-none focus:ring-2 focus:ring-[#0277D4]/30 ${
+            className={`mt-1 w-full rounded-lg border px-3 py-2.5 text-sm text-ink placeholder:text-muted-ink/50 focus:outline-none focus:ring-2 focus:ring-booking-blue/30 ${
               errors.fullName && touched.fullName
                 ? 'border-red-400 bg-red-50'
-                : 'border-[#D9ECFB] bg-white'
+                : 'border-border bg-white'
             }`}
           />
           {errors.fullName && touched.fullName && (
@@ -211,7 +211,7 @@ export function PassengerForm({ onSubmit }: PassengerFormProps) {
 
         {/* Date of Birth */}
         <div>
-          <label htmlFor="passenger-dob" className="block text-sm font-medium text-[#071827]">
+          <label htmlFor="passenger-dob" className="block text-sm font-medium text-ink">
             {t.flight.dateOfBirth} <span className="text-red-500">*</span>
           </label>
           <input
@@ -221,10 +221,10 @@ export function PassengerForm({ onSubmit }: PassengerFormProps) {
             onChange={(e) => handleChange('dateOfBirth', e.target.value)}
             onBlur={() => handleBlur('dateOfBirth')}
             max={new Date().toISOString().split('T')[0]}
-            className={`mt-1 w-full rounded-lg border px-3 py-2.5 text-sm text-[#071827] focus:outline-none focus:ring-2 focus:ring-[#0277D4]/30 ${
+            className={`mt-1 w-full rounded-lg border px-3 py-2.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-booking-blue/30 ${
               errors.dateOfBirth && touched.dateOfBirth
                 ? 'border-red-400 bg-red-50'
-                : 'border-[#D9ECFB] bg-white'
+                : 'border-border bg-white'
             }`}
           />
           {errors.dateOfBirth && touched.dateOfBirth && (
@@ -234,10 +234,7 @@ export function PassengerForm({ onSubmit }: PassengerFormProps) {
 
         {/* Nationality */}
         <div>
-          <label
-            htmlFor="passenger-nationality"
-            className="block text-sm font-medium text-[#071827]"
-          >
+          <label htmlFor="passenger-nationality" className="block text-sm font-medium text-ink">
             {t.flight.nationality} <span className="text-red-500">*</span>
           </label>
           <select
@@ -245,10 +242,10 @@ export function PassengerForm({ onSubmit }: PassengerFormProps) {
             value={form.nationality}
             onChange={(e) => handleChange('nationality', e.target.value)}
             onBlur={() => handleBlur('nationality')}
-            className={`mt-1 w-full rounded-lg border px-3 py-2.5 text-sm text-[#071827] focus:outline-none focus:ring-2 focus:ring-[#0277D4]/30 ${
+            className={`mt-1 w-full rounded-lg border px-3 py-2.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-booking-blue/30 ${
               errors.nationality && touched.nationality
                 ? 'border-red-400 bg-red-50'
-                : 'border-[#D9ECFB] bg-white'
+                : 'border-border bg-white'
             }`}
           >
             <option value="">— {t.flight.nationality} —</option>
@@ -265,7 +262,7 @@ export function PassengerForm({ onSubmit }: PassengerFormProps) {
 
         {/* Passport Number */}
         <div>
-          <label htmlFor="passenger-passport" className="block text-sm font-medium text-[#071827]">
+          <label htmlFor="passenger-passport" className="block text-sm font-medium text-ink">
             {t.flight.passportNumber} <span className="text-red-500">*</span>
           </label>
           <input
@@ -276,10 +273,10 @@ export function PassengerForm({ onSubmit }: PassengerFormProps) {
             onBlur={() => handleBlur('passportNumber')}
             maxLength={9}
             placeholder="B12345678"
-            className={`mt-1 w-full rounded-lg border px-3 py-2.5 text-sm font-mono text-[#071827] placeholder:text-[#476273]/50 focus:outline-none focus:ring-2 focus:ring-[#0277D4]/30 ${
+            className={`mt-1 w-full rounded-lg border px-3 py-2.5 text-sm font-mono text-ink placeholder:text-muted-ink/50 focus:outline-none focus:ring-2 focus:ring-booking-blue/30 ${
               errors.passportNumber && touched.passportNumber
                 ? 'border-red-400 bg-red-50'
-                : 'border-[#D9ECFB] bg-white'
+                : 'border-border bg-white'
             }`}
           />
           {errors.passportNumber && touched.passportNumber && (
@@ -292,7 +289,7 @@ export function PassengerForm({ onSubmit }: PassengerFormProps) {
       <button
         type="submit"
         disabled={!isValid}
-        className="mt-6 w-full rounded-lg bg-[#FF6D1A] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#e55e12] focus:outline-none focus:ring-2 focus:ring-[#FF6D1A]/30 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-6 w-full rounded-lg bg-orange-cta px-6 py-3 text-sm font-bold text-white transition hover:brightness-90 focus:outline-none focus:ring-2 focus:ring-orange-cta/30 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {t.common.confirm}
       </button>

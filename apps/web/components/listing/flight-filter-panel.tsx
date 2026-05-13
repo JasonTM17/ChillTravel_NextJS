@@ -104,10 +104,10 @@ export function FlightFilterPanel({
   // ─── Render ──────────────────────────────────────────────────────────────
 
   return (
-    <aside className="rounded-2xl border border-[#D9ECFB] bg-white p-5 shadow-[0_2px_12px_rgba(2,119,212,0.08)]">
+    <aside className="rounded-tv-xl border border-border bg-white p-5 shadow-card">
       {/* Departure time blocks */}
       <section>
-        <h3 className="text-sm font-bold text-[#071827]">{t.flight.departureTime}</h3>
+        <h3 className="text-sm font-bold text-ink">{t.flight.departureTime}</h3>
         <div className="mt-3 grid grid-cols-2 gap-2">
           {TIME_BLOCKS.map((block) => {
             const isActive = filters.timeBlocks.includes(block.id);
@@ -118,8 +118,8 @@ export function FlightFilterPanel({
                 onClick={() => toggleTimeBlock(block.id)}
                 className={`rounded-lg border px-3 py-2 text-xs font-medium transition ${
                   isActive
-                    ? 'border-[#0277D4] bg-[#EAF7FF] text-[#0277D4]'
-                    : 'border-[#D9ECFB] bg-white text-[#476273] hover:border-[#0277D4]/40'
+                    ? 'border-booking-blue bg-sky-surface text-booking-blue'
+                    : 'border-border bg-white text-muted-ink hover:border-booking-blue/40'
                 }`}
               >
                 {block.label}
@@ -131,7 +131,7 @@ export function FlightFilterPanel({
 
       {/* Number of stops */}
       <section className="mt-6">
-        <h3 className="text-sm font-bold text-[#071827]">{t.flight.stops}</h3>
+        <h3 className="text-sm font-bold text-ink">{t.flight.stops}</h3>
         <div className="mt-3 space-y-2">
           {[
             { value: 0, label: t.flight.direct },
@@ -140,13 +140,13 @@ export function FlightFilterPanel({
           ].map((option) => (
             <label
               key={option.value}
-              className="flex cursor-pointer items-center gap-2 text-sm text-[#071827]"
+              className="flex cursor-pointer items-center gap-2 text-sm text-ink"
             >
               <input
                 type="checkbox"
                 checked={filters.stops.includes(option.value)}
                 onChange={() => toggleStops(option.value)}
-                className="h-4 w-4 rounded border-[#D9ECFB] text-[#0277D4] focus:ring-[#0277D4]/30"
+                className="h-4 w-4 rounded border-border text-booking-blue focus:ring-booking-blue/30"
               />
               {option.label}
             </label>
@@ -156,18 +156,18 @@ export function FlightFilterPanel({
 
       {/* Airlines */}
       <section className="mt-6">
-        <h3 className="text-sm font-bold text-[#071827]">{t.flight.airline}</h3>
+        <h3 className="text-sm font-bold text-ink">{t.flight.airline}</h3>
         <div className="mt-3 max-h-40 space-y-2 overflow-y-auto">
           {availableAirlines.map((airline) => (
             <label
               key={airline}
-              className="flex cursor-pointer items-center gap-2 text-sm text-[#071827]"
+              className="flex cursor-pointer items-center gap-2 text-sm text-ink"
             >
               <input
                 type="checkbox"
                 checked={filters.airlines.includes(airline)}
                 onChange={() => toggleAirline(airline)}
-                className="h-4 w-4 rounded border-[#D9ECFB] text-[#0277D4] focus:ring-[#0277D4]/30"
+                className="h-4 w-4 rounded border-border text-booking-blue focus:ring-booking-blue/30"
               />
               {airline}
             </label>
@@ -177,7 +177,7 @@ export function FlightFilterPanel({
 
       {/* Price range slider */}
       <section className="mt-6">
-        <h3 className="text-sm font-bold text-[#071827]">{t.flight.pricePerPassenger}</h3>
+        <h3 className="text-sm font-bold text-ink">{t.flight.pricePerPassenger}</h3>
         <div className="mt-3">
           <input
             type="range"
@@ -185,10 +185,10 @@ export function FlightFilterPanel({
             max={priceBounds[1]}
             value={filters.priceRange[1]}
             onChange={(e) => handlePriceChange(Number(e.target.value))}
-            className="w-full accent-[#0277D4]"
+            className="w-full accent-booking-blue"
             aria-label={t.flight.pricePerPassenger}
           />
-          <div className="mt-1 flex justify-between text-xs text-[#476273]">
+          <div className="mt-1 flex justify-between text-xs text-muted-ink">
             <span>{fmt.formatCurrency(priceBounds[0])}</span>
             <span>{fmt.formatCurrency(filters.priceRange[1])}</span>
           </div>
@@ -199,7 +199,7 @@ export function FlightFilterPanel({
       <button
         type="button"
         onClick={resetAll}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg border border-[#D9ECFB] px-4 py-2.5 text-sm font-medium text-[#476273] transition hover:border-[#0277D4]/40 hover:text-[#0277D4]"
+        className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-muted-ink transition hover:border-booking-blue/40 hover:text-booking-blue"
       >
         <RotateCcw size={14} aria-hidden="true" />
         {t.flight.resetAllFilters}
@@ -207,9 +207,9 @@ export function FlightFilterPanel({
 
       {/* Empty state */}
       {filteredCount === 0 && (
-        <div className="mt-5 rounded-lg bg-[#EAF7FF] p-4 text-center">
-          <p className="text-sm font-medium text-[#0277D4]">{t.flight.noFlightsFound}</p>
-          <p className="mt-1 text-xs text-[#476273]">{t.common.resetFilters}</p>
+        <div className="mt-5 rounded-lg bg-sky-surface p-4 text-center">
+          <p className="text-sm font-medium text-booking-blue">{t.flight.noFlightsFound}</p>
+          <p className="mt-1 text-xs text-muted-ink">{t.common.resetFilters}</p>
         </div>
       )}
     </aside>

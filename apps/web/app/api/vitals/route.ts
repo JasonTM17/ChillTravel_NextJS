@@ -38,6 +38,7 @@ export async function POST(request: Request) {
 
     // Log to stdout in structured JSON format
     // In production, this would be picked up by a log aggregator
+    // eslint-disable-next-line no-console
     console.info(JSON.stringify(logEntry));
 
     return NextResponse.json({ success: true });

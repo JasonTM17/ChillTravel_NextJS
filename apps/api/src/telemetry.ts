@@ -77,7 +77,6 @@ if (otlpEndpoint) {
       process.on('SIGINT', shutdown);
 
       // eslint-disable-next-line no-console
-      // eslint-disable-next-line no-console
       console.info(
         `[telemetry] OpenTelemetry initialized — exporting traces to ${otlpEndpoint}`,
       );

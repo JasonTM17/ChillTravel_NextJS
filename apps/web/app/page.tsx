@@ -37,11 +37,11 @@ import type { Destination } from '@/lib/api/destination.api';
 import { tourApi } from '@/lib/api/tour.api';
 import type { Tour } from '@/lib/api/tour.api';
 import { getDestinationImage } from '@/lib/destination-images';
-import { useLocale } from '@/lib/i18n/use-locale';
 import type { TranslationNamespace } from '@/lib/i18n/types';
+import { useLocale } from '@/lib/i18n/use-locale';
 import { formatVnd } from '@/lib/utils';
 
-/* ─── Service tabs (Traveloka-style icon grid) ─────────────────────────────── */
+/* ─── Service tabs (icon grid) ─────────────────────────────── */
 const serviceItems = [
   { key: 'hotels' as const, href: '/hotels', icon: Hotel, color: '#0064D2' },
   { key: 'flights' as const, href: '/flights', icon: Plane, color: '#0064D2' },
@@ -319,7 +319,12 @@ export default function HomePage() {
 
         {/* Featured tours */}
         {(loading || tours.length > 0) && (
-          <Section title={t.home.featuredTours} subtitle={t.home.featuredToursSubtitle} href="/tours" viewAllLabel={t.home.viewAll}>
+          <Section
+            title={t.home.featuredTours}
+            subtitle={t.home.featuredToursSubtitle}
+            href="/tours"
+            viewAllLabel={t.home.viewAll}
+          >
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
               {loading
                 ? Array.from({ length: 4 }).map((_, i) => <CardSkeleton key={i} />)
@@ -362,7 +367,12 @@ export default function HomePage() {
 
         {/* All tours grid */}
         {!loading && tours.length > 4 && (
-          <Section title={t.home.allTours} subtitle={t.home.allToursSubtitle} href="/tours" viewAllLabel={t.home.viewAll}>
+          <Section
+            title={t.home.allTours}
+            subtitle={t.home.allToursSubtitle}
+            href="/tours"
+            viewAllLabel={t.home.viewAll}
+          >
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
               {tours.slice(4).map((tour) => (
                 <TourCard key={tour.slug} tour={tour} />
@@ -438,9 +448,7 @@ function HeroSearch({ t }: { t: TranslationNamespace }) {
             </div>
 
             {/* Search button */}
-            <span
-              className="flex items-center justify-center gap-2 rounded-tv bg-tv-orange px-6 py-3 text-tv-base font-bold text-white"
-            >
+            <span className="flex items-center justify-center gap-2 rounded-tv bg-tv-orange px-6 py-3 text-tv-base font-bold text-white">
               <Search size={18} />
               <span className="hidden md:inline">{t.home.search}</span>
             </span>

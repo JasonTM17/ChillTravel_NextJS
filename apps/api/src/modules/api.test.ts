@@ -67,24 +67,38 @@ describe('api http hardening', () => {
   let rootUrl: string;
   /** Versioned URL used for the majority of endpoints (auth, admin, ai, bookings, ...). */
   let apiUrl: string;
+  let initError: Error | null = null;
 
   beforeAll(async () => {
     // Env vars were seeded at file top-level so `ConfigModule.validateEnv`
     // has valid values by the time AppModule is loaded.
-    const { NestFactory } = await import('@nestjs/core');
-    const { AppModule } = await import('./app.module');
-    const { configureApiApp } = await import('./api.setup');
+    try {
+      // Prevent NestJS from calling process.exit on initialization failure
+      const originalExit = process.exit;
+      process.exit = (() => {
+        throw new Error('process.exit intercepted during test initialization');
+      }) as never;
 
-    app = await NestFactory.create(AppModule, { logger: false });
-    configureApiApp(app);
-    await app.listen(0);
-    const address = app.getHttpServer().address() as AddressInfo;
-    rootUrl = `http://127.0.0.1:${address.port}`;
-    apiUrl = `${rootUrl}/api/v1`;
+      const { NestFactory } = await import('@nestjs/core');
+      const { AppModule } = await import('./app.module');
+      const { configureApiApp } = await import('./api.setup');
+
+      app = await NestFactory.create(AppModule, { logger: false, abortOnError: false });
+      configureApiApp(app);
+      await app.listen(0);
+      const address = app.getHttpServer().address() as AddressInfo;
+      rootUrl = `http://127.0.0.1:${address.port}`;
+      apiUrl = `${rootUrl}/api/v1`;
+
+      process.exit = originalExit;
+    } catch (err) {
+      // Store the error so tests can skip gracefully instead of crashing the worker
+      initError = err instanceof Error ? err : new Error(String(err));
+    }
   });
 
   afterAll(async () => {
-    await app.close();
+    if (app) await app.close();
   });
 
   it('wraps successful responses in the global envelope shape', async () => {
@@ -253,6 +267,9 @@ describe('api http hardening', () => {
     path: string,
     opts: { body?: unknown; token?: string; baseUrl?: string } = {},
   ) {
+    if (initError) {
+      throw new Error(`Skipped: app failed to initialize — ${initError.message}`);
+    }
     const headers: Record<string, string> = {};
     if (opts.body !== undefined) {
       headers['content-type'] = 'application/json';

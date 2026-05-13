@@ -1,28 +1,62 @@
-node_modules
-.turbo
-.next
-dist
-coverage
-.vscode/
-.kiro/
+# === Dependencies ===
+node_modules/
+
+# === Build outputs ===
+dist/
+build/
+.next/
+.dart_tool/
+*.tsbuildinfo
+
+# === Turborepo ===
+.turbo/
+
+# === Test artifacts ===
+coverage/
+playwright-report/
+test-results/
+e2e/playwright-report/
+e2e/test-results/
+
+# === Environment ===
 .env
 .env.local
 .env.*.local
 !.env.example
+
+# === Logs ===
 *.log
-*.tsbuildinfo
+npm-debug.log*
+pnpm-debug.log*
+
+# === OS files ===
 .DS_Store
-build
-.dart_tool
+Thumbs.db
+Desktop.ini
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === Python ===
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# === Internal tools ===
+.stitch/
+.kiro/
+
+# === Flutter ===
 .flutter-plugins
 .flutter-plugins-dependencies
 android/.gradle
 ios/Pods
-apps/ai-service/.venv
-__pycache__
-*.pyc
+
+# === Generated assets ===
 assets/generated/*.png
 assets/generated/*.jpg
 packages/db/generated/
-e2e/playwright-report/
-e2e/test-results/

@@ -36,9 +36,65 @@ async function bootstrap(): Promise<void> {
   const port = config.get<number>('PORT') ?? 4000;
   const nodeEnv = config.get<NodeEnv>('NODE_ENV') ?? 'development';
 
-  app.use(helmet());
+  // Security: Helmet hardening (Req 4.1)
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'"],
+          styleSrc: ["'self'", "'unsafe-inline'"],
+          imgSrc: ["'self'", 'data:', 'https:'],
+          connectSrc: ["'self'"],
+          fontSrc: ["'self'"],
+          objectSrc: ["'none'"],
+          frameAncestors: ["'self'"],
+        },
+      },
+      crossOriginEmbedderPolicy: true,
+      referrerPolicy: { policy: 'no-referrer' },
+      hsts: { maxAge: 15552000, includeSubDomains: true },
+    }),
+  );
+
+  // Security: CORS whitelist from CORS_ORIGINS env var (Req 4.2)
+  const corsOrigins = config.get<string>('CORS_ORIGINS') ?? '';
+  const allowedOrigins: string[] = corsOrigins
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+
+  // In development, always allow the FRONTEND_URL and localhost origins
+  if (nodeEnv === 'development') {
+    if (!allowedOrigins.includes(frontendUrl)) {
+      allowedOrigins.push(frontendUrl);
+    }
+    const localhostDefaults = ['http://localhost:3000', 'http://localhost:4000'];
+    for (const origin of localhostDefaults) {
+      if (!allowedOrigins.includes(origin)) {
+        allowedOrigins.push(origin);
+      }
+    }
+  }
+
+  // If no origins configured in production, fall back to FRONTEND_URL only
+  if (allowedOrigins.length === 0) {
+    allowedOrigins.push(frontendUrl);
+  }
+
   app.enableCors({
-    origin: frontendUrl,
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+      // Allow requests with no origin (server-to-server, curl, mobile apps)
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS policy`));
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'x-request-id'],

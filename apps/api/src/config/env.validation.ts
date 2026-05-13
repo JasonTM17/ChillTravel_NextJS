@@ -24,6 +24,7 @@ export interface WanderViewerEnv {
   JWT_ACCESS_EXPIRATION: string;
   JWT_REFRESH_EXPIRATION: string;
   FRONTEND_URL: string;
+  CORS_ORIGINS: string;
   UPLOAD_DIR: string;
 }
 
@@ -37,6 +38,7 @@ export const ENV_KEYS = {
   JWT_ACCESS_EXPIRATION: 'JWT_ACCESS_EXPIRATION',
   JWT_REFRESH_EXPIRATION: 'JWT_REFRESH_EXPIRATION',
   FRONTEND_URL: 'FRONTEND_URL',
+  CORS_ORIGINS: 'CORS_ORIGINS',
   UPLOAD_DIR: 'UPLOAD_DIR',
 } as const;
 
@@ -158,6 +160,7 @@ export function validateEnv(config: Record<string, unknown>): Record<string, unk
   const accessExp = optionalString(config, ENV_KEYS.JWT_ACCESS_EXPIRATION, '15m');
   const refreshExp = optionalString(config, ENV_KEYS.JWT_REFRESH_EXPIRATION, '7d');
   const frontendUrl = optionalString(config, ENV_KEYS.FRONTEND_URL, 'http://localhost:3000');
+  const corsOrigins = optionalString(config, ENV_KEYS.CORS_ORIGINS, '');
   const uploadDir = optionalString(config, ENV_KEYS.UPLOAD_DIR, './uploads');
 
   if (errors.length > 0) {
@@ -176,6 +179,7 @@ export function validateEnv(config: Record<string, unknown>): Record<string, unk
     [ENV_KEYS.JWT_ACCESS_EXPIRATION]: accessExp,
     [ENV_KEYS.JWT_REFRESH_EXPIRATION]: refreshExp,
     [ENV_KEYS.FRONTEND_URL]: frontendUrl,
+    [ENV_KEYS.CORS_ORIGINS]: corsOrigins,
     [ENV_KEYS.UPLOAD_DIR]: uploadDir,
   };
 }

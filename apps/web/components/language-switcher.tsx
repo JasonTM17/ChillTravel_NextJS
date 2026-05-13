@@ -13,9 +13,9 @@ interface LocaleOption {
 }
 
 const LOCALE_OPTIONS: LocaleOption[] = [
-  { code: 'vi', flag: '🇻🇳', nativeName: 'Tiếng Việt' },
-  { code: 'en', flag: '🇬🇧', nativeName: 'English' },
-  { code: 'ja', flag: '🇯🇵', nativeName: '日本語' },
+  { code: 'vi', flag: 'VI', nativeName: 'Tiếng Việt' },
+  { code: 'en', flag: 'EN', nativeName: 'English' },
+  { code: 'ja', flag: 'JA', nativeName: '日本語' },
 ];
 
 // ─── Props ───────────────────────────────────────────────────────────────────
@@ -175,12 +175,9 @@ export function LanguageSwitcher({ className = '' }: LanguageSwitcherProps) {
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-label={`Language: ${currentOption.nativeName}. Click to change language.`}
-        className="inline-flex items-center gap-1.5 rounded-tv-sm border border-border bg-white px-3 py-1.5 text-tv-sm font-semibold text-ink transition-colors hover:border-booking-blue hover:text-booking-blue focus:outline-none focus:ring-2 focus:ring-booking-blue focus:ring-offset-1"
+        className="inline-flex items-center gap-1.5 rounded-tv-sm border border-tv-border bg-white px-3 py-1.5 text-tv-sm font-semibold text-tv-ink-2 transition-colors hover:border-tv-blue hover:text-tv-blue focus:outline-none focus:ring-2 focus:ring-booking-blue focus:ring-offset-1"
       >
-        <span aria-hidden="true" className="text-base leading-none">
-          {currentOption.flag}
-        </span>
-        <span className="uppercase">{currentOption.code}</span>
+        <span className="uppercase font-bold">{currentOption.code}</span>
       </button>
 
       {/* Dropdown Listbox */}
@@ -214,8 +211,8 @@ export function LanguageSwitcher({ className = '' }: LanguageSwitcherProps) {
                   isFocused ? 'bg-sky-surface' : ''
                 } ${isSelected ? 'font-semibold text-booking-blue' : 'text-ink'}`}
               >
-                <span aria-hidden="true" className="text-lg leading-none">
-                  {option.flag}
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded bg-tv-blue-light text-[10px] font-bold text-tv-blue uppercase">
+                  {option.code}
                 </span>
                 <span className="flex-1">{option.nativeName}</span>
                 {isSelected && (

@@ -122,6 +122,9 @@ function FlashSaleCard({ item, expired }: { item: FlashSaleItem; expired: boolea
         {/* Action */}
         <button
           disabled={expired}
+          onClick={() => {
+            if (!expired) window.location.href = '/tours';
+          }}
           className={cn(
             'mt-3 w-full rounded-tv px-3 py-2 text-sm font-bold transition focus:outline-none focus:ring-2 focus:ring-offset-1',
             expired

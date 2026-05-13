@@ -1,217 +1,210 @@
-# WanderViet Travel Platform
+<p align="center">
+  <h1 align="center">🌏 WanderViet — Vietnam Travel Platform</h1>
+  <p align="center">
+    <em>Full-stack travel platform built with modern monorepo architecture</em>
+  </p>
+</p>
 
-A full-stack, production-grade travel booking platform for Vietnam and international destinations.
+<p align="center">
+  <a href="https://github.com/nguyenson1710/wanderviet/actions/workflows/ci.yml">
+    <img src="https://github.com/nguyenson1710/wanderviet/actions/workflows/ci.yml/badge.svg" alt="CI" />
+  </a>
+  <a href="https://hub.docker.com/r/nguyenson1710/wanderviet-api">
+    <img src="https://img.shields.io/docker/v/nguyenson1710/wanderviet-api?label=API%20Image&logo=docker" alt="Docker API" />
+  </a>
+  <a href="https://hub.docker.com/r/nguyenson1710/wanderviet-web">
+    <img src="https://img.shields.io/docker/v/nguyenson1710/wanderviet-web?label=Web%20Image&logo=docker" alt="Docker Web" />
+  </a>
+  <a href="./LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
+  </a>
+</p>
 
-[![CI](https://github.com/your-org/wanderviet/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/wanderviet/actions/workflows/ci.yml)
-[![Docker API](https://img.shields.io/docker/v/nguyenson1710/wanderviet-api?label=API&logo=docker)](https://hub.docker.com/r/nguyenson1710/wanderviet-api)
-[![Docker Web](https://img.shields.io/docker/v/nguyenson1710/wanderviet-web?label=Web&logo=docker)](https://hub.docker.com/r/nguyenson1710/wanderviet-web)
+<p align="center">
+  <a href="./README.md">🇻🇳 Tiếng Việt</a> •
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-documentation">Docs</a> •
+  <a href="#-api-documentation">API Docs</a>
+</p>
 
-> 🇻🇳 **[Phiên bản Tiếng Việt](./README.md)**
+---
 
-## Overview
+## 📖 Introduction
 
-WanderViet is a portfolio-grade full-stack travel platform built with modern technologies:
+**WanderViet** is a comprehensive travel platform for the Vietnamese market, enabling users to search and book tours, hotels, and flights. The system integrates an AI chatbot for travel consultation powered by a fully local language model (no cloud API dependency).
 
-- **Web**: Next.js 16 + TypeScript + Tailwind CSS — Vietnamese-first, Traveloka-inspired UI
-- **API**: NestJS 11 + Prisma 7 + PostgreSQL — Full REST API with Swagger docs
-- **AI Service**: FastAPI + Ollama + Qdrant — Local-first chatbot, no OpenAI API key required
-- **Mobile**: Flutter (structured with Riverpod + Dio)
-- **DevOps**: pnpm workspaces + Turborepo + Docker + GitHub Actions CI/CD
+### ✨ Key Features
 
-> ⚠️ **Demo Payment** — All payment flows are mock/demo only. No real transactions are processed.
+- 🏨 Tour, hotel, and flight booking with demo payment system
+- 🤖 AI Travel Assistant — travel consultation chatbot (Ollama + RAG)
+- 👨‍💼 Admin Dashboard with analytics and booking management
+- 🔐 JWT authentication (15-min access token + 7-day refresh token)
+- 📱 Flutter cross-platform mobile app
+- 🧪 E2E testing (Playwright) + Load testing (k6)
+- 🐳 Docker Compose — spin up the entire system with a single command
 
-## Key Features
+---
 
-| Module        | Description                                                           |
-| ------------- | --------------------------------------------------------------------- |
-| Auth          | Register, login, JWT access+refresh, password change, account lockout |
-| Destinations  | Browse, search, detail pages, admin CRUD                              |
-| Tours         | Search/filter/sort, itineraries, departures, admin CRUD               |
-| Booking       | Book tours, manage bookings, code format WV-YYYYMMDD-XXXXXX           |
-| Payment       | Mock checkout + callback (demo only)                                  |
-| Reviews       | Tour reviews, admin approve/reject/hide                               |
-| Wishlist      | Save tours and destinations                                           |
-| Blog          | CMS with DRAFT/PUBLISHED workflow                                     |
-| Contact       | Contact form, admin triage                                            |
-| Admin         | Dashboard with revenue, top tours, full module management             |
-| Notifications | In-app notifications, mark as read                                    |
-| Coupons       | Discount codes, PERCENT/FIXED, usage limits                           |
-| AI Concierge  | Local chatbot (Ollama + RAG + Qdrant), no cloud API key needed        |
+## 🛠️ Tech Stack
 
-## System Requirements
+| Layer | Technology | Version |
+|-------|-----------|---------|
+| **Frontend** | Next.js + TypeScript + Tailwind CSS | 16.x |
+| **Backend** | NestJS + TypeScript | 11.x |
+| **Database** | PostgreSQL + Prisma ORM | 18 / 7.x |
+| **AI Service** | FastAPI + Ollama + Qdrant | Python 3.12+ |
+| **Mobile** | Flutter + Dart | Latest |
+| **Monorepo** | pnpm Workspaces + Turborepo | 10.x / 2.x |
+| **Testing** | Vitest + Playwright + k6 | Latest |
+| **CI/CD** | GitHub Actions + Docker | — |
+| **Cache** | Redis | 7.x |
 
-- **Node.js** 22 or 24
-- **pnpm** 10.33.0+
-- **Docker** + Docker Compose (for PostgreSQL, Redis, Qdrant)
-- **Python** 3.12+ (for AI service)
-- **Ollama** (optional, for local chatbot)
+---
 
-## Quick Start
+## 🏗️ Architecture
 
-### 1. Clone and install
+```
+wanderviet/
+├── apps/
+│   ├── api/            # NestJS 11 — REST API, Swagger at /api/docs
+│   ├── web/            # Next.js 16 — Vietnamese-first frontend
+│   ├── ai-service/     # FastAPI — Local RAG (Ollama + Qdrant)
+│   └── mobile/         # Flutter — Mobile app
+├── packages/
+│   ├── shared/         # Shared TypeScript types & API contracts
+│   ├── db/             # Prisma schema, migrations, seed data
+│   └── config/         # Shared ESLint, TypeScript, build configs
+├── infra/docker/       # Docker Compose (postgres, redis, qdrant, api, web, ai)
+├── e2e/                # Playwright end-to-end tests
+├── load-tests/         # k6 load test scripts
+└── docs/               # ADRs, ER diagram, architecture notes
+```
+
+```mermaid
+graph TB
+    subgraph Frontend
+        Web[Next.js 16<br/>:3000]
+        Mobile[Flutter App]
+    end
+    subgraph Backend
+        API[NestJS 11 API<br/>:4000]
+        AI[FastAPI AI Service<br/>:8010]
+    end
+    subgraph Data
+        PG[(PostgreSQL 18<br/>:5432)]
+        Redis[(Redis<br/>:6379)]
+        Qdrant[(Qdrant<br/>:6333)]
+    end
+    subgraph AI_Runtime
+        Ollama[Ollama LLM<br/>:11434]
+    end
+
+    Web --> API
+    Mobile --> API
+    API --> PG
+    API --> Redis
+    API --> AI
+    AI --> Ollama
+    AI --> Qdrant
+```
+
+---
+
+## 📋 Prerequisites
+
+| Software | Minimum Version |
+|----------|----------------|
+| Node.js | >= 22.x |
+| pnpm | >= 10.x |
+| Docker & Docker Compose | Latest |
+| PostgreSQL | 18 (via Docker) |
+| Python | >= 3.12 (for AI service) |
+
+---
+
+## 🚀 Quick Start
+
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-org/wanderviet.git
+git clone https://github.com/nguyenson1710/wanderviet.git
 cd wanderviet
+```
+
+### 2. Install dependencies
+
+```bash
 pnpm install
 ```
 
-### 2. Configure environment
+### 3. Configure environment
 
 ```bash
 cp .env.example .env
-# Edit .env with your values
+# Edit .env with your database credentials and configuration
 ```
 
-Required variables:
-
-```dotenv
-DATABASE_URL=postgresql://vietwander:vietwander@localhost:5432/vietwander
-JWT_ACCESS_SECRET=<random string, min 32 chars>
-JWT_REFRESH_SECRET=<random string, min 32 chars>
-FRONTEND_URL=http://localhost:3000
-```
-
-### 3. Start Docker services
-
-```bash
-docker compose -f infra/docker/docker-compose.yml up -d postgres redis qdrant
-```
-
-### 4. Initialize database
-
-```bash
-pnpm --filter @vietwander/db exec prisma migrate dev --schema prisma/schema.prisma
-pnpm seed
-```
-
-### 5. Run development
-
-```bash
-pnpm dev                              # All services (web + api)
-# Or individually:
-pnpm --filter @vietwander/web dev     # http://localhost:3000
-pnpm --filter @vietwander/api dev     # http://localhost:4000
-```
-
-### 6. AI Service (optional)
-
-```bash
-ollama pull qwen3:4b
-ollama pull nomic-embed-text
-
-cd apps/ai-service
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8010
-```
-
-## Docker Hub Images
-
-Pre-built images are available on Docker Hub:
-
-```bash
-docker pull nguyenson1710/wanderviet-api:latest
-docker pull nguyenson1710/wanderviet-web:latest
-```
-
-Run with Docker Compose:
+### 4. Start infrastructure (Docker)
 
 ```bash
 docker compose -f infra/docker/docker-compose.yml up -d
 ```
 
-## Demo Accounts
-
-| Email                | Password     | Role  |
-| -------------------- | ------------ | ----- |
-| admin@wanderviet.com | Admin@123456 | ADMIN |
-| user@wanderviet.com  | User@123456  | USER  |
-| staff@wanderviet.com | Staff@123456 | STAFF |
-
-## API Documentation
-
-Swagger UI: [http://localhost:4000/api/docs](http://localhost:4000/api/docs)
-
-## Project Structure
-
-```
-wanderviet/
-├── apps/
-│   ├── api/          # NestJS 11 — REST API
-│   ├── web/          # Next.js 16 — Frontend
-│   ├── ai-service/   # FastAPI — AI/RAG service
-│   └── mobile/       # Flutter — Mobile app
-├── packages/
-│   ├── shared/       # Shared TypeScript types
-│   ├── db/           # Prisma schema + migrations + seed
-│   └── config/       # Shared configs
-├── infra/docker/     # Docker Compose
-├── e2e/              # Playwright E2E tests
-├── load-tests/       # k6 load tests
-├── docs/             # Architecture, ADRs, guides
-└── Makefile          # Shortcut commands
-```
-
-## Common Commands
+### 5. Run database migrations & seed
 
 ```bash
-make dev              # Start all services
-make build            # Build all packages
-make test             # Run unit tests
-make lint             # Lint entire codebase
-make typecheck        # TypeScript type check
-make migrate          # Run Prisma migrations
-make seed             # Seed demo data
-make docker-up        # Start Docker services
-make docker-down      # Stop Docker services
-make docker-build     # Build Docker images
-make e2e              # Run Playwright E2E tests
-make load-test        # Run k6 load tests
-pnpm storybook        # Run Storybook at http://localhost:6006
+pnpm --filter @vietwander/db prisma migrate dev
+pnpm seed
 ```
 
-## CI/CD
+### 6. Start development servers
 
-### Continuous Integration (on every push/PR)
+```bash
+pnpm dev
+```
 
-| Job              | Description                                  |
-| ---------------- | -------------------------------------------- |
-| `web-api-ai`     | Lint, test, build on Node 22 and 24 (matrix) |
-| `typecheck`      | TypeScript type checking                     |
-| `security-audit` | `pnpm audit --prod`                          |
-| `e2e`            | Playwright E2E tests with PostgreSQL service |
-| `docker-build`   | Build Docker images (push to main only)      |
-| `mobile`         | Flutter analyze + test                       |
-
-### Continuous Deployment (on version tags)
-
-When a `v*` tag is pushed, the CD workflow automatically:
-
-1. Builds multi-stage Docker images for API and Web
-2. Pushes to Docker Hub with version tag + `latest`
-3. Uses GitHub Actions cache for faster builds
-
-Renovate bot automatically creates PRs for dependency updates with auto-merge for minor/patch.
-
-## Architecture
-
-See also:
-
-- [`docs/adr/`](docs/adr/) — Architecture Decision Records
-- [`docs/er-diagram.md`](docs/er-diagram.md) — Entity-Relationship diagram
-- [`docs/architecture.md`](docs/architecture.md) — System overview
-
-## Important Notes
-
-- **Payment**: All payment flows are mock/demo only. No real card data is ever stored.
-- **AI Chatbot**: Runtime does not require an OpenAI API key. Uses local Ollama.
-- **Secrets**: Never commit `.env` to git. See `.gitignore`.
-- **Data**: Tour and destination data is sample/demo. Does not reflect real-world information.
-
-## License
-
-MIT
+> 🌐 **Web:** http://localhost:3000
+> 🔌 **API:** http://localhost:4000/api/v1
+> 📚 **Swagger:** http://localhost:4000/api/docs
+> 🤖 **AI Service:** http://localhost:8010
 
 ---
 
-_WanderViet — Explore Vietnam and the world, your way._
+## 👤 Demo Accounts
+
+| Role | Email | Password |
+|------|-------|----------|
+| 👨‍💼 Admin | `admin@wanderviet.com` | `Admin@123456` |
+| 👤 User | `user@wanderviet.com` | `User@123456` |
+
+> ⚠️ **Note:** The payment system is mock/demo only — no real transactions are processed.
+
+---
+
+## 📚 API Documentation
+
+API documentation is auto-generated using Swagger/OpenAPI:
+
+- **Swagger UI:** http://localhost:4000/api/docs
+- **OpenAPI JSON:** http://localhost:4000/api/docs-json
+
+---
+
+## 📖 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Architecture](./docs/architecture.md) | System architecture overview |
+| [ADRs](./docs/adr/) | Architecture Decision Records |
+| [ER Diagram](./docs/er-diagram.md) | Entity-Relationship diagram |
+| [Contributing](./CONTRIBUTING.md) | Contribution guidelines |
+| [Changelog](./CHANGELOG.md) | Change history |
+| [Release Checklist](./docs/release-checklist.md) | Release process |
+
+---
+
+## 📄 License
+
+This project is distributed under the [MIT](./LICENSE) license.
+
+Copyright © 2025 [Nguyen Son](https://github.com/nguyenson1710)

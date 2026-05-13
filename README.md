@@ -1,216 +1,210 @@
-# WanderViet Travel Platform
+<p align="center">
+  <h1 align="center">🌏 WanderViet — Nền Tảng Du Lịch Việt Nam</h1>
+  <p align="center">
+    <em>Full-stack travel platform xây dựng với kiến trúc monorepo hiện đại</em>
+  </p>
+</p>
 
-Nền tảng đặt tour du lịch Việt Nam và quốc tế — full-stack, production-grade, Vietnamese-first.
+<p align="center">
+  <a href="https://github.com/nguyenson1710/wanderviet/actions/workflows/ci.yml">
+    <img src="https://github.com/nguyenson1710/wanderviet/actions/workflows/ci.yml/badge.svg" alt="CI" />
+  </a>
+  <a href="https://hub.docker.com/r/nguyenson1710/wanderviet-api">
+    <img src="https://img.shields.io/docker/v/nguyenson1710/wanderviet-api?label=API%20Image&logo=docker" alt="Docker API" />
+  </a>
+  <a href="https://hub.docker.com/r/nguyenson1710/wanderviet-web">
+    <img src="https://img.shields.io/docker/v/nguyenson1710/wanderviet-web?label=Web%20Image&logo=docker" alt="Docker Web" />
+  </a>
+  <a href="./LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
+  </a>
+</p>
 
-[![CI](https://github.com/your-org/wanderviet/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/wanderviet/actions/workflows/ci.yml)
-[![Docker API](https://img.shields.io/docker/v/nguyenson1710/wanderviet-api?label=API&logo=docker)](https://hub.docker.com/r/nguyenson1710/wanderviet-api)
-[![Docker Web](https://img.shields.io/docker/v/nguyenson1710/wanderviet-web?label=Web&logo=docker)](https://hub.docker.com/r/nguyenson1710/wanderviet-web)
+<p align="center">
+  <a href="./README.en.md">🇬🇧 English</a> •
+  <a href="#-cài-đặt-nhanh">Cài đặt</a> •
+  <a href="#-tài-liệu">Tài liệu</a> •
+  <a href="#-api-documentation">API Docs</a>
+</p>
 
-> 🌐 **[English version](./README.en.md)**
+---
 
-## Tổng quan
+## 📖 Giới Thiệu
 
-WanderViet là nền tảng du lịch full-stack được xây dựng như một dự án portfolio chất lượng production, bao gồm:
+**WanderViet** là nền tảng du lịch toàn diện dành cho thị trường Việt Nam, cho phép người dùng tìm kiếm, đặt tour, khách sạn và chuyến bay. Hệ thống tích hợp AI chatbot hỗ trợ tư vấn du lịch sử dụng mô hình ngôn ngữ chạy hoàn toàn local (không phụ thuộc cloud API).
 
-- **Web**: Next.js 16 + TypeScript + Tailwind CSS — giao diện Vietnamese-first, Traveloka-inspired
-- **API**: NestJS 11 + Prisma 7 + PostgreSQL — REST API đầy đủ với Swagger docs
-- **AI Service**: FastAPI + Ollama + Qdrant — chatbot local-first, không cần OpenAI API key
-- **Mobile**: Flutter (cấu trúc sẵn, Riverpod + Dio)
-- **DevOps**: pnpm workspaces + Turborepo + Docker Compose + GitHub Actions CI
+### ✨ Tính Năng Chính
 
-> ⚠️ **Thanh toán demo** — Tất cả luồng thanh toán là mock/demo. Không phát sinh giao dịch thật.
+- 🏨 Đặt tour, khách sạn, chuyến bay với hệ thống thanh toán demo
+- 🤖 AI Travel Assistant — chatbot tư vấn du lịch (Ollama + RAG)
+- 👨‍💼 Admin Dashboard với analytics và quản lý booking
+- 🔐 Xác thực JWT (access token 15 phút + refresh token 7 ngày)
+- 📱 Ứng dụng mobile Flutter cross-platform
+- 🧪 E2E testing (Playwright) + Load testing (k6)
+- 🐳 Docker Compose — khởi chạy toàn bộ hệ thống bằng 1 lệnh
 
-## Tính năng chính
+---
 
-| Module        | Mô tả                                                                |
-| ------------- | -------------------------------------------------------------------- |
-| Auth          | Đăng ký, đăng nhập, JWT access+refresh, đổi mật khẩu, khóa tài khoản |
-| Destinations  | Danh sách điểm đến, tìm kiếm, chi tiết, admin CRUD                   |
-| Tours         | Tìm kiếm/lọc/sắp xếp tour, lịch trình, ngày khởi hành, admin CRUD    |
-| Booking       | Đặt tour, quản lý booking, mã WV-YYYYMMDD-XXXXXX                     |
-| Payment       | Mock checkout + callback (demo only)                                 |
-| Reviews       | Đánh giá tour, admin duyệt/ẩn                                        |
-| Wishlist      | Lưu tour và điểm đến yêu thích                                       |
-| Blog          | CMS blog, DRAFT/PUBLISHED                                            |
-| Contact       | Form liên hệ, admin triage                                           |
-| Admin         | Dashboard tổng quan, doanh thu, top tours, quản lý tất cả modules    |
-| Notifications | Thông báo in-app, đánh dấu đã đọc                                    |
-| Coupons       | Mã giảm giá, PERCENT/FIXED, giới hạn sử dụng                         |
-| AI Concierge  | Chatbot local (Ollama + RAG + Qdrant), không cần cloud API key       |
+## 🛠️ Tech Stack
 
-## Yêu cầu hệ thống
+| Layer | Công nghệ | Phiên bản |
+|-------|-----------|-----------|
+| **Frontend** | Next.js + TypeScript + Tailwind CSS | 16.x |
+| **Backend** | NestJS + TypeScript | 11.x |
+| **Database** | PostgreSQL + Prisma ORM | 18 / 7.x |
+| **AI Service** | FastAPI + Ollama + Qdrant | Python 3.12+ |
+| **Mobile** | Flutter + Dart | Latest |
+| **Monorepo** | pnpm Workspaces + Turborepo | 10.x / 2.x |
+| **Testing** | Vitest + Playwright + k6 | Latest |
+| **CI/CD** | GitHub Actions + Docker | — |
+| **Cache** | Redis | 7.x |
 
-- **Node.js** 22 hoặc 24
-- **pnpm** 10.33.0+
-- **Docker** + Docker Compose (cho PostgreSQL, Redis, Qdrant)
-- **Python** 3.12+ (cho AI service)
-- **Ollama** (tùy chọn, cho chatbot local)
+---
 
-## Cài đặt nhanh
-
-### 1. Clone và cài dependencies
-
-```bash
-git clone https://github.com/your-org/wanderviet.git
-cd wanderviet
-pnpm install
-```
-
-### 2. Cấu hình môi trường
-
-```bash
-cp .env.example .env
-# Chỉnh sửa .env với các giá trị phù hợp
-```
-
-Các biến bắt buộc:
-
-```dotenv
-DATABASE_URL=postgresql://vietwander:vietwander@localhost:5432/vietwander
-JWT_ACCESS_SECRET=<chuỗi ngẫu nhiên ít nhất 32 ký tự>
-JWT_REFRESH_SECRET=<chuỗi ngẫu nhiên ít nhất 32 ký tự>
-FRONTEND_URL=http://localhost:3000
-```
-
-### 3. Khởi động Docker services
-
-```bash
-# Khởi động PostgreSQL, Redis, Qdrant
-docker compose -f infra/docker/docker-compose.yml up -d postgres redis qdrant
-```
-
-### 4. Khởi tạo database
-
-```bash
-# Chạy migrations
-pnpm --filter @vietwander/db exec prisma migrate dev --schema prisma/schema.prisma
-
-# Seed dữ liệu mẫu (12 điểm đến, 8 tour, demo users, bookings, reviews...)
-pnpm seed
-```
-
-### 5. Chạy development
-
-```bash
-# Chạy tất cả services song song (web + api)
-pnpm dev
-
-# Hoặc chạy riêng lẻ:
-pnpm --filter @vietwander/web dev    # http://localhost:3000
-pnpm --filter @vietwander/api dev    # http://localhost:4000
-```
-
-### 6. Chạy AI Service (tùy chọn)
-
-```bash
-# Cài Ollama: https://ollama.ai
-ollama pull qwen3:4b
-ollama pull nomic-embed-text
-
-# Chạy AI service
-cd apps/ai-service
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8010
-```
-
-## Tài khoản demo
-
-| Email                | Mật khẩu     | Vai trò |
-| -------------------- | ------------ | ------- |
-| admin@wanderviet.com | Admin@123456 | ADMIN   |
-| user@wanderviet.com  | User@123456  | USER    |
-| staff@wanderviet.com | Staff@123456 | STAFF   |
-
-## API Documentation
-
-Swagger UI: [http://localhost:4000/api/docs](http://localhost:4000/api/docs)
-
-## Cấu trúc dự án
+## 🏗️ Kiến Trúc
 
 ```
 wanderviet/
 ├── apps/
-│   ├── api/          # NestJS 11 — REST API
-│   ├── web/          # Next.js 16 — Frontend
-│   ├── ai-service/   # FastAPI — AI/RAG service
-│   └── mobile/       # Flutter — Mobile app
+│   ├── api/            # NestJS 11 — REST API, Swagger tại /api/docs
+│   ├── web/            # Next.js 16 — Frontend Vietnamese-first
+│   ├── ai-service/     # FastAPI — Local RAG (Ollama + Qdrant)
+│   └── mobile/         # Flutter — Mobile app
 ├── packages/
-│   ├── shared/       # Shared TypeScript types
-│   ├── db/           # Prisma schema + migrations + seed
-│   └── config/       # Shared configs
-├── infra/docker/     # Docker Compose
-├── e2e/              # Playwright E2E tests
-├── load-tests/       # k6 load tests
-├── docs/
-│   ├── adr/          # Architecture Decision Records
-│   └── er-diagram.md # Entity-Relationship diagram
-├── .github/
-│   ├── workflows/ci.yml  # GitHub Actions CI
-│   └── renovate.json     # Renovate bot config
-└── Makefile          # Shortcut commands
+│   ├── shared/         # Shared TypeScript types & API contracts
+│   ├── db/             # Prisma schema, migrations, seed data
+│   └── config/         # Shared ESLint, TypeScript, build configs
+├── infra/docker/       # Docker Compose (postgres, redis, qdrant, api, web, ai)
+├── e2e/                # Playwright end-to-end tests
+├── load-tests/         # k6 load test scripts
+└── docs/               # ADRs, ER diagram, architecture notes
 ```
 
-## Lệnh thường dùng
+```mermaid
+graph TB
+    subgraph Frontend
+        Web[Next.js 16<br/>:3000]
+        Mobile[Flutter App]
+    end
+    subgraph Backend
+        API[NestJS 11 API<br/>:4000]
+        AI[FastAPI AI Service<br/>:8010]
+    end
+    subgraph Data
+        PG[(PostgreSQL 18<br/>:5432)]
+        Redis[(Redis<br/>:6379)]
+        Qdrant[(Qdrant<br/>:6333)]
+    end
+    subgraph AI_Runtime
+        Ollama[Ollama LLM<br/>:11434]
+    end
 
-```bash
-# Development
-make dev              # Chạy tất cả services
-make build            # Build tất cả packages
-make test             # Chạy unit tests
-make lint             # Lint toàn bộ codebase
-make typecheck        # TypeScript type check
-
-# Database
-make migrate          # Chạy Prisma migrations
-make seed             # Seed dữ liệu mẫu
-
-# Docker
-make docker-up        # Khởi động Docker services
-make docker-down      # Dừng Docker services
-make docker-build     # Build Docker images
-
-# Testing
-make e2e              # Chạy Playwright E2E tests
-make load-test        # Chạy k6 load tests
-
-# Storybook
-pnpm storybook        # Chạy Storybook tại http://localhost:6006
+    Web --> API
+    Mobile --> API
+    API --> PG
+    API --> Redis
+    API --> AI
+    AI --> Ollama
+    AI --> Qdrant
 ```
-
-## CI/CD
-
-GitHub Actions CI chạy các jobs sau trên mỗi push/PR:
-
-| Job              | Mô tả                                         |
-| ---------------- | --------------------------------------------- |
-| `web-api-ai`     | Lint, test, build trên Node 22 và 24 (matrix) |
-| `typecheck`      | TypeScript type checking                      |
-| `security-audit` | `pnpm audit --prod`                           |
-| `e2e`            | Playwright E2E tests với PostgreSQL service   |
-| `docker-build`   | Build Docker images (chỉ trên push to main)   |
-| `mobile`         | Flutter analyze + test                        |
-
-Renovate bot tự động tạo PR cập nhật dependencies và bật auto-merge cho minor/patch.
-
-## Kiến trúc
-
-Xem thêm:
-
-- [`docs/adr/`](docs/adr/) — Architecture Decision Records
-- [`docs/er-diagram.md`](docs/er-diagram.md) — Entity-Relationship diagram
-- [`.kiro/specs/wanderviet-travel-platform/design.md`](.kiro/specs/wanderviet-travel-platform/design.md) — Technical design
-
-## Lưu ý quan trọng
-
-- **Thanh toán**: Tất cả luồng thanh toán là mock/demo. Không bao giờ lưu thông tin thẻ thật.
-- **AI Chatbot**: Runtime không yêu cầu OpenAI API key. Sử dụng Ollama local.
-- **Secrets**: Không commit `.env` vào git. Xem `.gitignore`.
-- **Dữ liệu**: Dữ liệu tour và điểm đến là mẫu/demo. Không phản ánh thông tin thực tế.
-
-## License
-
-MIT
 
 ---
 
-_WanderViet — Khám phá Việt Nam và thế giới theo cách của bạn._
+## 📋 Yêu Cầu Hệ Thống
+
+| Phần mềm | Phiên bản tối thiểu |
+|-----------|---------------------|
+| Node.js | >= 22.x |
+| pnpm | >= 10.x |
+| Docker & Docker Compose | Latest |
+| PostgreSQL | 18 (qua Docker) |
+| Python | >= 3.12 (cho AI service) |
+
+---
+
+## 🚀 Cài Đặt Nhanh
+
+### 1. Clone repository
+
+```bash
+git clone https://github.com/nguyenson1710/wanderviet.git
+cd wanderviet
+```
+
+### 2. Cài đặt dependencies
+
+```bash
+pnpm install
+```
+
+### 3. Cấu hình môi trường
+
+```bash
+cp .env.example .env
+# Chỉnh sửa .env với thông tin database và các config cần thiết
+```
+
+### 4. Khởi chạy infrastructure (Docker)
+
+```bash
+docker compose -f infra/docker/docker-compose.yml up -d
+```
+
+### 5. Chạy database migrations & seed
+
+```bash
+pnpm --filter @vietwander/db prisma migrate dev
+pnpm seed
+```
+
+### 6. Khởi chạy development servers
+
+```bash
+pnpm dev
+```
+
+> 🌐 **Web:** http://localhost:3000
+> 🔌 **API:** http://localhost:4000/api/v1
+> 📚 **Swagger:** http://localhost:4000/api/docs
+> 🤖 **AI Service:** http://localhost:8010
+
+---
+
+## 👤 Tài Khoản Demo
+
+| Vai trò | Email | Mật khẩu |
+|---------|-------|-----------|
+| 👨‍💼 Admin | `admin@wanderviet.com` | `Admin@123456` |
+| 👤 User | `user@wanderviet.com` | `User@123456` |
+
+> ⚠️ **Lưu ý:** Hệ thống thanh toán là mock/demo — không xử lý giao dịch thật.
+
+---
+
+## 📚 API Documentation
+
+API documentation được tạo tự động bằng Swagger/OpenAPI:
+
+- **Swagger UI:** http://localhost:4000/api/docs
+- **OpenAPI JSON:** http://localhost:4000/api/docs-json
+
+---
+
+## 📖 Tài Liệu
+
+| Tài liệu | Mô tả |
+|-----------|--------|
+| [Architecture](./docs/architecture.md) | Tổng quan kiến trúc hệ thống |
+| [ADRs](./docs/adr/) | Architecture Decision Records |
+| [ER Diagram](./docs/er-diagram.md) | Sơ đồ quan hệ thực thể |
+| [Contributing](./CONTRIBUTING.md) | Hướng dẫn đóng góp |
+| [Changelog](./CHANGELOG.md) | Lịch sử thay đổi |
+| [Release Checklist](./docs/release-checklist.md) | Quy trình release |
+
+---
+
+## 📄 License
+
+Dự án được phân phối dưới giấy phép [MIT](./LICENSE).
+
+Copyright © 2025 [Nguyen Son](https://github.com/nguyenson1710)

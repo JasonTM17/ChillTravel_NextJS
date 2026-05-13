@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">🌏 WanderViet — Vietnam Travel Platform</h1>
+  <h1 align="center">WanderViet — Vietnam Travel Platform</h1>
   <p align="center">
     <em>Full-stack travel platform built with modern monorepo architecture</em>
   </p>
@@ -21,31 +21,31 @@
 </p>
 
 <p align="center">
-  <a href="./README.md">🇻🇳 Tiếng Việt</a> •
-  <a href="#-quick-start">Quick Start</a> •
-  <a href="#-documentation">Docs</a> •
-  <a href="#-api-documentation">API Docs</a>
+  <a href="./README.md">Tieng Viet</a> |
+  <a href="#quick-start">Quick Start</a> |
+  <a href="#documentation">Docs</a> |
+  <a href="#api-documentation">API Docs</a>
 </p>
 
 ---
 
-## 📖 Introduction
+## Introduction
 
 **WanderViet** is a comprehensive travel platform for the Vietnamese market, enabling users to search and book tours, hotels, and flights. The system integrates an AI chatbot for travel consultation powered by a fully local language model (no cloud API dependency).
 
-### ✨ Key Features
+### Key Features
 
-- 🏨 Tour, hotel, and flight booking with demo payment system
-- 🤖 AI Travel Assistant — travel consultation chatbot (Ollama + RAG)
-- 👨‍💼 Admin Dashboard with analytics and booking management
-- 🔐 JWT authentication (15-min access token + 7-day refresh token)
-- 📱 Flutter cross-platform mobile app
-- 🧪 E2E testing (Playwright) + Load testing (k6)
-- 🐳 Docker Compose — spin up the entire system with a single command
+- Tour, hotel, and flight booking with demo payment system
+- AI Travel Assistant — travel consultation chatbot (Ollama + RAG)
+- Admin Dashboard with analytics and booking management
+- JWT authentication (15-min access token + 7-day refresh token)
+- Flutter cross-platform mobile app
+- E2E testing (Playwright) + Load testing (k6)
+- Docker Compose — spin up the entire system with a single command
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology | Version |
 |-------|-----------|---------|
@@ -61,7 +61,7 @@
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 wanderviet/
@@ -110,7 +110,7 @@ graph TB
 
 ---
 
-## 📋 Prerequisites
+## Prerequisites
 
 | Software | Minimum Version |
 |----------|----------------|
@@ -122,7 +122,7 @@ graph TB
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Clone the repository
 
@@ -163,25 +163,27 @@ pnpm seed
 pnpm dev
 ```
 
-> 🌐 **Web:** http://localhost:3000
-> 🔌 **API:** http://localhost:4000/api/v1
-> 📚 **Swagger:** http://localhost:4000/api/docs
-> 🤖 **AI Service:** http://localhost:8010
+| Service | URL |
+|---------|-----|
+| Web | http://localhost:3000 |
+| API | http://localhost:4000/api/v1 |
+| Swagger | http://localhost:4000/api/docs |
+| AI Service | http://localhost:8010 |
 
 ---
 
-## 👤 Demo Accounts
+## Demo Accounts
 
 | Role | Email | Password |
 |------|-------|----------|
-| 👨‍💼 Admin | `admin@wanderviet.com` | `Admin@123456` |
-| 👤 User | `user@wanderviet.com` | `User@123456` |
+| Admin | `admin@wanderviet.com` | `Admin@123456` |
+| User | `user@wanderviet.com` | `User@123456` |
 
-> ⚠️ **Note:** The payment system is mock/demo only — no real transactions are processed.
+> **Note:** The payment system is mock/demo only — no real transactions are processed.
 
 ---
 
-## 📚 API Documentation
+## API Documentation
 
 API documentation is auto-generated using Swagger/OpenAPI:
 
@@ -190,7 +192,7 @@ API documentation is auto-generated using Swagger/OpenAPI:
 
 ---
 
-## 📖 Documentation
+## Documentation
 
 | Document | Description |
 |----------|-------------|
@@ -203,8 +205,8 @@ API documentation is auto-generated using Swagger/OpenAPI:
 
 ---
 
-## 📄 License
+## License
 
 This project is distributed under the [MIT](./LICENSE) license.
 
-Copyright © 2025 [Nguyen Son](https://github.com/nguyenson1710)
+Copyright (c) 2025 [Nguyen Son](https://github.com/nguyenson1710)

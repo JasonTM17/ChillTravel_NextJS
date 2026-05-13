@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">🌏 WanderViet — Nền Tảng Du Lịch Việt Nam</h1>
+  <h1 align="center">WanderViet — Nền Tảng Du Lịch Việt Nam</h1>
   <p align="center">
     <em>Full-stack travel platform xây dựng với kiến trúc monorepo hiện đại</em>
   </p>
@@ -21,31 +21,47 @@
 </p>
 
 <p align="center">
-  <a href="./README.en.md">🇬🇧 English</a> •
-  <a href="#-cài-đặt-nhanh">Cài đặt</a> •
-  <a href="#-tài-liệu">Tài liệu</a> •
-  <a href="#-api-documentation">API Docs</a>
+  <a href="./README.en.md">English</a> |
+  <a href="#cài-đặt-nhanh">Cài đặt</a> |
+  <a href="#tài-liệu">Tài liệu</a> |
+  <a href="#api-documentation">API Docs</a>
 </p>
 
 ---
 
-## 📖 Giới Thiệu
+<p align="center">
+  <img src="./assets/images/homepage_top.png" alt="WanderViet Homepage Preview" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
+</p>
 
-**WanderViet** là nền tảng du lịch toàn diện dành cho thị trường Việt Nam, cho phép người dùng tìm kiếm, đặt tour, khách sạn và chuyến bay. Hệ thống tích hợp AI chatbot hỗ trợ tư vấn du lịch sử dụng mô hình ngôn ngữ chạy hoàn toàn local (không phụ thuộc cloud API).
+## Giao diện Nổi bật
 
-### ✨ Tính Năng Chính
+Dự án được thiết kế với chuẩn UI/UX cao cấp (Premium Booking Platform), sử dụng Design System tinh tế và hiện đại.
 
-- 🏨 Đặt tour, khách sạn, chuyến bay với hệ thống thanh toán demo
-- 🤖 AI Travel Assistant — chatbot tư vấn du lịch (Ollama + RAG)
-- 👨‍💼 Admin Dashboard với analytics và quản lý booking
-- 🔐 Xác thực JWT (access token 15 phút + refresh token 7 ngày)
-- 📱 Ứng dụng mobile Flutter cross-platform
-- 🧪 E2E testing (Playwright) + Load testing (k6)
-- 🐳 Docker Compose — khởi chạy toàn bộ hệ thống bằng 1 lệnh
+<p align="center">
+  <img src="./assets/images/homepage_flash_sale.png" alt="Flash Sale Deals" width="48%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
+  &nbsp;
+  <img src="./assets/images/homepage_full.png" alt="Full Homepage Layout" width="48%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
+</p>
 
 ---
 
-## 🛠️ Tech Stack
+## Giới Thiệu
+
+**WanderViet** là nền tảng du lịch toàn diện dành cho thị trường Việt Nam, cho phép người dùng tìm kiếm, đặt tour, khách sạn và chuyến bay. Hệ thống tích hợp AI chatbot hỗ trợ tư vấn du lịch sử dụng mô hình ngôn ngữ chạy hoàn toàn local (không phụ thuộc cloud API).
+
+### Tính Năng Chính
+
+- Đặt tour, khách sạn, chuyến bay với hệ thống thanh toán demo
+- AI Travel Assistant — chatbot tư vấn du lịch (Ollama + RAG)
+- Admin Dashboard với analytics và quản lý booking
+- Xác thực JWT (access token 15 phút + refresh token 7 ngày)
+- Ứng dụng mobile Flutter cross-platform
+- E2E testing (Playwright) + Load testing (k6)
+- Docker Compose — khởi chạy toàn bộ hệ thống bằng 1 lệnh
+
+---
+
+## Tech Stack
 
 | Layer | Công nghệ | Phiên bản |
 |-------|-----------|-----------|
@@ -61,7 +77,7 @@
 
 ---
 
-## 🏗️ Kiến Trúc
+## Kiến Trúc
 
 ```
 wanderviet/
@@ -110,7 +126,7 @@ graph TB
 
 ---
 
-## 📋 Yêu Cầu Hệ Thống
+## Yêu Cầu Hệ Thống
 
 | Phần mềm | Phiên bản tối thiểu |
 |-----------|---------------------|
@@ -122,7 +138,7 @@ graph TB
 
 ---
 
-## 🚀 Cài Đặt Nhanh
+## Cài Đặt Nhanh
 
 ### 1. Clone repository
 
@@ -163,25 +179,27 @@ pnpm seed
 pnpm dev
 ```
 
-> 🌐 **Web:** http://localhost:3000
-> 🔌 **API:** http://localhost:4000/api/v1
-> 📚 **Swagger:** http://localhost:4000/api/docs
-> 🤖 **AI Service:** http://localhost:8010
+| Service | URL |
+|---------|-----|
+| Web | http://localhost:3000 |
+| API | http://localhost:4000/api/v1 |
+| Swagger | http://localhost:4000/api/docs |
+| AI Service | http://localhost:8010 |
 
 ---
 
-## 👤 Tài Khoản Demo
+## Tài Khoản Demo
 
 | Vai trò | Email | Mật khẩu |
 |---------|-------|-----------|
-| 👨‍💼 Admin | `admin@wanderviet.com` | `Admin@123456` |
-| 👤 User | `user@wanderviet.com` | `User@123456` |
+| Admin | `admin@wanderviet.com` | `Admin@123456` |
+| User | `user@wanderviet.com` | `User@123456` |
 
-> ⚠️ **Lưu ý:** Hệ thống thanh toán là mock/demo — không xử lý giao dịch thật.
+> **Lưu ý:** Hệ thống thanh toán là mock/demo — không xử lý giao dịch thật.
 
 ---
 
-## 📚 API Documentation
+## API Documentation
 
 API documentation được tạo tự động bằng Swagger/OpenAPI:
 
@@ -190,7 +208,7 @@ API documentation được tạo tự động bằng Swagger/OpenAPI:
 
 ---
 
-## 📖 Tài Liệu
+## Tài Liệu
 
 | Tài liệu | Mô tả |
 |-----------|--------|
@@ -203,8 +221,8 @@ API documentation được tạo tự động bằng Swagger/OpenAPI:
 
 ---
 
-## 📄 License
+## License
 
 Dự án được phân phối dưới giấy phép [MIT](./LICENSE).
 
-Copyright © 2025 [Nguyen Son](https://github.com/nguyenson1710)
+Copyright (c) 2025 [Nguyen Son](https://github.com/nguyenson1710)

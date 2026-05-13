@@ -1,7 +1,9 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { destinations, envelope } from '@vietwander/shared';
 import { IsBoolean, IsOptional } from 'class-validator';
-import { JwtAuthGuard, Roles, RolesGuard } from './security';
+import { Roles } from '../common/decorators/roles.decorator';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../common/guards/roles.guard';
 
 class AdminReindexDto {
   @IsOptional()

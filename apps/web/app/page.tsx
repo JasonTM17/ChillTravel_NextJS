@@ -405,68 +405,73 @@ function HeroSearch({ t }: { t: TranslationNamespace }) {
           {t.home.heroTitle}
         </h1>
 
-        {/* Search card — entire card is clickable, linking to hotels search */}
-        <Link
-          href="/hotels?destination=Đà+Nẵng"
-          className="block rounded-tv-lg bg-white p-4 shadow-tv-modal hover:shadow-tv-modal/80 hover:ring-2 hover:ring-tv-blue/20 transition-all cursor-pointer"
-        >
+        {/* Search card — interactive Traveloka-style */}
+        <div className="rounded-tv-lg bg-white p-4 shadow-tv-modal">
           <div className="grid gap-3 md:grid-cols-[1fr_180px_180px_160px_auto]">
-            {/* Destination */}
+            {/* Destination — editable input */}
             <div className="tv-search-field">
-              <span className="text-tv-xs text-tv-ink-3">{t.home.destination}</span>
+              <label className="text-tv-xs text-tv-ink-3">{t.home.destination}</label>
               <div className="flex items-center gap-2 mt-1">
                 <MapPin size={16} className="shrink-0 text-tv-blue" />
-                <span className="w-full text-tv-base font-semibold text-tv-ink">Đà Nẵng</span>
+                <input
+                  defaultValue="Đà Nẵng"
+                  placeholder={t.home.searchPlaceholder}
+                  className="w-full text-tv-base font-semibold text-tv-ink bg-transparent outline-none placeholder:text-tv-ink-4"
+                />
               </div>
             </div>
 
-            {/* Check-in */}
+            {/* Check-in — static display */}
             <div className="tv-search-field">
-              <span className="text-tv-xs text-tv-ink-3">{t.home.checkIn}</span>
+              <label className="text-tv-xs text-tv-ink-3">{t.home.checkIn}</label>
               <div className="flex items-center gap-2 mt-1">
                 <CalendarDays size={16} className="shrink-0 text-tv-blue" />
-                <span className="value text-tv-base font-semibold">12 thg 8, 2026</span>
+                <span className="text-tv-base font-semibold">12 thg 8, 2026</span>
               </div>
             </div>
 
-            {/* Check-out */}
+            {/* Check-out — static display */}
             <div className="tv-search-field">
-              <span className="text-tv-xs text-tv-ink-3">{t.home.checkOut}</span>
+              <label className="text-tv-xs text-tv-ink-3">{t.home.checkOut}</label>
               <div className="flex items-center gap-2 mt-1">
                 <CalendarDays size={16} className="shrink-0 text-tv-blue" />
-                <span className="value text-tv-base font-semibold">16 thg 8, 2026</span>
+                <span className="text-tv-base font-semibold">16 thg 8, 2026</span>
               </div>
             </div>
 
-            {/* Guests */}
+            {/* Guests — static display */}
             <div className="tv-search-field">
-              <span className="text-tv-xs text-tv-ink-3">{t.booking.guests}</span>
+              <label className="text-tv-xs text-tv-ink-3">{t.booking.guests}</label>
               <div className="flex items-center gap-2 mt-1">
                 <Users size={16} className="shrink-0 text-tv-blue" />
-                <span className="value text-tv-base font-semibold">{t.home.guests}</span>
+                <span className="text-tv-base font-semibold">{t.home.guests}</span>
               </div>
             </div>
 
-            {/* Search button */}
-            <span className="flex items-center justify-center gap-2 rounded-tv bg-tv-orange px-6 py-3 text-tv-base font-bold text-white">
+            {/* Search button — Link to /hotels */}
+            <Link
+              href="/hotels?destination=Đà+Nẵng&checkIn=2026-08-12&checkOut=2026-08-16&rooms=1&guests=2"
+              className="flex items-center justify-center gap-2 rounded-tv bg-tv-orange px-6 py-3 text-tv-base font-bold text-white hover:bg-tv-orange-dark transition-colors"
+            >
               <Search size={18} />
               <span className="hidden md:inline">{t.home.search}</span>
-            </span>
+            </Link>
           </div>
 
-          {/* Quick search tags */}
+          {/* Quick search tags — Links */}
           <div className="mt-3 flex flex-wrap gap-2">
             <span className="text-tv-xs text-tv-ink-3 self-center">{t.home.quickSearch}</span>
             {['Đà Nẵng', 'Phú Quốc', 'Hội An', 'Sapa', 'Hà Nội', 'Tokyo', 'Bangkok'].map((city) => (
-              <span
+              <Link
                 key={city}
-                className="rounded-full border border-tv-border bg-tv-bg px-3 py-1 text-tv-xs font-semibold text-tv-ink-2"
+                href={`/explore?keyword=${city}`}
+                className="rounded-full border border-tv-border bg-tv-bg px-3 py-1 text-tv-xs font-semibold text-tv-ink-2 hover:border-tv-blue hover:text-tv-blue transition-colors"
               >
                 {city}
-              </span>
+              </Link>
             ))}
           </div>
-        </Link>
+        </div>
       </div>
     </div>
   );

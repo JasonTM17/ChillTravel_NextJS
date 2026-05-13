@@ -1,9 +1,11 @@
-import { api } from "./client";
-import type { ApiSuccess } from "@vietwander/shared";
+import type { ApiSuccess, UserProfile, AuthResponse } from '@vietwander/shared';
+import { api } from './client';
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
+
+export type { UserProfile, AuthResponse } from '@vietwander/shared';
 
 export interface LoginRequest {
   email: string;
@@ -17,59 +19,36 @@ export interface RegisterRequest {
   phone?: string;
 }
 
-export interface UserProfile {
-  id: string;
-  email: string;
-  fullName: string | null;
-  phone: string | null;
-  avatarUrl: string | null;
-  role: string;
-  status: string;
-  emailVerified: boolean;
-  createdAt: string;
-}
-
-export interface AuthResponse {
-  accessToken: string;
-  refreshToken: string;
-  user: UserProfile;
-}
-
 // ---------------------------------------------------------------------------
 // Auth API
 // ---------------------------------------------------------------------------
 
 export const authApi = {
-  login: (data: LoginRequest) =>
-    api.post<ApiSuccess<AuthResponse>>("/auth/login", data),
+  login: (data: LoginRequest) => api.post<ApiSuccess<AuthResponse>>('/auth/login', data),
 
-  register: (data: RegisterRequest) =>
-    api.post<ApiSuccess<AuthResponse>>("/auth/register", data),
+  register: (data: RegisterRequest) => api.post<ApiSuccess<AuthResponse>>('/auth/register', data),
 
   refresh: (refreshToken: string) =>
-    api.post<ApiSuccess<AuthResponse>>("/auth/refresh", { refreshToken }),
+    api.post<ApiSuccess<AuthResponse>>('/auth/refresh', { refreshToken }),
 
   logout: (refreshToken: string) =>
-    api.post<ApiSuccess<{ revoked: boolean }>>("/auth/logout", { refreshToken }),
+    api.post<ApiSuccess<{ revoked: boolean }>>('/auth/logout', { refreshToken }),
 
-  getMe: () =>
-    api.get<ApiSuccess<UserProfile>>("/auth/me"),
+  getMe: () => api.get<ApiSuccess<UserProfile>>('/auth/me'),
 
-  updateMe: (data: Partial<UserProfile>) =>
-    api.put<ApiSuccess<UserProfile>>("/auth/me", data),
+  updateMe: (data: Partial<UserProfile>) => api.put<ApiSuccess<UserProfile>>('/auth/me', data),
 
   changePassword: (data: { oldPassword: string; newPassword: string }) =>
-    api.put<ApiSuccess<{ changed: boolean }>>("/auth/change-password", data),
+    api.put<ApiSuccess<{ changed: boolean }>>('/auth/change-password', data),
 
   forgotPassword: (data: { email: string }) =>
-    api.post<ApiSuccess<{ sent: boolean }>>("/auth/forgot-password", data),
+    api.post<ApiSuccess<{ sent: boolean }>>('/auth/forgot-password', data),
 
   resetPassword: (data: { token: string; newPassword: string }) =>
-    api.post<ApiSuccess<{ reset: boolean }>>("/auth/reset-password", data),
+    api.post<ApiSuccess<{ reset: boolean }>>('/auth/reset-password', data),
 
   verifyEmail: (token: string) =>
-    api.get<ApiSuccess<{ verified: boolean }>>("/auth/verify-email", { token }),
+    api.get<ApiSuccess<{ verified: boolean }>>('/auth/verify-email', { token }),
 
-  resendVerification: () =>
-    api.post<ApiSuccess<{ sent: boolean }>>("/auth/resend-verification"),
+  resendVerification: () => api.post<ApiSuccess<{ sent: boolean }>>('/auth/resend-verification'),
 };

@@ -1,4 +1,9 @@
-export class UserProfileDto {
+import type {
+  UserProfile as IUserProfile,
+  AuthResponse as IAuthResponse,
+} from '@vietwander/shared';
+
+export class UserProfileDto implements IUserProfile {
   id!: string;
   email!: string;
   fullName!: string | null;
@@ -10,7 +15,7 @@ export class UserProfileDto {
   createdAt!: Date;
 }
 
-export class AuthResponseDto {
+export class AuthResponseDto implements IAuthResponse {
   accessToken!: string;
   refreshToken!: string;
   user!: UserProfileDto;

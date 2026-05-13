@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { BadRequestException, ForbiddenException, NotFoundException } from "@nestjs/common";
-import { BookingService } from "../booking.service";
+import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { BookingService } from '../booking.service';
 
 // ---------------------------------------------------------------------------
 // Mock factories
@@ -13,41 +13,41 @@ import { BookingService } from "../booking.service";
 function makePrisma() {
   const mock: Record<string, unknown> = {};
 
-  mock["tour"] = {
+  mock['tour'] = {
     findUnique: vi.fn(),
     update: vi.fn().mockResolvedValue({}),
   };
-  mock["tourDeparture"] = {
+  mock['tourDeparture'] = {
     findUnique: vi.fn(),
     update: vi.fn().mockResolvedValue({}),
   };
-  mock["booking"] = {
+  mock['booking'] = {
     findUnique: vi.fn(),
     findMany: vi.fn().mockResolvedValue([]),
     count: vi.fn().mockResolvedValue(0),
     create: vi.fn(),
     update: vi.fn(),
   };
-  mock["bookingGuest"] = {
+  mock['bookingGuest'] = {
     createMany: vi.fn().mockResolvedValue({ count: 0 }),
   };
-  mock["payment"] = {
+  mock['payment'] = {
     create: vi.fn().mockResolvedValue({}),
     findUnique: vi.fn(),
     update: vi.fn().mockResolvedValue({}),
   };
-  mock["coupon"] = {
+  mock['coupon'] = {
     findUnique: vi.fn(),
     update: vi.fn().mockResolvedValue({}),
   };
-  mock["user"] = {
+  mock['user'] = {
     findUnique: vi.fn().mockResolvedValue(null),
   };
 
   // $transaction executes the callback with the same mock so all stubs apply
-  mock["$transaction"] = vi.fn().mockImplementation(
-    async (cb: (tx: unknown) => Promise<unknown>) => cb(mock)
-  );
+  mock['$transaction'] = vi
+    .fn()
+    .mockImplementation(async (cb: (tx: unknown) => Promise<unknown>) => cb(mock));
 
   return mock as unknown as {
     tour: { findUnique: ReturnType<typeof vi.fn>; update: ReturnType<typeof vi.fn> };
@@ -86,35 +86,35 @@ function makeEmail() {
 // ---------------------------------------------------------------------------
 
 const MOCK_TOUR = {
-  id: "tour-id-1",
-  title: "Northern Vietnam Adventure",
-  slug: "northern-vietnam-adventure",
-  destinationId: "dest-id-1",
+  id: 'tour-id-1',
+  title: 'Northern Vietnam Adventure',
+  slug: 'northern-vietnam-adventure',
+  destinationId: 'dest-id-1',
   basePrice: 10_000_000,
   salePrice: null as number | null,
   maxGuests: 16,
   minGuests: 2,
   availableSlots: 12,
-  status: "ACTIVE",
+  status: 'ACTIVE',
   featured: false,
 };
 
 const MOCK_BOOKING_ROW = {
-  id: "booking-id-1",
-  bookingCode: "WV-20260511-AAAAAA",
-  userId: "user-id-1",
-  tourId: "tour-id-1",
+  id: 'booking-id-1',
+  bookingCode: 'WV-20260511-AAAAAA',
+  userId: 'user-id-1',
+  tourId: 'tour-id-1',
   departureId: null as string | null,
   couponId: null as string | null,
-  contactName: "Test User",
-  contactEmail: "user@wanderviet.com",
-  contactPhone: "0901234567",
+  contactName: 'Test User',
+  contactEmail: 'user@wanderviet.com',
+  contactPhone: '0901234567',
   numberOfGuests: 2,
   totalAmount: 20_000_000,
   discountAmount: 0,
-  status: "pending",
-  paymentStatus: "pending",
-  paymentMethod: "MOCK_CARD",
+  status: 'pending',
+  paymentStatus: 'pending',
+  paymentMethod: 'MOCK_CARD',
   isDemo: true,
   bookingDate: new Date(),
   createdAt: new Date(),
@@ -122,10 +122,10 @@ const MOCK_BOOKING_ROW = {
 };
 
 const BASE_CREATE_DTO = {
-  tourId: "tour-id-1",
-  contactName: "Test User",
-  contactEmail: "user@wanderviet.com",
-  contactPhone: "0901234567",
+  tourId: 'tour-id-1',
+  contactName: 'Test User',
+  contactEmail: 'user@wanderviet.com',
+  contactPhone: '0901234567',
   numberOfGuests: 2,
 };
 
@@ -133,7 +133,7 @@ const BASE_CREATE_DTO = {
 // Tests
 // ---------------------------------------------------------------------------
 
-describe("BookingService", () => {
+describe('BookingService', () => {
   let service: BookingService;
   let prisma: ReturnType<typeof makePrisma>;
   let email: ReturnType<typeof makeEmail>;
@@ -148,32 +148,32 @@ describe("BookingService", () => {
   // createBooking
   // -------------------------------------------------------------------------
 
-  describe("createBooking", () => {
-    it("creates booking with correct totalAmount using basePrice", async () => {
+  describe('createBooking', () => {
+    it('creates booking with correct totalAmount using basePrice', async () => {
       prisma.tour.findUnique.mockResolvedValue(MOCK_TOUR);
       // booking.findUnique for code collision check → null (code free)
       prisma.booking.findUnique
-        .mockResolvedValueOnce(null)   // collision check
+        .mockResolvedValueOnce(null) // collision check
         .mockResolvedValueOnce({ ...MOCK_BOOKING_ROW }); // final fetch with relations
       prisma.booking.create.mockResolvedValue(MOCK_BOOKING_ROW);
 
-      const result = await service.createBooking("user-id-1", BASE_CREATE_DTO);
+      const result = await service.createBooking('user-id-1', BASE_CREATE_DTO);
 
       expect(prisma.booking.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             totalAmount: 20_000_000, // 10_000_000 * 2
             discountAmount: 0,
-            status: "pending",
-            paymentStatus: "pending",
+            status: 'pending',
+            paymentStatus: 'pending',
             isDemo: true,
           }),
-        })
+        }),
       );
       expect(result).toBeDefined();
     });
 
-    it("uses salePrice instead of basePrice when salePrice is set", async () => {
+    it('uses salePrice instead of basePrice when salePrice is set', async () => {
       const tourWithSale = { ...MOCK_TOUR, salePrice: 8_000_000 };
       prisma.tour.findUnique.mockResolvedValue(tourWithSale);
       prisma.booking.findUnique
@@ -181,23 +181,23 @@ describe("BookingService", () => {
         .mockResolvedValueOnce({ ...MOCK_BOOKING_ROW, totalAmount: 16_000_000 });
       prisma.booking.create.mockResolvedValue({ ...MOCK_BOOKING_ROW, totalAmount: 16_000_000 });
 
-      await service.createBooking("user-id-1", BASE_CREATE_DTO);
+      await service.createBooking('user-id-1', BASE_CREATE_DTO);
 
       expect(prisma.booking.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             totalAmount: 16_000_000, // 8_000_000 * 2
           }),
-        })
+        }),
       );
     });
 
-    it("applies PERCENT coupon discount correctly", async () => {
+    it('applies PERCENT coupon discount correctly', async () => {
       prisma.tour.findUnique.mockResolvedValue(MOCK_TOUR);
       prisma.coupon.findUnique.mockResolvedValue({
-        id: "coupon-id-1",
-        code: "WVWELCOME10",
-        discountType: "PERCENT",
+        id: 'coupon-id-1',
+        code: 'WVWELCOME10',
+        discountType: 'PERCENT',
         discountValue: 10,
         minBookingAmount: 1_000_000,
         maxDiscountAmount: 2_000_000,
@@ -207,12 +207,14 @@ describe("BookingService", () => {
         validTo: new Date(Date.now() + 86400_000),
         isActive: true,
       });
-      prisma.booking.findUnique
-        .mockResolvedValueOnce(null)
-        .mockResolvedValueOnce({ ...MOCK_BOOKING_ROW, totalAmount: 18_000_000, discountAmount: 2_000_000 });
+      prisma.booking.findUnique.mockResolvedValueOnce(null).mockResolvedValueOnce({
+        ...MOCK_BOOKING_ROW,
+        totalAmount: 18_000_000,
+        discountAmount: 2_000_000,
+      });
       prisma.booking.create.mockResolvedValue({ ...MOCK_BOOKING_ROW, totalAmount: 18_000_000 });
 
-      await service.createBooking("user-id-1", { ...BASE_CREATE_DTO, couponCode: "WVWELCOME10" });
+      await service.createBooking('user-id-1', { ...BASE_CREATE_DTO, couponCode: 'WVWELCOME10' });
 
       // 10% of 20_000_000 = 2_000_000 (within maxDiscountAmount cap)
       expect(prisma.booking.create).toHaveBeenCalledWith(
@@ -221,16 +223,16 @@ describe("BookingService", () => {
             totalAmount: 18_000_000,
             discountAmount: 2_000_000,
           }),
-        })
+        }),
       );
     });
 
-    it("applies FIXED coupon discount correctly", async () => {
+    it('applies FIXED coupon discount correctly', async () => {
       prisma.tour.findUnique.mockResolvedValue(MOCK_TOUR);
       prisma.coupon.findUnique.mockResolvedValue({
-        id: "coupon-id-2",
-        code: "WV500K",
-        discountType: "FIXED",
+        id: 'coupon-id-2',
+        code: 'WV500K',
+        discountType: 'FIXED',
         discountValue: 500_000,
         minBookingAmount: 3_000_000,
         maxDiscountAmount: null,
@@ -240,12 +242,14 @@ describe("BookingService", () => {
         validTo: new Date(Date.now() + 86400_000),
         isActive: true,
       });
-      prisma.booking.findUnique
-        .mockResolvedValueOnce(null)
-        .mockResolvedValueOnce({ ...MOCK_BOOKING_ROW, totalAmount: 19_500_000, discountAmount: 500_000 });
+      prisma.booking.findUnique.mockResolvedValueOnce(null).mockResolvedValueOnce({
+        ...MOCK_BOOKING_ROW,
+        totalAmount: 19_500_000,
+        discountAmount: 500_000,
+      });
       prisma.booking.create.mockResolvedValue({ ...MOCK_BOOKING_ROW, totalAmount: 19_500_000 });
 
-      await service.createBooking("user-id-1", { ...BASE_CREATE_DTO, couponCode: "WV500K" });
+      await service.createBooking('user-id-1', { ...BASE_CREATE_DTO, couponCode: 'WV500K' });
 
       expect(prisma.booking.create).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -253,55 +257,55 @@ describe("BookingService", () => {
             totalAmount: 19_500_000,
             discountAmount: 500_000,
           }),
-        })
+        }),
       );
     });
 
-    it("throws BadRequestException when numberOfGuests > tour.availableSlots", async () => {
+    it('throws BadRequestException when numberOfGuests > tour.availableSlots', async () => {
       prisma.tour.findUnique.mockResolvedValue({ ...MOCK_TOUR, availableSlots: 1 });
 
       await expect(
-        service.createBooking("user-id-1", { ...BASE_CREATE_DTO, numberOfGuests: 5 })
+        service.createBooking('user-id-1', { ...BASE_CREATE_DTO, numberOfGuests: 5 }),
       ).rejects.toThrow(BadRequestException);
 
       expect(prisma.booking.create).not.toHaveBeenCalled();
     });
 
-    it("throws BadRequestException when tour is INACTIVE", async () => {
-      prisma.tour.findUnique.mockResolvedValue({ ...MOCK_TOUR, status: "INACTIVE" });
+    it('throws BadRequestException when tour is INACTIVE', async () => {
+      prisma.tour.findUnique.mockResolvedValue({ ...MOCK_TOUR, status: 'INACTIVE' });
 
-      await expect(
-        service.createBooking("user-id-1", BASE_CREATE_DTO)
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.createBooking('user-id-1', BASE_CREATE_DTO)).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
-    it("throws BadRequestException when tour is DELETED", async () => {
-      prisma.tour.findUnique.mockResolvedValue({ ...MOCK_TOUR, status: "DELETED" });
+    it('throws BadRequestException when tour is DELETED', async () => {
+      prisma.tour.findUnique.mockResolvedValue({ ...MOCK_TOUR, status: 'DELETED' });
 
-      await expect(
-        service.createBooking("user-id-1", BASE_CREATE_DTO)
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.createBooking('user-id-1', BASE_CREATE_DTO)).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
-    it("throws BadRequestException when tour is not found", async () => {
+    it('throws BadRequestException when tour is not found', async () => {
       prisma.tour.findUnique.mockResolvedValue(null);
 
-      await expect(
-        service.createBooking("user-id-1", BASE_CREATE_DTO)
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.createBooking('user-id-1', BASE_CREATE_DTO)).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
-    it("generates booking code in WV-YYYYMMDD-XXXXXX format", async () => {
+    it('generates booking code in WV-YYYYMMDD-XXXXXX format', async () => {
       prisma.tour.findUnique.mockResolvedValue(MOCK_TOUR);
-      prisma.booking.findUnique
-        .mockResolvedValueOnce(null)
-        .mockResolvedValueOnce(MOCK_BOOKING_ROW);
+      prisma.booking.findUnique.mockResolvedValueOnce(null).mockResolvedValueOnce(MOCK_BOOKING_ROW);
       prisma.booking.create.mockResolvedValue(MOCK_BOOKING_ROW);
 
-      await service.createBooking("user-id-1", BASE_CREATE_DTO);
+      await service.createBooking('user-id-1', BASE_CREATE_DTO);
 
-      const createCall = prisma.booking.create.mock.calls[0][0] as { data: { bookingCode: string } };
-      expect(createCall.data.bookingCode).toMatch(/^WV-\d{8}-[0-9A-F]{6}$/);
+      const createCall = prisma.booking.create.mock.calls[0]?.[0] as
+        | { data: { bookingCode: string } }
+        | undefined;
+      expect(createCall?.data.bookingCode).toMatch(/^WV-\d{8}-[0-9A-F]{6}$/);
     });
   });
 
@@ -309,90 +313,90 @@ describe("BookingService", () => {
   // cancelBooking
   // -------------------------------------------------------------------------
 
-  describe("cancelBooking", () => {
-    it("cancels PENDING booking without restoring slots", async () => {
-      prisma.booking.findUnique.mockResolvedValue({ ...MOCK_BOOKING_ROW, status: "pending" });
-      prisma.booking.update.mockResolvedValue({ ...MOCK_BOOKING_ROW, status: "cancelled" });
+  describe('cancelBooking', () => {
+    it('cancels PENDING booking without restoring slots', async () => {
+      prisma.booking.findUnique.mockResolvedValue({ ...MOCK_BOOKING_ROW, status: 'pending' });
+      prisma.booking.update.mockResolvedValue({ ...MOCK_BOOKING_ROW, status: 'cancelled' });
 
-      await service.cancelBooking("user-id-1", "WV-20260511-AAAAAA");
+      await service.cancelBooking('user-id-1', 'WV-20260511-AAAAAA');
 
       expect(prisma.booking.update).toHaveBeenCalledWith(
-        expect.objectContaining({ data: { status: "cancelled" } })
+        expect.objectContaining({ data: { status: 'cancelled' } }),
       );
       // No slot restore for PENDING
       expect(prisma.tour.update).not.toHaveBeenCalled();
     });
 
-    it("cancels CONFIRMED booking and restores tour.availableSlots", async () => {
+    it('cancels CONFIRMED booking and restores tour.availableSlots', async () => {
       prisma.booking.findUnique.mockResolvedValue({
         ...MOCK_BOOKING_ROW,
-        status: "confirmed",
+        status: 'confirmed',
         numberOfGuests: 2,
-        tourId: "tour-id-1",
+        tourId: 'tour-id-1',
         departureId: null,
       });
-      prisma.booking.update.mockResolvedValue({ ...MOCK_BOOKING_ROW, status: "cancelled" });
+      prisma.booking.update.mockResolvedValue({ ...MOCK_BOOKING_ROW, status: 'cancelled' });
 
-      await service.cancelBooking("user-id-1", "WV-20260511-AAAAAA");
+      await service.cancelBooking('user-id-1', 'WV-20260511-AAAAAA');
 
       expect(prisma.tour.update).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: { id: "tour-id-1" },
+          where: { id: 'tour-id-1' },
           data: { availableSlots: { increment: 2 } },
-        })
+        }),
       );
     });
 
-    it("cancels CONFIRMED booking with departure and restores departure slots", async () => {
+    it('cancels CONFIRMED booking with departure and restores departure slots', async () => {
       prisma.booking.findUnique.mockResolvedValue({
         ...MOCK_BOOKING_ROW,
-        status: "confirmed",
+        status: 'confirmed',
         numberOfGuests: 3,
-        tourId: "tour-id-1",
-        departureId: "dep-id-1",
+        tourId: 'tour-id-1',
+        departureId: 'dep-id-1',
       });
-      prisma.booking.update.mockResolvedValue({ ...MOCK_BOOKING_ROW, status: "cancelled" });
+      prisma.booking.update.mockResolvedValue({ ...MOCK_BOOKING_ROW, status: 'cancelled' });
 
-      await service.cancelBooking("user-id-1", "WV-20260511-AAAAAA");
+      await service.cancelBooking('user-id-1', 'WV-20260511-AAAAAA');
 
       expect(prisma.tourDeparture.update).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: { id: "dep-id-1" },
+          where: { id: 'dep-id-1' },
           data: { availableSlots: { increment: 3 } },
-        })
+        }),
       );
     });
 
-    it("throws BadRequestException when cancelling COMPLETED booking", async () => {
-      prisma.booking.findUnique.mockResolvedValue({ ...MOCK_BOOKING_ROW, status: "completed" });
+    it('throws BadRequestException when cancelling COMPLETED booking', async () => {
+      prisma.booking.findUnique.mockResolvedValue({ ...MOCK_BOOKING_ROW, status: 'completed' });
 
-      await expect(
-        service.cancelBooking("user-id-1", "WV-20260511-AAAAAA")
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.cancelBooking('user-id-1', 'WV-20260511-AAAAAA')).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
-    it("throws BadRequestException when cancelling already CANCELLED booking", async () => {
-      prisma.booking.findUnique.mockResolvedValue({ ...MOCK_BOOKING_ROW, status: "cancelled" });
+    it('throws BadRequestException when cancelling already CANCELLED booking', async () => {
+      prisma.booking.findUnique.mockResolvedValue({ ...MOCK_BOOKING_ROW, status: 'cancelled' });
 
-      await expect(
-        service.cancelBooking("user-id-1", "WV-20260511-AAAAAA")
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.cancelBooking('user-id-1', 'WV-20260511-AAAAAA')).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it("throws ForbiddenException when cancelling another user's booking", async () => {
-      prisma.booking.findUnique.mockResolvedValue({ ...MOCK_BOOKING_ROW, userId: "other-user-id" });
+      prisma.booking.findUnique.mockResolvedValue({ ...MOCK_BOOKING_ROW, userId: 'other-user-id' });
 
-      await expect(
-        service.cancelBooking("user-id-1", "WV-20260511-AAAAAA")
-      ).rejects.toThrow(ForbiddenException);
+      await expect(service.cancelBooking('user-id-1', 'WV-20260511-AAAAAA')).rejects.toThrow(
+        ForbiddenException,
+      );
     });
 
-    it("throws NotFoundException when booking code does not exist", async () => {
+    it('throws NotFoundException when booking code does not exist', async () => {
       prisma.booking.findUnique.mockResolvedValue(null);
 
-      await expect(
-        service.cancelBooking("user-id-1", "WV-NONEXISTENT")
-      ).rejects.toThrow(NotFoundException);
+      await expect(service.cancelBooking('user-id-1', 'WV-NONEXISTENT')).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
@@ -400,30 +404,30 @@ describe("BookingService", () => {
   // getByCode
   // -------------------------------------------------------------------------
 
-  describe("getByCode", () => {
-    it("returns booking when user is the owner", async () => {
-      prisma.booking.findUnique.mockResolvedValue({ ...MOCK_BOOKING_ROW, userId: "user-id-1" });
+  describe('getByCode', () => {
+    it('returns booking when user is the owner', async () => {
+      prisma.booking.findUnique.mockResolvedValue({ ...MOCK_BOOKING_ROW, userId: 'user-id-1' });
 
-      const result = await service.getByCode("user-id-1", "WV-20260511-AAAAAA");
+      const result = await service.getByCode('user-id-1', 'WV-20260511-AAAAAA');
 
       expect(result).toBeDefined();
-      expect(result?.userId).toBe("user-id-1");
+      expect(result?.userId).toBe('user-id-1');
     });
 
-    it("throws ForbiddenException when user is not the owner", async () => {
-      prisma.booking.findUnique.mockResolvedValue({ ...MOCK_BOOKING_ROW, userId: "other-user-id" });
+    it('throws ForbiddenException when user is not the owner', async () => {
+      prisma.booking.findUnique.mockResolvedValue({ ...MOCK_BOOKING_ROW, userId: 'other-user-id' });
 
-      await expect(
-        service.getByCode("user-id-1", "WV-20260511-AAAAAA")
-      ).rejects.toThrow(ForbiddenException);
+      await expect(service.getByCode('user-id-1', 'WV-20260511-AAAAAA')).rejects.toThrow(
+        ForbiddenException,
+      );
     });
 
-    it("throws NotFoundException when booking does not exist", async () => {
+    it('throws NotFoundException when booking does not exist', async () => {
       prisma.booking.findUnique.mockResolvedValue(null);
 
-      await expect(
-        service.getByCode("user-id-1", "WV-NONEXISTENT")
-      ).rejects.toThrow(NotFoundException);
+      await expect(service.getByCode('user-id-1', 'WV-NONEXISTENT')).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });

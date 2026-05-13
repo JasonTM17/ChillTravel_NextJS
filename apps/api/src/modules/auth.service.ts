@@ -1,16 +1,23 @@
-import { BadRequestException, ConflictException, HttpException, HttpStatus, Injectable, UnauthorizedException } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { JwtService } from "@nestjs/jwt";
-import * as bcrypt from "bcryptjs";
-import { createHash, randomBytes } from "node:crypto";
-import { PrismaService } from "../prisma/prisma.service";
-import { EmailService } from "../common/services/email.service";
-import type { RegisterDto } from "./auth/dto/register.dto";
-import type { LoginDto } from "./auth/dto/login.dto";
-import type { RefreshTokenDto } from "./auth/dto/refresh-token.dto";
-import type { ChangePasswordDto } from "./auth/dto/change-password.dto";
-import type { UpdateProfileDto } from "./auth/dto/update-profile.dto";
-import type { AuthResponseDto, UserProfileDto } from "./auth/dto/auth-response.dto";
+import { createHash, randomBytes } from 'node:crypto';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcryptjs';
+import { EmailService } from '../common/services/email.service';
+import { PrismaService } from '../prisma/prisma.service';
+import type { AuthResponseDto, UserProfileDto } from './auth/dto/auth-response.dto';
+import type { ChangePasswordDto } from './auth/dto/change-password.dto';
+import type { LoginDto } from './auth/dto/login.dto';
+import type { RefreshTokenDto } from './auth/dto/refresh-token.dto';
+import type { RegisterDto } from './auth/dto/register.dto';
+import type { UpdateProfileDto } from './auth/dto/update-profile.dto';
 
 /** Number of bcrypt salt rounds (design §4.4). */
 const BCRYPT_ROUNDS = 12;
@@ -28,7 +35,7 @@ const LOCKOUT_DURATION_MS = 15 * 60 * 1000;
 const EMAIL_VERIFY_TTL_MS = 24 * 60 * 60 * 1000;
 
 function hashToken(token: string): string {
-  return createHash("sha256").update(token).digest("hex");
+  return createHash('sha256').update(token).digest('hex');
 }
 
 @Injectable()
@@ -37,7 +44,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-    private readonly emailService: EmailService
+    private readonly emailService: EmailService,
   ) {}
 
   // ---------------------------------------------------------------------------
@@ -47,7 +54,7 @@ export class AuthService {
   async register(dto: RegisterDto): Promise<AuthResponseDto> {
     const existing = await this.prisma.user.findUnique({ where: { email: dto.email } });
     if (existing) {
-      throw new ConflictException("Email already registered");
+      throw new ConflictException('Email already registered');
     }
 
     const passwordHash = await bcrypt.hash(dto.password, BCRYPT_ROUNDS);
@@ -58,20 +65,20 @@ export class AuthService {
         password: passwordHash,
         fullName: dto.fullName,
         phone: dto.phone ?? null,
-        role: "USER",
-        status: "ACTIVE",
-        emailVerified: false
-      }
+        role: 'USER',
+        status: 'ACTIVE',
+        emailVerified: false,
+      },
     });
 
     // Create email verification token and send (mock)
-    const rawVerifyToken = randomBytes(32).toString("hex");
+    const rawVerifyToken = randomBytes(32).toString('hex');
     await this.prisma.emailVerificationToken.create({
       data: {
         userId: user.id,
         tokenHash: hashToken(rawVerifyToken),
-        expiresAt: new Date(Date.now() + EMAIL_VERIFY_TTL_MS)
-      }
+        expiresAt: new Date(Date.now() + EMAIL_VERIFY_TTL_MS),
+      },
     });
     this.emailService.sendEmailVerification(user.email, rawVerifyToken);
 
@@ -93,7 +100,7 @@ export class AuthService {
         const remainingMin = Math.ceil(remainingMs / 60_000);
         throw new HttpException(
           `Account locked. Try again in ${remainingMin} minute(s).`,
-          HttpStatus.LOCKED
+          HttpStatus.LOCKED,
         );
       }
       // Remove expired lockout if present
@@ -105,14 +112,14 @@ export class AuthService {
     // Generic 401 — do not reveal whether email exists
     if (!user) {
       await this.prisma.loginAttempt.create({
-        data: { email: dto.email, ipAddress, success: false }
+        data: { email: dto.email, ipAddress, success: false },
       });
-      throw new UnauthorizedException("Invalid email or password");
+      throw new UnauthorizedException('Invalid email or password');
     }
 
     // Check user status
-    if (user.status === "INACTIVE" || user.status === "BANNED") {
-      throw new UnauthorizedException("Account is not active");
+    if (user.status === 'INACTIVE' || user.status === 'BANNED') {
+      throw new UnauthorizedException('Account is not active');
     }
 
     // Verify password
@@ -120,7 +127,7 @@ export class AuthService {
 
     // Record login attempt
     await this.prisma.loginAttempt.create({
-      data: { email: dto.email, ipAddress, success: passwordValid }
+      data: { email: dto.email, ipAddress, success: passwordValid },
     });
 
     if (!passwordValid) {
@@ -130,20 +137,20 @@ export class AuthService {
         where: {
           email: dto.email,
           success: false,
-          createdAt: { gte: windowStart }
-        }
+          createdAt: { gte: windowStart },
+        },
       });
 
       if (recentFailures >= MAX_FAILED_ATTEMPTS) {
         const lockedUntil = new Date(Date.now() + LOCKOUT_DURATION_MS);
         await this.prisma.accountLockout.upsert({
           where: { userId: user.id },
-          create: { userId: user.id, lockedUntil, reason: "Too many failed login attempts" },
-          update: { lockedUntil, reason: "Too many failed login attempts" }
+          create: { userId: user.id, lockedUntil, reason: 'Too many failed login attempts' },
+          update: { lockedUntil, reason: 'Too many failed login attempts' },
         });
       }
 
-      throw new UnauthorizedException("Invalid email or password");
+      throw new UnauthorizedException('Invalid email or password');
     }
 
     return this.generateTokensAndRespond(user);
@@ -159,22 +166,22 @@ export class AuthService {
     const stored = await this.prisma.refreshToken.findUnique({ where: { tokenHash } });
 
     if (!stored || stored.revoked || stored.expiresAt < new Date()) {
-      throw new UnauthorizedException("Invalid or expired refresh token");
+      throw new UnauthorizedException('Invalid or expired refresh token');
     }
 
     // Revoke old token
     await this.prisma.refreshToken.update({
       where: { id: stored.id },
-      data: { revoked: true }
+      data: { revoked: true },
     });
 
     const user = await this.prisma.user.findUnique({ where: { id: stored.userId } });
     if (!user) {
-      throw new UnauthorizedException("User not found");
+      throw new UnauthorizedException('User not found');
     }
 
-    if (user.status === "INACTIVE" || user.status === "BANNED") {
-      throw new UnauthorizedException("Account is not active");
+    if (user.status === 'INACTIVE' || user.status === 'BANNED') {
+      throw new UnauthorizedException('Account is not active');
     }
 
     return this.generateTokensAndRespond(user);
@@ -191,7 +198,7 @@ export class AuthService {
     if (stored && stored.userId === userId && !stored.revoked) {
       await this.prisma.refreshToken.update({
         where: { id: stored.id },
-        data: { revoked: true }
+        data: { revoked: true },
       });
     }
   }
@@ -203,7 +210,7 @@ export class AuthService {
   async getMe(userId: string): Promise<UserProfileDto> {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
-      throw new UnauthorizedException("User not found");
+      throw new UnauthorizedException('User not found');
     }
     return this.toUserProfile(user);
   }
@@ -218,8 +225,8 @@ export class AuthService {
       data: {
         ...(dto.fullName !== undefined && { fullName: dto.fullName }),
         ...(dto.phone !== undefined && { phone: dto.phone }),
-        ...(dto.avatarUrl !== undefined && { avatarUrl: dto.avatarUrl })
-      }
+        ...(dto.avatarUrl !== undefined && { avatarUrl: dto.avatarUrl }),
+      },
     });
     return this.toUserProfile(user);
   }
@@ -231,25 +238,25 @@ export class AuthService {
   async changePassword(userId: string, dto: ChangePasswordDto): Promise<void> {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
-      throw new UnauthorizedException("User not found");
+      throw new UnauthorizedException('User not found');
     }
 
     const valid = await bcrypt.compare(dto.oldPassword, user.password);
     if (!valid) {
-      throw new BadRequestException("Old password is incorrect");
+      throw new BadRequestException('Old password is incorrect');
     }
 
     const newHash = await bcrypt.hash(dto.newPassword, BCRYPT_ROUNDS);
 
     await this.prisma.user.update({
       where: { id: userId },
-      data: { password: newHash }
+      data: { password: newHash },
     });
 
     // Revoke all refresh tokens for this user
     await this.prisma.refreshToken.updateMany({
       where: { userId, revoked: false },
-      data: { revoked: true }
+      data: { revoked: true },
     });
   }
 
@@ -272,7 +279,7 @@ export class AuthService {
     return {
       accessToken,
       refreshToken,
-      user: this.toUserProfile(user)
+      user: this.toUserProfile(user),
     };
   }
 
@@ -280,25 +287,22 @@ export class AuthService {
     accessToken: string;
     refreshToken: string;
   }> {
-    const accessExpiration =
-      this.configService.get<string>("JWT_ACCESS_EXPIRATION") ?? "15m";
-    const refreshSecret =
-      this.configService.get<string>("JWT_REFRESH_SECRET") ?? "refresh_secret";
-    const refreshExpiration =
-      this.configService.get<string>("JWT_REFRESH_EXPIRATION") ?? "7d";
+    const accessExpiration = this.configService.get<string>('JWT_ACCESS_EXPIRATION') ?? '15m';
+    const refreshSecret = this.configService.get<string>('JWT_REFRESH_SECRET') ?? 'refresh_secret';
+    const refreshExpiration = this.configService.get<string>('JWT_REFRESH_EXPIRATION') ?? '7d';
 
     const payload = { sub: user.id, email: user.email, role: user.role };
 
     const accessToken = this.jwtService.sign(payload, {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      expiresIn: accessExpiration as any
+      expiresIn: accessExpiration as any,
     });
 
-    const rawRefreshToken = randomBytes(40).toString("hex");
-    const refreshToken = this.jwtService.sign(
-      { sub: user.id, type: "refresh" },
+    const rawRefreshToken = randomBytes(40).toString('hex');
+    const _refreshToken = this.jwtService.sign(
+      { sub: user.id, type: 'refresh' },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      { secret: refreshSecret, expiresIn: refreshExpiration as any }
+      { secret: refreshSecret, expiresIn: refreshExpiration as any },
     );
 
     // Parse expiration to compute expiresAt
@@ -311,8 +315,8 @@ export class AuthService {
         userId: user.id,
         tokenHash,
         expiresAt: refreshExpiresAt,
-        revoked: false
-      }
+        revoked: false,
+      },
     });
 
     // Return the raw token to the client (not the JWT)
@@ -322,14 +326,14 @@ export class AuthService {
   private parseExpiration(exp: string): Date {
     const now = Date.now();
     const match = /^(\d+)([smhd])$/.exec(exp);
-    if (!match) return new Date(now + 7 * 24 * 60 * 60 * 1000);
+    if (!match?.[1] || !match[2]) return new Date(now + 7 * 24 * 60 * 60 * 1000);
     const value = parseInt(match[1], 10);
     const unit = match[2];
     const multipliers: Record<string, number> = {
       s: 1000,
       m: 60 * 1000,
       h: 60 * 60 * 1000,
-      d: 24 * 60 * 60 * 1000
+      d: 24 * 60 * 60 * 1000,
     };
     return new Date(now + value * (multipliers[unit] ?? 1000));
   }
@@ -354,7 +358,7 @@ export class AuthService {
       role: user.role,
       status: user.status,
       emailVerified: user.emailVerified,
-      createdAt: user.createdAt
+      createdAt: user.createdAt,
     };
   }
 }

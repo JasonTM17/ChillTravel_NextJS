@@ -5,10 +5,10 @@ import {
   HttpException,
   HttpStatus,
   Logger,
-  Optional
-} from "@nestjs/common";
-import { errorResponse, type ApiError, type ApiFieldError } from "@vietwander/shared";
-import { LocalErrorTracker } from "../services/error-tracker.service";
+  Optional,
+} from '@nestjs/common';
+import { errorResponse, type ApiError, type ApiFieldError } from '@vietwander/shared';
+import { LocalErrorTracker } from '../services/error-tracker.service';
 
 /**
  * Minimal structural types for the express-style request/response objects
@@ -39,29 +39,27 @@ interface NestHttpExceptionResponse {
 
 /** Narrow `unknown` into a shape-check for Prisma known-request errors. */
 function isPrismaKnownRequestError(
-  err: unknown
+  err: unknown,
 ): err is { code: string; meta?: Record<string, unknown>; message: string } {
-  if (typeof err !== "object" || err === null) return false;
+  if (typeof err !== 'object' || err === null) return false;
   const candidate = err as { name?: unknown; code?: unknown };
-  return (
-    candidate.name === "PrismaClientKnownRequestError" &&
-    typeof candidate.code === "string"
-  );
+  return candidate.name === 'PrismaClientKnownRequestError' && typeof candidate.code === 'string';
 }
 
-function extractValidationErrors(
-  raw: string | string[] | undefined
-): { message: string; errors: ApiFieldError[] } {
+function extractValidationErrors(raw: string | string[] | undefined): {
+  message: string;
+  errors: ApiFieldError[];
+} {
   if (Array.isArray(raw)) {
     return {
-      message: "Validation failed",
+      message: 'Validation failed',
       // class-validator emits a flat array of "field must be ..." strings.
       // We preserve the text but put it under the generic `_` field slot
       // since we don't have access to the original field name here.
-      errors: raw.map((msg) => ({ field: deriveFieldFromMessage(msg), message: msg }))
+      errors: raw.map((msg) => ({ field: deriveFieldFromMessage(msg), message: msg })),
     };
   }
-  return { message: raw ?? "Request failed", errors: [] };
+  return { message: raw ?? 'Request failed', errors: [] };
 }
 
 /**
@@ -71,9 +69,9 @@ function extractValidationErrors(
  */
 function deriveFieldFromMessage(message: string): string {
   const trimmed = message.trim();
-  if (!trimmed) return "_";
-  const first = trimmed.split(/\s+/)[0];
-  return /^[A-Za-z_][\w.]*$/.test(first) ? first : "_";
+  if (!trimmed) return '_';
+  const first = trimmed.split(/\s+/)[0] ?? '_';
+  return /^[A-Za-z_][\w.]*$/.test(first) ? first : '_';
 }
 
 /**
@@ -93,31 +91,26 @@ function deriveFieldFromMessage(message: string): string {
 export class GlobalExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(GlobalExceptionFilter.name);
 
-  constructor(
-    @Optional() private readonly errorTracker?: LocalErrorTracker
-  ) {}
+  constructor(@Optional() private readonly errorTracker?: LocalErrorTracker) {}
 
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<MinimalResponse>();
     const request = ctx.getRequest<MinimalRequest>();
-    const path = request?.url ?? "";
+    const path = request?.url ?? '';
 
     const { status, body } = this.buildErrorResponse(exception, path);
 
     response.status(status).json(body);
   }
 
-  private buildErrorResponse(
-    exception: unknown,
-    path: string
-  ): { status: number; body: ApiError } {
+  private buildErrorResponse(exception: unknown, path: string): { status: number; body: ApiError } {
     // --- HttpException branch -----------------------------------------------
     if (exception instanceof HttpException) {
       const status = exception.getStatus();
       const payload = exception.getResponse();
       const parsed: NestHttpExceptionResponse =
-        typeof payload === "object" && payload !== null
+        typeof payload === 'object' && payload !== null
           ? (payload as NestHttpExceptionResponse)
           : { message: String(payload) };
 
@@ -126,9 +119,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         return {
           status,
           body: errorResponse(
-            typeof parsed.message === "string" ? parsed.message : "Request failed",
-            parsed.errors
-          )
+            typeof parsed.message === 'string' ? parsed.message : 'Request failed',
+            parsed.errors,
+          ),
         };
       }
 
@@ -143,14 +136,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
     // --- Fallback: unknown exception → 500 ---------------------------------
     const error = exception instanceof Error ? exception : new Error(String(exception));
-    this.logger.error(
-      `Unhandled exception at ${path}: ${error.message}`,
-      error.stack
-    );
+    this.logger.error(`Unhandled exception at ${path}: ${error.message}`, error.stack);
     this.errorTracker?.capture(error, { path });
     return {
       status: HttpStatus.INTERNAL_SERVER_ERROR,
-      body: errorResponse("Internal server error")
+      body: errorResponse('Internal server error'),
     };
   }
 
@@ -160,41 +150,39 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     message: string;
   }): { status: number; body: ApiError } {
     switch (err.code) {
-      case "P2002": {
+      case 'P2002': {
         const target = Array.isArray(err.meta?.target)
-          ? (err.meta.target as string[]).join(", ")
-          : typeof err.meta?.target === "string"
+          ? (err.meta.target as string[]).join(', ')
+          : typeof err.meta?.target === 'string'
             ? (err.meta.target as string)
-            : "field";
+            : 'field';
         return {
           status: HttpStatus.CONFLICT,
-          body: errorResponse("Resource already exists", [
-            { field: target, message: `Duplicate value for ${target}` }
-          ])
+          body: errorResponse('Resource already exists', [
+            { field: target, message: `Duplicate value for ${target}` },
+          ]),
         };
       }
-      case "P2025":
+      case 'P2025':
         return {
           status: HttpStatus.NOT_FOUND,
-          body: errorResponse("Resource not found")
+          body: errorResponse('Resource not found'),
         };
-      case "P2003": {
+      case 'P2003': {
         const field =
-          typeof err.meta?.field_name === "string" ? (err.meta.field_name as string) : "_";
+          typeof err.meta?.field_name === 'string' ? (err.meta.field_name as string) : '_';
         return {
           status: HttpStatus.BAD_REQUEST,
-          body: errorResponse("Foreign key constraint violation", [
-            { field, message: "Referenced record does not exist" }
-          ])
+          body: errorResponse('Foreign key constraint violation', [
+            { field, message: 'Referenced record does not exist' },
+          ]),
         };
       }
       default:
-        this.logger.error(
-          `Unhandled Prisma error ${err.code}: ${err.message}`
-        );
+        this.logger.error(`Unhandled Prisma error ${err.code}: ${err.message}`);
         return {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
-          body: errorResponse("Database error")
+          body: errorResponse('Database error'),
         };
     }
   }

@@ -1,12 +1,12 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
-import { generateSlug, ensureUniqueSlug } from "../common/utils/slug.util";
-import { buildPagination } from "../common/dto/paginated-response.dto";
-import type { DestinationQueryDto } from "./destination/dto/destination-query.dto";
-import type { CreateDestinationDto } from "./destination/dto/create-destination.dto";
-import type { UpdateDestinationDto } from "./destination/dto/update-destination.dto";
-import type { AddDestinationImageDto } from "./destination/dto/add-destination-image.dto";
-import type { ApiPaginated } from "@vietwander/shared";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import type { ApiPaginated } from '@vietwander/shared';
+import { buildPagination } from '../common/dto/paginated-response.dto';
+import { generateSlug, ensureUniqueSlug } from '../common/utils/slug.util';
+import { PrismaService } from '../prisma/prisma.service';
+import type { AddDestinationImageDto } from './destination/dto/add-destination-image.dto';
+import type { CreateDestinationDto } from './destination/dto/create-destination.dto';
+import type { DestinationQueryDto } from './destination/dto/destination-query.dto';
+import type { UpdateDestinationDto } from './destination/dto/update-destination.dto';
 
 /**
  * DestinationService — real Prisma-backed implementation.
@@ -28,31 +28,31 @@ export class DestinationsService {
 
     // Build Prisma where clause
     const where: Record<string, unknown> = {
-      status: "ACTIVE"
+      status: 'ACTIVE',
     };
 
     if (query.keyword) {
-      where["OR"] = [
-        { name: { contains: query.keyword, mode: "insensitive" } },
-        { description: { contains: query.keyword, mode: "insensitive" } },
-        { shortDescription: { contains: query.keyword, mode: "insensitive" } }
+      where['OR'] = [
+        { name: { contains: query.keyword, mode: 'insensitive' } },
+        { description: { contains: query.keyword, mode: 'insensitive' } },
+        { shortDescription: { contains: query.keyword, mode: 'insensitive' } },
       ];
     }
 
     if (query.country) {
-      where["country"] = {
-        name: { contains: query.country, mode: "insensitive" }
+      where['country'] = {
+        name: { contains: query.country, mode: 'insensitive' },
       };
     }
 
     if (query.city) {
-      where["city"] = {
-        name: { contains: query.city, mode: "insensitive" }
+      where['city'] = {
+        name: { contains: query.city, mode: 'insensitive' },
       };
     }
 
     if (query.category) {
-      where["category"] = { contains: query.category, mode: "insensitive" };
+      where['category'] = { contains: query.category, mode: 'insensitive' };
     }
 
     // Build orderBy from sort param
@@ -68,12 +68,12 @@ export class DestinationsService {
           country: { select: { id: true, name: true } },
           city: { select: { id: true, name: true } },
           images: {
-            orderBy: { sortOrder: "asc" },
-            take: 1
-          }
-        }
+            orderBy: { sortOrder: 'asc' },
+            take: 1,
+          },
+        },
       }),
-      this.prisma.destination.count({ where })
+      this.prisma.destination.count({ where }),
     ]);
 
     return buildPagination(items, page, size, totalElements);
@@ -89,13 +89,13 @@ export class DestinationsService {
       include: {
         country: { select: { id: true, name: true } },
         city: { select: { id: true, name: true } },
-        images: { orderBy: { sortOrder: "asc" } },
-        tags: true
-      }
+        images: { orderBy: { sortOrder: 'asc' } },
+        tags: true,
+      },
     });
 
-    if (!destination || destination.status === "DELETED") {
-      throw new NotFoundException("Destination not found");
+    if (!destination || destination.status === 'DELETED') {
+      throw new NotFoundException('Destination not found');
     }
 
     return destination;
@@ -110,7 +110,7 @@ export class DestinationsService {
     const country = await this.prisma.country.upsert({
       where: { name: dto.country },
       create: { name: dto.country },
-      update: {}
+      update: {},
     });
 
     // Find or create City (if provided)
@@ -119,7 +119,7 @@ export class DestinationsService {
       const city = await this.prisma.city.upsert({
         where: { name_countryId: { name: dto.city, countryId: country.id } },
         create: { name: dto.city, countryId: country.id },
-        update: {}
+        update: {},
       });
       cityId = city.id;
     }
@@ -128,7 +128,7 @@ export class DestinationsService {
     const baseSlug = generateSlug(dto.name);
     const slug = await ensureUniqueSlug(baseSlug, async (candidate) => {
       const existing = await this.prisma.destination.findUnique({
-        where: { slug: candidate }
+        where: { slug: candidate },
       });
       return !!existing;
     });
@@ -141,27 +141,27 @@ export class DestinationsService {
         cityId,
         description: dto.description,
         shortDescription: dto.shortDescription ?? null,
-        longDescription: dto.longDescription ?? "",
-        bestTimeToVisit: dto.bestTimeToVisit ?? "",
+        longDescription: dto.longDescription ?? '',
+        bestTimeToVisit: dto.bestTimeToVisit ?? '',
         imageUrl: dto.imageUrl ?? null,
         category: dto.category ?? null,
         budgetMin: dto.budgetMin ?? 0,
         budgetMax: dto.budgetMax ?? 0,
-        currency: dto.currency ?? "VND",
+        currency: dto.currency ?? 'VND',
         latitude: dto.latitude ?? 0,
         longitude: dto.longitude ?? 0,
-        safetyLevel: dto.safetyLevel ?? "medium",
+        safetyLevel: dto.safetyLevel ?? 'medium',
         travelStyles: dto.travelStyles ?? [],
         cultureNotes: dto.cultureNotes ?? [],
         foodHighlights: dto.foodHighlights ?? [],
         isFeatured: dto.isFeatured ?? false,
-        status: "ACTIVE"
+        status: 'ACTIVE',
       },
       include: {
         country: { select: { id: true, name: true } },
         city: { select: { id: true, name: true } },
-        images: true
-      }
+        images: true,
+      },
     });
 
     return destination;
@@ -174,8 +174,8 @@ export class DestinationsService {
   async update(id: string, dto: UpdateDestinationDto): Promise<unknown> {
     // Verify destination exists
     const existing = await this.prisma.destination.findUnique({ where: { id } });
-    if (!existing || existing.status === "DELETED") {
-      throw new NotFoundException("Destination not found");
+    if (!existing || existing.status === 'DELETED') {
+      throw new NotFoundException('Destination not found');
     }
 
     // Handle country change
@@ -184,7 +184,7 @@ export class DestinationsService {
       const country = await this.prisma.country.upsert({
         where: { name: dto.country },
         create: { name: dto.country },
-        update: {}
+        update: {},
       });
       countryId = country.id;
     }
@@ -196,7 +196,7 @@ export class DestinationsService {
         const city = await this.prisma.city.upsert({
           where: { name_countryId: { name: dto.city, countryId } },
           create: { name: dto.city, countryId },
-          update: {}
+          update: {},
         });
         cityId = city.id;
       } else {
@@ -211,7 +211,7 @@ export class DestinationsService {
       slug = await ensureUniqueSlug(baseSlug, async (candidate) => {
         if (candidate === existing.slug) return false; // allow keeping same slug
         const found = await this.prisma.destination.findUnique({
-          where: { slug: candidate }
+          where: { slug: candidate },
         });
         return !!found;
       });
@@ -239,13 +239,13 @@ export class DestinationsService {
         ...(dto.travelStyles !== undefined && { travelStyles: dto.travelStyles }),
         ...(dto.cultureNotes !== undefined && { cultureNotes: dto.cultureNotes }),
         ...(dto.foodHighlights !== undefined && { foodHighlights: dto.foodHighlights }),
-        ...(dto.isFeatured !== undefined && { isFeatured: dto.isFeatured })
+        ...(dto.isFeatured !== undefined && { isFeatured: dto.isFeatured }),
       },
       include: {
         country: { select: { id: true, name: true } },
         city: { select: { id: true, name: true } },
-        images: true
-      }
+        images: true,
+      },
     });
 
     return updated;
@@ -257,13 +257,13 @@ export class DestinationsService {
 
   async softDelete(id: string): Promise<void> {
     const existing = await this.prisma.destination.findUnique({ where: { id } });
-    if (!existing || existing.status === "DELETED") {
-      throw new NotFoundException("Destination not found");
+    if (!existing || existing.status === 'DELETED') {
+      throw new NotFoundException('Destination not found');
     }
 
     await this.prisma.destination.update({
       where: { id },
-      data: { status: "DELETED" }
+      data: { status: 'DELETED' },
     });
   }
 
@@ -273,21 +273,21 @@ export class DestinationsService {
 
   async addImage(destinationId: string, dto: AddDestinationImageDto): Promise<unknown> {
     const destination = await this.prisma.destination.findUnique({
-      where: { id: destinationId }
+      where: { id: destinationId },
     });
-    if (!destination || destination.status === "DELETED") {
-      throw new NotFoundException("Destination not found");
+    if (!destination || destination.status === 'DELETED') {
+      throw new NotFoundException('Destination not found');
     }
 
     const image = await this.prisma.destinationImage.create({
       data: {
         destinationId,
         url: dto.imageUrl,
-        prompt: "",
-        alt: dto.altText ?? "",
+        prompt: '',
+        alt: dto.altText ?? '',
         altText: dto.altText ?? null,
-        sortOrder: dto.sortOrder ?? 0
-      }
+        sortOrder: dto.sortOrder ?? 0,
+      },
     });
 
     return image;
@@ -299,10 +299,10 @@ export class DestinationsService {
 
   async removeImage(imageId: string): Promise<void> {
     const image = await this.prisma.destinationImage.findUnique({
-      where: { id: imageId }
+      where: { id: imageId },
     });
     if (!image) {
-      throw new NotFoundException("Destination image not found");
+      throw new NotFoundException('Destination image not found');
     }
 
     await this.prisma.destinationImage.delete({ where: { id: imageId } });
@@ -313,18 +313,19 @@ export class DestinationsService {
   // ---------------------------------------------------------------------------
 
   private buildOrderBy(
-    sort?: string | string[]
-  ): Record<string, "asc" | "desc"> | Record<string, "asc" | "desc">[] {
-    if (!sort) return { createdAt: "desc" };
+    sort?: string | string[],
+  ): Record<string, 'asc' | 'desc'> | Record<string, 'asc' | 'desc'>[] {
+    if (!sort) return { createdAt: 'desc' };
 
     const sortValues = Array.isArray(sort) ? sort : [sort];
     const orderBy = sortValues.map((s) => {
-      const [field, direction] = s.split(",");
-      const dir: "asc" | "desc" =
-        direction?.toLowerCase() === "asc" ? "asc" : "desc";
+      const parts = s.split(',');
+      const field = parts[0] ?? 'createdAt';
+      const direction = parts[1];
+      const dir: 'asc' | 'desc' = direction?.toLowerCase() === 'asc' ? 'asc' : 'desc';
       return { [field]: dir };
     });
 
-    return orderBy.length === 1 ? orderBy[0] : orderBy;
+    return orderBy.length === 1 ? (orderBy[0] ?? { createdAt: 'desc' }) : orderBy;
   }
 }

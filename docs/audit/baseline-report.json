@@ -1,0 +1,216 @@
+{
+  "generatedAt": "2026-05-13T02:31:42.733Z",
+  "metrics": [
+    {
+      "name": "TypeScript strict mode (apps/api)",
+      "currentValue": "strict only",
+      "target": "strict + noUncheckedIndexedAccess",
+      "automated": true,
+      "command": "cat apps/api/tsconfig.json | grep -E \"strict|noUncheckedIndexedAccess\""
+    },
+    {
+      "name": "TypeScript strict mode (apps/web)",
+      "currentValue": "not strict",
+      "target": "strict + noUncheckedIndexedAccess",
+      "automated": true,
+      "command": "cat apps/web/tsconfig.json | grep -E \"strict|noUncheckedIndexedAccess\""
+    },
+    {
+      "name": "TypeScript strict mode (packages/shared)",
+      "currentValue": "strict only",
+      "target": "strict + noUncheckedIndexedAccess",
+      "automated": true,
+      "command": "cat packages/shared/tsconfig.json | grep -E \"strict|noUncheckedIndexedAccess\""
+    },
+    {
+      "name": "TypeScript strict mode (packages/db)",
+      "currentValue": "not strict",
+      "target": "strict + noUncheckedIndexedAccess",
+      "automated": true,
+      "command": "cat packages/db/tsconfig.json | grep -E \"strict|noUncheckedIndexedAccess\""
+    },
+    {
+      "name": "TypeScript strict mode (packages/config)",
+      "currentValue": "strict only",
+      "target": "strict + noUncheckedIndexedAccess",
+      "automated": true,
+      "command": "cat packages/config/tsconfig.json | grep -E \"strict|noUncheckedIndexedAccess\""
+    },
+    {
+      "name": "ESLint warnings (apps/api)",
+      "currentValue": 0,
+      "target": "0 (maintain after new rules reduce by 50%)",
+      "automated": true,
+      "command": "pnpm --filter @vietwander/api lint"
+    },
+    {
+      "name": "ESLint warnings (apps/web)",
+      "currentValue": 0,
+      "target": "0 (maintain after new rules reduce by 50%)",
+      "automated": true,
+      "command": "pnpm --filter @vietwander/web lint"
+    },
+    {
+      "name": "ESLint warnings (packages/shared)",
+      "currentValue": 0,
+      "target": "0 (maintain after new rules reduce by 50%)",
+      "automated": true,
+      "command": "pnpm --filter @vietwander/shared lint"
+    },
+    {
+      "name": "ESLint warnings (packages/db)",
+      "currentValue": 0,
+      "target": "0 (maintain after new rules reduce by 50%)",
+      "automated": true,
+      "command": "pnpm --filter @vietwander/db lint"
+    },
+    {
+      "name": "ESLint warnings (packages/config)",
+      "currentValue": 0,
+      "target": "0 (maintain after new rules reduce by 50%)",
+      "automated": true,
+      "command": "pnpm --filter @vietwander/config lint"
+    },
+    {
+      "name": "ESLint warnings (total)",
+      "currentValue": 0,
+      "target": "reduce new baseline by >= 50%",
+      "automated": true,
+      "command": "pnpm lint"
+    },
+    {
+      "name": "Test coverage (apps/api)",
+      "currentValue": "not measured (missing @vitest/coverage-v8)",
+      "target": ">= 70% (core modules)",
+      "automated": false,
+      "command": "pnpm --filter @vietwander/api test -- --run --coverage",
+      "manualProcedure": "pnpm --filter @vietwander/api add -D @vitest/coverage-v8 && pnpm --filter @vietwander/api test -- --run --coverage"
+    },
+    {
+      "name": "Test coverage (apps/web)",
+      "currentValue": "not measured (missing @vitest/coverage-v8)",
+      "target": ">= 50% (lib + hooks)",
+      "automated": false,
+      "command": "pnpm --filter @vietwander/web test -- --run --coverage",
+      "manualProcedure": "pnpm --filter @vietwander/web add -D @vitest/coverage-v8 && pnpm --filter @vietwander/web test -- --run --coverage"
+    },
+    {
+      "name": "Test coverage (packages/shared)",
+      "currentValue": "not measured (missing @vitest/coverage-v8)",
+      "target": ">= 60%",
+      "automated": false,
+      "command": "pnpm --filter @vietwander/shared test -- --run --coverage",
+      "manualProcedure": "pnpm --filter @vietwander/shared add -D @vitest/coverage-v8 && pnpm --filter @vietwander/shared test -- --run --coverage"
+    },
+    {
+      "name": "Test coverage (packages/db)",
+      "currentValue": "not measured (missing @vitest/coverage-v8)",
+      "target": ">= 50%",
+      "automated": false,
+      "command": "pnpm --filter @vietwander/db test -- --run --coverage",
+      "manualProcedure": "pnpm --filter @vietwander/db add -D @vitest/coverage-v8 && pnpm --filter @vietwander/db test -- --run --coverage"
+    },
+    {
+      "name": "Outdated dependencies (monorepo-wide)",
+      "currentValue": "25 outdated packages",
+      "target": "0 outdated packages with high/critical severity",
+      "automated": true,
+      "command": "pnpm outdated --recursive"
+    },
+    {
+      "name": "Web bundle size (JS)",
+      "currentValue": "1.87 MB",
+      "target": "< 300 KB (first load JS)",
+      "automated": true,
+      "command": "pnpm --filter @vietwander/web build && du -sh apps/web/.next/static/chunks/"
+    },
+    {
+      "name": "Web bundle size (CSS)",
+      "currentValue": "47.98 KB",
+      "target": "< 100 KB",
+      "automated": true,
+      "command": "pnpm --filter @vietwander/web build && du -sh apps/web/.next/static/css/"
+    },
+    {
+      "name": "API Docker image",
+      "currentValue": "1.7 GB",
+      "target": "< 500 MB",
+      "automated": true,
+      "command": "docker images nguyenson1710/wanderviet-api --format \"{{.Repository}}:{{.Tag}} {{.Size}}\""
+    },
+    {
+      "name": "Web Docker image",
+      "currentValue": "313 MB",
+      "target": "< 500 MB",
+      "automated": true,
+      "command": "docker images nguyenson1710/wanderviet-web --format \"{{.Repository}}:{{.Tag}} {{.Size}}\""
+    },
+    {
+      "name": "Security vulnerabilities (critical)",
+      "currentValue": 0,
+      "target": "0",
+      "automated": true,
+      "command": "pnpm audit --prod"
+    },
+    {
+      "name": "Security vulnerabilities (high)",
+      "currentValue": 11,
+      "target": "0",
+      "automated": true,
+      "command": "pnpm audit --prod"
+    },
+    {
+      "name": "Security vulnerabilities (moderate)",
+      "currentValue": 9,
+      "target": "<= 5",
+      "automated": true,
+      "command": "pnpm audit --prod"
+    },
+    {
+      "name": "ADR count",
+      "currentValue": 4,
+      "target": ">= 8 ADRs (4 existing + 4 new)",
+      "automated": true,
+      "command": "ls docs/adr/*.md | wc -l"
+    },
+    {
+      "name": "API test count",
+      "currentValue": "130 tests passing (10 files)",
+      "target": "maintain + add PBT tests",
+      "automated": true,
+      "command": "pnpm --filter @vietwander/api test -- --run"
+    },
+    {
+      "name": "Web test count",
+      "currentValue": "69 passed / 2 failed (5 files)",
+      "target": "all passing + add coverage",
+      "automated": true,
+      "command": "pnpm --filter @vietwander/web test -- --run"
+    },
+    {
+      "name": "Lighthouse score",
+      "currentValue": "not measured (requires running server)",
+      "target": "Performance >= 80, Accessibility >= 90, Best Practices >= 90, SEO >= 90",
+      "automated": false,
+      "command": "lighthouse http://localhost:3000 --output=json",
+      "manualProcedure": "pnpm --filter @vietwander/web dev && lighthouse http://localhost:3000 --output=json --output-path=docs/audit/lighthouse.json --chrome-flags=\"--headless\""
+    }
+  ],
+  "blockers": [
+    {
+      "type": "SECURITY_VULNERABILITY",
+      "description": "11 high severity vulnerabilities found in production dependencies (all in `next` package, patched in >= 16.2.5)",
+      "requirement": "Req 1.5 — blocker until resolved"
+    }
+  ],
+  "agentsMdCompliance": {
+    "noRealPayment": true,
+    "noCommittedSecrets": true,
+    "noRealCardData": true,
+    "noOpenAiKeyRequired": true
+  },
+  "testStatus": {
+    "api": { "files": 10, "tests": 130, "passed": 130, "failed": 0 },
+    "web": { "files": 5, "tests": 71, "passed": 69, "failed": 2 }
+  }
+}

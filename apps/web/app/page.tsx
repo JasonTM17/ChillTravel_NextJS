@@ -234,7 +234,6 @@ export default function HomePage() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [tours, setTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -248,7 +247,11 @@ export default function HomePage() {
         if (destRes.success) setDestinations(destRes.data.items);
         if (tourRes.success) setTours(Array.isArray(tourRes.data) ? tourRes.data.slice(0, 8) : []);
       } catch {
-        if (!cancelled) setError(t.home.loadError);
+        // API unavailable — show empty state gracefully
+        if (!cancelled) {
+          setDestinations([]);
+          setTours([]);
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -304,19 +307,6 @@ export default function HomePage() {
 
       {/* ── Main content ─────────────────────────────────────────────────── */}
       <div className="mx-auto max-w-[1200px] px-4 py-6 space-y-8">
-        {/* Error state */}
-        {error && (
-          <div className="tv-card p-6 text-center">
-            <p className="text-tv-red font-semibold">{error}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="mt-3 tv-btn-primary text-tv-sm"
-            >
-              {t.home.retry}
-            </button>
-          </div>
-        )}
-
         {/* Featured tours */}
         {(loading || tours.length > 0) && (
           <Section

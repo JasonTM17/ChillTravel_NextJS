@@ -2,6 +2,15 @@
   "name": "@vietwander/shared",
   "version": "0.1.0",
   "private": true,
+  "description": "Shared TypeScript types and API contracts",
+  "author": "Nguyen Son <nguyenson1710@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nguyenson1710/wanderviet.git",
+    "directory": "packages/shared"
+  },
+  "keywords": ["typescript", "types", "shared", "contracts"],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

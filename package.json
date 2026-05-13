@@ -2,6 +2,14 @@
   "name": "chilltravel",
   "private": true,
   "version": "0.1.0",
+  "description": "WanderViet — Full-stack Vietnam travel platform monorepo",
+  "author": "Nguyen Son <nguyenson1710@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nguyenson1710/wanderviet.git"
+  },
+  "keywords": ["travel", "vietnam", "nestjs", "nextjs", "monorepo", "turborepo"],
   "packageManager": "pnpm@10.33.0",
   "scripts": {
     "dev": "turbo dev",
@@ -22,7 +30,10 @@
     "prepare": "husky",
     "storybook": "pnpm --filter @vietwander/web storybook",
     "audit:baseline": "tsx scripts/audit/run-baseline.ts",
-    "audit:dead-code": "tsx scripts/audit/collectors/dead-code.ts"
+    "audit:dead-code": "tsx scripts/audit/collectors/dead-code.ts",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "changeset publish"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.0",

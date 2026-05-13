@@ -2,6 +2,15 @@
   "name": "@vietwander/config",
   "version": "0.1.0",
   "private": true,
+  "description": "Shared ESLint, TypeScript, and build configurations",
+  "author": "Nguyen Son <nguyenson1710@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nguyenson1710/wanderviet.git",
+    "directory": "packages/config"
+  },
+  "keywords": ["eslint", "typescript", "config", "shared"],
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "scripts": {

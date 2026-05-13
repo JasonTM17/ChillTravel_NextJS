@@ -2,6 +2,15 @@
   "name": "@vietwander/db",
   "version": "0.1.0",
   "private": true,
+  "description": "Prisma schema, migrations, and seed data",
+  "author": "Nguyen Son <nguyenson1710@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nguyenson1710/wanderviet.git",
+    "directory": "packages/db"
+  },
+  "keywords": ["prisma", "database", "postgresql", "migrations", "seed"],
   "main": "./generated/client/client.ts",
   "types": "./generated/client/client.ts",
   "exports": {

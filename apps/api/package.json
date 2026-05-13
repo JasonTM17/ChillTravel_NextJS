@@ -2,6 +2,15 @@
   "name": "@vietwander/api",
   "version": "0.1.0",
   "private": true,
+  "description": "WanderViet REST API — NestJS 11 with Swagger documentation",
+  "author": "Nguyen Son <nguyenson1710@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nguyenson1710/wanderviet.git",
+    "directory": "apps/api"
+  },
+  "keywords": ["nestjs", "rest-api", "swagger", "travel", "vietnam"],
   "scripts": {
     "dev": "node -r @swc-node/register src/main.ts",
     "build": "tsc -p tsconfig.json",

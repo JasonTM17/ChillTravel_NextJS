@@ -2,6 +2,15 @@
   "name": "@vietwander/web",
   "version": "0.1.0",
   "private": true,
+  "description": "WanderViet frontend — Next.js 16 Vietnamese-first travel platform",
+  "author": "Nguyen Son <nguyenson1710@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nguyenson1710/wanderviet.git",
+    "directory": "apps/web"
+  },
+  "keywords": ["nextjs", "react", "frontend", "travel", "vietnam"],
   "scripts": {
     "dev": "next dev --port 3000",
     "build": "next build",

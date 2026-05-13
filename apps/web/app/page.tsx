@@ -34,22 +34,23 @@ import type { FlashSaleItem } from '@/components/promo';
 import type { Deal } from '@/components/promo';
 import { destinationApi, getCountryName } from '@/lib/api/destination.api';
 import type { Destination } from '@/lib/api/destination.api';
-import { useLocale } from '@/lib/i18n/use-locale';
 import { tourApi } from '@/lib/api/tour.api';
 import type { Tour } from '@/lib/api/tour.api';
 import { getDestinationImage } from '@/lib/destination-images';
+import { useLocale } from '@/lib/i18n/use-locale';
+import type { TranslationNamespace } from '@/lib/i18n/types';
 import { formatVnd } from '@/lib/utils';
 
 /* ─── Service tabs (Traveloka-style icon grid) ─────────────────────────────── */
-const services = [
-  { label: 'Khách sạn', href: '/hotels', icon: Hotel, color: '#0064D2' },
-  { label: 'Vé máy bay', href: '/flights', icon: Plane, color: '#0064D2' },
-  { label: 'Tour du lịch', href: '/tours', icon: Ticket, color: '#0064D2' },
-  { label: 'Tàu hỏa', href: '/map', icon: Train, color: '#0064D2' },
-  { label: 'Xe đưa đón', href: '/map', icon: Bus, color: '#0064D2' },
-  { label: 'Thuê xe', href: '/map', icon: Car, color: '#0064D2' },
-  { label: 'Hoạt động', href: '/experiences', icon: Zap, color: '#0064D2' },
-  { label: 'Lập lịch AI', href: '/ai-planner', icon: Sparkles, color: '#FF6D00' },
+const serviceItems = [
+  { key: 'hotels' as const, href: '/hotels', icon: Hotel, color: '#0064D2' },
+  { key: 'flights' as const, href: '/flights', icon: Plane, color: '#0064D2' },
+  { key: 'tours' as const, href: '/tours', icon: Ticket, color: '#0064D2' },
+  { key: 'train' as const, href: '/map', icon: Train, color: '#0064D2' },
+  { key: 'shuttle' as const, href: '/map', icon: Bus, color: '#0064D2' },
+  { key: 'carRental' as const, href: '/map', icon: Car, color: '#0064D2' },
+  { key: 'activities' as const, href: '/experiences', icon: Zap, color: '#0064D2' },
+  { key: 'aiPlanner' as const, href: '/ai-planner', icon: Sparkles, color: '#FF6D00' },
 ] as const;
 
 /* ─── Promo deals ──────────────────────────────────────────────────────────── */
@@ -229,7 +230,7 @@ function CardSkeleton() {
 
 /* ─── Main page ─────────────────────────────────────────────────────────────── */
 export default function HomePage() {
-  const { locale } = useLocale();
+  const { locale, t } = useLocale();
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [tours, setTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
@@ -247,7 +248,7 @@ export default function HomePage() {
         if (destRes.success) setDestinations(destRes.data.items);
         if (tourRes.success) setTours(Array.isArray(tourRes.data) ? tourRes.data.slice(0, 8) : []);
       } catch {
-        if (!cancelled) setError('Không thể tải dữ liệu. Vui lòng thử lại.');
+        if (!cancelled) setError(t.home.loadError);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -256,7 +257,7 @@ export default function HomePage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [t]);
 
   // country can be a string OR an object { id, name } depending on API include depth
   const vietnam = destinations
@@ -275,13 +276,13 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-tv-bg">
       {/* ── Hero search section ──────────────────────────────────────────── */}
-      <HeroSearch />
+      <HeroSearch t={t} />
 
       {/* ── Service icon grid ────────────────────────────────────────────── */}
-      <ServiceGrid />
+      <ServiceGrid t={t} />
 
       {/* ── Promo banner ─────────────────────────────────────────────────── */}
-      <PromoBanner />
+      <PromoBanner t={t} />
 
       {/* ── Promo carousel (new component) ───────────────────────────────── */}
       <div className="mx-auto max-w-[1200px] px-4 py-5">
@@ -296,7 +297,7 @@ export default function HomePage() {
       {/* ── Coupon Grid ──────────────────────────────────────────────────── */}
       <div className="mx-auto max-w-[1200px] px-4 py-5">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="tv-section-title">Mã giảm giá</h2>
+          <h2 className="tv-section-title">{t.home.coupons}</h2>
         </div>
         <CouponGrid coupons={MOCK_COUPONS} locale={locale} />
       </div>
@@ -311,14 +312,14 @@ export default function HomePage() {
               onClick={() => window.location.reload()}
               className="mt-3 tv-btn-primary text-tv-sm"
             >
-              Thử lại
+              {t.home.retry}
             </button>
           </div>
         )}
 
         {/* Featured tours */}
         {(loading || tours.length > 0) && (
-          <Section title="Tour nổi bật" subtitle="Các tour được đặt nhiều nhất" href="/tours">
+          <Section title={t.home.featuredTours} subtitle={t.home.featuredToursSubtitle} href="/tours" viewAllLabel={t.home.viewAll}>
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
               {loading
                 ? Array.from({ length: 4 }).map((_, i) => <CardSkeleton key={i} />)
@@ -330,9 +331,10 @@ export default function HomePage() {
         {/* Vietnam destinations */}
         {(loading || vietnam.length > 0) && (
           <Section
-            title="Điểm đến Việt Nam"
-            subtitle="Khám phá vẻ đẹp đất nước hình chữ S"
+            title={t.home.vietnamDestinations}
+            subtitle={t.home.vietnamDestinationsSubtitle}
             href="/explore"
+            viewAllLabel={t.home.viewAll}
           >
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6">
               {loading
@@ -345,9 +347,10 @@ export default function HomePage() {
         {/* World destinations */}
         {(loading || world.length > 0) && (
           <Section
-            title="Điểm đến quốc tế"
-            subtitle="Khám phá thế giới với WanderViet"
+            title={t.home.worldDestinations}
+            subtitle={t.home.worldDestinationsSubtitle}
             href="/explore"
+            viewAllLabel={t.home.viewAll}
           >
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6">
               {loading
@@ -359,7 +362,7 @@ export default function HomePage() {
 
         {/* All tours grid */}
         {!loading && tours.length > 4 && (
-          <Section title="Tất cả tour" subtitle="Tìm tour phù hợp với bạn" href="/tours">
+          <Section title={t.home.allTours} subtitle={t.home.allToursSubtitle} href="/tours" viewAllLabel={t.home.viewAll}>
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
               {tours.slice(4).map((tour) => (
                 <TourCard key={tour.slug} tour={tour} />
@@ -375,21 +378,21 @@ export default function HomePage() {
       </div>
 
       {/* ── Trust band ───────────────────────────────────────────────────── */}
-      <TrustBand />
+      <TrustBand t={t} />
 
       {/* ── Footer ───────────────────────────────────────────────────────── */}
-      <SiteFooter />
+      <SiteFooter t={t} />
     </main>
   );
 }
 
 /* ─── Hero search ───────────────────────────────────────────────────────────── */
-function HeroSearch() {
+function HeroSearch({ t }: { t: TranslationNamespace }) {
   return (
     <div className="bg-tv-blue">
       <div className="mx-auto max-w-[1200px] px-4 py-8">
         <h1 className="mb-6 text-center text-2xl font-bold text-white md:text-3xl">
-          Đặt tour, khách sạn và vé máy bay dễ dàng
+          {t.home.heroTitle}
         </h1>
 
         {/* Search card — entire card is clickable, linking to hotels search */}
@@ -400,7 +403,7 @@ function HeroSearch() {
           <div className="grid gap-3 md:grid-cols-[1fr_180px_180px_160px_auto]">
             {/* Destination */}
             <div className="tv-search-field">
-              <span className="text-tv-xs text-tv-ink-3">Điểm đến</span>
+              <span className="text-tv-xs text-tv-ink-3">{t.home.destination}</span>
               <div className="flex items-center gap-2 mt-1">
                 <MapPin size={16} className="shrink-0 text-tv-blue" />
                 <span className="w-full text-tv-base font-semibold text-tv-ink">Đà Nẵng</span>
@@ -409,7 +412,7 @@ function HeroSearch() {
 
             {/* Check-in */}
             <div className="tv-search-field">
-              <span className="text-tv-xs text-tv-ink-3">Nhận phòng</span>
+              <span className="text-tv-xs text-tv-ink-3">{t.home.checkIn}</span>
               <div className="flex items-center gap-2 mt-1">
                 <CalendarDays size={16} className="shrink-0 text-tv-blue" />
                 <span className="value text-tv-base font-semibold">12 thg 8, 2026</span>
@@ -418,7 +421,7 @@ function HeroSearch() {
 
             {/* Check-out */}
             <div className="tv-search-field">
-              <span className="text-tv-xs text-tv-ink-3">Trả phòng</span>
+              <span className="text-tv-xs text-tv-ink-3">{t.home.checkOut}</span>
               <div className="flex items-center gap-2 mt-1">
                 <CalendarDays size={16} className="shrink-0 text-tv-blue" />
                 <span className="value text-tv-base font-semibold">16 thg 8, 2026</span>
@@ -427,10 +430,10 @@ function HeroSearch() {
 
             {/* Guests */}
             <div className="tv-search-field">
-              <span className="text-tv-xs text-tv-ink-3">Khách</span>
+              <span className="text-tv-xs text-tv-ink-3">{t.booking.guests}</span>
               <div className="flex items-center gap-2 mt-1">
                 <Users size={16} className="shrink-0 text-tv-blue" />
-                <span className="value text-tv-base font-semibold">2 khách, 1 phòng</span>
+                <span className="value text-tv-base font-semibold">{t.home.guests}</span>
               </div>
             </div>
 
@@ -439,13 +442,13 @@ function HeroSearch() {
               className="flex items-center justify-center gap-2 rounded-tv bg-tv-orange px-6 py-3 text-tv-base font-bold text-white"
             >
               <Search size={18} />
-              <span className="hidden md:inline">Tìm kiếm</span>
+              <span className="hidden md:inline">{t.home.search}</span>
             </span>
           </div>
 
           {/* Quick search tags */}
           <div className="mt-3 flex flex-wrap gap-2">
-            <span className="text-tv-xs text-tv-ink-3 self-center">Tìm nhanh:</span>
+            <span className="text-tv-xs text-tv-ink-3 self-center">{t.home.quickSearch}</span>
             {['Đà Nẵng', 'Phú Quốc', 'Hội An', 'Sapa', 'Hà Nội', 'Tokyo', 'Bangkok'].map((city) => (
               <span
                 key={city}
@@ -462,14 +465,14 @@ function HeroSearch() {
 }
 
 /* ─── Service icon grid ─────────────────────────────────────────────────────── */
-function ServiceGrid() {
+function ServiceGrid({ t }: { t: TranslationNamespace }) {
   return (
     <div className="bg-white border-b border-tv-border shadow-tv-card">
       <div className="mx-auto max-w-[1200px] px-4">
         <div className="flex overflow-x-auto">
-          {services.map(({ label, href, icon: Icon, color }) => (
+          {serviceItems.map(({ key, href, icon: Icon, color }) => (
             <Link
-              key={label}
+              key={key}
               href={href}
               className="tv-service-tab flex-shrink-0"
               style={{ color: undefined }}
@@ -480,7 +483,7 @@ function ServiceGrid() {
               >
                 <Icon size={24} style={{ color }} />
               </div>
-              <span className="text-tv-xs font-semibold text-tv-ink-2">{label}</span>
+              <span className="text-tv-xs font-semibold text-tv-ink-2">{t.home[key]}</span>
             </Link>
           ))}
         </div>
@@ -490,16 +493,16 @@ function ServiceGrid() {
 }
 
 /* ─── Promo banner ──────────────────────────────────────────────────────────── */
-function PromoBanner() {
+function PromoBanner({ t }: { t: TranslationNamespace }) {
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-5">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="tv-section-title">Ưu đãi hôm nay</h2>
+        <h2 className="tv-section-title">{t.home.todayDeals}</h2>
         <Link
           href="/tours"
           className="flex items-center gap-1 text-tv-sm font-semibold text-tv-blue hover:underline"
         >
-          Xem tất cả <ChevronRight size={14} />
+          {t.home.viewAll} <ChevronRight size={14} />
         </Link>
       </div>
       <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
@@ -528,11 +531,13 @@ function Section({
   title,
   subtitle,
   href,
+  viewAllLabel,
   children,
 }: {
   title: string;
   subtitle: string;
   href: string;
+  viewAllLabel?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -546,7 +551,7 @@ function Section({
           href={href}
           className="flex items-center gap-1 text-tv-sm font-semibold text-tv-blue hover:underline whitespace-nowrap"
         >
-          Xem tất cả <ArrowRight size={14} />
+          {viewAllLabel ?? 'Xem tất cả'} <ArrowRight size={14} />
         </Link>
       </div>
       {children}
@@ -645,7 +650,7 @@ function TourCard({ tour }: { tour: Tour }) {
 }
 
 /* ─── Trust band ────────────────────────────────────────────────────────────── */
-function TrustBand() {
+function TrustBand({ t }: { t: TranslationNamespace }) {
   return (
     <div className="bg-white border-t border-tv-border">
       <div className="mx-auto max-w-[1200px] px-4 py-5">
@@ -656,8 +661,8 @@ function TrustBand() {
               <ShieldCheck size={20} className="text-tv-blue" />
             </div>
             <div>
-              <p className="text-tv-sm font-bold text-tv-ink">Thanh toán an toàn</p>
-              <p className="text-tv-xs text-tv-ink-3">Mã hóa SSL, không lưu thẻ thật</p>
+              <p className="text-tv-sm font-bold text-tv-ink">{t.home.safePayment}</p>
+              <p className="text-tv-xs text-tv-ink-3">{t.home.safePaymentDesc}</p>
             </div>
           </div>
           {/* 2 */}
@@ -666,8 +671,8 @@ function TrustBand() {
               <CheckCircle2 size={20} className="text-emerald-600" />
             </div>
             <div>
-              <p className="text-tv-sm font-bold text-tv-ink">Dữ liệu thật</p>
-              <p className="text-tv-xs text-tv-ink-3">Tour và điểm đến từ backend thật</p>
+              <p className="text-tv-sm font-bold text-tv-ink">{t.home.realData}</p>
+              <p className="text-tv-xs text-tv-ink-3">{t.home.realDataDesc}</p>
             </div>
           </div>
           {/* 3 */}
@@ -676,8 +681,8 @@ function TrustBand() {
               <Headphones size={20} className="text-tv-orange-dark" />
             </div>
             <div>
-              <p className="text-tv-sm font-bold text-tv-ink">Hỗ trợ 24/7</p>
-              <p className="text-tv-xs text-tv-ink-3">Trợ lý local, không cần cloud key</p>
+              <p className="text-tv-sm font-bold text-tv-ink">{t.home.support247}</p>
+              <p className="text-tv-xs text-tv-ink-3">{t.home.support247Desc}</p>
             </div>
           </div>
           {/* 4 */}
@@ -686,8 +691,8 @@ function TrustBand() {
               <Tag size={20} className="text-amber-600" />
             </div>
             <div>
-              <p className="text-tv-sm font-bold text-tv-ink">Giá tốt nhất</p>
-              <p className="text-tv-xs text-tv-ink-3">Demo — không phát sinh giao dịch thật</p>
+              <p className="text-tv-sm font-bold text-tv-ink">{t.home.bestPrice}</p>
+              <p className="text-tv-xs text-tv-ink-3">{t.home.bestPriceDesc}</p>
             </div>
           </div>
         </div>
@@ -697,7 +702,7 @@ function TrustBand() {
 }
 
 /* ─── Footer ────────────────────────────────────────────────────────────────── */
-function SiteFooter() {
+function SiteFooter({ t }: { t: TranslationNamespace }) {
   return (
     <footer className="bg-tv-ink text-white">
       <div className="mx-auto max-w-[1200px] px-4 py-10">
@@ -710,7 +715,7 @@ function SiteFooter() {
             </p>
             <p className="mt-3 inline-flex items-center gap-1.5 rounded-tv-sm bg-white/10 px-2.5 py-1 text-tv-xs text-white/50">
               <ShieldCheck size={12} />
-              Thanh toán demo — không phát sinh giao dịch thật
+              {t.home.safePaymentDesc}
             </p>
             {/* Social media links */}
             <div className="mt-4 flex items-center gap-3">
@@ -756,30 +761,30 @@ function SiteFooter() {
           {/* Links */}
           {[
             {
-              title: 'Dịch vụ',
+              title: t.home.services,
               links: [
-                { label: 'Tour du lịch', href: '/tours' },
-                { label: 'Khách sạn', href: '/hotels' },
-                { label: 'Vé máy bay', href: '/flights' },
-                { label: 'Hoạt động', href: '/experiences' },
+                { label: t.home.tours, href: '/tours' },
+                { label: t.home.hotels, href: '/hotels' },
+                { label: t.home.flights, href: '/flights' },
+                { label: t.home.activities, href: '/experiences' },
               ],
             },
             {
-              title: 'Hỗ trợ',
+              title: t.home.support,
               links: [
-                { label: 'Trung tâm hỗ trợ', href: '/support' },
-                { label: 'Liên hệ', href: '/support' },
-                { label: 'Blog du lịch', href: '/blog' },
-                { label: 'Điều khoản', href: '/support' },
+                { label: t.home.support, href: '/support' },
+                { label: t.home.support, href: '/support' },
+                { label: 'Blog', href: '/blog' },
+                { label: t.home.support, href: '/support' },
               ],
             },
             {
-              title: 'Tài khoản',
+              title: t.home.account,
               links: [
-                { label: 'Đăng nhập', href: '/login' },
-                { label: 'Đăng ký', href: '/register' },
-                { label: 'Đặt chỗ của tôi', href: '/my-bookings' },
-                { label: 'Yêu thích', href: '/wishlist' },
+                { label: t.nav.login, href: '/login' },
+                { label: t.nav.register, href: '/register' },
+                { label: t.nav.myBookings, href: '/my-bookings' },
+                { label: t.nav.wishlist, href: '/wishlist' },
               ],
             },
           ].map((col) => (
@@ -788,8 +793,8 @@ function SiteFooter() {
                 {col.title}
               </p>
               <ul className="space-y-2">
-                {col.links.map((link) => (
-                  <li key={link.label}>
+                {col.links.map((link, idx) => (
+                  <li key={idx}>
                     <Link
                       href={link.href}
                       className="text-tv-xs text-white/50 hover:text-white transition-colors"
@@ -806,7 +811,7 @@ function SiteFooter() {
         {/* Tải ứng dụng */}
         <div className="mt-8 border-t border-white/10 pt-6">
           <p className="mb-3 text-tv-sm font-bold text-white/80 uppercase tracking-wider">
-            Tải ứng dụng
+            {t.home.downloadApp}
           </p>
           <div className="flex flex-wrap gap-3">
             <a
@@ -835,7 +840,7 @@ function SiteFooter() {
         </div>
 
         <div className="mt-8 border-t border-white/10 pt-6 flex flex-col items-center gap-2 md:flex-row md:justify-between">
-          <p className="text-tv-xs text-white/40">© 2026 WanderViet. Portfolio demo project.</p>
+          <p className="text-tv-xs text-white/40">© 2026 WanderViet. All rights reserved.</p>
           <p className="text-tv-xs text-white/40">
             Built with Next.js 16 · NestJS 11 · Prisma 7 · PostgreSQL
           </p>

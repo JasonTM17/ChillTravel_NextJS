@@ -218,6 +218,56 @@ export interface ErrorTranslations {
   sessionExpired: string;
 }
 
+export interface HomeTranslations {
+  heroTitle: string;
+  searchPlaceholder: string;
+  quickSearch: string;
+  todayDeals: string;
+  viewAll: string;
+  featuredTours: string;
+  featuredToursSubtitle: string;
+  vietnamDestinations: string;
+  vietnamDestinationsSubtitle: string;
+  worldDestinations: string;
+  worldDestinationsSubtitle: string;
+  allTours: string;
+  allToursSubtitle: string;
+  coupons: string;
+  demoPaymentNotice: string;
+  demoPaymentDesc: string;
+  loadError: string;
+  retry: string;
+  // Service tabs
+  hotels: string;
+  flights: string;
+  tours: string;
+  train: string;
+  shuttle: string;
+  carRental: string;
+  activities: string;
+  aiPlanner: string;
+  // Hero search
+  destination: string;
+  checkIn: string;
+  checkOut: string;
+  guests: string;
+  search: string;
+  // Footer
+  services: string;
+  support: string;
+  account: string;
+  downloadApp: string;
+  // Trust band
+  safePayment: string;
+  safePaymentDesc: string;
+  realData: string;
+  realDataDesc: string;
+  support247: string;
+  support247Desc: string;
+  bestPrice: string;
+  bestPriceDesc: string;
+}
+
 // ─── Main Translation Namespace ──────────────────────────────────────────────
 
 /**
@@ -236,4 +286,5 @@ export interface TranslationNamespace {
   promo: PromoTranslations;
   status: StatusTranslations;
   errors: ErrorTranslations;
+  home: HomeTranslations;
 }

@@ -16,7 +16,7 @@ const MOCK_HOTELS: Hotel[] = [
   {
     id: 'hotel-danang-beach',
     name: 'Danang Golden Bay Hotel',
-    imageUrl: '/generated/hotels/danang-golden-bay.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop',
     starRating: 5,
     reviewScore: 8.7,
     reviewCount: 1243,
@@ -29,7 +29,7 @@ const MOCK_HOTELS: Hotel[] = [
   {
     id: 'hotel-hoi-an-resort',
     name: 'Hội An Riverside Resort & Spa',
-    imageUrl: '/generated/hotels/hoian-riverside.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&h=400&fit=crop',
     starRating: 4,
     reviewScore: 9.1,
     reviewCount: 876,
@@ -42,7 +42,7 @@ const MOCK_HOTELS: Hotel[] = [
   {
     id: 'hotel-saigon-central',
     name: 'Saigon Central Hotel',
-    imageUrl: '/generated/hotels/saigon-central.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600&h=400&fit=crop',
     starRating: 3,
     reviewScore: 7.5,
     reviewCount: 542,
@@ -55,7 +55,7 @@ const MOCK_HOTELS: Hotel[] = [
   {
     id: 'hotel-phuquoc-villa',
     name: 'Phú Quốc Sunset Villa',
-    imageUrl: '/generated/hotels/phuquoc-villa.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&h=400&fit=crop',
     starRating: 5,
     reviewScore: 9.4,
     reviewCount: 328,
@@ -68,7 +68,7 @@ const MOCK_HOTELS: Hotel[] = [
   {
     id: 'hotel-hanoi-old-quarter',
     name: 'Hanoi Old Quarter Hostel',
-    imageUrl: '/generated/hotels/hanoi-hostel.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=600&h=400&fit=crop',
     starRating: 2,
     reviewScore: 7.8,
     reviewCount: 1102,
@@ -81,7 +81,7 @@ const MOCK_HOTELS: Hotel[] = [
   {
     id: 'hotel-nhatrang-beach',
     name: 'Nha Trang Beach Front Hotel',
-    imageUrl: '/generated/hotels/nhatrang-beach.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600&h=400&fit=crop',
     starRating: 4,
     reviewScore: 8.2,
     reviewCount: 654,
@@ -158,8 +158,7 @@ export default function HotelsPage() {
       const destLower = destination.toLowerCase();
       hotels = hotels.filter(
         (h) =>
-          h.location.toLowerCase().includes(destLower) ||
-          h.name.toLowerCase().includes(destLower),
+          h.location.toLowerCase().includes(destLower) || h.name.toLowerCase().includes(destLower),
       );
       // If no match, show all (fallback)
       if (hotels.length === 0) hotels = MOCK_HOTELS;

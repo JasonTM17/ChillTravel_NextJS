@@ -92,21 +92,21 @@ const promos = [
 const MOCK_PROMO_BANNERS: PromoBannerType[] = [
   {
     id: 'banner-1',
-    imageUrl: '/generated/promos/summer-sale.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&h=400&fit=crop',
     title: 'Mùa hè rực rỡ — Giảm đến 40% tour biển',
     ctaText: 'Khám phá ngay',
     ctaUrl: '/tours',
   },
   {
     id: 'banner-2',
-    imageUrl: '/generated/promos/danang-deal.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=1200&h=400&fit=crop',
     title: 'Đà Nẵng 3N2Đ chỉ từ 2.990.000đ',
     ctaText: 'Đặt tour',
     ctaUrl: '/tours',
   },
   {
     id: 'banner-3',
-    imageUrl: '/generated/promos/phuquoc-resort.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?w=1200&h=400&fit=crop',
     title: 'Phú Quốc — Resort 5 sao giá ưu đãi',
     ctaText: 'Xem ưu đãi',
     ctaUrl: '/hotels',
@@ -151,28 +151,28 @@ const MOCK_COUPONS: Coupon[] = [
 const MOCK_FLASH_SALE_ITEMS: FlashSaleItem[] = [
   {
     id: 'fs-1',
-    imageUrl: '/generated/promos/flash-danang.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=400&h=400&fit=crop',
     name: 'Tour Đà Nẵng - Hội An 3N2Đ',
     originalPrice: 4_500_000,
     salePrice: 2_990_000,
   },
   {
     id: 'fs-2',
-    imageUrl: '/generated/promos/flash-sapa.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=400&h=400&fit=crop',
     name: 'Sapa trekking 2N1Đ',
     originalPrice: 3_200_000,
     salePrice: 1_990_000,
   },
   {
     id: 'fs-3',
-    imageUrl: '/generated/promos/flash-phuquoc.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?w=400&h=400&fit=crop',
     name: 'Phú Quốc resort 4N3Đ',
     originalPrice: 8_500_000,
     salePrice: 5_900_000,
   },
   {
     id: 'fs-4',
-    imageUrl: '/generated/promos/flash-halong.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=400&h=400&fit=crop',
     name: 'Du thuyền Hạ Long 2N1Đ',
     originalPrice: 5_000_000,
     salePrice: 3_500_000,
@@ -182,28 +182,28 @@ const MOCK_FLASH_SALE_ITEMS: FlashSaleItem[] = [
 const MOCK_DEALS: Deal[] = [
   {
     id: 'deal-1',
-    imageUrl: '/generated/promos/deal-nhatrang.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600&h=450&fit=crop',
     title: 'Nha Trang Beach Resort 5 sao',
     price: 2_800_000,
     rating: 9.2,
   },
   {
     id: 'deal-2',
-    imageUrl: '/generated/promos/deal-dalat.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=450&fit=crop',
     title: 'Đà Lạt romantic getaway 3N2Đ',
     price: 3_500_000,
     rating: 8.8,
   },
   {
     id: 'deal-3',
-    imageUrl: '/generated/promos/deal-hue.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=450&fit=crop',
     title: 'Huế cố đô — Tour di sản văn hóa',
     price: 2_200_000,
     rating: 9.0,
   },
   {
     id: 'deal-4',
-    imageUrl: '/generated/promos/deal-bangkok.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=600&h=450&fit=crop',
     title: 'Bangkok shopping & food tour 4N3Đ',
     price: 6_500_000,
     rating: 8.5,
@@ -303,12 +303,6 @@ export default function HomePage() {
 
       {/* ── Main content ─────────────────────────────────────────────────── */}
       <div className="mx-auto max-w-[1200px] px-4 py-6 space-y-8">
-        {/* Demo payment notice */}
-        <div className="flex items-center gap-2 rounded-tv bg-amber-50 border border-amber-200 px-4 py-2.5 text-tv-sm text-amber-800">
-          <span className="font-bold">⚠️ Thanh toán demo</span>
-          <span>— Không phát sinh giao dịch thật. Đây là nền tảng demo portfolio.</span>
-        </div>
-
         {/* Error state */}
         {error && (
           <div className="tv-card p-6 text-center">
@@ -325,7 +319,7 @@ export default function HomePage() {
         {/* Featured tours */}
         {(loading || tours.length > 0) && (
           <Section title="Tour nổi bật" subtitle="Các tour được đặt nhiều nhất" href="/tours">
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
               {loading
                 ? Array.from({ length: 4 }).map((_, i) => <CardSkeleton key={i} />)
                 : tours.slice(0, 4).map((tour) => <TourCard key={tour.slug} tour={tour} />)}
@@ -340,7 +334,7 @@ export default function HomePage() {
             subtitle="Khám phá vẻ đẹp đất nước hình chữ S"
             href="/explore"
           >
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+            <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6">
               {loading
                 ? Array.from({ length: 6 }).map((_, i) => <CardSkeleton key={i} />)
                 : vietnam.map((d) => <DestCard key={d.slug} destination={d} compact />)}
@@ -355,7 +349,7 @@ export default function HomePage() {
             subtitle="Khám phá thế giới với WanderViet"
             href="/explore"
           >
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+            <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6">
               {loading
                 ? Array.from({ length: 6 }).map((_, i) => <CardSkeleton key={i} />)
                 : world.map((d) => <DestCard key={d.slug} destination={d} compact />)}
@@ -366,7 +360,7 @@ export default function HomePage() {
         {/* All tours grid */}
         {!loading && tours.length > 4 && (
           <Section title="Tất cả tour" subtitle="Tìm tour phù hợp với bạn" href="/tours">
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
               {tours.slice(4).map((tour) => (
                 <TourCard key={tour.slug} tour={tour} />
               ))}
@@ -513,7 +507,7 @@ function PromoBanner() {
           Xem tất cả <ChevronRight size={14} />
         </Link>
       </div>
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
         {promos.map((promo) => (
           <Link key={promo.code} href="/" className="tv-card overflow-hidden group">
             <div className={`bg-gradient-to-br ${promo.bg} p-4 text-white`}>

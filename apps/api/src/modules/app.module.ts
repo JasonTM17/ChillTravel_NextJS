@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
@@ -9,6 +9,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { CustomThrottlerGuard } from '../common/guards/custom-throttler.guard';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggerModule } from 'nestjs-pino';
+import { RequestIdMiddleware } from '../common/middleware/request-id.middleware';
 import { MetricsModule } from '../common/metrics';
 import { MetricsInterceptor } from '../common/metrics';
 import { GlobalExceptionFilter } from '../common/filters/global-exception.filter';
@@ -98,13 +99,52 @@ import { WishlistService } from './wishlist/wishlist.service';
         return {
           pinoHttp: {
             level: isProd ? 'info' : 'debug',
+            // Use the requestId already set by RequestIdMiddleware
             genReqId: (req) => {
-              const existing = (req.headers?.['x-request-id'] ?? undefined) as string | undefined;
-              return existing && existing.length > 0 ? existing : randomUUID();
+              return (req as { id?: string }).id ?? randomUUID();
             },
-            customProps: (req) => ({
-              requestId: (req as { id?: string }).id,
-            }),
+            // Attach structured fields to every log entry (Req 5.2)
+            customProps: (req) => {
+              const typedReq = req as {
+                id?: string;
+                requestId?: string;
+                user?: { id?: string; sub?: string };
+                route?: { path?: string };
+                url?: string;
+              };
+              return {
+                requestId: typedReq.id ?? typedReq.requestId,
+                userId: typedReq.user?.id ?? typedReq.user?.sub ?? undefined,
+                route: typedReq.route?.path ?? typedReq.url?.split('?')[0],
+              };
+            },
+            // Include statusCode and durationMs in the response log (Req 5.2)
+            customSuccessMessage: (_req, res) => {
+              return `${res.statusCode} - request completed`;
+            },
+            customErrorMessage: (_req, res) => {
+              return `${res.statusCode} - request errored`;
+            },
+            customSuccessObject: (req, res, val) => {
+              const typedReq = req as { id?: string; requestId?: string };
+              return {
+                ...val,
+                requestId: typedReq.id ?? typedReq.requestId,
+                statusCode: res.statusCode,
+                durationMs: val.responseTime,
+              };
+            },
+            customErrorObject: (req, res, _error, val) => {
+              const typedReq = req as { id?: string; requestId?: string };
+              return {
+                ...val,
+                requestId: typedReq.id ?? typedReq.requestId,
+                statusCode: res.statusCode,
+                durationMs: val.responseTime,
+              };
+            },
+            // Ensure time is always present (Pino includes it by default)
+            timestamp: () => `,"time":"${new Date().toISOString()}"`,
             redact: {
               paths: [
                 'req.headers.authorization',
@@ -212,4 +252,8 @@ import { WishlistService } from './wishlist/wishlist.service';
     { provide: APP_FILTER, useClass: GlobalExceptionFilter },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(RequestIdMiddleware).forRoutes('*');
+  }
+}

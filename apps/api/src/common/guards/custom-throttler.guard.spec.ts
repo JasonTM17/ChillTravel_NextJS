@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ExecutionContext } from '@nestjs/common';
 import { ThrottlerException, ThrottlerLimitDetail } from '@nestjs/throttler';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { CustomThrottlerGuard } from './custom-throttler.guard';
 
 describe('CustomThrottlerGuard', () => {
@@ -30,6 +30,7 @@ describe('CustomThrottlerGuard', () => {
         totalHits: 101,
         timeToExpire: 45000,
         timeToBlockExpire: 45000,
+        isBlocked: false,
       };
 
       await expect(
@@ -57,6 +58,7 @@ describe('CustomThrottlerGuard', () => {
         totalHits: 101,
         timeToExpire: 1500,
         timeToBlockExpire: 1500, // 1.5 seconds → should round up to 2
+        isBlocked: false,
       };
 
       await expect(
@@ -84,6 +86,7 @@ describe('CustomThrottlerGuard', () => {
         totalHits: 101,
         timeToExpire: 30000,
         timeToBlockExpire: 30000,
+        isBlocked: false,
       };
 
       try {

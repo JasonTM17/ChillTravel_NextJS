@@ -92,7 +92,7 @@ describe('Vietnamese travel-commerce UX', () => {
     ];
     const source = files.map((file) => readFileSync(`${root}/${file}`, 'utf8')).join('\n');
 
-    expect(source).toContain('ChillTravel');
+    expect(source).toContain('WanderViet');
     expect(source).not.toMatch(
       /VietWander AI|VIETWANDER AI|VietnamWanderAI|ChillTravel AI|traveloka/i,
     );
@@ -103,11 +103,11 @@ describe('Vietnamese travel-commerce UX', () => {
       ['app/budget/page.tsx', 'Ngân sách thông minh'],
       ['app/compare/page.tsx', 'So sánh thông minh'],
       ['app/personality/page.tsx', 'Phong cách du lịch'],
-      ['app/map/page.tsx', 'Bản đồ khám phá'],
+      ['app/map/page.tsx', 'Bản đồ điểm đến'],
       ['app/wishlist/page.tsx', 'Yêu thích'],
       ['app/trips/page.tsx', 'Chuyến đi'],
       ['app/profile/page.tsx', 'Hồ sơ du lịch'],
-      ['app/admin/page.tsx', 'Bảng vận hành ChillTravel'],
+      ['app/admin/page.tsx', 'Bảng vận hành WanderViet'],
       ['app/admin/ai-knowledge/page.tsx', 'Knowledge Studio'],
     ] as const;
 

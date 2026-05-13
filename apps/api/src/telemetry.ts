@@ -21,7 +21,7 @@ if (otlpEndpoint) {
   // Uses require() with try/catch so missing packages don't break the build.
   void (async () => {
     try {
-      /* eslint-disable @typescript-eslint/no-require-imports */
+       
       const { NodeSDK } = require('@opentelemetry/sdk-node') as {
         NodeSDK: new (config: Record<string, unknown>) => {
           start(): void;
@@ -37,7 +37,7 @@ if (otlpEndpoint) {
       const { Resource } = require('@opentelemetry/resources') as {
         Resource: new (attrs: Record<string, string>) => unknown;
       };
-      /* eslint-enable @typescript-eslint/no-require-imports */
+       
 
       const resource = new Resource({
         'service.name': 'wanderviet-api',
@@ -76,6 +76,8 @@ if (otlpEndpoint) {
       process.on('SIGTERM', shutdown);
       process.on('SIGINT', shutdown);
 
+      // eslint-disable-next-line no-console
+      // eslint-disable-next-line no-console
       console.info(
         `[telemetry] OpenTelemetry initialized — exporting traces to ${otlpEndpoint}`,
       );

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 /**
  * Admin Dashboard Overview — Task 37
@@ -18,6 +18,9 @@ import {
   List,
   MessageSquare,
   AlertCircle,
+  Inbox,
+  BarChart2,
+  PieChart as PieChartIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -395,7 +398,14 @@ function TopToursChart({ data }: { data: TopTour[] }) {
 
 function RecentBookingsTable({ bookings }: { bookings: RecentActivities['recentBookings'] }) {
   if (!bookings.length) {
-    return <p className="py-6 text-center text-sm text-[tv-ink-3]">Chưa có đặt chỗ nào.</p>;
+    return (
+      <div className="flex flex-col items-center justify-center py-8 text-center">
+        <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-50">
+          <Inbox className="h-6 w-6 text-gray-300" strokeWidth={1.5} />
+        </div>
+        <p className="text-sm font-bold text-gray-900">Chưa có đặt chỗ nào</p>
+      </div>
+    );
   }
 
   return (
@@ -452,7 +462,14 @@ const CONTACT_STATUS_LABELS: Record<string, string> = {
 
 function RecentContactsList({ contacts }: { contacts: RecentActivities['recentContacts'] }) {
   if (!contacts.length) {
-    return <p className="py-6 text-center text-sm text-[tv-ink-3]">Chưa có yêu cầu tư vấn nào.</p>;
+    return (
+      <div className="flex flex-col items-center justify-center py-8 text-center">
+        <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-50">
+          <MessageSquare className="h-6 w-6 text-gray-300" strokeWidth={1.5} />
+        </div>
+        <p className="text-sm font-bold text-gray-900">Chưa có yêu cầu tư vấn nào</p>
+      </div>
+    );
   }
 
   return (
@@ -497,7 +514,12 @@ function PendingReviewsList({ reviews }: { reviews: RecentActivities['recentRevi
 
   if (!pending.length) {
     return (
-      <p className="py-6 text-center text-sm text-[tv-ink-3]">Không có đánh giá nào chờ duyệt.</p>
+      <div className="flex flex-col items-center justify-center py-8 text-center">
+        <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-50">
+          <AlertCircle className="h-6 w-6 text-gray-300" strokeWidth={1.5} />
+        </div>
+        <p className="text-sm font-bold text-gray-900">Không có đánh giá chờ duyệt</p>
+      </div>
     );
   }
 
@@ -567,14 +589,14 @@ export default function AdminDashboardPage() {
   // ---- Error state ----
   if (!loading && error) {
     return (
-      <PageShell eyebrow="Quản trị hệ thống" title="Bảng vận hành ChillTravel">
+      <PageShell eyebrow="Quản trị hệ thống" title="Bảng vận hành WanderViet">
         <ErrorState message={error} onRetry={fetchAll} />
       </PageShell>
     );
   }
 
   return (
-    <PageShell eyebrow="Quản trị hệ thống" title="Bảng vận hành ChillTravel">
+    <PageShell eyebrow="Quản trị hệ thống" title="Bảng vận hành WanderViet">
       <div className="space-y-8">
         {/* Quick actions */}
         <QuickActions />
@@ -643,9 +665,13 @@ export default function AdminDashboardPage() {
               ) : revenue.length > 0 ? (
                 <RevenueChart data={revenue} />
               ) : (
-                <p className="py-16 text-center text-sm text-[tv-ink-3]">
-                  Chưa có dữ liệu doanh thu.
-                </p>
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-50">
+                    <BarChart2 className="h-8 w-8 text-gray-300" strokeWidth={1.5} />
+                  </div>
+                  <p className="text-base font-bold text-gray-900">Chưa có dữ liệu doanh thu</p>
+                  <p className="mt-1 text-sm text-gray-500">Doanh thu sẽ hiển thị khi có đặt chỗ thanh toán thành công.</p>
+                </div>
               )}
             </div>
           </CommerceSurface>
@@ -662,7 +688,12 @@ export default function AdminDashboardPage() {
               ) : bookingsByStatus ? (
                 <BookingsDonut data={bookingsByStatus} />
               ) : (
-                <p className="py-16 text-center text-sm text-[tv-ink-3]">Chưa có dữ liệu.</p>
+                <div className="flex flex-col items-center justify-center py-10 text-center">
+                  <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-50">
+                    <PieChartIcon className="h-8 w-8 text-gray-300" strokeWidth={1.5} />
+                  </div>
+                  <p className="text-base font-bold text-gray-900">Chưa có dữ liệu</p>
+                </div>
               )}
             </div>
           </CommerceSurface>
@@ -690,7 +721,12 @@ export default function AdminDashboardPage() {
             ) : topTours.length > 0 ? (
               <TopToursChart data={topTours} />
             ) : (
-              <p className="py-12 text-center text-sm text-[tv-ink-3]">Chưa có dữ liệu tour.</p>
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gray-50">
+                  <Compass className="h-7 w-7 text-gray-300" strokeWidth={1.5} />
+                </div>
+                <p className="text-base font-bold text-gray-900">Chưa có dữ liệu tour</p>
+              </div>
             )}
           </div>
         </CommerceSurface>

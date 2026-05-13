@@ -1,7 +1,6 @@
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { envelope } from '@vietwander/shared';
-import { register } from 'prom-client';
 import { Public } from '../common/decorators/public.decorator';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -46,14 +45,5 @@ export class HealthController {
     } catch {
       return envelope({ status: 'not_ready', db: 'disconnected' });
     }
-  }
-
-  /** GET /metrics — Prometheus metrics endpoint */
-  @Get('/metrics')
-  @ApiOperation({ summary: 'Prometheus metrics' })
-  @ApiResponse({ status: 200, description: 'Prometheus metrics in text format' })
-  async metrics(@Res() res: { set: (k: string, v: string) => void; end: (body: string) => void }) {
-    res.set('Content-Type', register.contentType);
-    res.end(await register.metrics());
   }
 }

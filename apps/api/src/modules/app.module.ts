@@ -9,6 +9,8 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { CustomThrottlerGuard } from '../common/guards/custom-throttler.guard';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { LoggerModule } from 'nestjs-pino';
+import { MetricsModule } from '../common/metrics';
+import { MetricsInterceptor } from '../common/metrics';
 import { GlobalExceptionFilter } from '../common/filters/global-exception.filter';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -147,6 +149,7 @@ import { WishlistService } from './wishlist/wishlist.service';
       defaultMetrics: { enabled: true },
       path: '/metrics',
     }),
+    MetricsModule,
   ],
   controllers: [
     HealthController,
@@ -205,6 +208,7 @@ import { WishlistService } from './wishlist/wishlist.service';
     { provide: APP_GUARD, useClass: CustomThrottlerGuard },
     { provide: APP_INTERCEPTOR, useClass: ResponseInterceptor },
     { provide: APP_INTERCEPTOR, useClass: AuditInterceptor },
+    { provide: APP_INTERCEPTOR, useClass: MetricsInterceptor },
     { provide: APP_FILTER, useClass: GlobalExceptionFilter },
   ],
 })

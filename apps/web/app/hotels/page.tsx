@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { useState, useMemo } from 'react';
 import { HotelCard, type Hotel } from '@/components/listing/hotel-card';
 import {
@@ -138,19 +139,52 @@ function applySort(hotels: Hotel[], sort: SortOption): Hotel[] {
 /* ─── Page Component ───────────────────────────────────────────────────────── */
 
 export default function HotelsPage() {
+  const searchParams = useSearchParams();
   const [filters, setFilters] = useState<HotelFilters>(DEFAULT_FILTERS);
   const [sort, setSort] = useState<SortOption>('popularity_desc');
 
+  // Read search params from URL (passed from search panel)
+  const destination = searchParams.get('destination') ?? '';
+  const checkIn = searchParams.get('checkIn') ?? '';
+  const checkOut = searchParams.get('checkOut') ?? '';
+  const rooms = searchParams.get('rooms') ?? '1';
+  const guests = searchParams.get('guests') ?? '2';
+
   const filteredHotels = useMemo(() => {
-    const filtered = applyFilters(MOCK_HOTELS, filters);
+    let hotels = MOCK_HOTELS;
+
+    // Filter by destination if provided from search params
+    if (destination) {
+      const destLower = destination.toLowerCase();
+      hotels = hotels.filter(
+        (h) =>
+          h.location.toLowerCase().includes(destLower) ||
+          h.name.toLowerCase().includes(destLower),
+      );
+      // If no match, show all (fallback)
+      if (hotels.length === 0) hotels = MOCK_HOTELS;
+    }
+
+    const filtered = applyFilters(hotels, filters);
     return applySort(filtered, sort);
-  }, [filters, sort]);
+  }, [filters, sort, destination]);
+
+  const searchSummary = destination
+    ? `${destination}${checkIn ? ` · ${checkIn}` : ''}${checkOut ? ` → ${checkOut}` : ''} · ${rooms} phòng · ${guests} khách`
+    : '';
 
   return (
     <PageShell
       eyebrow="Tìm nơi lưu trú"
       title="Khách sạn demo, giá rõ và không phát sinh giao dịch thật"
     >
+      {/* Search summary from URL params */}
+      {searchSummary && (
+        <div className="mb-4 rounded-tv border border-tv-border bg-sky-surface/50 px-4 py-3 text-sm text-muted-ink">
+          <span className="font-semibold text-ink">Tìm kiếm:</span> {searchSummary}
+        </div>
+      )}
+
       <div className="flex gap-6">
         {/* Filter sidebar */}
         <HotelFilterPanel

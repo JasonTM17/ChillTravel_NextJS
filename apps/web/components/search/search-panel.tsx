@@ -3,6 +3,9 @@
 import { Hotel, Plane, Map, Sparkles, Clock, X } from 'lucide-react';
 import { useState, useEffect, useCallback } from 'react';
 import { useLocale } from '@/lib/i18n';
+import { FlightSearchForm } from './flight-search-form';
+import { HotelSearchForm } from './hotel-search-form';
+import { MobileSearchOverlay } from './mobile-search-overlay';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -84,11 +87,10 @@ export function SearchPanel() {
     console.log(`Search triggered for tab: ${activeTab}`);
   }, [activeTab]);
 
-  return (
-    <section
-      className="w-full rounded-[12px] bg-white shadow-card md:rounded-[16px]"
-      aria-label={t.common.search}
-    >
+  // ─── Shared search panel content ──────────────────────────────────────────
+
+  const searchPanelContent = (
+    <>
       {/* ── Tab Bar ─────────────────────────────────────────────────────── */}
       <div
         className="flex border-b border-border overflow-x-auto"
@@ -136,24 +138,26 @@ export function SearchPanel() {
       >
         {/* Search form placeholder — actual forms will be implemented in next tasks */}
         <div className="flex flex-col gap-4">
-          {activeTab === 'hotels' && <HotelSearchPlaceholder t={t} />}
-          {activeTab === 'flights' && <FlightSearchPlaceholder t={t} />}
+          {activeTab === 'hotels' && <HotelSearchForm />}
+          {activeTab === 'flights' && <FlightSearchForm />}
           {activeTab === 'tours' && <TourSearchPlaceholder t={t} />}
           {activeTab === 'experiences' && <ExperienceSearchPlaceholder t={t} />}
 
-          {/* ── Orange CTA Button ─────────────────────────────────────── */}
-          <button
-            onClick={handleSearch}
-            className="
-              w-full rounded-tv-lg bg-orange-cta px-6 py-3
-              text-sm font-bold text-white
-              transition-colors hover:brightness-110 active:brightness-95
-              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-cta focus-visible:ring-offset-2
-              md:ml-auto md:w-auto md:min-w-[120px] md:self-end
-            "
-          >
-            {t.common.search}
-          </button>
+          {/* ── Orange CTA Button (only for non-form tabs) ───────────── */}
+          {activeTab !== 'hotels' && activeTab !== 'flights' && (
+            <button
+              onClick={handleSearch}
+              className="
+                w-full rounded-tv-lg bg-orange-cta px-6 py-3
+                text-sm font-bold text-white
+                transition-colors hover:brightness-110 active:brightness-95
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-cta focus-visible:ring-offset-2
+                md:ml-auto md:w-auto md:min-w-[120px] md:self-end
+              "
+            >
+              {t.common.search}
+            </button>
+          )}
         </div>
       </div>
 
@@ -202,7 +206,26 @@ export function SearchPanel() {
           </ul>
         </div>
       )}
-    </section>
+    </>
+  );
+
+  return (
+    <>
+      {/* ── Mobile: Collapsed bar + full-screen overlay (<768px) ─────────── */}
+      <div className="md:hidden">
+        <MobileSearchOverlay summary={t.search.destination}>
+          {searchPanelContent}
+        </MobileSearchOverlay>
+      </div>
+
+      {/* ── Desktop: Full search panel (≥768px) ─────────────────────────── */}
+      <section
+        className="hidden w-full rounded-[12px] bg-white shadow-card md:block md:rounded-[16px]"
+        aria-label={t.common.search}
+      >
+        {searchPanelContent}
+      </section>
+    </>
   );
 }
 
@@ -211,28 +234,6 @@ export function SearchPanel() {
 
 interface PlaceholderProps {
   t: ReturnType<typeof useLocale>['t'];
-}
-
-function HotelSearchPlaceholder({ t }: PlaceholderProps) {
-  return (
-    <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
-      <PlaceholderField label={t.search.destination} />
-      <PlaceholderField label={t.search.checkIn} />
-      <PlaceholderField label={t.search.checkOut} />
-      <PlaceholderField label={t.search.guestsCount} />
-    </div>
-  );
-}
-
-function FlightSearchPlaceholder({ t }: PlaceholderProps) {
-  return (
-    <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
-      <PlaceholderField label={t.search.origin} />
-      <PlaceholderField label={t.search.destination} />
-      <PlaceholderField label={t.search.departureDate} />
-      <PlaceholderField label={t.search.passengers} />
-    </div>
-  );
 }
 
 function TourSearchPlaceholder({ t }: PlaceholderProps) {

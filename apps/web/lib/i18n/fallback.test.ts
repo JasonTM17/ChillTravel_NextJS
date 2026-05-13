@@ -166,11 +166,11 @@ describe('getLocalizedField', () => {
 
   describe('handles edge cases gracefully (never throws)', () => {
     it('handles null object', () => {
-      expect(getLocalizedField(null, 'name', 'vi')).toBe('');
+      expect(getLocalizedField(null as unknown as Record<string, unknown>, 'name', 'vi')).toBe('');
     });
 
     it('handles undefined object', () => {
-      expect(getLocalizedField(undefined, 'name', 'en')).toBe('');
+      expect(getLocalizedField(undefined as unknown as Record<string, unknown>, 'name', 'en')).toBe('');
     });
 
     it('handles empty object', () => {

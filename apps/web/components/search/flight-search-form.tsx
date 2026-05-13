@@ -1,6 +1,7 @@
 'use client';
 
 import { CalendarDays, Users, Minus, Plus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState, useCallback, useMemo } from 'react';
 import { useLocale } from '@/lib/i18n';
 import { Autocomplete, type AutocompleteSuggestion } from './autocomplete';
@@ -13,6 +14,8 @@ type CabinClass = 'economy' | 'business' | 'first';
 interface FlightSearchFormProps {
   onSearch?: (params: FlightSearchParams) => void;
   fetchLocations?: (query: string) => Promise<AutocompleteSuggestion[]>;
+  /** If true, navigates to /flights with URL params on submit (default: true) */
+  navigateOnSearch?: boolean;
 }
 
 export interface FlightSearchParams {
@@ -53,8 +56,10 @@ const defaultFetchLocations = async (): Promise<AutocompleteSuggestion[]> => [];
 export function FlightSearchForm({
   onSearch,
   fetchLocations = defaultFetchLocations,
+  navigateOnSearch = true,
 }: FlightSearchFormProps) {
   const { t } = useLocale();
+  const router = useRouter();
 
   const [tripType, setTripType] = useState<TripType>('round-trip');
   const [origin, setOrigin] = useState('');
@@ -93,7 +98,7 @@ export function FlightSearchForm({
   }, []);
 
   const handleSubmit = useCallback(() => {
-    onSearch?.({
+    const params: FlightSearchParams = {
       origin,
       originId,
       destination,
@@ -103,7 +108,22 @@ export function FlightSearchForm({
       tripType,
       passengers,
       cabinClass,
-    });
+    };
+    onSearch?.(params);
+
+    if (navigateOnSearch) {
+      const searchParams = new URLSearchParams();
+      if (origin) searchParams.set('origin', origin);
+      if (originId) searchParams.set('originId', originId);
+      if (destination) searchParams.set('destination', destination);
+      if (destinationId) searchParams.set('destinationId', destinationId);
+      if (departureDate) searchParams.set('departureDate', departureDate);
+      if (tripType === 'round-trip' && returnDate) searchParams.set('returnDate', returnDate);
+      searchParams.set('tripType', tripType);
+      searchParams.set('passengers', String(passengers));
+      searchParams.set('cabinClass', cabinClass);
+      router.push(`/flights?${searchParams.toString()}`);
+    }
   }, [
     origin,
     originId,
@@ -115,6 +135,8 @@ export function FlightSearchForm({
     passengers,
     cabinClass,
     onSearch,
+    navigateOnSearch,
+    router,
   ]);
 
   const _cabinClassLabel = (cls: CabinClass): string => {

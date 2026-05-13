@@ -1,7 +1,7 @@
 'use client';
 
 import { ChevronUp, ChevronDown } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useLocale } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
@@ -23,7 +23,7 @@ interface OrderSummaryProps {
  * Order summary component.
  * Desktop (≥1024px): sticky sidebar with full breakdown.
  * Mobile (<1024px): collapsible bottom sheet — collapsed shows total (56px bar),
- * expanded shows max 85% viewport.
+ * expanded shows max 85% viewport. Toggled by tapping or vertical drag.
  */
 export function OrderSummary({
   serviceName,
@@ -35,6 +35,28 @@ export function OrderSummary({
 }: OrderSummaryProps) {
   const { t, fmt } = useLocale();
   const [expanded, setExpanded] = useState(false);
+  const touchStartY = useRef<number | null>(null);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0]?.clientY ?? null;
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      if (touchStartY.current === null) return;
+      const endY = e.changedTouches[0]?.clientY;
+      if (endY === undefined) return;
+      const deltaY = endY - touchStartY.current;
+      // Swipe up (negative delta) → expand; swipe down (positive delta) → collapse
+      if (deltaY < -30 && !expanded) {
+        setExpanded(true);
+      } else if (deltaY > 30 && expanded) {
+        setExpanded(false);
+      }
+      touchStartY.current = null;
+    },
+    [expanded],
+  );
 
   return (
     <>
@@ -101,6 +123,8 @@ export function OrderSummary({
             'relative z-50 bg-white border-t border-border rounded-t-tv-xl shadow-tv-modal transition-all duration-300 ease-in-out',
             expanded ? 'max-h-[85vh] overflow-y-auto' : 'h-14',
           )}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
           {/* Collapsed bar */}
           <button

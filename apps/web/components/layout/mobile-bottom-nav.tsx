@@ -6,14 +6,14 @@ import { usePathname } from 'next/navigation';
 
 /* ─── Navigation Item Definitions ─────────────────────────────────────────── */
 
-interface NavItem {
+export interface NavItem {
   id: string;
   label: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
   href: string;
 }
 
-const NAV_ITEMS: NavItem[] = [
+export const NAV_ITEMS: NavItem[] = [
   { id: 'home', label: 'Trang chủ', icon: Home, href: '/' },
   { id: 'search', label: 'Tìm kiếm', icon: Search, href: '/hotels' },
   { id: 'bookings', label: 'Đặt chỗ', icon: CalendarDays, href: '/my-bookings' },
@@ -26,8 +26,13 @@ const NAV_ITEMS: NavItem[] = [
 /**
  * Fixed bottom navigation bar visible only on mobile viewports (<768px).
  * Each icon tap target is at least 44×44 CSS pixels.
- * Bar height is at least 56px.
+ * Bar height is at least 56px (h-14 = 3.5rem = 56px).
  * Active state uses booking blue (#0277D4).
+ *
+ * Breakpoints:
+ * - Mobile (<768px): visible
+ * - Tablet (768-1024px): hidden (md:hidden)
+ * - Desktop (>1024px): hidden (md:hidden)
  *
  * @requirements 11.6, 13.1
  */
@@ -41,8 +46,9 @@ export function MobileBottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-white md:hidden"
+      className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-white pb-[env(safe-area-inset-bottom)] md:hidden"
       aria-label="Điều hướng chính"
+      role="navigation"
     >
       <div className="flex h-14 items-center justify-around">
         {NAV_ITEMS.map(({ id, label, icon: Icon, href }) => {

@@ -1,6 +1,7 @@
 'use client';
 
 import { Plane, Search } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import { useState, useMemo, useCallback } from 'react';
 import { FlightCard, type Flight } from '@/components/listing/flight-card';
 import { FlightFilterPanel, type FlightFilters } from '@/components/listing/flight-filter-panel';
@@ -120,6 +121,7 @@ function applyFlightFilters(flights: Flight[], filters: FlightFilters): Flight[]
 /* ─── Page Component ───────────────────────────────────────────────────────── */
 
 export default function FlightsPage() {
+  const searchParams = useSearchParams();
   const [filters, setFilters] = useState<FlightFilters>({
     timeBlocks: [],
     stops: [],
@@ -127,12 +129,45 @@ export default function FlightsPage() {
     priceRange: [0, 10_000_000],
   });
 
-  const filteredFlights = useMemo(() => applyFlightFilters(MOCK_FLIGHTS, filters), [filters]);
+  // Read search params from URL (passed from search panel)
+  const origin = searchParams.get('origin') ?? '';
+  const destination = searchParams.get('destination') ?? '';
+  const departureDate = searchParams.get('departureDate') ?? '';
+  const passengers = searchParams.get('passengers') ?? '1';
+  const tripType = searchParams.get('tripType') ?? 'round-trip';
+  const cabinClass = searchParams.get('cabinClass') ?? 'economy';
+
+  const filteredFlights = useMemo(() => {
+    let flights = MOCK_FLIGHTS;
+
+    // Filter by origin/destination from URL params if provided
+    if (origin) {
+      const originUpper = origin.toUpperCase();
+      flights = flights.filter(
+        (f) => f.origin.toUpperCase().includes(originUpper) || f.airline.toLowerCase().includes(origin.toLowerCase()),
+      );
+    }
+    if (destination) {
+      const destUpper = destination.toUpperCase();
+      const filtered = flights.filter((f) => f.destination.toUpperCase().includes(destUpper));
+      if (filtered.length > 0) flights = filtered;
+    }
+
+    return applyFlightFilters(flights, filters);
+  }, [filters, origin, destination]);
 
   const handleSelectFlight = useCallback((flight: Flight) => {
-    // Navigate to booking flow with flight data
-    window.location.href = `/booking/new?type=flight&id=${flight.id}`;
-  }, []);
+    // Navigate to booking flow with flight data and search params
+    const bookingParams = new URLSearchParams();
+    bookingParams.set('type', 'flight');
+    bookingParams.set('id', flight.id);
+    if (passengers) bookingParams.set('passengers', passengers);
+    window.location.href = `/booking/new?${bookingParams.toString()}`;
+  }, [passengers]);
+
+  const searchSummary = origin || destination
+    ? `${origin || '?'} → ${destination || '?'}${departureDate ? ` · ${departureDate}` : ''} · ${tripType === 'round-trip' ? 'Khứ hồi' : 'Một chiều'} · ${passengers} hành khách · ${cabinClass}`
+    : '';
 
   return (
     <PageShell
@@ -157,6 +192,11 @@ export default function FlightsPage() {
       </div>
 
       {/* Demo notice */}
+      {searchSummary && (
+        <div className="mb-4 rounded-tv border border-tv-border bg-sky-surface/50 px-4 py-3 text-sm text-muted-ink">
+          <span className="font-semibold text-ink">Tìm kiếm:</span> {searchSummary}
+        </div>
+      )}
       <div className="mb-6 flex items-center gap-2 rounded-tv bg-amber-50 border border-amber-200 px-4 py-2.5 text-tv-sm text-amber-800">
         <span className="font-bold">⚠️ Dữ liệu mẫu</span>
         <span>— Giá vé và lịch bay là mock data. Kiểm tra hãng bay cho dữ liệu thật.</span>

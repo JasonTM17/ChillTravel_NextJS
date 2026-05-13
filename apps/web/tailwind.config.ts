@@ -4,6 +4,15 @@ const config: Config = {
   darkMode: 'class',
   content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './lib/**/*.{ts,tsx}'],
   theme: {
+    screens: {
+      /* ─── Responsive Breakpoints (Requirements 11.6, 13.1) ─────────── */
+      /* Mobile: < 768px (default, no prefix needed) */
+      sm: '640px',
+      md: '768px' /* Tablet starts here */,
+      lg: '1024px' /* Desktop starts here */,
+      xl: '1280px',
+      '2xl': '1536px',
+    },
     extend: {
       colors: {
         /* ─── Design DNA Palette ─────────────────────────────────────────── */

@@ -1,8 +1,9 @@
 'use client';
 
 import { Copy, Check } from 'lucide-react';
-import { useCallback } from 'react';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
+import type { Locale } from '@/lib/i18n/types';
 import { cn } from '@/lib/utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -18,8 +19,9 @@ export interface Coupon {
   discountPercent: number;
 }
 
-interface CouponGridProps {
+export interface CouponGridProps {
   coupons: Coupon[];
+  locale: Locale;
 }
 
 // ─── Gradient presets ────────────────────────────────────────────────────────
@@ -33,20 +35,29 @@ const GRADIENTS = [
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function formatDate(dateStr: string): string {
-  // Expect ISO or parseable date, output DD/MM/YYYY
+function formatDate(dateStr: string, locale: Locale): string {
+  // Expect ISO or parseable date, output locale-aware format
   const d = new Date(dateStr);
   if (isNaN(d.getTime())) return dateStr;
   const day = String(d.getDate()).padStart(2, '0');
   const month = String(d.getMonth() + 1).padStart(2, '0');
   const year = d.getFullYear();
-  return `${day}/${month}/${year}`;
+  switch (locale) {
+    case 'en':
+      return `${month}/${day}/${year}`;
+    case 'ja':
+      return `${year}/${month}/${day}`;
+    case 'vi':
+    default:
+      return `${day}/${month}/${year}`;
+  }
 }
 
 // ─── Coupon Card ─────────────────────────────────────────────────────────────
 
-function CouponCard({ coupon, index }: { coupon: Coupon; index: number }) {
+function CouponCard({ coupon, index, locale }: { coupon: Coupon; index: number; locale: Locale }) {
   const [copied, setCopied] = useState(false);
+  const router = useRouter();
   const gradient = GRADIENTS[index % GRADIENTS.length];
 
   const handleCopy = useCallback(async () => {
@@ -58,6 +69,11 @@ function CouponCard({ coupon, index }: { coupon: Coupon; index: number }) {
       // Fallback: do nothing
     }
   }, [coupon.code]);
+
+  const handleUseCoupon = useCallback(() => {
+    // Navigate to booking flow with coupon pre-applied
+    router.push(`/booking/new?coupon=${encodeURIComponent(coupon.code)}`);
+  }, [coupon.code, router]);
 
   return (
     <article
@@ -91,11 +107,14 @@ function CouponCard({ coupon, index }: { coupon: Coupon; index: number }) {
 
         {/* Validity */}
         <p className="mb-3 text-xs text-white/70">
-          {formatDate(coupon.startDate)} – {formatDate(coupon.endDate)}
+          {formatDate(coupon.startDate, locale)} – {formatDate(coupon.endDate, locale)}
         </p>
 
         {/* CTA */}
-        <button className="w-full rounded-tv bg-white/20 px-4 py-2 text-sm font-bold backdrop-blur transition hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/40">
+        <button
+          onClick={handleUseCoupon}
+          className="w-full rounded-tv bg-white/20 px-4 py-2 text-sm font-bold backdrop-blur transition hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/40"
+        >
           Dùng ngay
         </button>
       </div>
@@ -105,7 +124,7 @@ function CouponCard({ coupon, index }: { coupon: Coupon; index: number }) {
 
 // ─── Grid Component ──────────────────────────────────────────────────────────
 
-export function CouponGrid({ coupons }: CouponGridProps) {
+export function CouponGrid({ coupons, locale }: CouponGridProps) {
   const visibleCoupons = coupons.slice(0, 8);
 
   if (visibleCoupons.length === 0) return null;
@@ -114,7 +133,7 @@ export function CouponGrid({ coupons }: CouponGridProps) {
     <section aria-label="Mã giảm giá">
       <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         {visibleCoupons.map((coupon, idx) => (
-          <CouponCard key={coupon.id} coupon={coupon} index={idx} />
+          <CouponCard key={coupon.id} coupon={coupon} index={idx} locale={locale} />
         ))}
       </div>
     </section>

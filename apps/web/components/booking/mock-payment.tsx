@@ -1,13 +1,24 @@
 'use client';
 
 import { ShieldCheck, CreditCard, Building2, Wallet } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useLocale } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
 type PaymentMethod = 'credit-card' | 'bank-transfer' | 'e-wallet';
 
+export interface PaymentFormData {
+  method: PaymentMethod;
+  cardNumber: string;
+  expiry: string;
+  cvv: string;
+}
+
 interface MockPaymentProps {
+  /** Previously entered payment data (restored on back/forward navigation) */
+  initialData?: PaymentFormData;
+  /** Called when payment form data changes (for state preservation) */
+  onDataChange?: (data: Partial<PaymentFormData>) => void;
   onSuccess: (referenceCode: string) => void;
   onFailure: () => void;
   className?: string;
@@ -36,14 +47,55 @@ function generateReferenceCode(): string {
 /**
  * Mock payment step with demo warning banner, payment method selection,
  * and fake credit card form. Never processes real transactions.
+ * Accepts initialData to restore previously entered values on back/forward navigation.
  */
-export function MockPayment({ onSuccess, onFailure, className }: MockPaymentProps) {
+export function MockPayment({ initialData, onDataChange, onSuccess, onFailure, className }: MockPaymentProps) {
   const { t } = useLocale();
-  const [method, setMethod] = useState<PaymentMethod>('credit-card');
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiry, setExpiry] = useState('');
-  const [cvv, setCvv] = useState('');
+  const [method, setMethod] = useState<PaymentMethod>(initialData?.method ?? 'credit-card');
+  const [cardNumber, setCardNumber] = useState(initialData?.cardNumber ?? '');
+  const [expiry, setExpiry] = useState(initialData?.expiry ?? '');
+  const [cvv, setCvv] = useState(initialData?.cvv ?? '');
   const [processing, setProcessing] = useState(false);
+
+  // Report data changes to parent for preservation
+  const reportChange = useCallback(
+    (updates: Partial<PaymentFormData>) => {
+      onDataChange?.(updates);
+    },
+    [onDataChange],
+  );
+
+  const handleMethodChange = useCallback(
+    (m: PaymentMethod) => {
+      setMethod(m);
+      reportChange({ method: m });
+    },
+    [reportChange],
+  );
+
+  const handleCardNumberChange = useCallback(
+    (value: string) => {
+      setCardNumber(value);
+      reportChange({ cardNumber: value });
+    },
+    [reportChange],
+  );
+
+  const handleExpiryChange = useCallback(
+    (value: string) => {
+      setExpiry(value);
+      reportChange({ expiry: value });
+    },
+    [reportChange],
+  );
+
+  const handleCvvChange = useCallback(
+    (value: string) => {
+      setCvv(value);
+      reportChange({ cvv: value });
+    },
+    [reportChange],
+  );
 
   const handleConfirmPayment = () => {
     setProcessing(true);
@@ -86,7 +138,7 @@ export function MockPayment({ onSuccess, onFailure, className }: MockPaymentProp
           <button
             key={id}
             type="button"
-            onClick={() => setMethod(id)}
+            onClick={() => handleMethodChange(id)}
             className={cn(
               'flex items-center gap-3 w-full rounded-tv border p-4 text-left transition-colors',
               method === id
@@ -128,7 +180,7 @@ export function MockPayment({ onSuccess, onFailure, className }: MockPaymentProp
               placeholder="4242 4242 4242 4242"
               maxLength={19}
               value={cardNumber}
-              onChange={(e) => setCardNumber(e.target.value)}
+              onChange={(e) => handleCardNumberChange(e.target.value)}
               className="w-full rounded-tv-sm border border-border px-3 py-2.5 text-sm text-ink placeholder:text-muted-ink/60 focus:border-booking-blue focus:outline-none focus:ring-1 focus:ring-booking-blue"
               autoComplete="off"
             />

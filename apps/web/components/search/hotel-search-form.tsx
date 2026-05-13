@@ -1,6 +1,7 @@
 'use client';
 
 import { CalendarDays, Users, Minus, Plus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState, useCallback, useMemo } from 'react';
 import { useLocale } from '@/lib/i18n';
 import { Autocomplete, type AutocompleteSuggestion } from './autocomplete';
@@ -10,6 +11,8 @@ import { Autocomplete, type AutocompleteSuggestion } from './autocomplete';
 interface HotelSearchFormProps {
   onSearch?: (params: HotelSearchParams) => void;
   fetchDestinations?: (query: string) => Promise<AutocompleteSuggestion[]>;
+  /** If true, navigates to /hotels with URL params on submit (default: true) */
+  navigateOnSearch?: boolean;
 }
 
 export interface HotelSearchParams {
@@ -26,7 +29,7 @@ export interface HotelSearchParams {
 const MIN_ROOMS = 1;
 const MAX_ROOMS = 8;
 const MIN_GUESTS = 1;
-const MAX_GUESTS_PER_ROOM = 16;
+const MAX_GUESTS = 16;
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -56,8 +59,10 @@ const defaultFetchDestinations = async (): Promise<AutocompleteSuggestion[]> => 
 export function HotelSearchForm({
   onSearch,
   fetchDestinations = defaultFetchDestinations,
+  navigateOnSearch = true,
 }: HotelSearchFormProps) {
   const { t } = useLocale();
+  const router = useRouter();
 
   const [destination, setDestination] = useState('');
   const [destinationId, setDestinationId] = useState('');
@@ -89,17 +94,29 @@ export function HotelSearchForm({
   }, []);
 
   const handleSubmit = useCallback(() => {
-    onSearch?.({
+    const params: HotelSearchParams = {
       destination,
       destinationId,
       checkIn,
       checkOut,
       rooms,
       guests,
-    });
-  }, [destination, destinationId, checkIn, checkOut, rooms, guests, onSearch]);
+    };
+    onSearch?.(params);
 
-  const maxGuests = rooms * MAX_GUESTS_PER_ROOM;
+    if (navigateOnSearch) {
+      const searchParams = new URLSearchParams();
+      if (destination) searchParams.set('destination', destination);
+      if (destinationId) searchParams.set('destinationId', destinationId);
+      if (checkIn) searchParams.set('checkIn', checkIn);
+      if (checkOut) searchParams.set('checkOut', checkOut);
+      searchParams.set('rooms', String(rooms));
+      searchParams.set('guests', String(guests));
+      router.push(`/hotels?${searchParams.toString()}`);
+    }
+  }, [destination, destinationId, checkIn, checkOut, rooms, guests, onSearch, navigateOnSearch, router]);
+
+  const maxGuests = MAX_GUESTS;
 
   return (
     <div className="flex flex-col gap-4">

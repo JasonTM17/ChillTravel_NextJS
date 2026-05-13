@@ -1,7 +1,5 @@
 'use client';
 
-import { MobileBottomNav } from './mobile-bottom-nav';
-
 /* ─── Responsive Layout Component ─────────────────────────────────────────── */
 
 /**
@@ -10,7 +8,10 @@ import { MobileBottomNav } from './mobile-bottom-nav';
  * - Tablet (768-1024px): single-column with full header visible
  * - Desktop (>1024px): multi-column layout with sticky trip cart sidebar
  *
- * Uses Tailwind responsive classes (md: for ≥768px, lg: for ≥1024px).
+ * Uses Tailwind responsive classes:
+ * - Default (no prefix): mobile styles
+ * - md: (≥768px): tablet styles
+ * - lg: (≥1024px): desktop styles
  *
  * @requirements 11.6, 13.1
  */
@@ -19,7 +20,7 @@ interface ResponsiveLayoutProps {
   children: React.ReactNode;
   /** Optional sidebar content (e.g., trip cart) shown on desktop only */
   sidebar?: React.ReactNode;
-  /** Whether to show the bottom navigation on mobile (default: true) */
+  /** Whether to show bottom padding spacer for mobile nav (default: true) */
   showBottomNav?: boolean;
   /** Additional CSS classes for the main content area */
   className?: string;
@@ -48,9 +49,6 @@ export function ResponsiveLayout({
           )}
         </div>
       </div>
-
-      {/* Bottom navigation — mobile only (<768px) */}
-      {showBottomNav && <MobileBottomNav />}
 
       {/* Bottom padding spacer on mobile to prevent content from being hidden behind bottom nav */}
       {showBottomNav && <div className="h-14 md:hidden" aria-hidden="true" />}

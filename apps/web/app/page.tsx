@@ -34,6 +34,7 @@ import type { FlashSaleItem } from '@/components/promo';
 import type { Deal } from '@/components/promo';
 import { destinationApi, getCountryName } from '@/lib/api/destination.api';
 import type { Destination } from '@/lib/api/destination.api';
+import { useLocale } from '@/lib/i18n/use-locale';
 import { tourApi } from '@/lib/api/tour.api';
 import type { Tour } from '@/lib/api/tour.api';
 import { getDestinationImage } from '@/lib/destination-images';
@@ -228,6 +229,7 @@ function CardSkeleton() {
 
 /* ─── Main page ─────────────────────────────────────────────────────────────── */
 export default function HomePage() {
+  const { locale } = useLocale();
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [tours, setTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
@@ -296,7 +298,7 @@ export default function HomePage() {
         <div className="flex items-center justify-between mb-3">
           <h2 className="tv-section-title">Mã giảm giá</h2>
         </div>
-        <CouponGrid coupons={MOCK_COUPONS} />
+        <CouponGrid coupons={MOCK_COUPONS} locale={locale} />
       </div>
 
       {/* ── Main content ─────────────────────────────────────────────────── */}
@@ -443,7 +445,7 @@ function HeroSearch() {
 
             {/* Search button */}
             <Link
-              href="/explore"
+              href="/hotels?destination=Đà+Nẵng&checkIn=2026-08-12&checkOut=2026-08-16&rooms=1&guests=2"
               className="flex items-center justify-center gap-2 rounded-tv bg-tv-orange px-6 py-3 text-tv-base font-bold text-white hover:bg-tv-orange-dark transition-colors"
             >
               <Search size={18} />

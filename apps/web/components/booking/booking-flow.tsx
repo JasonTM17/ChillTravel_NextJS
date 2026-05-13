@@ -6,7 +6,7 @@ import { useLocale } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 import { BookingConfirmation } from './booking-confirmation';
 import { BookingStepper, type BookingStep } from './booking-stepper';
-import { MockPayment } from './mock-payment';
+import { MockPayment, type PaymentFormData } from './mock-payment';
 import { OrderSummary, type OrderItem } from './order-summary';
 
 const STEP_ORDER: BookingStep[] = ['select', 'details', 'payment', 'confirmation'];
@@ -55,6 +55,13 @@ const DEFAULT_FORM_DATA: BookingFormData = {
   details: {},
 };
 
+const DEFAULT_PAYMENT_DATA: PaymentFormData = {
+  method: 'credit-card',
+  cardNumber: '',
+  expiry: '',
+  cvv: '',
+};
+
 /**
  * Booking flow orchestrator.
  * Manages step state (select → details → payment → confirmation),
@@ -73,6 +80,7 @@ export function BookingFlow({
     ...DEFAULT_FORM_DATA,
     ...initialData,
   });
+  const [paymentData, setPaymentData] = useState<PaymentFormData>(DEFAULT_PAYMENT_DATA);
   const [referenceCode, setReferenceCode] = useState<string>('');
   const [paymentStatus, setPaymentStatus] = useState<'success' | 'failed' | null>(null);
 
@@ -80,6 +88,10 @@ export function BookingFlow({
 
   const updateFormData = useCallback((updates: Partial<BookingFormData>) => {
     setFormData((prev) => ({ ...prev, ...updates }));
+  }, []);
+
+  const updatePaymentData = useCallback((updates: Partial<PaymentFormData>) => {
+    setPaymentData((prev) => ({ ...prev, ...updates }));
   }, []);
 
   const goToNext = useCallback(() => {
@@ -170,7 +182,12 @@ export function BookingFlow({
           )}
 
           {currentStep === 'payment' && (
-            <MockPayment onSuccess={handlePaymentSuccess} onFailure={handlePaymentFailure} />
+            <MockPayment
+              initialData={paymentData}
+              onDataChange={updatePaymentData}
+              onSuccess={handlePaymentSuccess}
+              onFailure={handlePaymentFailure}
+            />
           )}
 
           {currentStep === 'confirmation' && (

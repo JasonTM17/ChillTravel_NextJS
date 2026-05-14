@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wanderviet/src/application/travel_providers.dart';
 import 'package:wanderviet/src/core/api/vietwander_api_client.dart';
 import 'package:wanderviet/src/data/cache/travel_offline_cache.dart';
 import 'package:wanderviet/src/data/repositories/booking_repository.dart';

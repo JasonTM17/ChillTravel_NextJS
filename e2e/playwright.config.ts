@@ -19,7 +19,11 @@ export default defineConfig({
   /* Use multiple workers in CI for parallel execution within each shard */
   workers: process.env.CI ? 2 : undefined,
   reporter: process.env.CI
-    ? [['html', { outputFolder: 'playwright-report' }], ['github'], ['json', { outputFile: 'test-results/results.json' }]]
+    ? [
+        ['html', { outputFolder: 'playwright-report' }],
+        ['github'],
+        ['json', { outputFile: 'test-results/results.json' }],
+      ]
     : [['html', { outputFolder: 'playwright-report' }], ['list']],
   /* Global timeout per test */
   timeout: 60_000,
@@ -27,7 +31,7 @@ export default defineConfig({
     timeout: 10_000,
   },
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:3001',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'on-first-retry',
@@ -43,13 +47,13 @@ export default defineConfig({
   webServer: [
     {
       command: 'pnpm --filter @vietwander/api dev',
-      url: 'http://localhost:4000/health',
+      url: 'http://localhost:4000/health/live',
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,
     },
     {
       command: 'pnpm --filter @vietwander/web dev',
-      url: 'http://localhost:3000',
+      url: 'http://localhost:3001',
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,
     },

@@ -25,7 +25,7 @@ export function HeroSearch({ t }: { t: TranslationNamespace }) {
 
         {/* Search card */}
         <div className="rounded-2xl bg-white p-5 shadow-[0_20px_60px_rgba(0,0,0,0.3)] md:p-6">
-          <div className="grid gap-3 md:grid-cols-[1fr_160px_160px_140px_auto]">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_160px_160px_140px_auto]">
             {/* Destination */}
             <div className="tv-search-field">
               <label className="text-[11px] font-semibold uppercase tracking-wider text-tv-ink-3">

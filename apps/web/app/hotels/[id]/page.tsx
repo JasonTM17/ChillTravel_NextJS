@@ -48,7 +48,7 @@ export default function HotelDetailPage() {
   }
 
   return (
-    <main className="min-h-screen bg-sky-surface/30 text-ink">
+    <main className="min-h-screen bg-sky-surface/30 pb-20 text-ink lg:pb-0">
       {/* Breadcrumb Header */}
       <section className="border-b border-border bg-white">
         <div className="mx-auto max-w-[1180px] px-4 py-4">

@@ -33,7 +33,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <AuthProvider>
           <LocaleProvider>
             <SiteHeader />
-            {children}
+            <div className="pb-16 md:pb-0">{children}</div>
             <MobileBottomNav />
           </LocaleProvider>
         </AuthProvider>

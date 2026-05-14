@@ -29,6 +29,7 @@ import {
   DepartureRow,
   ReviewCard,
   BookingBox,
+  TourMobileBookingBar,
 } from './_components/tour-detail-widgets';
 
 export default function TourDetail({ params }: { params: Promise<{ slug: string }> }) {
@@ -381,6 +382,8 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
           />
         </aside>
       </section>
+
+      <TourMobileBookingBar displayPrice={displayPrice} bookingUrl={bookingUrl} />
     </main>
   );
 }

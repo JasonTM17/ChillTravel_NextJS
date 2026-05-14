@@ -103,6 +103,11 @@ export function FlashSaleSection() {
               <img
                 src={item.image}
                 alt={item.name}
+                loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.src = '/brand/logo-mark-islands.png';
+                  e.currentTarget.className = 'h-full w-full object-contain p-8 opacity-40';
+                }}
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
               <span className="absolute left-2 top-2 rounded-md bg-red-600 px-2 py-0.5 text-[11px] font-bold text-white">

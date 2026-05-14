@@ -425,3 +425,33 @@ export function TourOverviewCards({ tour, displayPrice }: { tour: Tour; displayP
     </div>
   );
 }
+
+// ---------------------------------------------------------------------------
+// Mobile booking CTA bar
+// ---------------------------------------------------------------------------
+
+export function TourMobileBookingBar({
+  displayPrice,
+  bookingUrl,
+}: {
+  displayPrice: number;
+  bookingUrl: string;
+}) {
+  return (
+    <div className="fixed bottom-16 left-0 right-0 z-40 border-t border-tv-border bg-white p-3 shadow-tv-header md:hidden">
+      <div className="mx-auto flex max-w-[1180px] items-center justify-between gap-3">
+        <div>
+          <p className="text-xs font-bold text-tv-ink-3">Gia tu</p>
+          <p className="text-lg font-bold text-tv-orange">{formatVnd(displayPrice)}</p>
+        </div>
+        <Link
+          href={bookingUrl}
+          className="inline-flex items-center gap-2 rounded-tv bg-tv-orange px-5 py-3 font-bold text-white shadow-tv-card hover:bg-tv-orange-dark"
+        >
+          Dat tour
+          <ArrowRight size={16} aria-hidden="true" />
+        </Link>
+      </div>
+    </div>
+  );
+}

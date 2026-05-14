@@ -515,7 +515,7 @@ export function StickyPriceSummary({
   const isRoomSelected = selectedRoomId !== null;
 
   return (
-    <div className="hidden lg:block">
+    <div className="hidden md:block">
       <div className="sticky top-24 space-y-4">
         <CommerceSurface>
           <h3 className="text-lg font-bold">Tóm tắt giá</h3>
@@ -584,7 +584,7 @@ export function MobileBottomBar({
   const lowestPrice = Math.min(...rooms.map((r) => r.nightlyPrice));
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-white p-3 shadow-tv-header lg:hidden">
+    <div className="fixed bottom-16 left-0 right-0 z-40 border-t border-border bg-white p-3 shadow-tv-header md:hidden">
       <div className="mx-auto flex max-w-[1180px] items-center justify-between gap-3">
         <div>
           {selectedRoomId && selectedRoom ? (

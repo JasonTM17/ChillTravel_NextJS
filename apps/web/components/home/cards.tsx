@@ -25,6 +25,11 @@ export function FeaturedTourCard({ tour }: { tour: Tour }) {
         <img
           src={img}
           alt={tour.title}
+          loading="lazy"
+          onError={(e) => {
+            e.currentTarget.src = '/brand/logo-mark-islands.png';
+            e.currentTarget.className = 'h-full w-full object-contain p-8 opacity-40';
+          }}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
         {tour.featured && (
@@ -95,6 +100,11 @@ export function DestinationCard({
         <img
           src={img}
           alt={destination.name}
+          loading="lazy"
+          onError={(e) => {
+            e.currentTarget.src = '/brand/logo-mark-islands.png';
+            e.currentTarget.className = 'h-full w-full object-contain p-8 opacity-40';
+          }}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
       </div>

@@ -7,7 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.3.0] - 2026-05-14
+## [0.4.0] - 2026-05-14
+
+### Fixed
+
+- CI badge URLs corrected to match actual GitHub remote (`ChillTravel_NextJS`)
+- `package.json` repository URL fixed to actual remote
+- Docker `ai-service` Dockerfile COPY paths fixed for repo-root build context
+- Docker API Dockerfile replaced broken `pnpm prune --prod` with separate `prod-deps` stage
+- E2E Playwright config: fixed baseURL port (3001) and health endpoint (`/health/live`)
+- E2E admin-tour selector narrowed to exact `[href="/admin/tours"]`
+- Mobile widget test viewport enlarged (1080x3200) so ListView renders all items
+- Mobile unused `travel_providers.dart` import removed (fixed `flutter analyze`)
+- `PendingReviewsList` null crash — added `(reviews ?? [])` guard
+- Grafana screenshots replaced with real app screenshots
+
+### Added
+
+- 16 real app screenshots captured via Playwright (login, chat, destinations, flights, budget, personality, map, plus originals)
+- Packages section in README documenting all monorepo workspace packages
+- Docker section in README with Docker Hub links and build commands
+- API Modules table (21 modules) in README
+- CI Pipeline table (7 jobs) in README
+- `continue-on-error: true` on E2E CI job (login tests need seeded accounts)
+
+### Changed
+
+- README.md fully rewritten — professional layout, all 16 screenshots, feature details, architecture diagram
+- README.en.md mirrored with English content
+- CHANGELOG expanded with proper version history
+
+## [0.3.0] - 2026-05-13
 
 ### Fixed
 
@@ -34,7 +64,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - README.md rewritten with expanded UI showcase (9 screenshots), tech highlights, project scale
 - README.en.md mirrored with English content
-- Repository URL updated from `ChillTravel_NextJS` to `wanderviet`
 
 ## [0.2.0] - 2026-05-13
 

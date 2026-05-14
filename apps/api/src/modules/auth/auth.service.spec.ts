@@ -62,14 +62,16 @@ function makeJwt() {
 }
 
 function makeConfig() {
+  const map: Record<string, string> = {
+    JWT_ACCESS_SECRET: 'test_access_secret_at_least_16_chars',
+    JWT_REFRESH_SECRET: 'test_refresh_secret_at_least_16_chars',
+    JWT_ACCESS_EXPIRATION: '15m',
+    JWT_REFRESH_EXPIRATION: '7d',
+  };
   return {
-    get: vi.fn((key: string) => {
-      const map: Record<string, string> = {
-        JWT_ACCESS_SECRET: 'test_access_secret_at_least_16_chars',
-        JWT_REFRESH_SECRET: 'test_refresh_secret_at_least_16_chars',
-        JWT_ACCESS_EXPIRATION: '15m',
-        JWT_REFRESH_EXPIRATION: '7d',
-      };
+    get: vi.fn((key: string) => map[key]),
+    getOrThrow: vi.fn((key: string) => {
+      if (!(key in map)) throw new Error(`Missing config: ${key}`);
       return map[key];
     }),
   };

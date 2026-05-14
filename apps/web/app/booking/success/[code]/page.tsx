@@ -124,17 +124,17 @@ function Stepper({ current }: { current: number }) {
             <span
               className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                 active
-                  ? 'bg-[tv-blue] text-white ring-4 ring-[#b8ddff]'
+                  ? 'bg-tv-blue text-white ring-4 ring-[#b8ddff]'
                   : done
                     ? 'bg-[#0f8b7b] text-white'
-                    : 'bg-[tv-border] text-[#8b99a7]'
+                    : 'bg-tv-border text-[#8b99a7]'
               }`}
             >
               {i + 1}
             </span>
             <span
               className={`hidden font-bold sm:inline ${
-                active ? 'text-[tv-blue]' : done ? 'text-[#0f8b7b]' : 'text-[#8b99a7]'
+                active ? 'text-tv-blue' : done ? 'text-[#0f8b7b]' : 'text-[#8b99a7]'
               }`}
             >
               {step}
@@ -156,26 +156,24 @@ function Stepper({ current }: { current: number }) {
 function BookingSummaryCard({ booking }: { booking: Booking }) {
   return (
     <CommerceSurface>
-      <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
-        Tóm tắt đặt tour
-      </p>
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">Tóm tắt đặt tour</p>
       <div className="mt-4 space-y-3">
         <div>
-          <p className="font-bold text-[tv-ink]">
+          <p className="font-bold text-tv-ink">
             {booking.tour?.title ?? `Tour #${booking.tourId}`}
           </p>
-          <p className="mt-1 text-sm font-bold text-[tv-ink-3]">
-            Mã đặt tour: <span className="font-bold text-[tv-blue]">{booking.bookingCode}</span>
+          <p className="mt-1 text-sm font-bold text-tv-ink-3">
+            Mã đặt tour: <span className="font-bold text-tv-blue">{booking.bookingCode}</span>
           </p>
         </div>
 
         <div className="space-y-2 text-sm">
-          <div className="flex items-center gap-2 text-[tv-ink-3]">
-            <CalendarDays size={14} className="text-[tv-blue]" aria-hidden="true" />
+          <div className="flex items-center gap-2 text-tv-ink-3">
+            <CalendarDays size={14} className="text-tv-blue" aria-hidden="true" />
             <span>Ngày đặt: {formatDateVi(new Date(booking.bookingDate))}</span>
           </div>
-          <div className="flex items-center gap-2 text-[tv-ink-3]">
-            <Users size={14} className="text-[tv-blue]" aria-hidden="true" />
+          <div className="flex items-center gap-2 text-tv-ink-3">
+            <Users size={14} className="text-tv-blue" aria-hidden="true" />
             <span>{booking.numberOfGuests} khách</span>
           </div>
         </div>
@@ -184,10 +182,10 @@ function BookingSummaryCard({ booking }: { booking: Booking }) {
           <StatusPill tone="orange">Chờ thanh toán</StatusPill>
         </div>
 
-        <div className="border-t border-[tv-border] pt-3">
+        <div className="border-t border-tv-border pt-3">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-[tv-ink]">Tổng thanh toán</span>
-            <span className="text-xl font-bold text-[tv-orange]">
+            <span className="font-bold text-tv-ink">Tổng thanh toán</span>
+            <span className="text-xl font-bold text-tv-orange">
               {formatVnd(booking.totalPrice)}
             </span>
           </div>
@@ -303,7 +301,7 @@ function PaymentContent() {
     return (
       <PageShell eyebrow="Thanh toán" title="Đang tải thông tin...">
         <div className="flex items-center justify-center py-20">
-          <Loader2 size={32} className="animate-spin text-[tv-blue]" aria-hidden="true" />
+          <Loader2 size={32} className="animate-spin text-tv-blue" aria-hidden="true" />
         </div>
       </PageShell>
     );
@@ -321,7 +319,7 @@ function PaymentContent() {
             </p>
             <Link
               href="/my-bookings"
-              className="rounded-tv bg-[tv-blue] px-6 py-3 text-sm font-bold text-white"
+              className="rounded-tv bg-tv-blue px-6 py-3 text-sm font-bold text-white"
             >
               Xem lịch sử booking
             </Link>
@@ -346,7 +344,7 @@ function PaymentContent() {
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <h2 className="text-xl font-bold">Phương thức thanh toán</h2>
-                <p className="mt-1 text-sm text-[tv-ink-3]">
+                <p className="mt-1 text-sm text-tv-ink-3">
                   Chọn phương thức demo. Không nhập số thẻ thật.
                 </p>
               </div>
@@ -365,26 +363,26 @@ function PaymentContent() {
                     onClick={() => setSelectedMethod(id)}
                     className={`flex items-center gap-3 rounded-tv border p-4 text-left transition ${
                       active
-                        ? 'border-[tv-blue] bg-[tv-blue-light] ring-2 ring-[tv-blue]/10'
-                        : 'border-[tv-border] bg-white hover:border-[tv-blue] hover:bg-[tv-bg]'
+                        ? 'border-tv-blue bg-tv-blue-light ring-2 ring-tv-blue/10'
+                        : 'border-tv-border bg-white hover:border-tv-blue hover:bg-tv-bg'
                     }`}
                     aria-pressed={active}
                   >
                     <span
                       className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border ${
-                        active ? 'border-[tv-blue] bg-[tv-blue]' : 'border-[#8b99a7]'
+                        active ? 'border-tv-blue bg-tv-blue' : 'border-[#8b99a7]'
                       }`}
                     >
                       {active && <span className="h-2 w-2 rounded-full bg-white" />}
                     </span>
                     <Icon
                       size={24}
-                      className={active ? 'text-[tv-blue]' : 'text-[tv-ink-3]'}
+                      className={active ? 'text-tv-blue' : 'text-tv-ink-3'}
                       aria-hidden="true"
                     />
                     <span className="min-w-0">
                       <span className="block font-bold">{label}</span>
-                      <span className="mt-0.5 block text-sm text-[tv-ink-3]">{description}</span>
+                      <span className="mt-0.5 block text-sm text-tv-ink-3">{description}</span>
                     </span>
                   </button>
                 );
@@ -413,7 +411,7 @@ function PaymentContent() {
               type="button"
               onClick={handlePay}
               disabled={paying}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-tv bg-[tv-orange] px-4 py-4 font-bold text-white shadow-tv-card transition hover:bg-[tv-orange-dark] disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-tv bg-tv-orange px-4 py-4 font-bold text-white shadow-tv-card transition hover:bg-tv-orange-dark disabled:cursor-not-allowed disabled:opacity-60"
             >
               {paying ? (
                 <>
@@ -435,19 +433,19 @@ function PaymentContent() {
             </div>
 
             {paying && (
-              <p className="mt-3 text-center text-xs font-bold text-[tv-ink-3]">
+              <p className="mt-3 text-center text-xs font-bold text-tv-ink-3">
                 Đang mô phỏng giao dịch... Vui lòng không đóng trang.
               </p>
             )}
           </CommerceSurface>
 
           {/* QR preview */}
-          <div className="rounded-tv border border-[tv-border] bg-[tv-blue-light] p-5 text-center">
-            <div className="mx-auto grid h-20 w-20 place-items-center rounded-tv bg-white text-[tv-blue]">
+          <div className="rounded-tv border border-tv-border bg-tv-blue-light p-5 text-center">
+            <div className="mx-auto grid h-20 w-20 place-items-center rounded-tv bg-white text-tv-blue">
               <QrCode size={48} aria-hidden="true" />
             </div>
             <h3 className="mt-3 text-base font-bold">Vé QR demo</h3>
-            <p className="mt-1 text-xs leading-5 text-[tv-ink-3]">
+            <p className="mt-1 text-xs leading-5 text-tv-ink-3">
               Vé điện tử demo sẽ được tạo sau khi xác nhận thanh toán.
             </p>
           </div>
@@ -464,7 +462,7 @@ function PaymentContent() {
 function PaymentFallback() {
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[tv-blue]" />
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-tv-blue" />
     </div>
   );
 }

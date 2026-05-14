@@ -29,7 +29,7 @@ function ToastContainer({ toasts }: { toasts: ToastMsg[] }) {
         <div
           key={t.id}
           className={`rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg ${
-            t.type === 'success' ? 'bg-[tv-blue]' : 'bg-red-500'
+            t.type === 'success' ? 'bg-tv-blue' : 'bg-red-500'
           }`}
         >
           {t.text}
@@ -123,13 +123,13 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[tv-blue-light] p-6">
+    <div className="min-h-screen bg-tv-blue-light p-6">
       <ToastContainer toasts={toasts} />
 
       {/* Breadcrumbs */}
       <nav className="mb-4 text-sm text-gray-500">
         <span>Admin</span> <span className="mx-1">/</span>
-        <span className="font-semibold text-[tv-blue]">Người dùng</span>
+        <span className="font-semibold text-tv-blue">Người dùng</span>
       </nav>
 
       {/* Header */}
@@ -138,7 +138,7 @@ export default function AdminUsersPage() {
           <h1 className="text-2xl font-bold text-gray-900">Quản lý người dùng</h1>
           {totalElements > 0 && (
             <p className="mt-1 text-sm text-gray-500">
-              Tổng cộng <span className="font-semibold text-[tv-blue]">{totalElements}</span> người
+              Tổng cộng <span className="font-semibold text-tv-blue">{totalElements}</span> người
               dùng
             </p>
           )}
@@ -151,11 +151,11 @@ export default function AdminUsersPage() {
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Tìm theo email hoặc tên..."
-            className="rounded-tv-sm border border-gray-200 bg-white px-4 py-2 text-sm focus:border-[tv-blue] focus:outline-none"
+            className="rounded-tv-sm border border-gray-200 bg-white px-4 py-2 text-sm focus:border-tv-blue focus:outline-none"
           />
           <button
             type="submit"
-            className="rounded-tv-sm bg-[tv-blue] px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+            className="rounded-tv-sm bg-tv-blue px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
           >
             Tìm
           </button>
@@ -181,7 +181,7 @@ export default function AdminUsersPage() {
             <p className="mb-3 text-red-500">{error}</p>
             <button
               onClick={load}
-              className="rounded-lg bg-[tv-blue] px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+              className="rounded-lg bg-tv-blue px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
             >
               Thử lại
             </button>
@@ -196,7 +196,7 @@ export default function AdminUsersPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b bg-[tv-blue-light] text-left text-xs font-bold uppercase text-gray-500">
+                <tr className="border-b bg-tv-blue-light text-left text-xs font-bold uppercase text-gray-500">
                   <th className="px-4 py-3">Email</th>
                   <th className="px-4 py-3">Họ tên</th>
                   <th className="px-4 py-3">Điện thoại</th>
@@ -209,7 +209,7 @@ export default function AdminUsersPage() {
               <tbody>
                 {items.map((item) => (
                   <tr key={item.id} className="border-b last:border-0 hover:bg-gray-50">
-                    <td className="px-4 py-3 font-semibold text-[tv-blue]">{item.email}</td>
+                    <td className="px-4 py-3 font-semibold text-tv-blue">{item.email}</td>
                     <td className="px-4 py-3 text-gray-900">{item.fullName ?? '—'}</td>
                     <td className="px-4 py-3 text-gray-600">{item.phone ?? '—'}</td>
                     <td className="px-4 py-3">

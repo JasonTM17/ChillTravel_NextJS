@@ -28,7 +28,7 @@ function ToastContainer({ toasts }: { toasts: ToastMsg[] }) {
       {toasts.map((t) => (
         <div
           key={t.id}
-          className={`rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg ${t.type === 'success' ? 'bg-[tv-blue]' : 'bg-red-500'}`}
+          className={`rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg ${t.type === 'success' ? 'bg-tv-blue' : 'bg-red-500'}`}
         >
           {t.text}
         </div>
@@ -98,21 +98,21 @@ function ContactDrawer({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-[tv-blue]">Chi tiết liên hệ</h2>
+          <h2 className="text-lg font-bold text-tv-blue">Chi tiết liên hệ</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl font-bold">
             ×
           </button>
         </div>
 
         <div className="space-y-4">
-          <div className="rounded-tv-sm bg-[tv-blue-light] p-4 space-y-2">
+          <div className="rounded-tv-sm bg-tv-blue-light p-4 space-y-2">
             <div>
               <p className="text-xs text-gray-500">Họ tên</p>
               <p className="font-bold text-gray-900">{contact.name}</p>
             </div>
             <div>
               <p className="text-xs text-gray-500">Email</p>
-              <p className="font-semibold text-[tv-blue]">{contact.email}</p>
+              <p className="font-semibold text-tv-blue">{contact.email}</p>
             </div>
             {contact.phone && (
               <div>
@@ -138,7 +138,7 @@ function ContactDrawer({
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-[tv-blue] focus:outline-none"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-tv-blue focus:outline-none"
             >
               <option value="NEW">Mới</option>
               <option value="IN_PROGRESS">Đang xử lý</option>
@@ -150,7 +150,7 @@ function ContactDrawer({
           <div>
             <label className="mb-1 block text-xs font-semibold text-gray-600">Giao cho</label>
             <input
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-[tv-blue] focus:outline-none"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-tv-blue focus:outline-none"
               value={assignedTo}
               onChange={(e) => setAssignedTo(e.target.value)}
               placeholder="Email nhân viên..."
@@ -160,7 +160,7 @@ function ContactDrawer({
           <div>
             <label className="mb-1 block text-xs font-semibold text-gray-600">Ghi chú admin</label>
             <textarea
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-[tv-blue] focus:outline-none"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-tv-blue focus:outline-none"
               rows={3}
               value={adminNote}
               onChange={(e) => setAdminNote(e.target.value)}
@@ -171,7 +171,7 @@ function ContactDrawer({
           <button
             onClick={handleSave}
             disabled={saving}
-            className="w-full rounded-tv-sm bg-[tv-orange] py-2.5 text-sm font-bold text-white hover:bg-orange-600 disabled:opacity-60"
+            className="w-full rounded-tv-sm bg-tv-orange py-2.5 text-sm font-bold text-white hover:bg-orange-600 disabled:opacity-60"
           >
             {saving ? 'Đang lưu...' : 'Lưu thay đổi'}
           </button>
@@ -222,12 +222,12 @@ export default function AdminContactsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[tv-blue-light] p-6">
+    <div className="min-h-screen bg-tv-blue-light p-6">
       <ToastContainer toasts={toasts} />
 
       <nav className="mb-4 text-sm text-gray-500">
         <span>Admin</span> <span className="mx-1">/</span>
-        <span className="font-semibold text-[tv-blue]">Liên hệ</span>
+        <span className="font-semibold text-tv-blue">Liên hệ</span>
       </nav>
 
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
@@ -235,7 +235,7 @@ export default function AdminContactsPage() {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="rounded-tv-sm border border-gray-200 bg-white px-4 py-2 text-sm font-semibold focus:border-[tv-blue] focus:outline-none"
+          className="rounded-tv-sm border border-gray-200 bg-white px-4 py-2 text-sm font-semibold focus:border-tv-blue focus:outline-none"
         >
           <option value="">Tất cả</option>
           <option value="NEW">Mới</option>
@@ -260,7 +260,7 @@ export default function AdminContactsPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b bg-[tv-blue-light] text-left text-xs font-bold uppercase text-gray-500">
+                <tr className="border-b bg-tv-blue-light text-left text-xs font-bold uppercase text-gray-500">
                   <th className="px-4 py-3">Họ tên</th>
                   <th className="px-4 py-3">Email</th>
                   <th className="px-4 py-3">Điểm đến</th>
@@ -286,7 +286,7 @@ export default function AdminContactsPage() {
                     <td className="px-4 py-3 text-right">
                       <button
                         onClick={() => setDrawer(item)}
-                        className="rounded-lg bg-[tv-blue-light] px-3 py-1 text-xs font-semibold text-[tv-blue] hover:bg-blue-100"
+                        className="rounded-lg bg-tv-blue-light px-3 py-1 text-xs font-semibold text-tv-blue hover:bg-blue-100"
                       >
                         Xem
                       </button>

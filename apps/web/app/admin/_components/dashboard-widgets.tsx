@@ -68,7 +68,7 @@ export function SkeletonBox({ className = '' }: { className?: string }) {
 
 export function MetricCardSkeleton() {
   return (
-    <div className="rounded-tv border border-[tv-border] bg-white p-5 shadow-tv-card">
+    <div className="rounded-tv border border-tv-border bg-white p-5 shadow-tv-card">
       <SkeletonBox className="h-3 w-24" />
       <SkeletonBox className="mt-3 h-8 w-32" />
       <SkeletonBox className="mt-2 h-3 w-40" />
@@ -98,22 +98,22 @@ interface MetricCardProps {
 
 export function MetricCard({ label, value, helper, icon, tone = 'blue' }: MetricCardProps) {
   const valueColor =
-    tone === 'orange' ? 'text-[tv-orange]' : tone === 'teal' ? 'text-[#0f8b7b]' : 'text-[tv-blue]';
+    tone === 'orange' ? 'text-tv-orange' : tone === 'teal' ? 'text-[#0f8b7b]' : 'text-tv-blue';
   const iconBg =
     tone === 'orange'
-      ? 'bg-[#fff3e8] text-[tv-orange]'
+      ? 'bg-[#fff3e8] text-tv-orange'
       : tone === 'teal'
         ? 'bg-[#e8fbf6] text-[#0f8b7b]'
-        : 'bg-[tv-blue-light] text-[tv-blue]';
+        : 'bg-tv-blue-light text-tv-blue';
 
   return (
-    <div className="rounded-tv border border-[tv-border] bg-white p-5 shadow-tv-card">
+    <div className="rounded-tv border border-tv-border bg-white p-5 shadow-tv-card">
       <div className="flex items-start justify-between">
-        <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-ink-3]">{label}</p>
+        <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">{label}</p>
         <div className={`rounded-tv-sm p-2 ${iconBg}`}>{icon}</div>
       </div>
       <p className={`mt-3 text-3xl font-bold ${valueColor}`}>{value}</p>
-      <p className="mt-1 text-sm font-bold leading-6 text-[tv-ink-3]">{helper}</p>
+      <p className="mt-1 text-sm font-bold leading-6 text-tv-ink-3">{helper}</p>
     </div>
   );
 }
@@ -146,7 +146,7 @@ export function ErrorState({ message, onRetry }: { message: string; onRetry: () 
       <button
         type="button"
         onClick={onRetry}
-        className="rounded-tv-sm bg-[tv-blue] px-5 py-2 text-sm font-bold text-white transition hover:bg-[#0265b8]"
+        className="rounded-tv-sm bg-tv-blue px-5 py-2 text-sm font-bold text-white transition hover:bg-[#0265b8]"
       >
         Thử lại
       </button>
@@ -251,7 +251,7 @@ export function BookingsDonut({ data }: { data: BookingStatusCounts }) {
       </ResponsiveContainer>
       <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
         {entries.map((e) => (
-          <div key={e.name} className="flex items-center gap-1.5 text-xs font-bold text-[tv-ink-3]">
+          <div key={e.name} className="flex items-center gap-1.5 text-xs font-bold text-tv-ink-3">
             <span
               className="inline-block h-2.5 w-2.5 rounded-full"
               style={{ background: e.color }}
@@ -338,7 +338,7 @@ export function RecentBookingsTable({
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-[tv-border] text-left text-xs font-bold uppercase tracking-[0.12em] text-[tv-ink-3]">
+          <tr className="border-b border-tv-border text-left text-xs font-bold uppercase tracking-[0.12em] text-tv-ink-3">
             <th className="pb-3 pr-4">Mã đặt chỗ</th>
             <th className="pb-3 pr-4">Khách hàng</th>
             <th className="pb-3 pr-4">Tour</th>
@@ -348,15 +348,15 @@ export function RecentBookingsTable({
         </thead>
         <tbody>
           {bookings.map((b) => (
-            <tr key={b.id} className="border-b border-[tv-border] last:border-b-0">
-              <td className="py-3 pr-4 font-bold text-[tv-blue]">
+            <tr key={b.id} className="border-b border-tv-border last:border-b-0">
+              <td className="py-3 pr-4 font-bold text-tv-blue">
                 <Link href={`/admin/bookings`} className="hover:underline">
                   {b.bookingCode}
                 </Link>
               </td>
-              <td className="py-3 pr-4 text-[tv-ink]">{b.contactName}</td>
-              <td className="py-3 pr-4 text-[tv-ink-3]">{b.tour?.title ?? '—'}</td>
-              <td className="py-3 pr-4 font-bold text-[tv-ink]">{formatVnd(b.totalPrice)}</td>
+              <td className="py-3 pr-4 text-tv-ink">{b.contactName}</td>
+              <td className="py-3 pr-4 text-tv-ink-3">{b.tour?.title ?? '—'}</td>
+              <td className="py-3 pr-4 font-bold text-tv-ink">{formatVnd(b.totalPrice)}</td>
               <td className="py-3">
                 <StatusBadge status={b.status} />
               </td>
@@ -390,15 +390,15 @@ export function RecentContactsList({ contacts }: { contacts: RecentActivities['r
         return (
           <li
             key={c.id}
-            className="flex items-start gap-3 rounded-tv-sm border border-[tv-border] p-3"
+            className="flex items-start gap-3 rounded-tv-sm border border-tv-border p-3"
           >
             <div className="flex-1 min-w-0">
-              <p className="truncate font-bold text-[tv-ink]">{c.name}</p>
-              <p className="mt-0.5 truncate text-xs text-[tv-ink-3]">
+              <p className="truncate font-bold text-tv-ink">{c.name}</p>
+              <p className="mt-0.5 truncate text-xs text-tv-ink-3">
                 {c.email}
                 {c.destinationInterested ? ` · ${c.destinationInterested}` : ''}
               </p>
-              <p className="mt-0.5 text-xs text-[tv-ink-3]">
+              <p className="mt-0.5 text-xs text-tv-ink-3">
                 {new Date(c.createdAt).toLocaleDateString('vi-VN')}
               </p>
             </div>
@@ -434,13 +434,10 @@ export function PendingReviewsList({ reviews }: { reviews: RecentActivities['rec
   return (
     <ul className="space-y-3">
       {pending.map((r) => (
-        <li
-          key={r.id}
-          className="flex items-start gap-3 rounded-tv-sm border border-[tv-border] p-3"
-        >
+        <li key={r.id} className="flex items-start gap-3 rounded-tv-sm border border-tv-border p-3">
           <div className="flex-1 min-w-0">
-            <p className="truncate font-bold text-[tv-ink]">{r.title ?? r.content.slice(0, 60)}</p>
-            <p className="mt-0.5 text-xs text-[tv-ink-3]">
+            <p className="truncate font-bold text-tv-ink">{r.title ?? r.content.slice(0, 60)}</p>
+            <p className="mt-0.5 text-xs text-tv-ink-3">
               {'★'.repeat(r.rating)}
               {'☆'.repeat(5 - r.rating)} · {new Date(r.createdAt).toLocaleDateString('vi-VN')}
             </p>

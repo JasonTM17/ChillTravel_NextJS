@@ -65,11 +65,11 @@ export default function ForgotPasswordPage() {
       <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <CommerceSurface>
           <div className="flex items-center gap-3">
-            <div className="rounded-tv bg-[tv-blue-light] p-3 text-[tv-blue]">
+            <div className="rounded-tv bg-tv-blue-light p-3 text-tv-blue">
               <KeyRound size={22} aria-hidden="true" />
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-ink-3]">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">
                 Đặt lại mật khẩu
               </p>
               <h2 className="text-2xl font-bold">Nhập email để nhận link đặt lại</h2>
@@ -87,7 +87,7 @@ export default function ForgotPasswordPage() {
                 </p>
                 <Link
                   href="/login"
-                  className="mt-3 inline-flex font-bold text-[tv-blue] hover:underline"
+                  className="mt-3 inline-flex font-bold text-tv-blue hover:underline"
                 >
                   Quay lại đăng nhập
                 </Link>
@@ -95,12 +95,12 @@ export default function ForgotPasswordPage() {
             </div>
           ) : (
             <>
-              <p className="mt-4 text-sm leading-6 text-[tv-ink-3]">
+              <p className="mt-4 text-sm leading-6 text-tv-ink-3">
                 Nhập địa chỉ email đã đăng ký. Chúng tôi sẽ gửi link đặt lại mật khẩu đến email đó.
               </p>
 
               <form onSubmit={handleSubmit} className="mt-6 grid gap-4" noValidate>
-                <label className="grid gap-2 text-sm font-bold text-[tv-ink-3]">
+                <label className="grid gap-2 text-sm font-bold text-tv-ink-3">
                   Email
                   <input
                     name="email"
@@ -109,7 +109,7 @@ export default function ForgotPasswordPage() {
                     onChange={handleChange}
                     autoComplete="email"
                     placeholder="ban@example.com"
-                    className="rounded-tv border border-[tv-border] bg-[tv-bg] px-4 py-3 font-bold text-[tv-ink] outline-none focus:border-[tv-blue] aria-[invalid=true]:border-red-400"
+                    className="rounded-tv border border-tv-border bg-tv-bg px-4 py-3 font-bold text-tv-ink outline-none focus:border-tv-blue aria-[invalid=true]:border-red-400"
                     aria-invalid={!!fieldErrors.email}
                     aria-describedby={fieldErrors.email ? 'email-error' : undefined}
                   />
@@ -127,15 +127,15 @@ export default function ForgotPasswordPage() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="rounded-tv bg-[tv-orange] px-5 py-3 font-bold text-white transition hover:bg-[tv-orange-dark] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="rounded-tv bg-tv-orange px-5 py-3 font-bold text-white transition hover:bg-tv-orange-dark disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isLoading ? 'Đang gửi…' : 'Gửi link đặt lại mật khẩu'}
                 </button>
               </form>
 
-              <p className="mt-4 text-sm leading-6 text-[tv-ink-3]">
+              <p className="mt-4 text-sm leading-6 text-tv-ink-3">
                 Nhớ mật khẩu rồi?{' '}
-                <Link href="/login" className="font-bold text-[tv-blue] hover:underline">
+                <Link href="/login" className="font-bold text-tv-blue hover:underline">
                   Đăng nhập
                 </Link>
               </p>
@@ -147,16 +147,16 @@ export default function ForgotPasswordPage() {
           <TrustBanner compact />
           <CommerceSurface>
             <h2 className="text-xl font-bold">Lưu ý</h2>
-            <ul className="mt-4 space-y-3 text-sm font-bold text-[tv-ink-3]">
+            <ul className="mt-4 space-y-3 text-sm font-bold text-tv-ink-3">
               {[
                 'Link đặt lại có hiệu lực trong 1 giờ.',
                 'Kiểm tra cả thư mục spam nếu không thấy email.',
                 'Mỗi link chỉ dùng được một lần.',
               ].map((note) => (
-                <li key={note} className="flex items-start gap-2 rounded-tv-sm bg-[tv-bg] p-3">
+                <li key={note} className="flex items-start gap-2 rounded-tv-sm bg-tv-bg p-3">
                   <CheckCircle2
                     size={15}
-                    className="mt-0.5 shrink-0 text-[tv-blue]"
+                    className="mt-0.5 shrink-0 text-tv-blue"
                     aria-hidden="true"
                   />
                   {note}

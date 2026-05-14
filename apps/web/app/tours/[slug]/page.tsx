@@ -136,12 +136,12 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
   if (notFoundError) notFound();
   if (error) {
     return (
-      <main className="min-h-screen bg-[tv-bg] flex items-center justify-center">
+      <main className="min-h-screen bg-tv-bg flex items-center justify-center">
         <div className="rounded-tv border border-dashed border-red-200 bg-red-50 p-10 text-center max-w-md">
           <p className="text-lg font-bold text-red-600">{error}</p>
           <Link
             href="/tours"
-            className="mt-4 inline-flex rounded-tv-sm bg-[tv-blue] px-5 py-2.5 font-bold text-white hover:bg-[tv-blue-dark]"
+            className="mt-4 inline-flex rounded-tv-sm bg-tv-blue px-5 py-2.5 font-bold text-white hover:bg-tv-blue-dark"
           >
             Quay lai danh sach tour
           </Link>
@@ -184,9 +184,9 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
     : `/booking/new?tourId=${tour.id}&guests=${guests}`;
 
   return (
-    <main className="min-h-screen bg-[tv-bg] text-[tv-ink]">
+    <main className="min-h-screen bg-tv-bg text-tv-ink">
       {/* Hero */}
-      <section className="border-b border-[tv-border] bg-white">
+      <section className="border-b border-tv-border bg-white">
         <div className="mx-auto max-w-[1180px] px-4 py-6 md:px-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div className="flex-1">
@@ -209,7 +209,7 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
                 )}
               </div>
               <h1 className="mt-4 text-3xl font-bold leading-tight md:text-5xl">{tour.title}</h1>
-              <p className="mt-3 max-w-3xl text-base leading-7 text-[tv-ink-3]">
+              <p className="mt-3 max-w-3xl text-base leading-7 text-tv-ink-3">
                 {tour.shortDescription ?? tour.description}
               </p>
               <div className="mt-4 flex flex-wrap items-center gap-4 text-sm">
@@ -217,12 +217,12 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
                   <span className="inline-flex items-center gap-1.5 font-bold text-[#b45309]">
                     <Star size={16} fill="currentColor" aria-hidden="true" />
                     {avgRating.toFixed(1)}
-                    <span className="font-bold text-[tv-ink-3]">
+                    <span className="font-bold text-tv-ink-3">
                       ({approvedReviews.length} danh gia)
                     </span>
                   </span>
                 )}
-                <span className="inline-flex items-center gap-1.5 font-bold text-[tv-ink-3]">
+                <span className="inline-flex items-center gap-1.5 font-bold text-tv-ink-3">
                   <Users size={15} aria-hidden="true" />
                   Toi da {tour.maxGuests} khach
                 </span>
@@ -236,7 +236,7 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
                 className={`inline-flex items-center gap-2 rounded-tv border px-4 py-3 text-sm font-bold transition ${
                   wishlistId
                     ? 'border-red-200 bg-red-50 text-red-500 hover:bg-red-100'
-                    : 'border-[tv-border] bg-white text-[tv-ink-3] hover:border-red-200 hover:text-red-500'
+                    : 'border-tv-border bg-white text-tv-ink-3 hover:border-red-200 hover:text-red-500'
                 }`}
                 aria-label={wishlistId ? 'Xoa khoi yeu thich' : 'Them vao yeu thich'}
                 type="button"
@@ -246,7 +246,7 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
               </button>
               <Link
                 href={`/ai-planner?tour=${tour.slug}`}
-                className="inline-flex items-center gap-2 rounded-tv border border-[tv-border] bg-white px-4 py-3 text-sm font-bold text-[tv-blue] hover:bg-[tv-blue-light]"
+                className="inline-flex items-center gap-2 rounded-tv border border-tv-border bg-white px-4 py-3 text-sm font-bold text-tv-blue hover:bg-tv-blue-light"
               >
                 <MessageCircle size={18} aria-hidden="true" />
                 Hoi AI
@@ -286,7 +286,7 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
 
           <CommerceSurface>
             <h2 className="text-2xl font-bold">Mo ta tour</h2>
-            <p className="mt-3 leading-7 text-[tv-ink-3]">{tour.description}</p>
+            <p className="mt-3 leading-7 text-tv-ink-3">{tour.description}</p>
           </CommerceSurface>
 
           {tour.itinerary && tour.itinerary.length > 0 && (
@@ -306,13 +306,13 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
           <CommerceSurface>
             <h2 className="text-2xl font-bold">Lich khoi hanh</h2>
             {futureDepartures.length === 0 ? (
-              <div className="mt-4 rounded-tv bg-[tv-bg] p-5 text-center">
-                <p className="font-bold text-[tv-ink-3]">
+              <div className="mt-4 rounded-tv bg-tv-bg p-5 text-center">
+                <p className="font-bold text-tv-ink-3">
                   Hien chua co lich khoi hanh. Vui long lien he de tu van.
                 </p>
                 <Link
                   href="/support"
-                  className="mt-3 inline-flex items-center gap-1.5 rounded-tv-sm bg-[tv-blue] px-4 py-2.5 text-sm font-bold text-white hover:bg-[tv-blue-dark]"
+                  className="mt-3 inline-flex items-center gap-1.5 rounded-tv-sm bg-tv-blue px-4 py-2.5 text-sm font-bold text-white hover:bg-tv-blue-dark"
                 >
                   Lien he tu van
                   <ArrowRight size={15} aria-hidden="true" />
@@ -342,14 +342,14 @@ export default function TourDetail({ params }: { params: Promise<{ slug: string 
                 <div className="flex items-center gap-2">
                   <Star size={20} fill="#f97316" className="text-[#f97316]" aria-hidden="true" />
                   <span className="text-2xl font-bold">{avgRating.toFixed(1)}</span>
-                  <span className="text-sm font-bold text-[tv-ink-3]">
+                  <span className="text-sm font-bold text-tv-ink-3">
                     / 5 ({approvedReviews.length} danh gia)
                   </span>
                 </div>
               )}
             </div>
             {approvedReviews.length === 0 ? (
-              <p className="mt-4 text-sm font-bold text-[tv-ink-3]">
+              <p className="mt-4 text-sm font-bold text-tv-ink-3">
                 Chua co danh gia nao. Hay la nguoi dau tien!
               </p>
             ) : (

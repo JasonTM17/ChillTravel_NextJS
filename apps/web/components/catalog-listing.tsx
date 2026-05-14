@@ -21,14 +21,12 @@ export function CatalogListing({ kind }: { kind: 'hotel' | 'experience' }) {
         <CommerceSurface>
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
-                {title}
-              </p>
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">{title}</p>
               <h2 className="mt-2 text-2xl font-bold">{helper}</h2>
             </div>
             <Link
               href="/explore"
-              className="inline-flex rounded-tv-sm bg-[tv-blue] px-4 py-3 text-sm font-bold text-white"
+              className="inline-flex rounded-tv-sm bg-tv-blue px-4 py-3 text-sm font-bold text-white"
             >
               Tìm thêm
             </Link>
@@ -67,7 +65,7 @@ function HotelCatalogRow({ hotel }: { hotel: HotelProperty }) {
   );
 
   return (
-    <article className="grid overflow-hidden rounded-tv border border-[tv-border] bg-white shadow-tv-card md:grid-cols-[210px_minmax(0,1fr)_210px]">
+    <article className="grid overflow-hidden rounded-tv border border-tv-border bg-white shadow-tv-card md:grid-cols-[210px_minmax(0,1fr)_210px]">
       <Link
         href={`/hotels/${hotel.slug}`}
         className="min-h-[190px] bg-cover bg-center"
@@ -84,14 +82,14 @@ function HotelCatalogRow({ hotel }: { hotel: HotelProperty }) {
         </div>
         <Link
           href={`/hotels/${hotel.slug}`}
-          className="mt-3 block text-xl font-bold hover:text-[tv-blue]"
+          className="mt-3 block text-xl font-bold hover:text-tv-blue"
         >
           {hotel.name}
         </Link>
-        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[tv-ink-3]">{hotel.summary}</p>
-        <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-[tv-ink-3]">
+        <p className="mt-2 line-clamp-2 text-sm leading-6 text-tv-ink-3">{hotel.summary}</p>
+        <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-tv-ink-3">
           <span className="inline-flex items-center gap-1 rounded-full bg-[#f3f9ff] px-3 py-1">
-            <MapPin size={14} className="text-[tv-blue]" aria-hidden="true" />
+            <MapPin size={14} className="text-tv-blue" aria-hidden="true" />
             {copy.city}
           </span>
           {hotel.amenities.slice(0, 2).map((amenity) => (
@@ -104,17 +102,17 @@ function HotelCatalogRow({ hotel }: { hotel: HotelProperty }) {
           ))}
         </div>
       </div>
-      <aside className="flex flex-col justify-between border-t border-[tv-border] bg-[tv-bg] p-5 md:border-l md:border-t-0">
+      <aside className="flex flex-col justify-between border-t border-tv-border bg-tv-bg p-5 md:border-l md:border-t-0">
         <div>
-          <p className="text-xs font-bold text-[tv-ink-3]">Giá mẫu từ</p>
-          <p className="mt-1 text-2xl font-bold text-[tv-orange]">
+          <p className="text-xs font-bold text-tv-ink-3">Giá mẫu từ</p>
+          <p className="mt-1 text-2xl font-bold text-tv-orange">
             {formatVnd(lowestRoom?.nightlyPrice ?? 0)}
           </p>
-          <p className="mt-1 text-xs font-bold text-[tv-ink-3]">mỗi đêm</p>
+          <p className="mt-1 text-xs font-bold text-tv-ink-3">mỗi đêm</p>
         </div>
         <Link
           href={`/hotels/${hotel.slug}`}
-          className="mt-5 inline-flex items-center justify-center gap-2 rounded-tv-sm bg-[tv-orange] px-4 py-3 text-sm font-bold text-white"
+          className="mt-5 inline-flex items-center justify-center gap-2 rounded-tv-sm bg-tv-orange px-4 py-3 text-sm font-bold text-white"
         >
           <CalendarCheck2 size={16} aria-hidden="true" />
           Xem phòng
@@ -144,7 +142,7 @@ function CatalogRow({
   const Icon = kind === 'hotel' ? CalendarCheck2 : Ticket;
 
   return (
-    <article className="grid overflow-hidden rounded-tv border border-[tv-border] bg-white shadow-tv-card md:grid-cols-[210px_minmax(0,1fr)_210px]">
+    <article className="grid overflow-hidden rounded-tv border border-tv-border bg-white shadow-tv-card md:grid-cols-[210px_minmax(0,1fr)_210px]">
       <div
         className="min-h-[190px] bg-cover bg-center"
         style={{ backgroundImage: `url(${getDestinationImage(destination.slug)})` }}
@@ -158,29 +156,29 @@ function CatalogRow({
           </span>
         </div>
         <h3 className="mt-3 text-xl font-bold">{primaryLabel}</h3>
-        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[tv-ink-3]">{copy.summary}</p>
-        <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-[tv-ink-3]">
+        <p className="mt-2 line-clamp-2 text-sm leading-6 text-tv-ink-3">{copy.summary}</p>
+        <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-tv-ink-3">
           <span className="inline-flex items-center gap-1 rounded-full bg-[#f3f9ff] px-3 py-1">
-            <MapPin size={14} className="text-[tv-blue]" aria-hidden="true" />
+            <MapPin size={14} className="text-tv-blue" aria-hidden="true" />
             {copy.city}
           </span>
           <span className="inline-flex items-center gap-1 rounded-full bg-[#f3f9ff] px-3 py-1">
-            <Utensils size={14} className="text-[tv-blue]" aria-hidden="true" />
+            <Utensils size={14} className="text-tv-blue" aria-hidden="true" />
             {copy.foodHighlights[0]}
           </span>
         </div>
       </div>
-      <aside className="flex flex-col justify-between border-t border-[tv-border] bg-[tv-bg] p-5 md:border-l md:border-t-0">
+      <aside className="flex flex-col justify-between border-t border-tv-border bg-tv-bg p-5 md:border-l md:border-t-0">
         <div>
-          <p className="text-xs font-bold text-[tv-ink-3]">Giá mẫu từ</p>
-          <p className="mt-1 text-2xl font-bold text-[tv-orange]">{formatVnd(price)}</p>
-          <p className="mt-1 text-xs font-bold text-[tv-ink-3]">
+          <p className="text-xs font-bold text-tv-ink-3">Giá mẫu từ</p>
+          <p className="mt-1 text-2xl font-bold text-tv-orange">{formatVnd(price)}</p>
+          <p className="mt-1 text-xs font-bold text-tv-ink-3">
             {kind === 'hotel' ? 'mỗi đêm' : 'mỗi khách'}
           </p>
         </div>
         <Link
           href={`/booking/${destination.slug}`}
-          className="mt-5 inline-flex items-center justify-center gap-2 rounded-tv-sm bg-[tv-orange] px-4 py-3 text-sm font-bold text-white"
+          className="mt-5 inline-flex items-center justify-center gap-2 rounded-tv-sm bg-tv-orange px-4 py-3 text-sm font-bold text-white"
         >
           <Icon size={16} aria-hidden="true" />
           Đặt chỗ demo

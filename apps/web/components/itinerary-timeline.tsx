@@ -11,12 +11,12 @@ export function ItineraryTimeline({ plan }: { plan: TripPlan }) {
         >
           <div className="flex flex-col gap-3 border-b border-[#eee6da] pb-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[tv-blue]">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-tv-blue">
                 Ngày {day.day}
               </p>
-              <h3 className="mt-1 text-xl font-bold text-[tv-ink]">{day.title}</h3>
+              <h3 className="mt-1 text-xl font-bold text-tv-ink">{day.title}</h3>
             </div>
-            <span className="w-fit rounded-full bg-[tv-blue-light] px-3 py-1 text-sm font-bold text-[tv-blue]">
+            <span className="w-fit rounded-full bg-tv-blue-light px-3 py-1 text-sm font-bold text-tv-blue">
               {formatVnd(day.estimatedCost)}
             </span>
           </div>
@@ -34,8 +34,8 @@ export function ItineraryTimeline({ plan }: { plan: TripPlan }) {
 function PlanBlock({ title, items }: { title: string; items: string[] }) {
   return (
     <div className="rounded-tv-sm bg-[#f8f1e6] p-4">
-      <h4 className="font-bold text-[tv-ink]">{title}</h4>
-      <ul className="mt-3 space-y-2 text-sm leading-6 text-[tv-ink-3]">
+      <h4 className="font-bold text-tv-ink">{title}</h4>
+      <ul className="mt-3 space-y-2 text-sm leading-6 text-tv-ink-3">
         {items.map((item) => (
           <li key={item}>{item}</li>
         ))}

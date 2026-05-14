@@ -165,7 +165,7 @@ export function NotificationBell() {
         aria-label={`Thông báo${unreadCount > 0 ? ` — ${unreadCount} chưa đọc` : ''}`}
         aria-haspopup="true"
         aria-expanded={open}
-        className="relative hidden rounded-tv-sm border border-[tv-border] p-2 text-[tv-ink-3] transition hover:bg-[tv-blue-light] hover:text-[tv-blue] md:inline-flex"
+        className="relative hidden rounded-tv-sm border border-tv-border p-2 text-tv-ink-3 transition hover:bg-tv-blue-light hover:text-tv-blue md:inline-flex"
       >
         <Bell size={18} aria-hidden="true" />
         {unreadCount > 0 && (
@@ -183,13 +183,13 @@ export function NotificationBell() {
         <div
           role="menu"
           aria-label="Thông báo gần đây"
-          className="absolute right-0 mt-3 w-80 overflow-hidden rounded-tv border border-[tv-border] bg-white shadow-[0_18px_48px_rgba(2,68,120,0.16)]"
+          className="absolute right-0 mt-3 w-80 overflow-hidden rounded-tv border border-tv-border bg-white shadow-[0_18px_48px_rgba(2,68,120,0.16)]"
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-[tv-border] px-4 py-3">
-            <span className="text-sm font-bold text-[tv-ink]">Thông báo</span>
+          <div className="flex items-center justify-between border-b border-tv-border px-4 py-3">
+            <span className="text-sm font-bold text-tv-ink">Thông báo</span>
             {unreadCount > 0 && (
-              <span className="rounded-full bg-[tv-blue-light] px-2 py-0.5 text-xs font-bold text-[tv-blue]">
+              <span className="rounded-full bg-tv-blue-light px-2 py-0.5 text-xs font-bold text-tv-blue">
                 {unreadCount} chưa đọc
               </span>
             )}
@@ -198,19 +198,17 @@ export function NotificationBell() {
           {/* List */}
           <ul className="max-h-[360px] overflow-y-auto">
             {loading && notifications.length === 0 && (
-              <li className="px-4 py-6 text-center text-sm text-[tv-ink-3]">Đang tải…</li>
+              <li className="px-4 py-6 text-center text-sm text-tv-ink-3">Đang tải…</li>
             )}
             {!loading && notifications.length === 0 && (
-              <li className="px-4 py-8 text-center text-sm text-[tv-ink-3]">
-                Chưa có thông báo nào
-              </li>
+              <li className="px-4 py-8 text-center text-sm text-tv-ink-3">Chưa có thông báo nào</li>
             )}
             {notifications.map((n) => (
               <li key={n.id} role="menuitem">
                 <button
                   type="button"
                   onClick={() => handleNotificationClick(n)}
-                  className={`flex w-full items-start gap-3 px-4 py-3 text-left transition hover:bg-[tv-blue-light] ${
+                  className={`flex w-full items-start gap-3 px-4 py-3 text-left transition hover:bg-tv-blue-light ${
                     !n.isRead ? 'bg-[#f0f8ff]' : ''
                   }`}
                 >
@@ -218,7 +216,7 @@ export function NotificationBell() {
                   <span
                     aria-hidden="true"
                     className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
-                      !n.isRead ? 'bg-[tv-blue] text-white' : 'bg-[tv-border] text-[tv-ink-3]'
+                      !n.isRead ? 'bg-tv-blue text-white' : 'bg-tv-border text-tv-ink-3'
                     }`}
                   >
                     {typeIcon(n.type)}
@@ -228,12 +226,12 @@ export function NotificationBell() {
                   <div className="min-w-0 flex-1">
                     <p
                       className={`truncate text-sm ${
-                        !n.isRead ? 'font-bold text-[tv-ink]' : 'font-medium text-[tv-ink-2]'
+                        !n.isRead ? 'font-bold text-tv-ink' : 'font-medium text-tv-ink-2'
                       }`}
                     >
                       {n.title}
                     </p>
-                    <p className="mt-0.5 line-clamp-2 text-xs text-[tv-ink-3]">{n.body}</p>
+                    <p className="mt-0.5 line-clamp-2 text-xs text-tv-ink-3">{n.body}</p>
                     <p className="mt-1 text-[10px] text-[#8aabb8]">{relativeTime(n.createdAt)}</p>
                   </div>
 
@@ -241,7 +239,7 @@ export function NotificationBell() {
                   {!n.isRead && (
                     <span
                       aria-hidden="true"
-                      className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[tv-blue]"
+                      className="mt-2 h-2 w-2 shrink-0 rounded-full bg-tv-blue"
                     />
                   )}
                 </button>
@@ -250,14 +248,14 @@ export function NotificationBell() {
           </ul>
 
           {/* Footer */}
-          <div className="border-t border-[tv-border] px-4 py-2.5">
+          <div className="border-t border-tv-border px-4 py-2.5">
             <button
               type="button"
               onClick={() => {
                 setOpen(false);
                 router.push('/notifications');
               }}
-              className="w-full rounded-tv-sm py-2 text-center text-sm font-bold text-[tv-blue] transition hover:bg-[tv-blue-light]"
+              className="w-full rounded-tv-sm py-2 text-center text-sm font-bold text-tv-blue transition hover:bg-tv-blue-light"
             >
               Xem tất cả thông báo
             </button>

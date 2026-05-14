@@ -28,7 +28,7 @@ function ToastContainer({ toasts }: { toasts: ToastMsg[] }) {
       {toasts.map((t) => (
         <div
           key={t.id}
-          className={`rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg ${t.type === 'success' ? 'bg-[tv-blue]' : 'bg-red-500'}`}
+          className={`rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg ${t.type === 'success' ? 'bg-tv-blue' : 'bg-red-500'}`}
         >
           {t.text}
         </div>
@@ -65,7 +65,7 @@ function StarRating({ rating }: { rating: number }) {
   return (
     <span className="text-sm">
       {[1, 2, 3, 4, 5].map((s) => (
-        <span key={s} className={s <= rating ? 'text-[tv-orange]' : 'text-gray-200'}>
+        <span key={s} className={s <= rating ? 'text-tv-orange' : 'text-gray-200'}>
           ★
         </span>
       ))}
@@ -129,12 +129,12 @@ export default function AdminReviewsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[tv-blue-light] p-6">
+    <div className="min-h-screen bg-tv-blue-light p-6">
       <ToastContainer toasts={toasts} />
 
       <nav className="mb-4 text-sm text-gray-500">
         <span>Admin</span> <span className="mx-1">/</span>
-        <span className="font-semibold text-[tv-blue]">Đánh giá</span>
+        <span className="font-semibold text-tv-blue">Đánh giá</span>
       </nav>
 
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
@@ -142,7 +142,7 @@ export default function AdminReviewsPage() {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="rounded-tv-sm border border-gray-200 bg-white px-4 py-2 text-sm font-semibold focus:border-[tv-blue] focus:outline-none"
+          className="rounded-tv-sm border border-gray-200 bg-white px-4 py-2 text-sm font-semibold focus:border-tv-blue focus:outline-none"
         >
           <option value="">Tất cả</option>
           <option value="PENDING">Chờ duyệt</option>

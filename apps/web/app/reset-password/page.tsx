@@ -107,7 +107,7 @@ function ResetPasswordForm() {
               </p>
               <Link
                 href="/forgot-password"
-                className="mt-3 inline-flex font-bold text-[tv-blue] hover:underline"
+                className="mt-3 inline-flex font-bold text-tv-blue hover:underline"
               >
                 Yêu cầu link mới
               </Link>
@@ -122,11 +122,11 @@ function ResetPasswordForm() {
     <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
       <CommerceSurface>
         <div className="flex items-center gap-3">
-          <div className="rounded-tv bg-[tv-blue-light] p-3 text-[tv-blue]">
+          <div className="rounded-tv bg-tv-blue-light p-3 text-tv-blue">
             <LockKeyhole size={22} aria-hidden="true" />
           </div>
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-ink-3]">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">
               Mật khẩu mới
             </p>
             <h2 className="text-2xl font-bold">Tạo mật khẩu mới cho tài khoản</h2>
@@ -153,7 +153,7 @@ function ResetPasswordForm() {
             )}
 
             <form onSubmit={handleSubmit} className="mt-6 grid gap-4" noValidate>
-              <label className="grid gap-2 text-sm font-bold text-[tv-ink-3]">
+              <label className="grid gap-2 text-sm font-bold text-tv-ink-3">
                 Mật khẩu mới
                 <input
                   name="newPassword"
@@ -162,7 +162,7 @@ function ResetPasswordForm() {
                   onChange={handleChange}
                   autoComplete="new-password"
                   placeholder="Ít nhất 8 ký tự"
-                  className="rounded-tv border border-[tv-border] bg-[tv-bg] px-4 py-3 font-bold text-[tv-ink] outline-none focus:border-[tv-blue] aria-[invalid=true]:border-red-400"
+                  className="rounded-tv border border-tv-border bg-tv-bg px-4 py-3 font-bold text-tv-ink outline-none focus:border-tv-blue aria-[invalid=true]:border-red-400"
                   aria-invalid={!!fieldErrors.newPassword}
                   aria-describedby={fieldErrors.newPassword ? 'newPassword-error' : undefined}
                 />
@@ -177,7 +177,7 @@ function ResetPasswordForm() {
                 )}
               </label>
 
-              <label className="grid gap-2 text-sm font-bold text-[tv-ink-3]">
+              <label className="grid gap-2 text-sm font-bold text-tv-ink-3">
                 Xác nhận mật khẩu
                 <input
                   name="confirmPassword"
@@ -186,7 +186,7 @@ function ResetPasswordForm() {
                   onChange={handleChange}
                   autoComplete="new-password"
                   placeholder="Nhập lại mật khẩu mới"
-                  className="rounded-tv border border-[tv-border] bg-[tv-bg] px-4 py-3 font-bold text-[tv-ink] outline-none focus:border-[tv-blue] aria-[invalid=true]:border-red-400"
+                  className="rounded-tv border border-tv-border bg-tv-bg px-4 py-3 font-bold text-tv-ink outline-none focus:border-tv-blue aria-[invalid=true]:border-red-400"
                   aria-invalid={!!fieldErrors.confirmPassword}
                   aria-describedby={
                     fieldErrors.confirmPassword ? 'confirmPassword-error' : undefined
@@ -206,14 +206,14 @@ function ResetPasswordForm() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="rounded-tv bg-[tv-orange] px-5 py-3 font-bold text-white transition hover:bg-[tv-orange-dark] disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-tv bg-tv-orange px-5 py-3 font-bold text-white transition hover:bg-tv-orange-dark disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isLoading ? 'Đang cập nhật…' : 'Đặt lại mật khẩu'}
               </button>
             </form>
 
-            <p className="mt-4 text-sm leading-6 text-[tv-ink-3]">
-              <Link href="/login" className="font-bold text-[tv-blue] hover:underline">
+            <p className="mt-4 text-sm leading-6 text-tv-ink-3">
+              <Link href="/login" className="font-bold text-tv-blue hover:underline">
                 Quay lại đăng nhập
               </Link>
             </p>
@@ -225,16 +225,16 @@ function ResetPasswordForm() {
         <TrustBanner compact />
         <CommerceSurface>
           <h2 className="text-xl font-bold">Yêu cầu mật khẩu</h2>
-          <ul className="mt-4 space-y-3 text-sm font-bold text-[tv-ink-3]">
+          <ul className="mt-4 space-y-3 text-sm font-bold text-tv-ink-3">
             {[
               'Ít nhất 8 ký tự',
               'Nên kết hợp chữ hoa, chữ thường và số',
               'Không dùng mật khẩu đã dùng trước đây',
             ].map((req) => (
-              <li key={req} className="flex items-start gap-2 rounded-tv-sm bg-[tv-bg] p-3">
+              <li key={req} className="flex items-start gap-2 rounded-tv-sm bg-tv-bg p-3">
                 <CheckCircle2
                   size={15}
-                  className="mt-0.5 shrink-0 text-[tv-blue]"
+                  className="mt-0.5 shrink-0 text-tv-blue"
                   aria-hidden="true"
                 />
                 {req}
@@ -254,7 +254,7 @@ function ResetPasswordForm() {
 export default function ResetPasswordPage() {
   return (
     <PageShell eyebrow="Khôi phục tài khoản" title="Đặt lại mật khẩu">
-      <Suspense fallback={<div className="h-64 animate-pulse rounded-tv bg-[tv-bg]" />}>
+      <Suspense fallback={<div className="h-64 animate-pulse rounded-tv bg-tv-bg" />}>
         <ResetPasswordForm />
       </Suspense>
     </PageShell>

@@ -63,8 +63,8 @@ function QuickActions() {
   ] as const;
 
   const toneClasses = {
-    blue: 'bg-[tv-blue-light] text-[tv-blue] hover:bg-[#d0ecfa]',
-    orange: 'bg-[#fff3e8] text-[tv-orange] hover:bg-[#ffe8d0]',
+    blue: 'bg-tv-blue-light text-tv-blue hover:bg-[#d0ecfa]',
+    orange: 'bg-[#fff3e8] text-tv-orange hover:bg-[#ffe8d0]',
     teal: 'bg-[#e8fbf6] text-[#0f8b7b] hover:bg-[#d0f5ec]',
   };
 
@@ -192,10 +192,8 @@ export default function AdminDashboardPage() {
         {/* Charts row */}
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
           <CommerceSurface>
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
-              Doanh thu
-            </p>
-            <h2 className="mt-1 text-xl font-bold text-[tv-ink]">12 tháng gần nhất</h2>
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">Doanh thu</p>
+            <h2 className="mt-1 text-xl font-bold text-tv-ink">12 tháng gần nhất</h2>
             <div className="mt-5">
               {loading ? (
                 <ChartSkeleton height={280} />
@@ -216,10 +214,10 @@ export default function AdminDashboardPage() {
           </CommerceSurface>
 
           <CommerceSurface>
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">
               Đặt chỗ theo trạng thái
             </p>
-            <h2 className="mt-1 text-xl font-bold text-[tv-ink]">Phân bổ hiện tại</h2>
+            <h2 className="mt-1 text-xl font-bold text-tv-ink">Phân bổ hiện tại</h2>
             <div className="mt-5">
               {loading ? (
                 <ChartSkeleton height={220} />
@@ -241,14 +239,12 @@ export default function AdminDashboardPage() {
         <CommerceSurface>
           <div className="flex items-end justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
-                Top tour
-              </p>
-              <h2 className="mt-1 text-xl font-bold text-[tv-ink]">5 tour được đặt nhiều nhất</h2>
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">Top tour</p>
+              <h2 className="mt-1 text-xl font-bold text-tv-ink">5 tour được đặt nhiều nhất</h2>
             </div>
             <Link
               href="/admin/tours"
-              className="rounded-tv-sm bg-[tv-blue-light] px-4 py-2 text-sm font-bold text-[tv-blue] transition hover:bg-[#d0ecfa]"
+              className="rounded-tv-sm bg-tv-blue-light px-4 py-2 text-sm font-bold text-tv-blue transition hover:bg-[#d0ecfa]"
             >
               Xem tất cả
             </Link>
@@ -274,14 +270,14 @@ export default function AdminDashboardPage() {
           <CommerceSurface>
             <div className="flex items-end justify-between">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">
                   Hoạt động gần đây
                 </p>
-                <h2 className="mt-1 text-xl font-bold text-[tv-ink]">Đặt chỗ mới nhất</h2>
+                <h2 className="mt-1 text-xl font-bold text-tv-ink">Đặt chỗ mới nhất</h2>
               </div>
               <Link
                 href="/admin/bookings"
-                className="rounded-tv-sm bg-[tv-blue-light] px-4 py-2 text-sm font-bold text-[tv-blue] transition hover:bg-[#d0ecfa]"
+                className="rounded-tv-sm bg-tv-blue-light px-4 py-2 text-sm font-bold text-tv-blue transition hover:bg-[#d0ecfa]"
               >
                 Xem tất cả
               </Link>
@@ -302,14 +298,14 @@ export default function AdminDashboardPage() {
           <CommerceSurface>
             <div className="flex items-end justify-between">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">
                   Yêu cầu tư vấn
                 </p>
-                <h2 className="mt-1 text-xl font-bold text-[tv-ink]">Liên hệ gần đây</h2>
+                <h2 className="mt-1 text-xl font-bold text-tv-ink">Liên hệ gần đây</h2>
               </div>
               <Link
                 href="/admin/contacts"
-                className="rounded-tv-sm bg-[tv-blue-light] px-4 py-2 text-sm font-bold text-[tv-blue] transition hover:bg-[#d0ecfa]"
+                className="rounded-tv-sm bg-tv-blue-light px-4 py-2 text-sm font-bold text-tv-blue transition hover:bg-[#d0ecfa]"
               >
                 Xem tất cả
               </Link>
@@ -330,14 +326,14 @@ export default function AdminDashboardPage() {
           <CommerceSurface>
             <div className="flex items-end justify-between">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-blue]">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">
                   Kiểm duyệt
                 </p>
-                <h2 className="mt-1 text-xl font-bold text-[tv-ink]">Đánh giá chờ duyệt</h2>
+                <h2 className="mt-1 text-xl font-bold text-tv-ink">Đánh giá chờ duyệt</h2>
               </div>
               <Link
                 href="/admin/reviews"
-                className="rounded-tv-sm bg-[tv-blue-light] px-4 py-2 text-sm font-bold text-[tv-blue] transition hover:bg-[#d0ecfa]"
+                className="rounded-tv-sm bg-tv-blue-light px-4 py-2 text-sm font-bold text-tv-blue transition hover:bg-[#d0ecfa]"
               >
                 Xem tất cả
               </Link>

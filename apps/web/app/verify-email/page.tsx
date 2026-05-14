@@ -58,11 +58,11 @@ function VerifyEmailContent() {
     <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
       <CommerceSurface>
         <div className="flex items-center gap-3">
-          <div className="rounded-tv bg-[tv-blue-light] p-3 text-[tv-blue]">
+          <div className="rounded-tv bg-tv-blue-light p-3 text-tv-blue">
             <MailCheck size={22} aria-hidden="true" />
           </div>
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-[tv-ink-3]">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">
               Xác thực email
             </p>
             <h2 className="text-2xl font-bold">Kích hoạt tài khoản của bạn</h2>
@@ -71,10 +71,10 @@ function VerifyEmailContent() {
 
         <div className="mt-6">
           {state === 'loading' && (
-            <div className="flex items-center gap-3 rounded-tv border border-[tv-border] bg-[tv-bg] p-5 text-[tv-ink-3]">
+            <div className="flex items-center gap-3 rounded-tv border border-tv-border bg-tv-bg p-5 text-tv-ink-3">
               <Loader2
                 size={22}
-                className="animate-spin shrink-0 text-[tv-blue]"
+                className="animate-spin shrink-0 text-tv-blue"
                 aria-hidden="true"
               />
               <p className="font-bold">Đang xác thực email của bạn…</p>
@@ -92,7 +92,7 @@ function VerifyEmailContent() {
                 </p>
                 <Link
                   href="/login"
-                  className="mt-3 inline-flex rounded-tv bg-[tv-orange] px-5 py-2.5 font-bold text-white transition hover:bg-[tv-orange-dark]"
+                  className="mt-3 inline-flex rounded-tv bg-tv-orange px-5 py-2.5 font-bold text-white transition hover:bg-tv-orange-dark"
                 >
                   Đăng nhập ngay
                 </Link>
@@ -112,7 +112,7 @@ function VerifyEmailContent() {
                 <div className="mt-3 flex flex-wrap gap-3">
                   <Link
                     href="/login"
-                    className="inline-flex font-bold text-[tv-blue] hover:underline"
+                    className="inline-flex font-bold text-tv-blue hover:underline"
                   >
                     Đăng nhập
                   </Link>
@@ -131,7 +131,7 @@ function VerifyEmailContent() {
                 </p>
                 <Link
                   href="/login"
-                  className="mt-3 inline-flex font-bold text-[tv-blue] hover:underline"
+                  className="mt-3 inline-flex font-bold text-tv-blue hover:underline"
                 >
                   Quay lại đăng nhập
                 </Link>
@@ -145,23 +145,23 @@ function VerifyEmailContent() {
         <TrustBanner compact />
         <CommerceSurface>
           <h2 className="text-xl font-bold">Không nhận được email?</h2>
-          <ul className="mt-4 space-y-3 text-sm font-bold text-[tv-ink-3]">
+          <ul className="mt-4 space-y-3 text-sm font-bold text-tv-ink-3">
             {[
               'Kiểm tra thư mục spam hoặc junk mail.',
               'Đảm bảo email đăng ký chính xác.',
               'Link xác thực có hiệu lực trong 24 giờ.',
             ].map((tip) => (
-              <li key={tip} className="flex items-start gap-2 rounded-tv-sm bg-[tv-bg] p-3">
+              <li key={tip} className="flex items-start gap-2 rounded-tv-sm bg-tv-bg p-3">
                 <CheckCircle2
                   size={15}
-                  className="mt-0.5 shrink-0 text-[tv-blue]"
+                  className="mt-0.5 shrink-0 text-tv-blue"
                   aria-hidden="true"
                 />
                 {tip}
               </li>
             ))}
           </ul>
-          <Link href="/login" className="mt-4 inline-flex font-bold text-[tv-blue] hover:underline">
+          <Link href="/login" className="mt-4 inline-flex font-bold text-tv-blue hover:underline">
             Đăng nhập
           </Link>
         </CommerceSurface>
@@ -187,7 +187,7 @@ export default function VerifyEmailPage() {
     <Suspense
       fallback={
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[tv-blue]" />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-tv-blue" />
         </div>
       }
     >

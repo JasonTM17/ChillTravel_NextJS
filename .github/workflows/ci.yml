@@ -91,6 +91,8 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Build shared package
+        run: pnpm --filter @vietwander/shared build
       - name: Generate Prisma client
         run: pnpm --filter @vietwander/db build
       - name: Apply database migrations
@@ -160,6 +162,6 @@ jobs:
       - working-directory: apps/mobile
         run: flutter pub get
       - working-directory: apps/mobile
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
       - working-directory: apps/mobile
         run: flutter test

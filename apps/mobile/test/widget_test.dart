@@ -7,14 +7,12 @@ import 'package:wanderviet/src/data/cache/travel_offline_cache.dart';
 import 'package:wanderviet/src/data/repositories/booking_repository.dart';
 import 'package:wanderviet/src/data/repositories/chat_repository.dart';
 import 'package:wanderviet/src/data/repositories/travel_repository.dart';
-import 'package:wanderviet/src/domain/travel_models.dart';
 import 'package:wanderviet/src/features/ai_chat_screen.dart';
 import 'package:wanderviet/src/features/booking_screen.dart';
 import 'package:wanderviet/src/features/destination_detail_screen.dart';
 import 'package:wanderviet/src/features/explore_screen.dart';
 import 'package:wanderviet/src/features/home_screen.dart';
 import 'package:wanderviet/src/features/itinerary_screen.dart';
-import 'package:wanderviet/src/features/onboarding_screen.dart';
 import 'package:wanderviet/src/features/wishlist_screen.dart';
 
 import 'package:wanderviet/src/app.dart';

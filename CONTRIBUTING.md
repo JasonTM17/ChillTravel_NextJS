@@ -7,8 +7,8 @@ Thank you for your interest in contributing to WanderViet! This guide will help 
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/nguyenson1710/wanderviet.git
-   cd wanderviet
+   git clone https://github.com/JasonTM17/ChillTravel_NextJS.git
+   cd ChillTravel_NextJS
    ```
 
 2. **Install dependencies**

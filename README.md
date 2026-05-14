@@ -6,8 +6,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/nguyenson1710/wanderviet/actions/workflows/ci.yml">
-    <img src="https://github.com/nguyenson1710/wanderviet/actions/workflows/ci.yml/badge.svg" alt="CI" />
+  <a href="https://github.com/JasonTM17/ChillTravel_NextJS/actions/workflows/ci.yml">
+    <img src="https://github.com/JasonTM17/ChillTravel_NextJS/actions/workflows/ci.yml/badge.svg" alt="CI" />
   </a>
   <a href="https://hub.docker.com/r/nguyenson1710/wanderviet-api">
     <img src="https://img.shields.io/docker/v/nguyenson1710/wanderviet-api?label=API%20Image&logo=docker" alt="Docker API" />
@@ -143,8 +143,8 @@ graph TB
 ### 1. Clone repository
 
 ```bash
-git clone https://github.com/nguyenson1710/wanderviet.git
-cd wanderviet
+git clone https://github.com/JasonTM17/ChillTravel_NextJS.git
+cd ChillTravel_NextJS
 ```
 
 ### 2. Cài đặt dependencies
@@ -225,4 +225,4 @@ API documentation được tạo tự động bằng Swagger/OpenAPI:
 
 Dự án được phân phối dưới giấy phép [MIT](./LICENSE).
 
-Copyright (c) 2025 [Nguyen Son](https://github.com/nguyenson1710)
+Copyright (c) 2026 [Nguyen Son](https://github.com/JasonTM17)

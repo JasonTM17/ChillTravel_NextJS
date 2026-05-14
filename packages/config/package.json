@@ -7,10 +7,15 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nguyenson1710/wanderviet.git",
+    "url": "https://github.com/JasonTM17/ChillTravel_NextJS.git",
     "directory": "packages/config"
   },
-  "keywords": ["eslint", "typescript", "config", "shared"],
+  "keywords": [
+    "eslint",
+    "typescript",
+    "config",
+    "shared"
+  ],
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "scripts": {

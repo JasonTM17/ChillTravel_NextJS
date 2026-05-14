@@ -7,10 +7,16 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nguyenson1710/wanderviet.git",
+    "url": "https://github.com/JasonTM17/ChillTravel_NextJS.git",
     "directory": "packages/db"
   },
-  "keywords": ["prisma", "database", "postgresql", "migrations", "seed"],
+  "keywords": [
+    "prisma",
+    "database",
+    "postgresql",
+    "migrations",
+    "seed"
+  ],
   "main": "./generated/client/client.ts",
   "types": "./generated/client/client.ts",
   "exports": {

@@ -418,7 +418,7 @@ export function RecentContactsList({ contacts }: { contacts: RecentActivities['r
 // ─── Pending Reviews List ────────────────────────────────────────────────────
 
 export function PendingReviewsList({ reviews }: { reviews: RecentActivities['recentReviews'] }) {
-  const pending = reviews.filter((r) => r.status === 'PENDING');
+  const pending = (reviews ?? []).filter((r) => r.status === 'PENDING');
 
   if (!pending.length) {
     return (

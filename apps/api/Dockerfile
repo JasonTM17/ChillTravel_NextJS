@@ -34,8 +34,18 @@ RUN pnpm --filter @vietwander/shared build
 # Build the API (tsc → dist/)
 RUN pnpm --filter @vietwander/api build
 
-# Prune dev dependencies for smaller production image
-RUN pnpm prune --prod
+# ─── Stage 3b: production deps ───────────────────────────────────────────────
+FROM base AS prod-deps
+WORKDIR /workspace
+
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY apps/api/package.json          ./apps/api/package.json
+COPY apps/web/package.json          ./apps/web/package.json
+COPY packages/config/package.json   ./packages/config/package.json
+COPY packages/db/package.json       ./packages/db/package.json
+COPY packages/shared/package.json   ./packages/shared/package.json
+
+RUN pnpm install --frozen-lockfile --prod
 
 # ─── Stage 4: runner ──────────────────────────────────────────────────────────
 FROM node:24-alpine AS runner
@@ -46,8 +56,8 @@ ENV NODE_ENV=production
 RUN addgroup -S app && adduser -S app -G app
 
 # Copy only what the runtime needs
-COPY --from=build /workspace/node_modules                   ./node_modules
-COPY --from=build /workspace/apps/api/node_modules          ./apps/api/node_modules
+COPY --from=prod-deps /workspace/node_modules                   ./node_modules
+COPY --from=prod-deps /workspace/apps/api/node_modules          ./apps/api/node_modules
 COPY --from=build /workspace/apps/api/dist                  ./dist
 COPY --from=build /workspace/packages/shared/dist           ./packages/shared/dist
 COPY --from=build /workspace/packages/db                    ./packages/db

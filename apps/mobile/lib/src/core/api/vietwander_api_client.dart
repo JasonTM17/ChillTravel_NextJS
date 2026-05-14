@@ -14,7 +14,7 @@ final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(
     BaseOptions(
       baseUrl: const String.fromEnvironment(
-        'CHILLTRAVEL_API_BASE_URL',
+        'WANDERVIET_API_BASE_URL',
         defaultValue: 'http://localhost:3000/api',
       ),
       connectTimeout: const Duration(seconds: 5),

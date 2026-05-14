@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:chilltravel/src/application/travel_providers.dart';
-import 'package:chilltravel/src/core/api/vietwander_api_client.dart';
-import 'package:chilltravel/src/data/cache/travel_offline_cache.dart';
-import 'package:chilltravel/src/data/repositories/booking_repository.dart';
-import 'package:chilltravel/src/data/repositories/chat_repository.dart';
-import 'package:chilltravel/src/data/repositories/travel_repository.dart';
-import 'package:chilltravel/src/domain/travel_models.dart';
-import 'package:chilltravel/src/features/ai_chat_screen.dart';
-import 'package:chilltravel/src/features/booking_screen.dart';
-import 'package:chilltravel/src/features/destination_detail_screen.dart';
-import 'package:chilltravel/src/features/explore_screen.dart';
-import 'package:chilltravel/src/features/home_screen.dart';
-import 'package:chilltravel/src/features/itinerary_screen.dart';
-import 'package:chilltravel/src/features/onboarding_screen.dart';
-import 'package:chilltravel/src/features/wishlist_screen.dart';
+import 'package:wanderviet/src/application/travel_providers.dart';
+import 'package:wanderviet/src/core/api/vietwander_api_client.dart';
+import 'package:wanderviet/src/data/cache/travel_offline_cache.dart';
+import 'package:wanderviet/src/data/repositories/booking_repository.dart';
+import 'package:wanderviet/src/data/repositories/chat_repository.dart';
+import 'package:wanderviet/src/data/repositories/travel_repository.dart';
+import 'package:wanderviet/src/domain/travel_models.dart';
+import 'package:wanderviet/src/features/ai_chat_screen.dart';
+import 'package:wanderviet/src/features/booking_screen.dart';
+import 'package:wanderviet/src/features/destination_detail_screen.dart';
+import 'package:wanderviet/src/features/explore_screen.dart';
+import 'package:wanderviet/src/features/home_screen.dart';
+import 'package:wanderviet/src/features/itinerary_screen.dart';
+import 'package:wanderviet/src/features/onboarding_screen.dart';
+import 'package:wanderviet/src/features/wishlist_screen.dart';
 
-import 'package:chilltravel/src/app.dart';
+import 'package:wanderviet/src/app.dart';
 
 void main() {
   testWidgets('app renders onboarding', (tester) async {
@@ -30,7 +30,7 @@ void main() {
       ),
     );
 
-    expect(find.text('CHILLTRAVEL'), findsWidgets);
+    expect(find.text('WANDERVIET'), findsWidgets);
     expect(find.text('Tiếng Việt là mặc định'), findsOneWidget);
   });
 

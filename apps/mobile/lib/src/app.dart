@@ -39,7 +39,7 @@ class WanderVietApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'CHILLTRAVEL',
+      title: 'WANDERVIET',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF0F8B7B)),
         useMaterial3: true,

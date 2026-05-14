@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
 
 env:
-  GHCR_API_IMAGE: ghcr.io/${{ github.repository_owner }}/wanderviet-api
-  GHCR_WEB_IMAGE: ghcr.io/${{ github.repository_owner }}/wanderviet-web
-  GHCR_AI_IMAGE: ghcr.io/${{ github.repository_owner }}/wanderviet-ai
+  GHCR_API_IMAGE: ghcr.io/jasontm17/wanderviet-api
+  GHCR_WEB_IMAGE: ghcr.io/jasontm17/wanderviet-web
+  GHCR_AI_IMAGE: ghcr.io/jasontm17/wanderviet-ai
 
 jobs:
   build-and-push:

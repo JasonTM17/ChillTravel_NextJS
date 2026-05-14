@@ -11,7 +11,7 @@ import { PageShell } from '@/components/page-shell';
 
 const supportContacts = [
   [MessageCircle, 'Chat hỗ trợ', '/chat', 'Hỏi trợ lý local về lịch trình hoặc đặt chỗ demo.'],
-  [Mail, 'Email demo', '/profile', 'support@chilltravel.local'],
+  [Mail, 'Email demo', '/profile', 'support@wanderviet.local'],
   [Phone, 'Hotline mẫu', '/support', '1900 0000 không gọi ra thật'],
 ] as const;
 

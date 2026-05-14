@@ -27,7 +27,10 @@ export default function LoyaltyPage() {
   );
 
   return (
-    <PageShell eyebrow="Chill Rewards" title="Loyalty dashboard demo cho ưu đãi, QR và gói offline">
+    <PageShell
+      eyebrow="WanderViet Rewards"
+      title="Loyalty dashboard demo cho ưu đãi, QR và gói offline"
+    >
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_330px]">
         <section className="space-y-5">
           <CommerceSurface className="bg-tv-blue text-white">

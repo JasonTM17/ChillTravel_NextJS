@@ -47,17 +47,17 @@
 
 ## Tech Stack
 
-| Layer | Technology | Version |
-|-------|-----------|---------|
-| **Frontend** | Next.js + TypeScript + Tailwind CSS | 16.x |
-| **Backend** | NestJS + TypeScript | 11.x |
-| **Database** | PostgreSQL + Prisma ORM | 18 / 7.x |
-| **AI Service** | FastAPI + Ollama + Qdrant | Python 3.12+ |
-| **Mobile** | Flutter + Dart | Latest |
-| **Monorepo** | pnpm Workspaces + Turborepo | 10.x / 2.x |
-| **Testing** | Vitest + Playwright + k6 | Latest |
-| **CI/CD** | GitHub Actions + Docker | — |
-| **Cache** | Redis | 7.x |
+| Layer          | Technology                          | Version      |
+| -------------- | ----------------------------------- | ------------ |
+| **Frontend**   | Next.js + TypeScript + Tailwind CSS | 16.x         |
+| **Backend**    | NestJS + TypeScript                 | 11.x         |
+| **Database**   | PostgreSQL + Prisma ORM             | 18 / 7.x     |
+| **AI Service** | FastAPI + Ollama + Qdrant           | Python 3.12+ |
+| **Mobile**     | Flutter + Dart                      | Latest       |
+| **Monorepo**   | pnpm Workspaces + Turborepo         | 10.x / 2.x   |
+| **Testing**    | Vitest + Playwright + k6            | Latest       |
+| **CI/CD**      | GitHub Actions + Docker             | —            |
+| **Cache**      | Redis                               | 7.x          |
 
 ---
 
@@ -83,7 +83,7 @@ wanderviet/
 ```mermaid
 graph TB
     subgraph Frontend
-        Web[Next.js 16<br/>:3000]
+        Web[Next.js 16<br/>:3001]
         Mobile[Flutter App]
     end
     subgraph Backend
@@ -112,13 +112,13 @@ graph TB
 
 ## Prerequisites
 
-| Software | Minimum Version |
-|----------|----------------|
-| Node.js | >= 22.x |
-| pnpm | >= 10.x |
-| Docker & Docker Compose | Latest |
-| PostgreSQL | 18 (via Docker) |
-| Python | >= 3.12 (for AI service) |
+| Software                | Minimum Version          |
+| ----------------------- | ------------------------ |
+| Node.js                 | >= 22.x                  |
+| pnpm                    | >= 10.x                  |
+| Docker & Docker Compose | Latest                   |
+| PostgreSQL              | 18 (via Docker)          |
+| Python                  | >= 3.12 (for AI service) |
 
 ---
 
@@ -163,21 +163,21 @@ pnpm seed
 pnpm dev
 ```
 
-| Service | URL |
-|---------|-----|
-| Web | http://localhost:3000 |
-| API | http://localhost:4000/api/v1 |
-| Swagger | http://localhost:4000/api/docs |
-| AI Service | http://localhost:8010 |
+| Service    | URL                            |
+| ---------- | ------------------------------ |
+| Web        | http://localhost:3001          |
+| API        | http://localhost:4000/api/v1   |
+| Swagger    | http://localhost:4000/api/docs |
+| AI Service | http://localhost:8010          |
 
 ---
 
 ## Demo Accounts
 
-| Role | Email | Password |
-|------|-------|----------|
+| Role  | Email                  | Password       |
+| ----- | ---------------------- | -------------- |
 | Admin | `admin@wanderviet.com` | `Admin@123456` |
-| User | `user@wanderviet.com` | `User@123456` |
+| User  | `user@wanderviet.com`  | `User@123456`  |
 
 > **Note:** The payment system is mock/demo only — no real transactions are processed.
 
@@ -194,14 +194,14 @@ API documentation is auto-generated using Swagger/OpenAPI:
 
 ## Documentation
 
-| Document | Description |
-|----------|-------------|
-| [Architecture](./docs/architecture.md) | System architecture overview |
-| [ADRs](./docs/adr/) | Architecture Decision Records |
-| [ER Diagram](./docs/er-diagram.md) | Entity-Relationship diagram |
-| [Contributing](./CONTRIBUTING.md) | Contribution guidelines |
-| [Changelog](./CHANGELOG.md) | Change history |
-| [Release Checklist](./docs/release-checklist.md) | Release process |
+| Document                                         | Description                   |
+| ------------------------------------------------ | ----------------------------- |
+| [Architecture](./docs/architecture.md)           | System architecture overview  |
+| [ADRs](./docs/adr/)                              | Architecture Decision Records |
+| [ER Diagram](./docs/er-diagram.md)               | Entity-Relationship diagram   |
+| [Contributing](./CONTRIBUTING.md)                | Contribution guidelines       |
+| [Changelog](./CHANGELOG.md)                      | Change history                |
+| [Release Checklist](./docs/release-checklist.md) | Release process               |
 
 ---
 

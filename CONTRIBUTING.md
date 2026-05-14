@@ -34,8 +34,8 @@ Thank you for your interest in contributing to WanderViet! This guide will help 
 5. **Run database migrations and seed**
 
    ```bash
-   pnpm --filter @wanderviet/db db:migrate
-   pnpm --filter @wanderviet/db db:seed
+   pnpm --filter @vietwander/db prisma migrate dev
+   pnpm --filter @vietwander/db seed
    ```
 
 6. **Start development servers**
@@ -48,14 +48,15 @@ Thank you for your interest in contributing to WanderViet! This guide will help 
 
 Use the following prefixes for branch names:
 
-| Prefix   | Purpose                          |
-|----------|----------------------------------|
-| `feat/`  | New features                     |
-| `fix/`   | Bug fixes                        |
-| `docs/`  | Documentation changes            |
-| `chore/` | Maintenance, tooling, refactors  |
+| Prefix   | Purpose                         |
+| -------- | ------------------------------- |
+| `feat/`  | New features                    |
+| `fix/`   | Bug fixes                       |
+| `docs/`  | Documentation changes           |
+| `chore/` | Maintenance, tooling, refactors |
 
 Examples:
+
 - `feat/tour-search-filters`
 - `fix/booking-date-validation`
 - `docs/update-architecture-diagram`
@@ -78,7 +79,7 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org/) f
 ### Types
 
 | Type       | Description                        |
-|------------|------------------------------------|
+| ---------- | ---------------------------------- |
 | `feat`     | A new feature                      |
 | `fix`      | A bug fix                          |
 | `docs`     | Documentation only changes         |
@@ -154,7 +155,7 @@ wanderviet/
 ├── e2e/              # Playwright end-to-end tests
 ├── scripts/          # Utility and automation scripts
 ├── docs/             # Architecture docs and ADRs
-└── docker-compose.yml
+└── infra/docker/docker-compose.yml
 ```
 
 Each `apps/*` package is a deployable service. Each `packages/*` package is a shared library consumed by apps. Turborepo orchestrates builds, tests, and linting across the monorepo.

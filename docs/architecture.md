@@ -10,7 +10,7 @@
 ┌─────────────────┐     ┌──────────────────┐     ┌──────────────────┐
 │  Next.js 16     │────▶│  NestJS 11 API   │────▶│  PostgreSQL 18   │
 │  apps/web       │     │  apps/api        │     │  (Prisma 7 ORM)  │
-│  :3000          │     │  :4000 /api/v1   │     │  :5432           │
+│  :3001          │     │  :4000 /api/v1   │     │  :5432           │
 └─────────────────┘     └──────────────────┘     └──────────────────┘
                                 │
                                 ▼
@@ -55,15 +55,15 @@ wanderviet/
 
 All services are containerized and orchestrated via Docker Compose (`infra/docker/docker-compose.yml`).
 
-| Service        | Image                              | Port Mapping       | Notes                          |
-| -------------- | ---------------------------------- | ------------------ | ------------------------------ |
-| api            | `nguyenson1710/wanderviet-api`     | `4000:4000`        | NestJS REST API                |
-| web            | `nguyenson1710/wanderviet-web`     | `3000:3000`        | Next.js frontend               |
-| ai-service     | Built from `apps/ai-service/`      | `8010:8010`        | FastAPI RAG service            |
-| postgres       | `postgres:18-alpine`               | `5432:5432`        | Primary database               |
-| redis          | `redis:7-alpine`                   | `6379:6379`        | Caching & session store        |
-| qdrant         | `qdrant/qdrant:latest`             | `6333:6333`        | Vector database for RAG        |
-| ollama         | `ollama/ollama:latest`             | `11434:11434`      | Local LLM inference            |
+| Service    | Image                          | Port Mapping  | Notes                   |
+| ---------- | ------------------------------ | ------------- | ----------------------- |
+| api        | `nguyenson1710/wanderviet-api` | `4000:4000`   | NestJS REST API         |
+| web        | `nguyenson1710/wanderviet-web` | `3001:3001`   | Next.js frontend        |
+| ai-service | Built from `apps/ai-service/`  | `8010:8010`   | FastAPI RAG service     |
+| postgres   | `postgres:18-alpine`           | `5432:5432`   | Primary database        |
+| redis      | `redis:7-alpine`               | `6379:6379`   | Caching & session store |
+| qdrant     | `qdrant/qdrant:latest`         | `6333:6333`   | Vector database for RAG |
+| ollama     | `ollama/ollama:latest`         | `11434:11434` | Local LLM inference     |
 
 ### Docker Build Strategy
 
@@ -106,7 +106,7 @@ apps/ai-service/knowledge/
 ```mermaid
 graph TB
     subgraph Frontend
-        Web[Next.js 16<br/>:3000]
+        Web[Next.js 16<br/>:3001]
         Mobile[Flutter App]
     end
     subgraph Backend

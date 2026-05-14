@@ -53,7 +53,7 @@ class QdrantRagAdapter:
     ):
         self.url = url
         self.collection = collection
-        self.enabled = enabled if enabled is not None else os.getenv("CHILLTRAVEL_USE_QDRANT", "").lower() in {"1", "true", "yes"}
+        self.enabled = enabled if enabled is not None else os.getenv("WANDERVIET_USE_QDRANT", "").lower() in {"1", "true", "yes"}
         self.embedder = OllamaEmbeddingProvider()
 
     def status(self) -> dict[str, Any]:

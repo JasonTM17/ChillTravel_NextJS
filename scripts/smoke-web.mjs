@@ -8,7 +8,7 @@ const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 const routes = [
-  ['/', ['ChillTravel', 'Khách sạn', 'Ưu đãi mẫu']],
+  ['/', ['WanderViet', 'Khách sạn', 'Ưu đãi mẫu']],
   ['/explore?q=Da+Nang', ['Đà Nẵng', 'Tóm tắt chuyến đi', 'Chỉ thanh toán demo']],
   [
     '/explore?q=Da+Nang&style=%E1%BA%A8m%20th%E1%BB%B1c',
@@ -37,10 +37,10 @@ const routes = [
   ['/trips', 'Chuyến đi'],
   ['/profile', 'Hồ sơ du lịch'],
   ['/support', ['Trung tâm hỗ trợ', 'Thanh toán demo hoạt động', 'Không nhập hoặc lưu thẻ thật']],
-  ['/loyalty', ['Chill Rewards', '1.280', 'điểm demo', 'Không có giá trị thanh toán thật']],
+  ['/loyalty', ['WanderViet Rewards', '1.280', 'điểm demo', 'Không có giá trị thanh toán thật']],
   ['/login', 'Đăng nhập'],
   ['/register', 'Đăng ký'],
-  ['/admin', 'Bảng vận hành ChillTravel'],
+  ['/admin', 'Bảng vận hành WanderViet'],
   ['/admin/ai-knowledge', 'Knowledge Studio'],
 ];
 
@@ -64,7 +64,7 @@ let server;
 
 async function fetchText(path) {
   const response = await fetch(`${baseUrl}${path}`, {
-    headers: { 'user-agent': 'ChillTravel route smoke' },
+    headers: { 'user-agent': 'WanderViet route smoke' },
   });
   return { status: response.status, body: await response.text() };
 }
@@ -118,8 +118,8 @@ function assertRoute(path, expected, status, body) {
       throw new Error(`${path} is missing expected text: ${expectedText}`);
     }
   }
-  if (!body.includes('ChillTravel')) {
-    throw new Error(`${path} is missing ChillTravel brand text`);
+  if (!body.includes('WanderViet')) {
+    throw new Error(`${path} is missing WanderViet brand text`);
   }
   for (const pattern of forbidden) {
     if (pattern.test(body)) {
@@ -149,7 +149,7 @@ async function main() {
 
 try {
   await main();
-  console.log('ChillTravel web smoke passed');
+  console.log('WanderViet web smoke passed');
 } finally {
   if (server) {
     server.kill();

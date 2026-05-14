@@ -28,7 +28,7 @@
   "scripts": {
     "build": "prisma generate --schema prisma/schema.prisma && prisma validate --schema prisma/schema.prisma",
     "lint": "prisma validate --schema prisma/schema.prisma",
-    "test": "node -e \"console.log('db schema validation delegated to build')\"",
+    "test": "echo 'db schema validation delegated to build'",
     "seed": "tsx prisma/seed.ts"
   },
   "prisma": {

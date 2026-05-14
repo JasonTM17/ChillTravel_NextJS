@@ -102,14 +102,15 @@ describe('api http hardening', () => {
   });
 
   it('wraps successful responses in the global envelope shape', async () => {
-    // /health is excluded from the /api/v1 global prefix (Req 32).
-    const response = await api('GET', '/health', { baseUrl: rootUrl });
+    // /health/live is excluded from the /api/v1 global prefix and does not
+    // require DB/Redis, making it safe for unit tests without services.
+    const response = await api('GET', '/health/live', { baseUrl: rootUrl });
 
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject({
       success: true,
       message: 'OK',
-      data: { status: 'ok', paymentMode: 'mock', aiRuntime: 'local-first' },
+      data: { status: 'alive' },
     });
   });
 

@@ -45,7 +45,7 @@ COPY packages/config/package.json   ./packages/config/package.json
 COPY packages/db/package.json       ./packages/db/package.json
 COPY packages/shared/package.json   ./packages/shared/package.json
 
-RUN pnpm install --frozen-lockfile --prod
+RUN pnpm install --frozen-lockfile --prod --ignore-scripts
 
 # ─── Stage 4: runner ──────────────────────────────────────────────────────────
 FROM node:24-alpine AS runner

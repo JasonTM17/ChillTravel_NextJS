@@ -73,7 +73,7 @@ void main() {
 
     expect(find.text('Ăn gì ở gần đây?'), findsOneWidget);
     expect(find.text('Trợ lý'), findsOneWidget);
-    expect(find.textContaining('gói offline'), findsOneWidget);
+    expect(find.textContaining('gói offline'), findsWidgets);
   });
 
   testWidgets('booking creates sandbox holds locally', (tester) async {

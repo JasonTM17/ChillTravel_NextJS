@@ -26,9 +26,7 @@ test.describe('Admin Tour Flow: Admin Login → Create Tour', () => {
     await page.goto('/admin');
 
     // Look for tours management link/section
-    const toursLink = page.locator(
-      'a:has-text("Tours"), a:has-text("Tour"), [href*="/admin/tours"]'
-    ).first();
+    const toursLink = page.locator('[href="/admin/tours"]').first();
 
     if (await toursLink.isVisible()) {
       await toursLink.click();
@@ -47,9 +45,11 @@ test.describe('Admin Tour Flow: Admin Login → Create Tour', () => {
     await page.goto('/admin/tours');
 
     // Look for create/add tour button
-    const createButton = page.locator(
-      'a:has-text("Create"), a:has-text("Add"), a:has-text("Tạo"), button:has-text("Create"), button:has-text("Add"), button:has-text("Tạo"), [href*="/admin/tours/create"], [href*="/admin/tours/new"]'
-    ).first();
+    const createButton = page
+      .locator(
+        'a:has-text("Create"), a:has-text("Add"), a:has-text("Tạo"), button:has-text("Create"), button:has-text("Add"), button:has-text("Tạo"), [href*="/admin/tours/create"], [href*="/admin/tours/new"]',
+      )
+      .first();
 
     if (await createButton.isVisible()) {
       await createButton.click();
@@ -74,27 +74,25 @@ test.describe('Admin Tour Flow: Admin Login → Create Tour', () => {
     const form = page.locator('form').first();
     if (await form.isVisible()) {
       // Fill in basic tour information
-      const nameInput = page.locator(
-        '[name="name"], [name="title"], [name="tourName"]'
-      ).first();
+      const nameInput = page.locator('[name="name"], [name="title"], [name="tourName"]').first();
 
       if (await nameInput.isVisible()) {
         await nameInput.fill(`E2E Test Tour ${Date.now()}`);
       }
 
       // Look for description field
-      const descInput = page.locator(
-        '[name="description"], textarea'
-      ).first();
+      const descInput = page.locator('[name="description"], textarea').first();
 
       if (await descInput.isVisible()) {
         await descInput.fill('This is an E2E test tour created by Playwright');
       }
 
       // Verify form has a submit button
-      const submitButton = page.locator(
-        'button[type="submit"], button:has-text("Save"), button:has-text("Create"), button:has-text("Lưu"), button:has-text("Tạo")'
-      ).first();
+      const submitButton = page
+        .locator(
+          'button[type="submit"], button:has-text("Save"), button:has-text("Create"), button:has-text("Lưu"), button:has-text("Tạo")',
+        )
+        .first();
       await expect(submitButton).toBeVisible();
     }
   });

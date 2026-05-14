@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JasonTM17/ChillTravel_NextJS.git",
+    "url": "https://github.com/JasonTM17/wanderviet.git",
     "directory": "packages/config"
   },
   "keywords": [
@@ -21,7 +21,7 @@
   "scripts": {
     "build": "tsc --noEmit",
     "lint": "tsc --noEmit",
-    "test": "node -e \"console.log('config package smoke ok')\""
+    "test": "echo 'config package smoke ok'"
   },
   "devDependencies": {
     "typescript": "^5.9.3"

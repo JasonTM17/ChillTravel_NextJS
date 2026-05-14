@@ -53,16 +53,15 @@ services:
         condition: service_healthy
 
   ai-service:
-    image: python:3.12-slim
-    working_dir: /workspace/apps/ai-service
-    command: sh -c "pip install -r requirements.txt && uvicorn app.main:app --host 0.0.0.0 --port 8010"
-    volumes:
-      - ../..:/workspace
+    build:
+      context: ../..
+      dockerfile: apps/ai-service/Dockerfile
     ports:
       - '8010:8010'
     environment:
       OLLAMA_BASE_URL: http://host.docker.internal:11434
       QDRANT_URL: http://qdrant:6333
+    restart: unless-stopped
     depends_on:
       - qdrant
 

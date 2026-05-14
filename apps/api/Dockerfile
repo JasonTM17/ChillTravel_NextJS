@@ -34,6 +34,9 @@ RUN pnpm --filter @vietwander/shared build
 # Build the API (tsc → dist/)
 RUN pnpm --filter @vietwander/api build
 
+# Prune dev dependencies for smaller production image
+RUN pnpm prune --prod
+
 # ─── Stage 4: runner ──────────────────────────────────────────────────────────
 FROM node:24-alpine AS runner
 WORKDIR /app

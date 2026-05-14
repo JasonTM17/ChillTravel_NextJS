@@ -6,8 +6,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/JasonTM17/ChillTravel_NextJS/actions/workflows/ci.yml">
-    <img src="https://github.com/JasonTM17/ChillTravel_NextJS/actions/workflows/ci.yml/badge.svg" alt="CI" />
+  <a href="https://github.com/JasonTM17/wanderviet/actions/workflows/ci.yml">
+    <img src="https://github.com/JasonTM17/wanderviet/actions/workflows/ci.yml/badge.svg" alt="CI" />
   </a>
   <a href="https://hub.docker.com/r/nguyenson1710/wanderviet-api">
     <img src="https://img.shields.io/docker/v/nguyenson1710/wanderviet-api?label=API%20Image&logo=docker" alt="Docker API" />
@@ -18,6 +18,8 @@
   <a href="./LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
   </a>
+  <img src="https://img.shields.io/badge/TypeScript-Strict-3178c6?logo=typescript&logoColor=white" alt="TypeScript Strict" />
+  <img src="https://img.shields.io/badge/Node.js-22+-339933?logo=node.js&logoColor=white" alt="Node 22+" />
 </p>
 
 <p align="center">
@@ -28,6 +30,10 @@
 </p>
 
 ---
+
+<p align="center">
+  <img src="./assets/images/homepage_top.png" alt="WanderViet Homepage" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
+</p>
 
 ## Introduction
 
@@ -42,6 +48,46 @@
 - Flutter cross-platform mobile app
 - E2E testing (Playwright) + Load testing (k6)
 - Docker Compose — spin up the entire system with a single command
+
+---
+
+## UI Showcase
+
+### Homepage — Hero Search & Flash Sale
+
+<p align="center">
+  <img src="./assets/images/homepage_flash_sale.png" alt="Flash Sale" width="48%" />
+  &nbsp;
+  <img src="./assets/images/homepage_full.png" alt="Homepage Full" width="48%" />
+</p>
+
+### Tour Detail — Gallery, Itinerary, Booking
+
+<p align="center">
+  <img src="./assets/images/tour-detail.png" alt="Tour Detail" width="100%" style="border-radius: 8px;" />
+</p>
+
+### Explore & Destination Search
+
+<p align="center">
+  <img src="./assets/images/explore-search.png" alt="Explore Search" width="100%" style="border-radius: 8px;" />
+</p>
+
+### Hotel Detail & Booking Flow
+
+<p align="center">
+  <img src="./assets/images/hotel-detail.png" alt="Hotel Detail" width="48%" />
+  &nbsp;
+  <img src="./assets/images/booking-flow.png" alt="Booking Flow" width="48%" />
+</p>
+
+### AI Trip Planner & Admin Dashboard
+
+<p align="center">
+  <img src="./assets/images/ai-planner.png" alt="AI Planner" width="48%" />
+  &nbsp;
+  <img src="./assets/images/admin-dashboard.png" alt="Admin Dashboard" width="48%" />
+</p>
 
 ---
 
@@ -110,6 +156,21 @@ graph TB
 
 ---
 
+## Technical Highlights
+
+| Aspect                  | Details                                                                  |
+| ----------------------- | ------------------------------------------------------------------------ |
+| **Local AI/RAG**        | Ollama LLM + Qdrant vector DB — no API keys, no cost                     |
+| **True monorepo**       | pnpm workspaces + Turborepo — shared types, lint, build pipeline         |
+| **Security**            | JWT rotation, rate limiting, path traversal protection, input validation |
+| **Production Docker**   | Multi-stage builds, non-root containers, health checks                   |
+| **Automated CI/CD**     | GitHub Actions: lint → test → build → push Docker images                 |
+| **Multi-layer testing** | Unit (Vitest) + E2E (Playwright) + Load (k6)                             |
+| **Design System**       | Custom Tailwind tokens, responsive mobile-first, accessibility           |
+| **4 ADRs**              | Documented technical decisions (NestJS, Prisma, mock payment, monorepo)  |
+
+---
+
 ## Prerequisites
 
 | Software                | Minimum Version          |
@@ -127,8 +188,8 @@ graph TB
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/JasonTM17/ChillTravel_NextJS.git
-cd ChillTravel_NextJS
+git clone https://github.com/JasonTM17/wanderviet.git
+cd wanderviet
 ```
 
 ### 2. Install dependencies
@@ -194,14 +255,46 @@ API documentation is auto-generated using Swagger/OpenAPI:
 
 ## Documentation
 
-| Document                                         | Description                   |
-| ------------------------------------------------ | ----------------------------- |
-| [Architecture](./docs/architecture.md)           | System architecture overview  |
-| [ADRs](./docs/adr/)                              | Architecture Decision Records |
-| [ER Diagram](./docs/er-diagram.md)               | Entity-Relationship diagram   |
-| [Contributing](./CONTRIBUTING.md)                | Contribution guidelines       |
-| [Changelog](./CHANGELOG.md)                      | Change history                |
-| [Release Checklist](./docs/release-checklist.md) | Release process               |
+| Document                                         | Description                    |
+| ------------------------------------------------ | ------------------------------ |
+| [Architecture](./docs/architecture.md)           | System architecture overview   |
+| [Features](./docs/FEATURES.md)                   | Detailed feature documentation |
+| [ADRs](./docs/adr/)                              | Architecture Decision Records  |
+| [ER Diagram](./docs/er-diagram.md)               | Entity-Relationship diagram    |
+| [Contributing](./CONTRIBUTING.md)                | Contribution guidelines        |
+| [Changelog](./CHANGELOG.md)                      | Change history                 |
+| [Release Checklist](./docs/release-checklist.md) | Release process                |
+
+---
+
+## Project Scale
+
+```
+41 web pages | 21 API modules | 10 AI endpoints | 12 mobile screens
+```
+
+| Feature Group | Pages                                                                                                     |
+| ------------- | --------------------------------------------------------------------------------------------------------- |
+| Booking       | Tour listing, Tour detail, Hotel detail, Flight search, Booking form, Payment, Success                    |
+| AI            | AI Planner, Chat, Budget estimator, Personality quiz, Destination compare                                 |
+| User          | Login, Register, Profile, Wishlist, My Bookings, Notifications, Loyalty                                   |
+| Admin         | Dashboard, Users, Tours, Hotels, Destinations, Bookings, Coupons, Blogs, Reviews, Analytics, AI Knowledge |
+| Explore       | Search, Map, Experiences, Trips                                                                           |
+
+---
+
+## Scripts
+
+```bash
+pnpm dev              # Start all dev servers
+pnpm build            # Production build
+pnpm lint             # ESLint + Prettier check
+pnpm typecheck        # TypeScript strict check
+pnpm test             # Vitest unit tests
+pnpm e2e              # Playwright E2E tests
+pnpm docker:up        # Docker Compose up
+pnpm seed             # Seed database
+```
 
 ---
 

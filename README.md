@@ -6,8 +6,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/JasonTM17/ChillTravel_NextJS/actions/workflows/ci.yml">
-    <img src="https://github.com/JasonTM17/ChillTravel_NextJS/actions/workflows/ci.yml/badge.svg" alt="CI" />
+  <a href="https://github.com/JasonTM17/wanderviet/actions/workflows/ci.yml">
+    <img src="https://github.com/JasonTM17/wanderviet/actions/workflows/ci.yml/badge.svg" alt="CI" />
   </a>
   <a href="https://hub.docker.com/r/nguyenson1710/wanderviet-api">
     <img src="https://img.shields.io/docker/v/nguyenson1710/wanderviet-api?label=API%20Image&logo=docker" alt="Docker API" />
@@ -18,52 +18,82 @@
   <a href="./LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
   </a>
+  <img src="https://img.shields.io/badge/TypeScript-Strict-3178c6?logo=typescript&logoColor=white" alt="TypeScript Strict" />
+  <img src="https://img.shields.io/badge/Node.js-22+-339933?logo=node.js&logoColor=white" alt="Node 22+" />
 </p>
 
 <p align="center">
   <a href="./README.en.md">English</a> |
-  <a href="#cài-đặt-nhanh">Cài đặt</a> |
-  <a href="#tài-liệu">Tài liệu</a> |
+  <a href="#cài-đặt-nhanh">Cai dat</a> |
+  <a href="#tài-liệu">Tai lieu</a> |
   <a href="#api-documentation">API Docs</a>
 </p>
 
 ---
 
 <p align="center">
-  <img src="./assets/images/homepage_top.png" alt="WanderViet Homepage Preview" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
+  <img src="./assets/images/homepage_top.png" alt="WanderViet Homepage" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
 </p>
 
-## Giao diện Nổi bật
+## Gioi Thieu
 
-Dự án được thiết kế với chuẩn UI/UX cao cấp (Premium Booking Platform), sử dụng Design System tinh tế và hiện đại.
+**WanderViet** la nen tang du lich toan dien danh cho thi truong Viet Nam, cho phep nguoi dung tim kiem, dat tour, khach san va chuyen bay. He thong tich hop AI chatbot ho tro tu van du lich su dung mo hinh ngon ngu chay hoan toan local (khong phu thuoc cloud API).
 
-<p align="center">
-  <img src="./assets/images/homepage_flash_sale.png" alt="Flash Sale Deals" width="48%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
-  &nbsp;
-  <img src="./assets/images/homepage_full.png" alt="Full Homepage Layout" width="48%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
-</p>
+### Tinh Nang Chinh
+
+- Dat tour, khach san, chuyen bay voi he thong thanh toan demo
+- AI Travel Assistant — chatbot tu van du lich (Ollama + RAG)
+- Admin Dashboard voi analytics va quan ly booking
+- Xac thuc JWT (access token 15 phut + refresh token 7 ngay)
+- Ung dung mobile Flutter cross-platform
+- E2E testing (Playwright) + Load testing (k6)
+- Docker Compose — khoi chay toan bo he thong bang 1 lenh
 
 ---
 
-## Giới Thiệu
+## Giao Dien
 
-**WanderViet** là nền tảng du lịch toàn diện dành cho thị trường Việt Nam, cho phép người dùng tìm kiếm, đặt tour, khách sạn và chuyến bay. Hệ thống tích hợp AI chatbot hỗ trợ tư vấn du lịch sử dụng mô hình ngôn ngữ chạy hoàn toàn local (không phụ thuộc cloud API).
+### Trang chu — Hero Search & Flash Sale
 
-### Tính Năng Chính
+<p align="center">
+  <img src="./assets/images/homepage_flash_sale.png" alt="Flash Sale" width="48%" />
+  &nbsp;
+  <img src="./assets/images/homepage_full.png" alt="Homepage Full" width="48%" />
+</p>
 
-- Đặt tour, khách sạn, chuyến bay với hệ thống thanh toán demo
-- AI Travel Assistant — chatbot tư vấn du lịch (Ollama + RAG)
-- Admin Dashboard với analytics và quản lý booking
-- Xác thực JWT (access token 15 phút + refresh token 7 ngày)
-- Ứng dụng mobile Flutter cross-platform
-- E2E testing (Playwright) + Load testing (k6)
-- Docker Compose — khởi chạy toàn bộ hệ thống bằng 1 lệnh
+### Tour Chi Tiet — Gallery, Lich Trinh, Booking
+
+<p align="center">
+  <img src="./assets/images/tour-detail.png" alt="Tour Detail" width="100%" style="border-radius: 8px;" />
+</p>
+
+### Tim Kiem & Kham Pha Diem Den
+
+<p align="center">
+  <img src="./assets/images/explore-search.png" alt="Explore Search" width="100%" style="border-radius: 8px;" />
+</p>
+
+### Khach San — Photo Gallery & Dat Phong
+
+<p align="center">
+  <img src="./assets/images/hotel-detail.png" alt="Hotel Detail" width="48%" />
+  &nbsp;
+  <img src="./assets/images/booking-flow.png" alt="Booking Flow" width="48%" />
+</p>
+
+### AI Trip Planner & Admin Dashboard
+
+<p align="center">
+  <img src="./assets/images/ai-planner.png" alt="AI Planner" width="48%" />
+  &nbsp;
+  <img src="./assets/images/admin-dashboard.png" alt="Admin Dashboard" width="48%" />
+</p>
 
 ---
 
 ## Tech Stack
 
-| Layer          | Công nghệ                           | Phiên bản    |
+| Layer          | Cong nghe                           | Phien ban    |
 | -------------- | ----------------------------------- | ------------ |
 | **Frontend**   | Next.js + TypeScript + Tailwind CSS | 16.x         |
 | **Backend**    | NestJS + TypeScript                 | 11.x         |
@@ -77,12 +107,12 @@ Dự án được thiết kế với chuẩn UI/UX cao cấp (Premium Booking Pl
 
 ---
 
-## Kiến Trúc
+## Kien Truc
 
 ```
 wanderviet/
 ├── apps/
-│   ├── api/            # NestJS 11 — REST API, Swagger tại /api/docs
+│   ├── api/            # NestJS 11 — REST API, Swagger tai /api/docs
 │   ├── web/            # Next.js 16 — Frontend Vietnamese-first
 │   ├── ai-service/     # FastAPI — Local RAG (Ollama + Qdrant)
 │   └── mobile/         # Flutter — Mobile app
@@ -126,9 +156,24 @@ graph TB
 
 ---
 
-## Yêu Cầu Hệ Thống
+## Diem Noi Bat Ky Thuat
 
-| Phần mềm                | Phiên bản tối thiểu      |
+| Khia canh                   | Chi tiet                                                                 |
+| --------------------------- | ------------------------------------------------------------------------ |
+| **AI/RAG hoat dong local**  | Ollama LLM + Qdrant vector DB — khong can API key, khong mat phi         |
+| **Monorepo thuc thu**       | pnpm workspaces + Turborepo — shared types, lint, build pipeline         |
+| **Security**                | JWT rotation, rate limiting, path traversal protection, input validation |
+| **Docker production-ready** | Multi-stage builds, non-root containers, health checks                   |
+| **CI/CD tu dong**           | GitHub Actions: lint → test → build → push Docker images                 |
+| **Testing da tang**         | Unit (Vitest) + E2E (Playwright) + Load (k6)                             |
+| **Design System**           | Custom Tailwind tokens, responsive mobile-first, accessibility           |
+| **4 ADRs**                  | Ghi chep quyet dinh ky thuat (NestJS, Prisma, mock payment, monorepo)    |
+
+---
+
+## Yeu Cau He Thong
+
+| Phan mem                | Phien ban toi thieu      |
 | ----------------------- | ------------------------ |
 | Node.js                 | >= 22.x                  |
 | pnpm                    | >= 10.x                  |
@@ -138,42 +183,42 @@ graph TB
 
 ---
 
-## Cài Đặt Nhanh
+## Cai Dat Nhanh
 
 ### 1. Clone repository
 
 ```bash
-git clone https://github.com/JasonTM17/ChillTravel_NextJS.git
-cd ChillTravel_NextJS
+git clone https://github.com/JasonTM17/wanderviet.git
+cd wanderviet
 ```
 
-### 2. Cài đặt dependencies
+### 2. Cai dat dependencies
 
 ```bash
 pnpm install
 ```
 
-### 3. Cấu hình môi trường
+### 3. Cau hinh moi truong
 
 ```bash
 cp .env.example .env
-# Chỉnh sửa .env với thông tin database và các config cần thiết
+# Chinh sua .env voi thong tin database va cac config can thiet
 ```
 
-### 4. Khởi chạy infrastructure (Docker)
+### 4. Khoi chay infrastructure (Docker)
 
 ```bash
 docker compose -f infra/docker/docker-compose.yml up -d
 ```
 
-### 5. Chạy database migrations & seed
+### 5. Chay database migrations & seed
 
 ```bash
 pnpm --filter @vietwander/db prisma migrate dev
 pnpm seed
 ```
 
-### 6. Khởi chạy development servers
+### 6. Khoi chay development servers
 
 ```bash
 pnpm dev
@@ -188,41 +233,73 @@ pnpm dev
 
 ---
 
-## Tài Khoản Demo
+## Tai Khoan Demo
 
-| Vai trò | Email                  | Mật khẩu       |
+| Vai tro | Email                  | Mat khau       |
 | ------- | ---------------------- | -------------- |
 | Admin   | `admin@wanderviet.com` | `Admin@123456` |
 | User    | `user@wanderviet.com`  | `User@123456`  |
 
-> **Lưu ý:** Hệ thống thanh toán là mock/demo — không xử lý giao dịch thật.
+> **Luu y:** He thong thanh toan la mock/demo — khong xu ly giao dich that.
 
 ---
 
 ## API Documentation
 
-API documentation được tạo tự động bằng Swagger/OpenAPI:
+API documentation duoc tao tu dong bang Swagger/OpenAPI:
 
 - **Swagger UI:** http://localhost:4000/api/docs
 - **OpenAPI JSON:** http://localhost:4000/api/docs-json
 
 ---
 
-## Tài Liệu
+## Tai Lieu
 
-| Tài liệu                                         | Mô tả                         |
+| Tai lieu                                         | Mo ta                         |
 | ------------------------------------------------ | ----------------------------- |
-| [Architecture](./docs/architecture.md)           | Tổng quan kiến trúc hệ thống  |
+| [Architecture](./docs/architecture.md)           | Tong quan kien truc he thong  |
+| [Features](./docs/FEATURES.md)                   | Chi tiet tinh nang            |
 | [ADRs](./docs/adr/)                              | Architecture Decision Records |
-| [ER Diagram](./docs/er-diagram.md)               | Sơ đồ quan hệ thực thể        |
-| [Contributing](./CONTRIBUTING.md)                | Hướng dẫn đóng góp            |
-| [Changelog](./CHANGELOG.md)                      | Lịch sử thay đổi              |
-| [Release Checklist](./docs/release-checklist.md) | Quy trình release             |
+| [ER Diagram](./docs/er-diagram.md)               | So do quan he thuc the        |
+| [Contributing](./CONTRIBUTING.md)                | Huong dan dong gop            |
+| [Changelog](./CHANGELOG.md)                      | Lich su thay doi              |
+| [Release Checklist](./docs/release-checklist.md) | Quy trinh release             |
+
+---
+
+## Cau Truc Du An
+
+```
+41 trang web | 21 API modules | 10 AI endpoints | 12 man hinh mobile
+```
+
+| Nhom tinh nang | Trang                                                                                                     |
+| -------------- | --------------------------------------------------------------------------------------------------------- |
+| Booking        | Tour listing, Tour detail, Hotel detail, Flight search, Booking form, Payment, Success                    |
+| AI             | AI Planner, Chat, Budget estimator, Personality quiz, Destination compare                                 |
+| User           | Login, Register, Profile, Wishlist, My Bookings, Notifications, Loyalty                                   |
+| Admin          | Dashboard, Users, Tours, Hotels, Destinations, Bookings, Coupons, Blogs, Reviews, Analytics, AI Knowledge |
+| Explore        | Search, Map, Experiences, Trips                                                                           |
+
+---
+
+## Scripts
+
+```bash
+pnpm dev              # Chay tat ca dev servers
+pnpm build            # Build production
+pnpm lint             # ESLint + Prettier check
+pnpm typecheck        # TypeScript strict check
+pnpm test             # Vitest unit tests
+pnpm e2e              # Playwright E2E tests
+pnpm docker:up        # Docker Compose up
+pnpm seed             # Seed database
+```
 
 ---
 
 ## License
 
-Dự án được phân phối dưới giấy phép [MIT](./LICENSE).
+Du an duoc phan phoi duoi giay phep [MIT](./LICENSE).
 
 Copyright (c) 2026 [Nguyen Son](https://github.com/JasonTM17)

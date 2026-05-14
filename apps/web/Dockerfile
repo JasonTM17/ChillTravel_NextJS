@@ -1,6 +1,6 @@
 # ─── Stage 1: base ────────────────────────────────────────────────────────────
 FROM node:24-alpine AS base
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@10.33.0 --activate
 
 # ─── Stage 2: deps ────────────────────────────────────────────────────────────
 FROM base AS deps
@@ -36,6 +36,9 @@ FROM node:24-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+ENV PORT=3001
+
+RUN addgroup -S app && adduser -S app -G app
 
 # Next.js standalone output bundles its own node_modules
 COPY --from=build /workspace/apps/web/.next/standalone ./
@@ -44,6 +47,10 @@ COPY --from=build /workspace/apps/web/.next/static      ./.next/static
 # Public assets (images, icons, etc.)
 COPY --from=build /workspace/apps/web/public            ./public
 
-EXPOSE 3000
+RUN chown -R app:app /app
+
+USER app
+
+EXPOSE 3001
 
 CMD ["node", "server.js"]

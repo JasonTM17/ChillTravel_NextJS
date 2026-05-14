@@ -18,6 +18,11 @@
     "turborepo"
   ],
   "packageManager": "pnpm@10.33.0",
+  "pnpm": {
+    "overrides": {
+      "multer": ">=2.1.0"
+    }
+  },
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",

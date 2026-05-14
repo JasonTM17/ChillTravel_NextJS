@@ -13,7 +13,7 @@ export function CommerceSurface({
   return (
     <section
       {...props}
-      className={cn('rounded-tv bg-white border border-tv-border shadow-tv-card p-5', className)}
+      className={cn('rounded-xl bg-white border border-gray-100 shadow-sm p-5', className)}
     >
       {children}
     </section>

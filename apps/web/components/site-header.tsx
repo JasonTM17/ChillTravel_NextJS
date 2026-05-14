@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, ChevronDown, HelpCircle, LogIn, Menu, UserRound, X } from 'lucide-react';
+import { Bell, ChevronDown, HelpCircle, LogIn, Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
@@ -8,17 +8,13 @@ import { BrandLogo } from '@/components/brand-logo';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { useAuth } from '@/lib/auth/auth-context';
 
-/* ─── Top utility bar (above main header) ─────────────────────────────────── */
-const topLinks = [{ label: 'Hỗ trợ', href: '/support', icon: HelpCircle }] as const;
-
-/* ─── Main navigation tabs ────────────────────────────────────────────────── */
 const mainNav = [
   { label: 'Khách sạn', href: '/hotels' },
   { label: 'Vé máy bay', href: '/flights' },
   { label: 'Tour du lịch', href: '/tours' },
   { label: 'Hoạt động', href: '/experiences' },
   { label: 'Bản đồ', href: '/map' },
-  { label: 'Ưu đãi', href: '/explore' },
+  { label: 'AI Planner', href: '/ai-planner' },
 ] as const;
 
 export function SiteHeader() {
@@ -27,53 +23,56 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-tv-header">
-      {/* ── Top bar ─────────────────────────────────────────────────────── */}
-      <div className="border-b border-tv-border bg-white">
-        <div className="mx-auto flex h-9 max-w-[1200px] items-center justify-between px-4">
-          {/* Left: brand tagline */}
-          <span className="hidden text-tv-xs text-tv-ink-3 md:block">
-            Nền tảng đặt tour du lịch Việt Nam &amp; quốc tế
+    <header className="sticky top-0 z-50 bg-white shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
+      {/* Top bar */}
+      <div className="border-b border-gray-100 bg-gray-50/80">
+        <div className="mx-auto flex h-8 max-w-[1200px] items-center justify-between px-4">
+          <span className="hidden text-[11px] text-gray-500 md:block">
+            Nền tảng đặt tour du lịch Việt Nam & quốc tế
           </span>
 
-          {/* Right: utility links */}
           <div className="flex items-center gap-4 ml-auto">
-            {topLinks.map(({ label, href, icon: Icon }) => (
-              <Link
-                key={label}
-                href={href}
-                className="inline-flex items-center gap-1 text-tv-xs text-tv-ink-3 hover:text-tv-blue transition-colors"
-              >
-                <Icon size={13} />
-                {label}
-              </Link>
-            ))}
+            <Link
+              href="/support"
+              className="inline-flex items-center gap-1 text-[11px] text-gray-500 hover:text-[#0064D2] transition-colors"
+            >
+              <HelpCircle size={12} />
+              Hỗ trợ
+            </Link>
 
             <LanguageSwitcher />
 
             {isAuthenticated ? (
               <div className="flex items-center gap-3">
-                <Link href="/notifications" className="relative text-tv-ink-3 hover:text-tv-blue">
-                  <Bell size={16} />
+                <Link
+                  href="/notifications"
+                  className="relative text-gray-500 hover:text-[#0064D2] transition-colors"
+                >
+                  <Bell size={15} />
+                  <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-red-500" />
                 </Link>
-                <div className="flex items-center gap-1 cursor-pointer text-tv-xs font-semibold text-tv-ink-2 hover:text-tv-blue">
-                  <UserRound size={14} />
-                  <span className="max-w-[100px] truncate">{user?.fullName ?? user?.email}</span>
-                  <ChevronDown size={12} />
+                <div className="flex items-center gap-1.5 cursor-pointer text-[11px] font-semibold text-gray-700 hover:text-[#0064D2] transition-colors">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#0064D2] text-[10px] font-bold text-white">
+                    {(user?.fullName ?? user?.email ?? 'U').charAt(0).toUpperCase()}
+                  </div>
+                  <span className="max-w-[80px] truncate hidden sm:inline">
+                    {user?.fullName ?? user?.email}
+                  </span>
+                  <ChevronDown size={11} />
                 </div>
               </div>
             ) : (
               <div className="flex items-center gap-2">
                 <Link
                   href="/login"
-                  className="inline-flex items-center gap-1 rounded-tv-sm border border-tv-blue px-3 py-1 text-tv-xs font-bold text-tv-blue hover:bg-tv-blue-light transition-colors"
+                  className="inline-flex items-center gap-1 rounded-lg border border-[#0064D2] px-3 py-1 text-[11px] font-bold text-[#0064D2] transition-colors hover:bg-blue-50"
                 >
-                  <LogIn size={12} />
+                  <LogIn size={11} />
                   Đăng nhập
                 </Link>
                 <Link
                   href="/register"
-                  className="inline-flex items-center rounded-tv-sm bg-tv-blue px-3 py-1 text-tv-xs font-bold text-white hover:bg-tv-blue-dark transition-colors"
+                  className="inline-flex items-center rounded-lg bg-[#0064D2] px-3 py-1 text-[11px] font-bold text-white transition-colors hover:bg-[#004EA2]"
                 >
                   Đăng ký
                 </Link>
@@ -83,13 +82,12 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* ── Main header ─────────────────────────────────────────────────── */}
+      {/* Main header */}
       <div className="bg-white">
-        <div className="mx-auto flex h-14 max-w-[1200px] items-center gap-6 px-4">
-          {/* Logo */}
+        <div className="mx-auto flex h-12 max-w-[1200px] items-center gap-6 px-4">
           <BrandLogo />
 
-          {/* Nav tabs — desktop */}
+          {/* Nav — desktop */}
           <nav className="hidden flex-1 items-center md:flex" aria-label="Điều hướng chính">
             {mainNav.map(({ label, href }) => {
               const active = pathname === href || pathname.startsWith(href + '/');
@@ -97,11 +95,11 @@ export function SiteHeader() {
                 <Link
                   key={label}
                   href={href}
-                  className={`relative inline-flex h-14 items-center px-3 text-tv-base font-semibold transition-colors whitespace-nowrap
+                  className={`relative inline-flex h-12 items-center px-3 text-[13px] font-semibold transition-colors whitespace-nowrap
                     ${
                       active
-                        ? 'text-tv-blue after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[3px] after:bg-tv-blue after:rounded-t'
-                        : 'text-tv-ink-2 hover:text-tv-blue'
+                        ? 'text-[#0064D2] after:absolute after:bottom-0 after:left-2 after:right-2 after:h-[2.5px] after:rounded-full after:bg-[#0064D2]'
+                        : 'text-gray-600 hover:text-[#0064D2]'
                     }`}
                 >
                   {label}
@@ -112,43 +110,43 @@ export function SiteHeader() {
 
           {/* Mobile menu button */}
           <button
-            className="ml-auto rounded-tv-sm border border-tv-border p-2 text-tv-ink-3 md:hidden"
+            className="ml-auto flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 md:hidden"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Menu"
           >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
       </div>
 
-      {/* ── Mobile menu ─────────────────────────────────────────────────── */}
+      {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-tv-border bg-white shadow-tv-modal md:hidden">
+        <div className="border-t border-gray-100 bg-white shadow-lg md:hidden">
           <nav className="flex flex-col py-2">
             {mainNav.map(({ label, href }) => (
               <Link
                 key={label}
                 href={href}
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center px-4 py-3 text-tv-base font-semibold text-tv-ink-2 hover:bg-tv-blue-light hover:text-tv-blue"
+                className="flex items-center px-4 py-3 text-[13px] font-semibold text-gray-700 hover:bg-blue-50 hover:text-[#0064D2] transition-colors"
               >
                 {label}
               </Link>
             ))}
-            <hr className="my-2 border-tv-border" />
+            <hr className="my-2 border-gray-100" />
             {!isAuthenticated && (
               <>
                 <Link
                   href="/login"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 px-4 py-3 text-tv-base font-bold text-tv-blue"
+                  className="flex items-center gap-2 px-4 py-3 text-[13px] font-bold text-[#0064D2]"
                 >
-                  <LogIn size={16} /> Đăng nhập
+                  <LogIn size={15} /> Đăng nhập
                 </Link>
                 <Link
                   href="/register"
                   onClick={() => setMobileOpen(false)}
-                  className="mx-4 mb-2 flex items-center justify-center rounded-tv bg-tv-blue py-2.5 text-tv-base font-bold text-white"
+                  className="mx-4 mb-2 flex items-center justify-center rounded-lg bg-[#0064D2] py-2.5 text-[13px] font-bold text-white"
                 >
                   Đăng ký
                 </Link>

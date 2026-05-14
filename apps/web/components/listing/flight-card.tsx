@@ -3,16 +3,14 @@
 import { Plane } from 'lucide-react';
 import { useLocale } from '@/lib/i18n';
 
-// ─── Types ───────────────────────────────────────────────────────────────────
-
 export interface Flight {
   id: string;
   flightNumber: string;
   airline: string;
   origin: string;
   destination: string;
-  departureTime: string; // ISO datetime
-  arrivalTime: string; // ISO datetime
+  departureTime: string;
+  arrivalTime: string;
   durationMin: number;
   stops: number;
   layoverCity?: string;
@@ -25,8 +23,6 @@ interface FlightCardProps {
   flight: Flight;
   onSelect?: (flight: Flight) => void;
 }
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function formatTime(isoString: string): string {
   const date = new Date(isoString);
@@ -41,8 +37,6 @@ function formatDuration(minutes: number): string {
   return m > 0 ? `${h}h ${m}m` : `${h}h`;
 }
 
-// ─── Component ───────────────────────────────────────────────────────────────
-
 export function FlightCard({ flight, onSelect }: FlightCardProps) {
   const { t, fmt } = useLocale();
 
@@ -55,31 +49,32 @@ export function FlightCard({ flight, onSelect }: FlightCardProps) {
 
   const stopsBadgeColor =
     flight.stops === 0
-      ? 'bg-emerald-100 text-emerald-700'
+      ? 'bg-emerald-50 text-emerald-700'
       : flight.stops === 1
-        ? 'bg-amber-100 text-amber-700'
-        : 'bg-red-100 text-red-700';
+        ? 'bg-amber-50 text-amber-700'
+        : 'bg-red-50 text-red-700';
 
   const totalPrice = flight.basePrice + flight.taxAmount;
 
   return (
-    <article className="rounded-tv-xl border border-border bg-white p-5 shadow-card transition hover:shadow-card-lg">
+    <article className="overflow-hidden rounded-xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:shadow-lg hover:-translate-y-0.5">
       {/* Top row: airline + flight number + price */}
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          {/* Airline logo placeholder */}
-          <div className="grid h-10 w-10 place-items-center rounded-tv bg-sky-surface text-xs font-bold text-booking-blue">
+          <div className="grid h-10 w-10 place-items-center rounded-lg bg-blue-50 text-[11px] font-bold text-[#0064D2]">
             {flight.airline.slice(0, 2).toUpperCase()}
           </div>
           <div>
-            <p className="text-sm font-semibold text-ink">{flight.airline}</p>
-            <p className="text-xs text-muted-ink">{flight.flightNumber}</p>
+            <p className="text-[13px] font-bold text-gray-800">{flight.airline}</p>
+            <p className="text-[11px] text-gray-500">{flight.flightNumber}</p>
           </div>
         </div>
 
         <div className="text-right">
-          <p className="text-lg font-bold text-booking-blue">{fmt.formatCurrency(totalPrice)}</p>
-          <p className="text-xs text-muted-ink">{t.flight.pricePerPassenger}</p>
+          <p className="text-[17px] font-extrabold text-[#0064D2]">
+            {fmt.formatCurrency(totalPrice)}
+          </p>
+          <p className="text-[11px] text-gray-400">{t.flight.pricePerPassenger}</p>
         </div>
       </div>
 
@@ -87,31 +82,31 @@ export function FlightCard({ flight, onSelect }: FlightCardProps) {
       <div className="mt-5 flex items-center gap-3">
         {/* Departure */}
         <div className="text-center">
-          <p className="text-xl font-bold text-ink">{formatTime(flight.departureTime)}</p>
-          <p className="text-xs font-medium text-muted-ink">{flight.origin}</p>
+          <p className="text-xl font-extrabold text-gray-900">{formatTime(flight.departureTime)}</p>
+          <p className="text-[11px] font-semibold text-gray-500">{flight.origin}</p>
         </div>
 
-        {/* Timeline visualization */}
+        {/* Timeline */}
         <div className="flex flex-1 flex-col items-center gap-1">
-          <p className="text-xs font-medium text-muted-ink">{formatDuration(flight.durationMin)}</p>
+          <p className="text-[11px] font-medium text-gray-400">
+            {formatDuration(flight.durationMin)}
+          </p>
           <div className="relative flex w-full items-center">
-            <div className="h-[2px] flex-1 bg-border" />
+            <div className="h-[2px] flex-1 bg-gray-200" />
             {flight.stops > 0 && flight.layoverCity && (
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                <div className="h-2.5 w-2.5 rounded-full border-2 border-booking-blue bg-white" />
+                <div className="h-2.5 w-2.5 rounded-full border-2 border-[#0064D2] bg-white" />
               </div>
             )}
-            <Plane size={14} className="mx-1 text-booking-blue" aria-hidden="true" />
-            <div className="h-[2px] flex-1 bg-border" />
+            <Plane size={14} className="mx-1 text-[#0064D2]" aria-hidden="true" />
+            <div className="h-[2px] flex-1 bg-gray-200" />
           </div>
           <div className="flex items-center gap-1">
-            <span
-              className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${stopsBadgeColor}`}
-            >
+            <span className={`rounded-md px-2 py-0.5 text-[10px] font-bold ${stopsBadgeColor}`}>
               {stopsLabel}
             </span>
             {flight.stops > 0 && flight.layoverCity && flight.layoverMin && (
-              <span className="text-[10px] text-muted-ink">
+              <span className="text-[10px] text-gray-400">
                 {t.flight.layover}: {flight.layoverCity} ({formatDuration(flight.layoverMin)})
               </span>
             )}
@@ -120,8 +115,8 @@ export function FlightCard({ flight, onSelect }: FlightCardProps) {
 
         {/* Arrival */}
         <div className="text-center">
-          <p className="text-xl font-bold text-ink">{formatTime(flight.arrivalTime)}</p>
-          <p className="text-xs font-medium text-muted-ink">{flight.destination}</p>
+          <p className="text-xl font-extrabold text-gray-900">{formatTime(flight.arrivalTime)}</p>
+          <p className="text-[11px] font-semibold text-gray-500">{flight.destination}</p>
         </div>
       </div>
 
@@ -130,7 +125,7 @@ export function FlightCard({ flight, onSelect }: FlightCardProps) {
         <button
           type="button"
           onClick={() => onSelect?.(flight)}
-          className="rounded-lg bg-orange-cta px-6 py-2.5 text-sm font-bold text-white transition hover:brightness-90 focus:outline-none focus:ring-2 focus:ring-orange-cta/30 focus:ring-offset-2"
+          className="rounded-lg bg-[#FF6D00] px-6 py-2.5 text-[13px] font-bold text-white shadow-sm transition-all hover:bg-[#E55A00] hover:shadow-md active:scale-[0.97]"
         >
           {t.flight.selectFlight}
         </button>

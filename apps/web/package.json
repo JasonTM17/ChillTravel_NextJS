@@ -10,9 +10,15 @@
     "url": "https://github.com/nguyenson1710/wanderviet.git",
     "directory": "apps/web"
   },
-  "keywords": ["nextjs", "react", "frontend", "travel", "vietnam"],
+  "keywords": [
+    "nextjs",
+    "react",
+    "frontend",
+    "travel",
+    "vietnam"
+  ],
   "scripts": {
-    "dev": "next dev --port 3000",
+    "dev": "next dev --port 3001",
     "build": "next build",
     "lint": "eslint . --max-warnings 50",
     "typecheck": "tsc --noEmit",

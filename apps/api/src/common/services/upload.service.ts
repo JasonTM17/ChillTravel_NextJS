@@ -99,6 +99,9 @@ export class LocalUploadService implements IUploadService {
    * @param filename - The filename (not the full path) to delete.
    */
   async deleteImage(filename: string): Promise<void> {
+    if (!filename || filename.includes('/') || filename.includes('\\') || filename.includes('..')) {
+      throw new BadRequestException('Tên file không hợp lệ');
+    }
     const filePath = join(this.uploadDir, filename);
     try {
       await unlink(filePath);

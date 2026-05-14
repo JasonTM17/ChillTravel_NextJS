@@ -1,4 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import {
   envelope,
   type AiBudgetEstimateRequest,
@@ -145,6 +146,7 @@ class ReindexDto implements AiReindexRequest {
 
 @Controller('ai')
 @Public()
+@Throttle({ default: { limit: 10, ttl: 60000 } })
 export class AiController {
   constructor(private readonly ai: AiService) {}
 

@@ -334,7 +334,7 @@ export class AuthService {
     refreshToken: string;
   }> {
     const accessExpiration = this.configService.get<string>('JWT_ACCESS_EXPIRATION') ?? '15m';
-    const refreshSecret = this.configService.get<string>('JWT_REFRESH_SECRET') ?? 'refresh_secret';
+    const refreshSecret = this.configService.getOrThrow<string>('JWT_REFRESH_SECRET');
     const refreshExpiration = this.configService.get<string>('JWT_REFRESH_EXPIRATION') ?? '7d';
 
     const payload = { sub: user.id, email: user.email, role: user.role };

@@ -1,5 +1,5 @@
 // =============================================================================
-// WanderViet Travel Platform — Prisma schema (evolved from ChillTravel baseline)
+// WanderViet Travel Platform — Prisma schema (evolved from WanderViet baseline)
 //
 // Evolution strategy (see design.md §2 + §18.1):
 //   • Preserve every legacy model (Country, City, HotelMock, RoomMock,
@@ -37,7 +37,7 @@ datasource db {
 ///   USER         -> USER
 ///   ADMIN        -> ADMIN
 ///   STAFF        -> STAFF (canonical WanderViet staff role)
-///   HOST | GUIDE -> STAFF (legacy ChillTravel values normalized up)
+///   HOST | GUIDE -> STAFF (legacy WanderViet values normalized up)
 enum RoleName {
   USER
   HOST
@@ -501,7 +501,7 @@ model Booking {
   items     BookingItem[]
   guests    BookingGuest[]
 
-  /// Legacy demo payment record (pre-WanderViet ChillTravel flow). Kept for
+  /// Legacy demo payment record (pre-WanderViet WanderViet flow). Kept for
   /// backward compat with mobile/AI preview clients.
   paymentMock PaymentMock?
   /// Canonical payment record used by the WanderViet checkout flow.
@@ -540,7 +540,7 @@ model BookingGuest {
 }
 
 /// Legacy demo payment snapshot. Preserved for backward compat with the
-/// original ChillTravel mock flow. New flows populate the `Payment` model.
+/// original WanderViet mock flow. New flows populate the `Payment` model.
 model PaymentMock {
   id        String        @id @default(cuid())
   bookingId String        @unique

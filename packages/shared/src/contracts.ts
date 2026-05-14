@@ -119,7 +119,7 @@ export interface AiReindexRequest {
   force?: boolean;
 }
 
-export interface ChillTravelApiContract {
+export interface WanderVietApiContract {
   auth: {
     login: { request: AuthLoginRequest; response: AuthSession };
     register: { request: AuthRegisterRequest; response: AuthSession };

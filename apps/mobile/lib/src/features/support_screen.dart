@@ -10,7 +10,7 @@ class SupportScreen extends StatelessWidget {
     return const TravelPageShell(
       title: 'Hỗ trợ',
       subtitle:
-          'Trung tâm hỗ trợ demo cho thanh toán mô phỏng, trợ lý local-first, gói offline và tài khoản ChillTravel.',
+          'Trung tâm hỗ trợ demo cho thanh toán mô phỏng, trợ lý local-first, gói offline và tài khoản WanderViet.',
       nextRoute: '/profile',
       children: [
         _SupportSearchCard(),

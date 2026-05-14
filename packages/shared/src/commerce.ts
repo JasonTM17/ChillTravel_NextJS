@@ -214,7 +214,7 @@ export const supportArticles: SupportArticle[] = [
     id: 'support-demo-payment',
     category: 'payment',
     title: 'Thanh toán demo hoạt động như thế nào?',
-    summary: 'ChillTravel chỉ mô phỏng giữ chỗ để demo portfolio, không xử lý tiền thật.',
+    summary: 'WanderViet chỉ mô phỏng giữ chỗ để demo portfolio, không xử lý tiền thật.',
     steps: [
       'Chọn phương thức demo',
       'Xác nhận giữ chỗ mẫu',

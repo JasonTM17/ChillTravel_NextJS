@@ -243,7 +243,7 @@
 | `packages/shared/src/index.ts` | 110  | `AiPersonalityRequest`         | Remove export or verify usage |
 | `packages/shared/src/index.ts` | 114  | `AiMoodSearchRequest`          | Remove export or verify usage |
 | `packages/shared/src/index.ts` | 118  | `AiReindexRequest`             | Remove export or verify usage |
-| `packages/shared/src/index.ts` | 122  | `ChillTravelApiContract`       | Remove export or verify usage |
+| `packages/shared/src/index.ts` | 122  | `WanderVietApiContract`        | Remove export or verify usage |
 | `packages/shared/src/index.ts` | 147  | `MobileOfflineSnapshot`        | Remove export or verify usage |
 | `packages/shared/src/index.ts` | 3    | `travelStyles`                 | Remove export or verify usage |
 | `packages/shared/src/index.ts` | 14   | `destinations`                 | Remove export or verify usage |

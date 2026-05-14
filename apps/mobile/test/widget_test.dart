@@ -26,7 +26,7 @@ void main() {
         overrides: [
           travelApiGatewayProvider.overrideWith((ref) => _ThrowingApiGateway()),
         ],
-        child: const ChillTravelApp(),
+        child: const WanderVietApp(),
       ),
     );
 

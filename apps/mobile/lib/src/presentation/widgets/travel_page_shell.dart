@@ -30,7 +30,7 @@ class TravelPageShell extends StatelessWidget {
         foregroundColor: chillNavy,
         elevation: 0,
         title: const Text(
-          'ChillTravel',
+          'WanderViet',
           style: TextStyle(fontWeight: FontWeight.w900),
         ),
         actions: [

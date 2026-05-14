@@ -9,7 +9,7 @@ import { buildVietnameseDemoItinerary, demoPaymentWarning, formatDateVi } from '
 const root = fileURLToPath(new URL('..', import.meta.url));
 
 describe('Vietnamese travel-commerce UX', () => {
-  it('keeps the distinct ChillTravel logo assets available', () => {
+  it('keeps the distinct WanderViet logo assets available', () => {
     const markPath = new URL('../public/brand/logo-mark.svg', import.meta.url);
     const lockupPath = new URL('../public/brand/logo-lockup.svg', import.meta.url);
 
@@ -76,11 +76,11 @@ describe('Vietnamese travel-commerce UX', () => {
     const source = files.map((file) => readFileSync(`${root}/${file}`, 'utf8')).join('\n');
 
     expect(source).not.toMatch(
-      /Demo payment - no real transaction|Open dossier|Mock booking|Search results|Your trip cart|Build itinerary|Starting from|Admin dashboard|Traveler profile|Wishlist|Login|Register|This route drifted off the itinerary|Back home|Bo nhan dien phong cach du lich|Map discovery|Hotels mock|So sanh thong minh|Booking demo|Card mock|VNPay mock|PayPal sandbox|Indexed|Ready|Hallucination guard|real-time|Production-safe|Top search|Funnel demo|Travel style|Guardrail|không charge|Checkout ChillTravel|provider demo|provider thật|Thuế & phí \(sample\)|flow booking|asset placeholder|fallback đẹp|landing\/search/,
+      /Demo payment - no real transaction|Open dossier|Mock booking|Search results|Your trip cart|Build itinerary|Starting from|Admin dashboard|Traveler profile|Wishlist|Login|Register|This route drifted off the itinerary|Back home|Bo nhan dien phong cach du lich|Map discovery|Hotels mock|So sanh thong minh|Booking demo|Card mock|VNPay mock|PayPal sandbox|Indexed|Ready|Hallucination guard|real-time|Production-safe|Top search|Funnel demo|Travel style|Guardrail|không charge|Checkout WanderViet|provider demo|provider thật|Thuế & phí \(sample\)|flow booking|asset placeholder|fallback đẹp|landing\/search/,
     );
   });
 
-  it('keeps shipped web source on the ChillTravel brand boundary', () => {
+  it('keeps shipped web source on the WanderViet brand boundary', () => {
     const files = [
       'app/layout.tsx',
       'app/page.tsx',
@@ -94,7 +94,7 @@ describe('Vietnamese travel-commerce UX', () => {
 
     expect(source).toContain('WanderViet');
     expect(source).not.toMatch(
-      /VietWander AI|VIETWANDER AI|VietnamWanderAI|ChillTravel AI|traveloka/i,
+      /VietWander AI|VIETWANDER AI|VietnamWanderAI|WanderViet AI|traveloka/i,
     );
   });
 

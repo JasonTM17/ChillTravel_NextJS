@@ -442,7 +442,7 @@ export function localAiAnswer(query: string): AiAnswer {
   return {
     summary: limited
       ? 'This is a local knowledge-base answer. Real-time prices, visa rules, and current weather must be checked with official sources.'
-      : 'A grounded local RAG-style travel answer using ChillTravel sample knowledge.',
+      : 'A grounded local RAG-style travel answer using WanderViet sample knowledge.',
     answer: limited
       ? 'I do not have live flight, visa, or current weather data in the local runtime. I can still build a sample plan and budget, but you should verify real-time details with official providers.'
       : 'I recommend ' +
@@ -452,7 +452,7 @@ export function localAiAnswer(query: string): AiAnswer {
         ' style. Start with food, culture, and a balanced pace, then adjust hotel and transport choices with the Smart Budget Simulator.',
     citations: [
       {
-        title: 'ChillTravel knowledge: ' + destination.name,
+        title: 'WanderViet knowledge: ' + destination.name,
         sourceId: 'destinations/' + destination.slug + '.md',
         chunkId: destination.slug + '-overview',
       },

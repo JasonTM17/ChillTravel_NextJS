@@ -1,11 +1,11 @@
 # Prisma Migrations — WanderViet
 
-This folder tracks schema history for the WanderViet / ChillTravel Postgres
+This folder tracks schema history for the WanderViet / WanderViet Postgres
 database.
 
 ## Baseline: `20260511000000_init_wanderviet`
 
-Initial WanderViet schema (evolved from the legacy ChillTravel baseline).
+Initial WanderViet schema (evolved from the legacy WanderViet baseline).
 The `migration.sql` file was generated offline with:
 
 ```bash

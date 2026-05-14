@@ -4,7 +4,7 @@ test.describe('Authentication flow', () => {
   test('register → login → logout', async ({ page }) => {
     // Navigate to register page
     await page.goto('/register');
-    await expect(page).toHaveTitle(/WanderViet|ChillTravel/);
+    await expect(page).toHaveTitle(/WanderViet|WanderViet/);
 
     // Fill register form
     await page.fill('[name="fullName"]', 'E2E Test User');

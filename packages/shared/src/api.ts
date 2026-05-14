@@ -4,7 +4,7 @@
  * These shapes implement design §3.2 (response format) and §3.4 (pagination
  * query) of the WanderViet Travel Platform spec. They are **distinct from**
  * the legacy `ApiResponse<T>` (see `./types`) and `ApiErrorEnvelope` (see
- * `./contracts`) envelopes that the ChillTravel baseline still uses. Both
+ * `./contracts`) envelopes that the WanderViet baseline still uses. Both
  * envelope families coexist so existing consumers (AI service, mobile,
  * legacy web endpoints) keep working unchanged while new WanderViet
  * endpoints adopt the canonical format.

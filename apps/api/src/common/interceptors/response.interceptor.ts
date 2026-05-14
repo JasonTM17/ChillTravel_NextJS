@@ -7,7 +7,7 @@ import { Observable, map } from 'rxjs';
  * passes through unchanged.
  *
  * We cover two envelope families that currently coexist:
- *   - Legacy ChillTravel envelope from `envelope()` helper:
+ *   - Legacy WanderViet envelope from `envelope()` helper:
  *       `{ success: boolean, data, message, meta }`
  *   - New WanderViet envelope from `successResponse()` / `errorResponse()`:
  *       `{ success: boolean, message, data|errors, timestamp }`

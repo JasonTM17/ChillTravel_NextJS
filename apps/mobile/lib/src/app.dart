@@ -33,8 +33,8 @@ final router = GoRouter(
   ],
 );
 
-class ChillTravelApp extends StatelessWidget {
-  const ChillTravelApp({super.key});
+class WanderVietApp extends StatelessWidget {
+  const WanderVietApp({super.key});
 
   @override
   Widget build(BuildContext context) {

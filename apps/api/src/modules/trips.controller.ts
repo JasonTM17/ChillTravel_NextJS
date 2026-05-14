@@ -53,7 +53,7 @@ export class TripsController {
   @Get('profile')
   profile() {
     return envelope({
-      displayName: 'ChillTravel Demo User',
+      displayName: 'WanderViet Demo User',
       travelStyle: 'Culture Seeker',
       language: 'vi',
     });

@@ -11,7 +11,7 @@ test.describe('Auth Flow: Register → Login', () => {
 
   test('user can register a new account', async ({ page }) => {
     await page.goto('/register');
-    await expect(page).toHaveTitle(/WanderViet|ChillTravel/);
+    await expect(page).toHaveTitle(/WanderViet|WanderViet/);
 
     // Fill registration form
     await page.fill('[name="fullName"]', fullName);

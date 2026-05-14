@@ -254,7 +254,7 @@ const CITIES: Array<{ name: string; countryKey: CountryKey }> = [
 
 // ---------------------------------------------------------------------------
 // Destinations (12)
-// Content reuses the ChillTravel `@vietwander/shared` seed where possible and
+// Content reuses the WanderViet `@vietwander/shared` seed where possible and
 // adds Bali / Paris which aren't in the core VN set.
 // ---------------------------------------------------------------------------
 

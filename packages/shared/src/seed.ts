@@ -21,7 +21,7 @@ export const destinations: Destination[] = [
     summary:
       'Hà Nội is curated for culture travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Hà Nội blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Hà Nội blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'October to April',
     budgetMin: 650000,
     budgetMax: 2200000,
@@ -81,7 +81,7 @@ export const destinations: Destination[] = [
     summary:
       'Hạ Long is curated for beach travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Hạ Long blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Hạ Long blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'October to May',
     budgetMin: 900000,
     budgetMax: 3200000,
@@ -141,7 +141,7 @@ export const destinations: Destination[] = [
     summary:
       'Sapa is curated for mountain travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Sapa blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Sapa blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'September to November',
     budgetMin: 700000,
     budgetMax: 2600000,
@@ -201,7 +201,7 @@ export const destinations: Destination[] = [
     summary:
       'Ninh Bình is curated for nature travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Ninh Bình blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Ninh Bình blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'February to May',
     budgetMin: 550000,
     budgetMax: 1800000,
@@ -261,7 +261,7 @@ export const destinations: Destination[] = [
     summary:
       'Huế is curated for culture travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Huế blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Huế blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'January to April',
     budgetMin: 600000,
     budgetMax: 2100000,
@@ -321,7 +321,7 @@ export const destinations: Destination[] = [
     summary:
       'Đà Nẵng is curated for beach travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Đà Nẵng blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Đà Nẵng blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'February to August',
     budgetMin: 800000,
     budgetMax: 3000000,
@@ -381,7 +381,7 @@ export const destinations: Destination[] = [
     summary:
       'Hội An is curated for culture travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Hội An blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Hội An blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'February to April',
     budgetMin: 750000,
     budgetMax: 2800000,
@@ -441,7 +441,7 @@ export const destinations: Destination[] = [
     summary:
       'Nha Trang is curated for beach travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Nha Trang blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Nha Trang blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'January to September',
     budgetMin: 850000,
     budgetMax: 3100000,
@@ -501,7 +501,7 @@ export const destinations: Destination[] = [
     summary:
       'Đà Lạt is curated for mountain travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Đà Lạt blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Đà Lạt blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'November to March',
     budgetMin: 650000,
     budgetMax: 2400000,
@@ -561,7 +561,7 @@ export const destinations: Destination[] = [
     summary:
       'Phú Quốc is curated for island travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Phú Quốc blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Phú Quốc blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'November to April',
     budgetMin: 1100000,
     budgetMax: 4200000,
@@ -621,7 +621,7 @@ export const destinations: Destination[] = [
     summary:
       'Cần Thơ is curated for food travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Cần Thơ blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Cần Thơ blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'December to April',
     budgetMin: 500000,
     budgetMax: 1600000,
@@ -681,7 +681,7 @@ export const destinations: Destination[] = [
     summary:
       'Hà Giang is curated for adventure travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Hà Giang blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Hà Giang blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'September to November',
     budgetMin: 700000,
     budgetMax: 2500000,
@@ -741,7 +741,7 @@ export const destinations: Destination[] = [
     summary:
       'Tokyo is curated for city travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Tokyo blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Tokyo blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'March to May',
     budgetMin: 2500000,
     budgetMax: 8000000,
@@ -801,7 +801,7 @@ export const destinations: Destination[] = [
     summary:
       'Seoul is curated for city travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Seoul blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Seoul blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'April to June',
     budgetMin: 2200000,
     budgetMax: 6500000,
@@ -861,7 +861,7 @@ export const destinations: Destination[] = [
     summary:
       'Bangkok is curated for food travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Bangkok blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Bangkok blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'November to February',
     budgetMin: 1200000,
     budgetMax: 3800000,
@@ -921,7 +921,7 @@ export const destinations: Destination[] = [
     summary:
       'Singapore is curated for family travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Singapore blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Singapore blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'February to April',
     budgetMin: 2500000,
     budgetMax: 7000000,
@@ -981,7 +981,7 @@ export const destinations: Destination[] = [
     summary:
       'Bali is curated for wellness travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Bali blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Bali blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'April to October',
     budgetMin: 1600000,
     budgetMax: 5200000,
@@ -1041,7 +1041,7 @@ export const destinations: Destination[] = [
     summary:
       'Paris is curated for romance travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Paris blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Paris blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'April to June',
     budgetMin: 3000000,
     budgetMax: 9500000,
@@ -1101,7 +1101,7 @@ export const destinations: Destination[] = [
     summary:
       'Rome is curated for culture travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Rome blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Rome blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'April to June',
     budgetMin: 2600000,
     budgetMax: 8500000,
@@ -1161,7 +1161,7 @@ export const destinations: Destination[] = [
     summary:
       'Barcelona is curated for nightlife travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Barcelona blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Barcelona blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'May to June',
     budgetMin: 2400000,
     budgetMax: 7800000,
@@ -1221,7 +1221,7 @@ export const destinations: Destination[] = [
     summary:
       'London is curated for culture travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'London blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'London blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'May to September',
     budgetMin: 3200000,
     budgetMax: 9800000,
@@ -1281,7 +1281,7 @@ export const destinations: Destination[] = [
     summary:
       'New York is curated for city travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'New York blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'New York blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'April to June',
     budgetMin: 3500000,
     budgetMax: 11000000,
@@ -1341,7 +1341,7 @@ export const destinations: Destination[] = [
     summary:
       'Swiss Alps is curated for mountain travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Swiss Alps blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Swiss Alps blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'June to September',
     budgetMin: 4200000,
     budgetMax: 14000000,
@@ -1401,7 +1401,7 @@ export const destinations: Destination[] = [
     summary:
       'Santorini is curated for island travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Santorini blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Santorini blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'May to October',
     budgetMin: 3600000,
     budgetMax: 12000000,
@@ -1461,7 +1461,7 @@ export const destinations: Destination[] = [
     summary:
       'Sydney is curated for coast travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Sydney blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Sydney blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'September to November',
     budgetMin: 3200000,
     budgetMax: 9500000,
@@ -1521,7 +1521,7 @@ export const destinations: Destination[] = [
     summary:
       'Dubai is curated for luxury travelers with local food, seasonal guidance, mock stays, and assistant-ready planning context.',
     longDescription:
-      'Dubai blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for ChillTravel demos.',
+      'Dubai blends place identity, practical planning, cultural notes, food discovery, and budget-aware experiences for WanderViet demos.',
     bestTimeToVisit: 'November to March',
     budgetMin: 2800000,
     budgetMax: 12500000,

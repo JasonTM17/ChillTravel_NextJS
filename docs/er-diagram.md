@@ -1,6 +1,6 @@
 # WanderViet — Entity-Relationship Diagram
 
-Generated from `packages/db/prisma/schema.prisma`. Reflects the evolved WanderViet schema (legacy ChillTravel models omitted for clarity; see schema.prisma for the full picture including Trip, ChatbotSession, AiKnowledge\*, etc.).
+Generated from `packages/db/prisma/schema.prisma`. Reflects the evolved WanderViet schema (legacy WanderViet models omitted for clarity; see schema.prisma for the full picture including Trip, ChatbotSession, AiKnowledge\*, etc.).
 
 ```mermaid
 erDiagram
@@ -345,7 +345,7 @@ erDiagram
 | Booking → BookingGuest           | 1:N         | One row per traveller in the party                                             |
 | Coupon → Booking                 | 1:N         | A coupon can be applied to multiple bookings (up to `usageLimit`)              |
 | Tour → Review                    | 1:N         | Reviews are scoped to a tour; only users with a `completed` booking may submit |
-| Destination → Review             | 1:N         | Legacy destination-level reviews (ChillTravel compat)                          |
+| Destination → Review             | 1:N         | Legacy destination-level reviews (WanderViet compat)                           |
 | User → WishlistEntry             | 1:N         | Flat favourites list; `itemType` discriminates TOUR vs DESTINATION             |
 | User → BlogPost                  | 1:N         | Admin/Staff users author blog posts                                            |
 | User → ContactRequest (assignee) | 1:N         | Staff member assigned to handle the contact                                    |

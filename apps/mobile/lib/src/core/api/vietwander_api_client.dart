@@ -23,7 +23,7 @@ final dioProvider = Provider<Dio>((ref) {
       headers: const {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'X-ChillTravel-Client': 'mobile',
+        'X-WanderViet-Client': 'mobile',
       },
     ),
   );

@@ -20,7 +20,7 @@ import type {
   BookingCreateRequest,
   DestinationListQuery,
   MobileOfflineSnapshot,
-  ChillTravelApiContract,
+  WanderVietApiContract,
 } from './contracts';
 import { destinations } from './seed';
 
@@ -85,7 +85,7 @@ describe('seed data and travel intelligence', () => {
       bookings: [],
       cachedAt: new Date(0).toISOString(),
     } satisfies MobileOfflineSnapshot;
-    const contract = 'ai' satisfies keyof ChillTravelApiContract;
+    const contract = 'ai' satisfies keyof WanderVietApiContract;
 
     expect(destinationQuery.sort).toBe('popular');
     expect(bookingRequest.method).toBe('MOCK_MOMO');

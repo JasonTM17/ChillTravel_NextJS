@@ -20,7 +20,7 @@
  *
  * ⚠️ Naming note: the type alias `RoleName` here matches the schema enum
  * name. The legacy `Role` type in `./types` (`"USER" | "HOST" | "GUIDE" |
- * "ADMIN"`) is kept for existing ChillTravel contracts and is **not**
+ * "ADMIN"`) is kept for existing WanderViet contracts and is **not**
  * replaced by this.
  */
 

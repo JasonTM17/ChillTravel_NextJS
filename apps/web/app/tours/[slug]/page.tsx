@@ -22,7 +22,6 @@ import type { Tour } from '@/lib/api/tour.api';
 import { wishlistApi } from '@/lib/api/wishlist.api';
 import { useAuth } from '@/lib/auth/auth-context';
 import { getDestinationImage } from '@/lib/destination-images';
-import { formatVnd } from '@/lib/utils';
 import {
   TourDetailSkeleton,
   TourOverviewCards,

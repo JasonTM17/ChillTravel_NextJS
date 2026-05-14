@@ -9,7 +9,6 @@ import {
   Dumbbell,
   MapPin,
   Sparkles,
-  Star,
   Users,
   UtensilsCrossed,
   Waves,

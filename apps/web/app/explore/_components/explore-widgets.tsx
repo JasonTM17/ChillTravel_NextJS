@@ -18,7 +18,7 @@ import {
   Wifi,
 } from 'lucide-react';
 import Link from 'next/link';
-import { destinationApi, getCountryName, getCityName } from '@/lib/api/destination.api';
+import { getCountryName, getCityName } from '@/lib/api/destination.api';
 import type { Destination } from '@/lib/api/destination.api';
 import { getDestinationImage } from '@/lib/destination-images';
 import { demoPaymentWarning, formatDateVi } from '@/lib/vietnamese';

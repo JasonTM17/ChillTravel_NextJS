@@ -8,7 +8,7 @@ FORBIDDEN_PATTERNS='(^|/)\.env($|\.)|(^|/)node_modules/|(^|/)dist/|(^|/)\.next/|
 STAGED_FILES=$(git diff --cached --name-only)
 
 if [ -n "$STAGED_FILES" ]; then
-  BLOCKED_FILES=$(echo "$STAGED_FILES" | grep -E "$FORBIDDEN_PATTERNS" || true)
+  BLOCKED_FILES=$(echo "$STAGED_FILES" | grep -E "$FORBIDDEN_PATTERNS" | grep -v '\.env\.example$' || true)
 
   if [ -n "$BLOCKED_FILES" ]; then
     echo ""

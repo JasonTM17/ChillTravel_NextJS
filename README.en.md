@@ -317,6 +317,15 @@ docker compose -f infra/docker/docker-compose.yml up -d
 | ----- | ------------------------------------------------------------------------------------- |
 | API   | [nguyenson1710/wanderviet-api](https://hub.docker.com/r/nguyenson1710/wanderviet-api) |
 | Web   | [nguyenson1710/wanderviet-web](https://hub.docker.com/r/nguyenson1710/wanderviet-web) |
+| AI    | [nguyenson1710/wanderviet-ai](https://hub.docker.com/r/nguyenson1710/wanderviet-ai)   |
+
+### GitHub Packages (ghcr.io)
+
+| Image | Link                                                                                                              |
+| ----- | ----------------------------------------------------------------------------------------------------------------- |
+| API   | [ghcr.io/jasontm17/wanderviet-api](https://github.com/JasonTM17/ChillTravel_NextJS/pkgs/container/wanderviet-api) |
+| Web   | [ghcr.io/jasontm17/wanderviet-web](https://github.com/JasonTM17/ChillTravel_NextJS/pkgs/container/wanderviet-web) |
+| AI    | [ghcr.io/jasontm17/wanderviet-ai](https://github.com/JasonTM17/ChillTravel_NextJS/pkgs/container/wanderviet-ai)   |
 
 ### Build locally
 

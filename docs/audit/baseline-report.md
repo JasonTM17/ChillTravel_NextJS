@@ -191,7 +191,7 @@ The following issues **MUST** be resolved before proceeding with dependent requi
 pnpm --filter @vietwander/web dev
 
 # 2. Run Lighthouse CLI (install globally if needed: npm i -g lighthouse)
-lighthouse http://localhost:3000 --output=json --output-path=docs/audit/lighthouse.json --chrome-flags="--headless"
+lighthouse http://localhost:3001 --output=json --output-path=docs/audit/lighthouse.json --chrome-flags="--headless"
 
 # 3. View scores
 cat docs/audit/lighthouse.json | jq '{performance: .categories.performance.score, accessibility: .categories.accessibility.score, bestPractices: .categories["best-practices"].score, seo: .categories.seo.score}'

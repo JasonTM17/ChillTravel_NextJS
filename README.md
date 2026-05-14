@@ -63,17 +63,17 @@ Dự án được thiết kế với chuẩn UI/UX cao cấp (Premium Booking Pl
 
 ## Tech Stack
 
-| Layer | Công nghệ | Phiên bản |
-|-------|-----------|-----------|
-| **Frontend** | Next.js + TypeScript + Tailwind CSS | 16.x |
-| **Backend** | NestJS + TypeScript | 11.x |
-| **Database** | PostgreSQL + Prisma ORM | 18 / 7.x |
-| **AI Service** | FastAPI + Ollama + Qdrant | Python 3.12+ |
-| **Mobile** | Flutter + Dart | Latest |
-| **Monorepo** | pnpm Workspaces + Turborepo | 10.x / 2.x |
-| **Testing** | Vitest + Playwright + k6 | Latest |
-| **CI/CD** | GitHub Actions + Docker | — |
-| **Cache** | Redis | 7.x |
+| Layer          | Công nghệ                           | Phiên bản    |
+| -------------- | ----------------------------------- | ------------ |
+| **Frontend**   | Next.js + TypeScript + Tailwind CSS | 16.x         |
+| **Backend**    | NestJS + TypeScript                 | 11.x         |
+| **Database**   | PostgreSQL + Prisma ORM             | 18 / 7.x     |
+| **AI Service** | FastAPI + Ollama + Qdrant           | Python 3.12+ |
+| **Mobile**     | Flutter + Dart                      | Latest       |
+| **Monorepo**   | pnpm Workspaces + Turborepo         | 10.x / 2.x   |
+| **Testing**    | Vitest + Playwright + k6            | Latest       |
+| **CI/CD**      | GitHub Actions + Docker             | —            |
+| **Cache**      | Redis                               | 7.x          |
 
 ---
 
@@ -99,7 +99,7 @@ wanderviet/
 ```mermaid
 graph TB
     subgraph Frontend
-        Web[Next.js 16<br/>:3000]
+        Web[Next.js 16<br/>:3001]
         Mobile[Flutter App]
     end
     subgraph Backend
@@ -128,13 +128,13 @@ graph TB
 
 ## Yêu Cầu Hệ Thống
 
-| Phần mềm | Phiên bản tối thiểu |
-|-----------|---------------------|
-| Node.js | >= 22.x |
-| pnpm | >= 10.x |
-| Docker & Docker Compose | Latest |
-| PostgreSQL | 18 (qua Docker) |
-| Python | >= 3.12 (cho AI service) |
+| Phần mềm                | Phiên bản tối thiểu      |
+| ----------------------- | ------------------------ |
+| Node.js                 | >= 22.x                  |
+| pnpm                    | >= 10.x                  |
+| Docker & Docker Compose | Latest                   |
+| PostgreSQL              | 18 (qua Docker)          |
+| Python                  | >= 3.12 (cho AI service) |
 
 ---
 
@@ -179,21 +179,21 @@ pnpm seed
 pnpm dev
 ```
 
-| Service | URL |
-|---------|-----|
-| Web | http://localhost:3000 |
-| API | http://localhost:4000/api/v1 |
-| Swagger | http://localhost:4000/api/docs |
-| AI Service | http://localhost:8010 |
+| Service    | URL                            |
+| ---------- | ------------------------------ |
+| Web        | http://localhost:3001          |
+| API        | http://localhost:4000/api/v1   |
+| Swagger    | http://localhost:4000/api/docs |
+| AI Service | http://localhost:8010          |
 
 ---
 
 ## Tài Khoản Demo
 
-| Vai trò | Email | Mật khẩu |
-|---------|-------|-----------|
-| Admin | `admin@wanderviet.com` | `Admin@123456` |
-| User | `user@wanderviet.com` | `User@123456` |
+| Vai trò | Email                  | Mật khẩu       |
+| ------- | ---------------------- | -------------- |
+| Admin   | `admin@wanderviet.com` | `Admin@123456` |
+| User    | `user@wanderviet.com`  | `User@123456`  |
 
 > **Lưu ý:** Hệ thống thanh toán là mock/demo — không xử lý giao dịch thật.
 
@@ -210,14 +210,14 @@ API documentation được tạo tự động bằng Swagger/OpenAPI:
 
 ## Tài Liệu
 
-| Tài liệu | Mô tả |
-|-----------|--------|
-| [Architecture](./docs/architecture.md) | Tổng quan kiến trúc hệ thống |
-| [ADRs](./docs/adr/) | Architecture Decision Records |
-| [ER Diagram](./docs/er-diagram.md) | Sơ đồ quan hệ thực thể |
-| [Contributing](./CONTRIBUTING.md) | Hướng dẫn đóng góp |
-| [Changelog](./CHANGELOG.md) | Lịch sử thay đổi |
-| [Release Checklist](./docs/release-checklist.md) | Quy trình release |
+| Tài liệu                                         | Mô tả                         |
+| ------------------------------------------------ | ----------------------------- |
+| [Architecture](./docs/architecture.md)           | Tổng quan kiến trúc hệ thống  |
+| [ADRs](./docs/adr/)                              | Architecture Decision Records |
+| [ER Diagram](./docs/er-diagram.md)               | Sơ đồ quan hệ thực thể        |
+| [Contributing](./CONTRIBUTING.md)                | Hướng dẫn đóng góp            |
+| [Changelog](./CHANGELOG.md)                      | Lịch sử thay đổi              |
+| [Release Checklist](./docs/release-checklist.md) | Quy trình release             |
 
 ---
 

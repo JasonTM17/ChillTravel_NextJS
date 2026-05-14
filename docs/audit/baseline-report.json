@@ -192,8 +192,8 @@
       "currentValue": "not measured (requires running server)",
       "target": "Performance >= 80, Accessibility >= 90, Best Practices >= 90, SEO >= 90",
       "automated": false,
-      "command": "lighthouse http://localhost:3000 --output=json",
-      "manualProcedure": "pnpm --filter @vietwander/web dev && lighthouse http://localhost:3000 --output=json --output-path=docs/audit/lighthouse.json --chrome-flags=\"--headless\""
+      "command": "lighthouse http://localhost:3001 --output=json",
+      "manualProcedure": "pnpm --filter @vietwander/web dev && lighthouse http://localhost:3001 --output=json --output-path=docs/audit/lighthouse.json --chrome-flags=\"--headless\""
     }
   ],
   "blockers": [

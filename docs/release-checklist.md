@@ -28,10 +28,10 @@ make e2e           # Playwright E2E suite
 
 ## Manual Checks
 
-- [ ] `http://localhost:3000` — home page loads, destinations visible
-- [ ] `http://localhost:3000/tours` — tour listing with filters works
-- [ ] `http://localhost:3000/login` — login with `user@wanderviet.com / User@123456`
-- [ ] `http://localhost:3000/admin` — admin dashboard loads with `admin@wanderviet.com / Admin@123456`
+- [ ] `http://localhost:3001` — home page loads, destinations visible
+- [ ] `http://localhost:3001/tours` — tour listing with filters works
+- [ ] `http://localhost:3001/login` — login with `user@wanderviet.com / User@123456`
+- [ ] `http://localhost:3001/admin` — admin dashboard loads with `admin@wanderviet.com / Admin@123456`
 - [ ] `http://localhost:4000/api/docs` — Swagger UI reachable
 - [ ] `http://localhost:4000/health` — health check returns `{ status: "ok" }`
 - [ ] Payment banner visible on booking pages: **"Thanh toán demo — không phát sinh giao dịch thật"**

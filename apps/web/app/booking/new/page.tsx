@@ -639,6 +639,30 @@ function BookingNewContent() {
             </Link>
           </aside>
         </div>
+
+        {/* Mobile fixed CTA */}
+        <div className="fixed bottom-16 left-0 right-0 z-40 border-t border-tv-border bg-white p-3 shadow-tv-header lg:hidden">
+          <div className="mx-auto flex max-w-[1180px] items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold text-tv-ink-3">Tổng cộng</p>
+              <p className="text-lg font-bold text-tv-orange">{formatVnd(total)}</p>
+            </div>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="inline-flex items-center gap-2 rounded-tv bg-tv-orange px-5 py-3 font-bold text-white shadow-tv-card hover:bg-tv-orange-dark disabled:opacity-60"
+            >
+              {submitting ? (
+                <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+              ) : (
+                <>
+                  Tiếp tục
+                  <ChevronRight size={16} aria-hidden="true" />
+                </>
+              )}
+            </button>
+          </div>
+        </div>
       </form>
     </PageShell>
   );

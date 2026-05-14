@@ -16,7 +16,7 @@ import {
   X,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { CommerceSurface, StatusPill, TrustBanner } from '@/components/commerce-primitives';
 import { getDestinationImage } from '@/lib/destination-images';
 import { useLocale } from '@/lib/i18n';
@@ -241,36 +241,13 @@ export function PhotoGallery({ images }: { images: string[] }) {
       </div>
 
       {showFullscreen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
-          <button
-            onClick={() => setShowFullscreen(false)}
-            className="absolute right-4 top-4 rounded-full bg-white/20 p-2 text-white hover:bg-white/30"
-            aria-label="Close gallery"
-          >
-            <X size={24} />
-          </button>
-          <button
-            onClick={goToPrev}
-            className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-3 text-white hover:bg-white/30"
-            aria-label="Previous image"
-          >
-            <ChevronLeft size={28} />
-          </button>
-          <div
-            className="mx-16 aspect-[16/9] w-full max-w-5xl bg-contain bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${images[currentIndex]})` }}
-          />
-          <button
-            onClick={goToNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-3 text-white hover:bg-white/30"
-            aria-label="Next image"
-          >
-            <ChevronRight size={28} />
-          </button>
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-black/60 px-4 py-2 text-sm font-bold text-white">
-            {currentIndex + 1} / {images.length}
-          </div>
-        </div>
+        <GalleryFullscreen
+          images={images}
+          currentIndex={currentIndex}
+          onPrev={goToPrev}
+          onNext={goToNext}
+          onClose={() => setShowFullscreen(false)}
+        />
       )}
     </>
   );
@@ -299,6 +276,100 @@ export function AmenityGrid({ amenities }: { amenities: string[] }) {
         })}
       </div>
     </CommerceSurface>
+  );
+}
+
+// ─── Gallery Fullscreen with scroll lock + focus trap ────────────────────────
+
+function GalleryFullscreen({
+  images,
+  currentIndex,
+  onPrev,
+  onNext,
+  onClose,
+}: {
+  images: string[];
+  currentIndex: number;
+  onPrev: () => void;
+  onNext: () => void;
+  onClose: () => void;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
+  useEffect(() => {
+    containerRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+      else if (e.key === 'ArrowLeft') onPrev();
+      else if (e.key === 'ArrowRight') onNext();
+      else if (e.key === 'Tab') {
+        const focusable = containerRef.current?.querySelectorAll<HTMLElement>(
+          'button, [tabindex]:not([tabindex="-1"])',
+        );
+        if (!focusable || focusable.length === 0) return;
+        const first = focusable[0]!;
+        const last = focusable[focusable.length - 1]!;
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [onClose, onPrev, onNext]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Photo gallery"
+      tabIndex={-1}
+    >
+      <button
+        onClick={onClose}
+        className="absolute right-4 top-4 rounded-full bg-white/20 p-2 text-white hover:bg-white/30"
+        aria-label="Close gallery"
+      >
+        <X size={24} />
+      </button>
+      <button
+        onClick={onPrev}
+        className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-3 text-white hover:bg-white/30"
+        aria-label="Previous image"
+      >
+        <ChevronLeft size={28} />
+      </button>
+      <div
+        className="mx-16 aspect-[16/9] w-full max-w-5xl bg-contain bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${images[currentIndex]})` }}
+      />
+      <button
+        onClick={onNext}
+        className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-3 text-white hover:bg-white/30"
+        aria-label="Next image"
+      >
+        <ChevronRight size={28} />
+      </button>
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-black/60 px-4 py-2 text-sm font-bold text-white">
+        {currentIndex + 1} / {images.length}
+      </div>
+    </div>
   );
 }
 

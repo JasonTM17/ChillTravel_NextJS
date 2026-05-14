@@ -3,6 +3,7 @@ import {
   ArrowRight,
   CalendarDays,
   CheckCircle2,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Coffee,
@@ -18,6 +19,7 @@ import {
   Wifi,
 } from 'lucide-react';
 import Link from 'next/link';
+import { useState } from 'react';
 import { getCountryName, getCityName } from '@/lib/api/destination.api';
 import type { Destination } from '@/lib/api/destination.api';
 import { getDestinationImage } from '@/lib/destination-images';
@@ -152,7 +154,7 @@ export function ExploreSearch({
           onSubmit={onSearch}
           className="rounded-[26px] bg-tv-blue p-3 shadow-[0_18px_42px_rgba(2,119,212,0.18)]"
         >
-          <div className="grid gap-3 rounded-[20px] bg-white p-3 lg:grid-cols-[1.35fr_0.9fr_0.9fr_0.95fr_148px]">
+          <div className="grid gap-3 rounded-[20px] bg-white p-3 sm:grid-cols-2 lg:grid-cols-[1.35fr_0.9fr_0.9fr_0.95fr_148px]">
             <label className="flex min-w-0 items-center gap-3 rounded-tv border border-tv-border bg-tv-bg px-4 py-3">
               <Search size={19} className="text-tv-blue" aria-hidden="true" />
               <span className="min-w-0 flex-1">
@@ -272,57 +274,75 @@ export function FilterRail({
   onCategoryToggle: (cat: string) => void;
   onSortChange: (value: string) => void;
 }) {
-  return (
-    <aside className="h-fit rounded-tv border border-tv-border bg-white p-5 shadow-tv-card lg:sticky lg:top-24">
-      <div className="flex items-center justify-between border-b border-tv-border pb-4">
-        <h2 className="text-xl font-bold">Bộ lọc</h2>
-        <SlidersHorizontal className="text-tv-blue" size={18} aria-hidden="true" />
-      </div>
+  const [open, setOpen] = useState(false);
 
-      <div className="mt-5">
-        <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">Phong cách</h3>
-        <div className="mt-3 grid gap-2">
-          {categoryOptions.map((cat) => {
-            const active = selectedCategory === cat;
-            return (
+  return (
+    <aside className="h-fit rounded-tv border border-tv-border bg-white shadow-tv-card lg:sticky lg:top-24">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex w-full items-center justify-between p-5 lg:pointer-events-none"
+        type="button"
+        aria-expanded={open}
+      >
+        <h2 className="text-xl font-bold">Bộ lọc</h2>
+        <span className="flex items-center gap-2">
+          <SlidersHorizontal className="text-tv-blue" size={18} aria-hidden="true" />
+          <ChevronDown
+            size={18}
+            className={`text-tv-ink-3 transition-transform lg:hidden ${open ? 'rotate-180' : ''}`}
+            aria-hidden="true"
+          />
+        </span>
+      </button>
+
+      <div className={`border-t border-tv-border px-5 pb-5 ${open ? 'block' : 'hidden lg:block'}`}>
+        <div className="mt-5">
+          <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">
+            Phong cách
+          </h3>
+          <div className="mt-3 grid gap-2">
+            {categoryOptions.map((cat) => {
+              const active = selectedCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => onCategoryToggle(cat)}
+                  className={`flex items-center justify-between rounded-tv-sm border px-3 py-2 text-sm font-bold transition text-left ${
+                    active
+                      ? 'border-tv-blue bg-tv-blue-light text-tv-blue'
+                      : 'border-tv-border bg-white text-tv-ink-3 hover:border-tv-blue hover:text-tv-blue'
+                  }`}
+                  type="button"
+                >
+                  <span>{cat}</span>
+                  {active ? <CheckCircle2 size={16} aria-hidden="true" /> : null}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="mt-6 rounded-tv bg-tv-bg p-4">
+          <div className="flex items-center gap-2 text-sm font-bold">
+            <WalletCards size={17} className="text-tv-blue" aria-hidden="true" />
+            Sắp xếp
+          </div>
+          <div className="mt-3 grid gap-2">
+            {sortOptions.map((option) => (
               <button
-                key={cat}
-                onClick={() => onCategoryToggle(cat)}
-                className={`flex items-center justify-between rounded-tv-sm border px-3 py-2 text-sm font-bold transition text-left ${
-                  active
+                key={option.value}
+                onClick={() => onSortChange(option.value)}
+                className={`rounded-tv-sm border px-3 py-2 text-xs font-bold text-left transition ${
+                  selectedSort === option.value
                     ? 'border-tv-blue bg-tv-blue-light text-tv-blue'
-                    : 'border-tv-border bg-white text-tv-ink-3 hover:border-tv-blue hover:text-tv-blue'
+                    : 'border-tv-border bg-white text-tv-ink-3 hover:border-tv-blue'
                 }`}
                 type="button"
               >
-                <span>{cat}</span>
-                {active ? <CheckCircle2 size={16} aria-hidden="true" /> : null}
+                {option.label}
               </button>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="mt-6 rounded-tv bg-tv-bg p-4">
-        <div className="flex items-center gap-2 text-sm font-bold">
-          <WalletCards size={17} className="text-tv-blue" aria-hidden="true" />
-          Sắp xếp
-        </div>
-        <div className="mt-3 grid gap-2">
-          {sortOptions.map((option) => (
-            <button
-              key={option.value}
-              onClick={() => onSortChange(option.value)}
-              className={`rounded-tv-sm border px-3 py-2 text-xs font-bold text-left transition ${
-                selectedSort === option.value
-                  ? 'border-tv-blue bg-tv-blue-light text-tv-blue'
-                  : 'border-tv-border bg-white text-tv-ink-3 hover:border-tv-blue'
-              }`}
-              type="button"
-            >
-              {option.label}
-            </button>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </aside>

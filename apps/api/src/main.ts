@@ -83,7 +83,10 @@ async function bootstrap(): Promise<void> {
   }
 
   app.enableCors({
-    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    origin: (
+      origin: string | undefined,
+      callback: (err: Error | null, allow?: boolean) => void,
+    ) => {
       // Allow requests with no origin (server-to-server, curl, mobile apps)
       if (!origin) {
         callback(null, true);
@@ -104,6 +107,19 @@ async function bootstrap(): Promise<void> {
   const uploadDir = config.get<string>('UPLOAD_DIR') ?? './uploads';
   app.useStaticAssets(join(process.cwd(), uploadDir), { prefix: '/uploads' });
 
+  const demoAccountsSection =
+    nodeEnv !== 'production'
+      ? `
+
+### Demo Accounts
+| Email | Password | Role |
+|-------|----------|------|
+| admin@wanderviet.com | Admin@123456 | ADMIN |
+| user@wanderviet.com | User@123456 | USER |
+| staff@wanderviet.com | Staff@123456 | STAFF |
+`
+      : '';
+
   const swaggerConfig = new DocumentBuilder()
     .setTitle('WanderViet Travel Platform API')
     .setDescription(
@@ -118,14 +134,7 @@ Authorization: Bearer <accessToken>
 \`\`\`
 
 Obtain tokens via \`POST /api/v1/auth/login\` or \`POST /api/v1/auth/register\`.
-
-### Demo Accounts
-| Email | Password | Role |
-|-------|----------|------|
-| admin@wanderviet.com | Admin@123456 | ADMIN |
-| user@wanderviet.com | User@123456 | USER |
-| staff@wanderviet.com | Staff@123456 | STAFF |
-
+${demoAccountsSection}
 ### Payment Notice
 All payment flows are **demo/mock only** — no real transactions are processed.
 \`Thanh toán demo — không phát sinh giao dịch thật\`

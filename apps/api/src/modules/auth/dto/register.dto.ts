@@ -14,6 +14,9 @@ export class RegisterDto {
   @ApiProperty({ example: 'Password@123', minLength: 8 })
   @IsString()
   @MinLength(8)
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/, {
+    message: 'password must contain uppercase, lowercase, number, and special character',
+  })
   password!: string;
 
   @ApiPropertyOptional({ example: '+84901234567' })

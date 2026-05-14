@@ -1,6 +1,6 @@
 # ─── Stage 1: base ────────────────────────────────────────────────────────────
 FROM node:24-alpine AS base
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@10.33.0 --activate
 
 # ─── Stage 2: deps ────────────────────────────────────────────────────────────
 FROM base AS deps
@@ -40,12 +40,18 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
+RUN addgroup -S app && adduser -S app -G app
+
 # Copy only what the runtime needs
 COPY --from=build /workspace/node_modules                   ./node_modules
 COPY --from=build /workspace/apps/api/node_modules          ./apps/api/node_modules
 COPY --from=build /workspace/apps/api/dist                  ./dist
 COPY --from=build /workspace/packages/shared/dist           ./packages/shared/dist
 COPY --from=build /workspace/packages/db                    ./packages/db
+
+RUN chown -R app:app /app
+
+USER app
 
 EXPOSE 4000
 

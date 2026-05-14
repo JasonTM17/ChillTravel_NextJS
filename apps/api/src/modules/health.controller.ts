@@ -1,11 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import {
-  HealthCheck,
-  HealthCheckService,
-  HealthIndicatorResult,
-} from '@nestjs/terminus';
+import { HealthCheck, HealthCheckService, HealthIndicatorResult } from '@nestjs/terminus';
 import { envelope } from '@vietwander/shared';
 import { Public } from '../common/decorators/public.decorator';
 import { PrismaService } from '../prisma/prisma.service';
@@ -32,10 +28,7 @@ export class HealthController {
   @ApiResponse({ status: 200, description: 'Service is healthy' })
   @ApiResponse({ status: 503, description: 'Service degraded' })
   async check() {
-    const result = await this.health.check([
-      () => this.checkDatabase(),
-      () => this.checkRedis(),
-    ]);
+    const result = await this.health.check([() => this.checkDatabase(), () => this.checkRedis()]);
 
     const dbStatus = result.details?.['database']?.status === 'up' ? 'up' : 'down';
     const redisStatus = result.details?.['redis']?.status === 'up' ? 'up' : 'down';
@@ -65,7 +58,7 @@ export class HealthController {
       await this.prisma.$queryRaw`SELECT 1`;
       return envelope({ status: 'ready', db: 'connected' });
     } catch {
-      return envelope({ status: 'not_ready', db: 'disconnected' });
+      throw new ServiceUnavailableException({ status: 'not_ready', db: 'disconnected' });
     }
   }
 

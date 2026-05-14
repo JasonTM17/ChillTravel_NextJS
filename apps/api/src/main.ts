@@ -32,7 +32,7 @@ async function bootstrap(): Promise<void> {
   configureApiApp(app);
 
   const config = app.get(ConfigService);
-  const frontendUrl = config.get<string>('FRONTEND_URL') ?? 'http://localhost:3000';
+  const frontendUrl = config.get<string>('FRONTEND_URL') ?? 'http://localhost:3001';
   const port = config.get<number>('PORT') ?? 4000;
   const nodeEnv = config.get<NodeEnv>('NODE_ENV') ?? 'development';
 
@@ -69,7 +69,7 @@ async function bootstrap(): Promise<void> {
     if (!allowedOrigins.includes(frontendUrl)) {
       allowedOrigins.push(frontendUrl);
     }
-    const localhostDefaults = ['http://localhost:3000', 'http://localhost:4000'];
+    const localhostDefaults = ['http://localhost:3001', 'http://localhost:4000'];
     for (const origin of localhostDefaults) {
       if (!allowedOrigins.includes(origin)) {
         allowedOrigins.push(origin);

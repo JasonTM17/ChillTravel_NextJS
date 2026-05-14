@@ -1,6 +1,6 @@
 'use client';
 
-import { destinations, getHotelPropertyBySlug, type RoomOffer } from '@vietwander/shared';
+import { getHotelPropertyBySlug, type RoomOffer } from '@vietwander/shared';
 import {
   Bath,
   BedDouble,
@@ -21,11 +21,7 @@ import {
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useState, useMemo, useCallback } from 'react';
-import {
-  CommerceSurface,
-  StatusPill,
-  TrustBanner,
-} from '@/components/commerce-primitives';
+import { CommerceSurface, StatusPill, TrustBanner } from '@/components/commerce-primitives';
 import { getDestinationImage } from '@/lib/destination-images';
 import { useLocale } from '@/lib/i18n';
 import { formatVnd } from '@/lib/utils';
@@ -85,14 +81,36 @@ interface MockReview {
 
 function generateMockReviews(hotelName: string, count: number): MockReview[] {
   const authors = [
-    'Nguyễn Văn A', 'Trần Thị B', 'Lê Minh C', 'Phạm Hồng D',
-    'Hoàng Anh E', 'Vũ Thị F', 'Đặng Quốc G', 'Bùi Thanh H',
-    'Ngô Thị I', 'Dương Văn K', 'Lý Thị L', 'Trịnh Minh M',
-    'Hà Văn N', 'Đinh Thị O', 'Phan Quốc P', 'Mai Thị Q',
-    'Tạ Văn R', 'Chu Thị S', 'Đỗ Minh T', 'Lương Thị U',
-    'Cao Văn V', 'Tô Thị W', 'Huỳnh Văn X', 'Võ Thị Y',
-    'Trương Văn Z', 'Nguyễn Thị AA', 'Trần Văn BB', 'Lê Thị CC',
-    'Phạm Văn DD', 'Hoàng Thị EE',
+    'Nguyễn Văn A',
+    'Trần Thị B',
+    'Lê Minh C',
+    'Phạm Hồng D',
+    'Hoàng Anh E',
+    'Vũ Thị F',
+    'Đặng Quốc G',
+    'Bùi Thanh H',
+    'Ngô Thị I',
+    'Dương Văn K',
+    'Lý Thị L',
+    'Trịnh Minh M',
+    'Hà Văn N',
+    'Đinh Thị O',
+    'Phan Quốc P',
+    'Mai Thị Q',
+    'Tạ Văn R',
+    'Chu Thị S',
+    'Đỗ Minh T',
+    'Lương Thị U',
+    'Cao Văn V',
+    'Tô Thị W',
+    'Huỳnh Văn X',
+    'Võ Thị Y',
+    'Trương Văn Z',
+    'Nguyễn Thị AA',
+    'Trần Văn BB',
+    'Lê Thị CC',
+    'Phạm Văn DD',
+    'Hoàng Thị EE',
   ];
   const comments = [
     `Phòng sạch sẽ, nhân viên thân thiện. ${hotelName} rất đáng để quay lại.`,
@@ -127,14 +145,17 @@ function generateMockReviews(hotelName: string, count: number): MockReview[] {
 
 // ─── Amenity Icon Map ────────────────────────────────────────────────────────
 
-const AMENITY_ICON_MAP: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+const AMENITY_ICON_MAP: Record<
+  string,
+  React.ComponentType<{ size?: number; className?: string }>
+> = {
   'Hồ bơi': Waves,
-  'Wifi': Wifi,
+  Wifi: Wifi,
   'Wi-Fi': Wifi,
   'Bãi đỗ xe': Car,
   'Nhà hàng': UtensilsCrossed,
   'Phòng gym': Dumbbell,
-  'Spa': Sparkles,
+  Spa: Sparkles,
   'Ăn sáng mẫu': Coffee,
   'Bữa sáng địa phương': Coffee,
   'Gần biển': Waves,
@@ -171,7 +192,9 @@ function PhotoGallery({ images }: { images: string[] }) {
           role="button"
           tabIndex={0}
           aria-label={`${t.hotel.photoGallery} - ${currentIndex + 1}/${images.length}`}
-          onKeyDown={(e) => { if (e.key === 'Enter') setShowFullscreen(true); }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') setShowFullscreen(true);
+          }}
         />
 
         {/* Navigation Arrows */}
@@ -323,10 +346,7 @@ function GuestReviews({ reviews }: { reviews: MockReview[] }) {
   const { t } = useLocale();
 
   const totalPages = Math.ceil(reviews.length / REVIEWS_PER_PAGE);
-  const paginatedReviews = reviews.slice(
-    (page - 1) * REVIEWS_PER_PAGE,
-    page * REVIEWS_PER_PAGE
-  );
+  const paginatedReviews = reviews.slice((page - 1) * REVIEWS_PER_PAGE, page * REVIEWS_PER_PAGE);
 
   return (
     <CommerceSurface>
@@ -357,9 +377,7 @@ function GuestReviews({ reviews }: { reviews: MockReview[] }) {
                 {review.rating.toFixed(1)}
               </span>
             </div>
-            <p className="mt-3 text-sm leading-relaxed text-muted-ink">
-              {review.comment}
-            </p>
+            <p className="mt-3 text-sm leading-relaxed text-muted-ink">{review.comment}</p>
           </article>
         ))}
       </div>
@@ -410,8 +428,8 @@ function RoomTypeList({
   rooms,
   selectedRoomId,
   onSelectRoom,
-  hotelSlug,
-  destinationSlug,
+  hotelSlug: _hotelSlug,
+  destinationSlug: _destinationSlug,
 }: {
   rooms: RoomOffer[];
   selectedRoomId: string | null;
@@ -527,9 +545,7 @@ function StickyPriceSummary({
           ) : (
             <div className="mt-3">
               <p className="text-sm text-muted-ink">{t.hotel.startingFrom}</p>
-              <p className="mt-1 text-2xl font-bold text-orange-cta">
-                {formatVnd(lowestPrice)}
-              </p>
+              <p className="mt-1 text-2xl font-bold text-orange-cta">{formatVnd(lowestPrice)}</p>
               <p className="text-xs text-muted-ink">{t.hotel.perNight}</p>
             </div>
           )}
@@ -554,9 +570,7 @@ function StickyPriceSummary({
           )}
 
           {!isRoomSelected && (
-            <p className="mt-2 text-center text-xs text-muted-ink">
-              {t.hotel.selectRoomFirst}
-            </p>
+            <p className="mt-2 text-center text-xs text-muted-ink">{t.hotel.selectRoomFirst}</p>
           )}
         </CommerceSurface>
 
@@ -578,15 +592,12 @@ export default function HotelDetailPage() {
 
   // Generate gallery images (up to 30)
   const galleryImages = useMemo(
-    () => hotel ? generateGalleryImages(hotel.destinationSlug, 30) : [],
-    [hotel]
+    () => (hotel ? generateGalleryImages(hotel.destinationSlug, 30) : []),
+    [hotel],
   );
 
   // Generate mock reviews
-  const reviews = useMemo(
-    () => hotel ? generateMockReviews(hotel.name, 25) : [],
-    [hotel]
-  );
+  const reviews = useMemo(() => (hotel ? generateMockReviews(hotel.name, 25) : []), [hotel]);
 
   if (!hotel) {
     return (
@@ -600,8 +611,6 @@ export default function HotelDetailPage() {
       </main>
     );
   }
-
-  const destination = destinations.find((item) => item.slug === hotel.destinationSlug) ?? destinations[0]!;
 
   return (
     <main className="min-h-screen bg-sky-surface/30 text-ink">

@@ -10,7 +10,6 @@ import {
   SlidersHorizontal,
   Sparkles,
   Star,
-  Tag,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -32,8 +31,16 @@ const MOCK_TOURS: Tour[] = [
     title: 'Đà Nẵng - Hội An 3 ngày 2 đêm',
     slug: 'da-nang-hoi-an-3n2d',
     destinationId: 'dest-danang',
-    destination: { id: 'dest-danang', name: 'Đà Nẵng', slug: 'da-nang', country: 'Việt Nam', city: 'Đà Nẵng', imageUrl: null },
-    description: 'Khám phá thành phố biển Đà Nẵng và phố cổ Hội An với hành trình 3 ngày 2 đêm đầy trải nghiệm.',
+    destination: {
+      id: 'dest-danang',
+      name: 'Đà Nẵng',
+      slug: 'da-nang',
+      country: 'Việt Nam',
+      city: 'Đà Nẵng',
+      imageUrl: null,
+    },
+    description:
+      'Khám phá thành phố biển Đà Nẵng và phố cổ Hội An với hành trình 3 ngày 2 đêm đầy trải nghiệm.',
     shortDescription: 'Tour biển Đà Nẵng kết hợp phố cổ Hội An',
     durationDays: 3,
     durationNights: 2,
@@ -58,7 +65,14 @@ const MOCK_TOURS: Tour[] = [
     title: 'Sapa Trekking 2 ngày 1 đêm',
     slug: 'sapa-trekking-2n1d',
     destinationId: 'dest-sapa',
-    destination: { id: 'dest-sapa', name: 'Sapa', slug: 'sapa', country: 'Việt Nam', city: 'Lào Cai', imageUrl: null },
+    destination: {
+      id: 'dest-sapa',
+      name: 'Sapa',
+      slug: 'sapa',
+      country: 'Việt Nam',
+      city: 'Lào Cai',
+      imageUrl: null,
+    },
     description: 'Trekking qua các bản làng dân tộc, ngắm ruộng bậc thang và trải nghiệm homestay.',
     shortDescription: 'Trekking Sapa — bản làng & ruộng bậc thang',
     durationDays: 2,
@@ -84,7 +98,14 @@ const MOCK_TOURS: Tour[] = [
     title: 'Phú Quốc Resort 4 ngày 3 đêm',
     slug: 'phu-quoc-resort-4n3d',
     destinationId: 'dest-phuquoc',
-    destination: { id: 'dest-phuquoc', name: 'Phú Quốc', slug: 'phu-quoc', country: 'Việt Nam', city: 'Kiên Giang', imageUrl: null },
+    destination: {
+      id: 'dest-phuquoc',
+      name: 'Phú Quốc',
+      slug: 'phu-quoc',
+      country: 'Việt Nam',
+      city: 'Kiên Giang',
+      imageUrl: null,
+    },
     description: 'Nghỉ dưỡng tại resort 5 sao, lặn ngắm san hô và khám phá đảo ngọc.',
     shortDescription: 'Nghỉ dưỡng Phú Quốc — resort 5 sao',
     durationDays: 4,
@@ -110,7 +131,14 @@ const MOCK_TOURS: Tour[] = [
     title: 'Du thuyền Hạ Long 2 ngày 1 đêm',
     slug: 'ha-long-cruise-2n1d',
     destinationId: 'dest-halong',
-    destination: { id: 'dest-halong', name: 'Hạ Long', slug: 'ha-long', country: 'Việt Nam', city: 'Quảng Ninh', imageUrl: null },
+    destination: {
+      id: 'dest-halong',
+      name: 'Hạ Long',
+      slug: 'ha-long',
+      country: 'Việt Nam',
+      city: 'Quảng Ninh',
+      imageUrl: null,
+    },
     description: 'Ngủ đêm trên du thuyền 5 sao, chèo kayak và khám phá hang động.',
     shortDescription: 'Du thuyền Hạ Long — kayak & hang động',
     durationDays: 2,
@@ -136,7 +164,14 @@ const MOCK_TOURS: Tour[] = [
     title: 'Nha Trang biển xanh 3 ngày 2 đêm',
     slug: 'nha-trang-beach-3n2d',
     destinationId: 'dest-nhatrang',
-    destination: { id: 'dest-nhatrang', name: 'Nha Trang', slug: 'nha-trang', country: 'Việt Nam', city: 'Khánh Hòa', imageUrl: null },
+    destination: {
+      id: 'dest-nhatrang',
+      name: 'Nha Trang',
+      slug: 'nha-trang',
+      country: 'Việt Nam',
+      city: 'Khánh Hòa',
+      imageUrl: null,
+    },
     description: 'Tắm biển, lặn ngắm san hô và thưởng thức hải sản tươi sống.',
     shortDescription: 'Nha Trang — biển xanh & hải sản',
     durationDays: 3,
@@ -162,7 +197,14 @@ const MOCK_TOURS: Tour[] = [
     title: 'Đà Lạt romantic 3 ngày 2 đêm',
     slug: 'da-lat-romantic-3n2d',
     destinationId: 'dest-dalat',
-    destination: { id: 'dest-dalat', name: 'Đà Lạt', slug: 'da-lat', country: 'Việt Nam', city: 'Lâm Đồng', imageUrl: null },
+    destination: {
+      id: 'dest-dalat',
+      name: 'Đà Lạt',
+      slug: 'da-lat',
+      country: 'Việt Nam',
+      city: 'Lâm Đồng',
+      imageUrl: null,
+    },
     description: 'Thành phố ngàn hoa với thác nước, đồi chè và cafe view đẹp.',
     shortDescription: 'Đà Lạt — thành phố ngàn hoa',
     durationDays: 3,
@@ -372,35 +414,43 @@ function ToursPageInner() {
   }
 
   return (
-    <main className="min-h-screen bg-tv-bg text-tv-ink">
+    <main className="min-h-screen bg-[#F7F8FA]">
       {/* Search bar */}
-      <section className="border-b border-tv-border bg-white">
-        <div className="mx-auto max-w-[1180px] px-4 py-5">
+      <section className="border-b border-gray-100 bg-white">
+        <div className="mx-auto max-w-[1200px] px-4 py-5">
           <form
             onSubmit={handleSearch}
-            className="rounded-[26px] bg-tv-blue p-3 shadow-[0_18px_42px_rgba(2,119,212,0.18)]"
+            className="overflow-hidden rounded-2xl bg-gradient-to-r from-[#0064D2] to-[#004EA2] p-4 shadow-[0_12px_40px_rgba(0,100,210,0.2)]"
           >
-            <div className="grid gap-3 rounded-[20px] bg-white p-3 md:grid-cols-[1fr_160px_148px]">
-              <label className="flex min-w-0 items-center gap-3 rounded-tv border border-tv-border bg-tv-bg px-4 py-3">
-                <Search size={19} className="text-tv-blue" aria-hidden="true" />
+            <div className="grid gap-3 rounded-xl bg-white p-3 md:grid-cols-[1fr_180px_140px]">
+              <label className="flex min-w-0 items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
+                <Search size={19} className="text-[#0064D2]" aria-hidden="true" />
                 <span className="min-w-0 flex-1">
-                  <span className="block text-xs font-bold text-tv-ink-3">Tìm tour</span>
+                  <span className="block text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                    Tìm tour
+                  </span>
                   <input
                     name="keyword"
                     defaultValue={keyword}
-                    className="mt-1 w-full bg-transparent font-bold text-tv-ink outline-none"
+                    className="mt-1 w-full bg-transparent text-[14px] font-bold text-gray-800 outline-none placeholder:text-gray-400"
                     placeholder="Tên tour, điểm đến..."
                   />
                 </span>
               </label>
-              <div className="flex items-center gap-3 rounded-tv border border-tv-border bg-white px-4 py-3">
-                <SlidersHorizontal size={18} className="shrink-0 text-tv-blue" aria-hidden="true" />
+              <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3">
+                <SlidersHorizontal
+                  size={18}
+                  className="shrink-0 text-[#0064D2]"
+                  aria-hidden="true"
+                />
                 <span className="min-w-0">
-                  <span className="block text-xs font-bold text-tv-ink-3">Sắp xếp</span>
+                  <span className="block text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                    Sắp xếp
+                  </span>
                   <select
                     value={sort}
                     onChange={(e) => handleSortChange(e.target.value)}
-                    className="mt-1 w-full bg-transparent font-bold text-tv-ink outline-none text-sm"
+                    className="mt-1 w-full bg-transparent text-[14px] font-bold text-gray-800 outline-none"
                     aria-label="Sắp xếp tour"
                   >
                     {sortOptions.map((opt) => (
@@ -412,7 +462,7 @@ function ToursPageInner() {
                 </span>
               </div>
               <button
-                className="rounded-tv bg-tv-orange px-5 py-3 text-sm font-bold text-white transition hover:bg-tv-orange-dark"
+                className="rounded-xl bg-[#FF6D00] px-5 py-3 text-[14px] font-bold text-white shadow-lg shadow-orange-500/30 transition-all hover:bg-[#E55A00] hover:shadow-xl active:scale-[0.98]"
                 type="submit"
               >
                 Tìm kiếm
@@ -423,139 +473,140 @@ function ToursPageInner() {
       </section>
 
       {/* Main content */}
-      <section className="mx-auto grid max-w-[1180px] gap-5 px-4 py-6 lg:grid-cols-[260px_minmax(0,1fr)]">
+      <section className="mx-auto grid max-w-[1200px] gap-5 px-4 py-6 lg:grid-cols-[260px_minmax(0,1fr)]">
         {/* Filter rail */}
-        <aside className="h-fit rounded-tv border border-tv-border bg-white p-5 shadow-tv-card lg:sticky lg:top-24">
-          <div className="flex items-center justify-between border-b border-tv-border pb-4">
-            <h2 className="text-xl font-bold">Bộ lọc</h2>
-            <SlidersHorizontal className="text-tv-blue" size={18} aria-hidden="true" />
+        <aside className="h-fit overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm lg:sticky lg:top-24">
+          <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50 px-5 py-4">
+            <h2 className="text-[15px] font-extrabold text-gray-800">Bộ lọc</h2>
+            <SlidersHorizontal className="text-[#0064D2]" size={16} aria-hidden="true" />
           </div>
+          <div className="p-5">
+            {/* Category */}
+            <div>
+              <h3 className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                Loại tour
+              </h3>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {categoryOptions.map((cat) => {
+                  const active = category === cat;
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => handleCategoryToggle(cat)}
+                      className={`rounded-lg border px-3 py-1.5 text-[12px] font-semibold transition ${
+                        active
+                          ? 'border-[#0064D2] bg-blue-50 text-[#0064D2]'
+                          : 'border-gray-200 bg-white text-gray-600 hover:border-[#0064D2] hover:text-[#0064D2]'
+                      }`}
+                      type="button"
+                    >
+                      {cat}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
-          {/* Category */}
-          <div className="mt-5">
-            <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">
-              Loại tour
-            </h3>
-            <div className="mt-3 grid gap-2">
-              {categoryOptions.map((cat) => {
-                const active = category === cat;
-                return (
+            {/* Duration */}
+            <div className="mt-5">
+              <h3 className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                Thời gian
+              </h3>
+              <div className="mt-3 space-y-1.5">
+                {durationOptions.map((opt) => (
                   <button
-                    key={cat}
-                    onClick={() => handleCategoryToggle(cat)}
-                    className={`flex items-center justify-between rounded-tv-sm border px-3 py-2 text-sm font-bold transition text-left ${
-                      active
-                        ? 'border-tv-blue bg-tv-blue-light text-tv-blue'
-                        : 'border-tv-border bg-white text-tv-ink-3 hover:border-tv-blue hover:text-tv-blue'
+                    key={opt.value}
+                    onClick={() => handleDurationChange(opt.value)}
+                    className={`w-full rounded-lg border px-3 py-2 text-[12px] font-semibold text-left transition ${
+                      duration === opt.value
+                        ? 'border-[#0064D2] bg-blue-50 text-[#0064D2]'
+                        : 'border-gray-200 bg-white text-gray-600 hover:border-[#0064D2]'
                     }`}
                     type="button"
                   >
-                    {cat}
+                    {opt.label}
                   </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Duration */}
-          <div className="mt-6">
-            <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">
-              Thời gian
-            </h3>
-            <div className="mt-3 grid gap-2">
-              {durationOptions.map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => handleDurationChange(opt.value)}
-                  className={`rounded-tv-sm border px-3 py-2 text-xs font-bold text-left transition ${
-                    duration === opt.value
-                      ? 'border-tv-blue bg-tv-blue-light text-tv-blue'
-                      : 'border-tv-border bg-white text-tv-ink-3 hover:border-tv-blue'
-                  }`}
-                  type="button"
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Price range */}
-          <div className="mt-6">
-            <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-tv-ink-3">
-              Khoảng giá (VNĐ)
-            </h3>
-            <div className="mt-3 space-y-2">
-              <div>
-                <label className="text-xs font-bold text-tv-ink-3" htmlFor="minPrice">
-                  Từ
-                </label>
-                <input
-                  id="minPrice"
-                  type="number"
-                  min={0}
-                  step={100000}
-                  defaultValue={minPrice}
-                  onBlur={(e) => handlePriceChange('minPrice', e.target.value)}
-                  className="mt-1 w-full rounded-tv-sm border border-tv-border bg-white px-3 py-2 text-sm font-bold text-tv-ink outline-none focus:border-tv-blue"
-                  placeholder="0"
-                />
-              </div>
-              <div>
-                <label className="text-xs font-bold text-tv-ink-3" htmlFor="maxPrice">
-                  Đến
-                </label>
-                <input
-                  id="maxPrice"
-                  type="number"
-                  min={0}
-                  step={100000}
-                  defaultValue={maxPrice}
-                  onBlur={(e) => handlePriceChange('maxPrice', e.target.value)}
-                  className="mt-1 w-full rounded-tv-sm border border-tv-border bg-white px-3 py-2 text-sm font-bold text-tv-ink outline-none focus:border-tv-blue"
-                  placeholder="Không giới hạn"
-                />
+                ))}
               </div>
             </div>
-          </div>
 
-          {/* Clear filters */}
-          {(keyword || category || minPrice || maxPrice || duration || sort) && (
-            <button
-              onClick={() => router.push('/tours')}
-              className="mt-6 w-full rounded-tv-sm border border-tv-border bg-white px-3 py-2 text-xs font-bold text-tv-ink-3 hover:border-tv-blue hover:text-tv-blue"
-              type="button"
-            >
-              Xóa bộ lọc
-            </button>
-          )}
+            {/* Price range */}
+            <div className="mt-5">
+              <h3 className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                Khoảng giá (VNĐ)
+              </h3>
+              <div className="mt-3 space-y-2">
+                <div>
+                  <label className="text-[11px] font-medium text-gray-500" htmlFor="minPrice">
+                    Từ
+                  </label>
+                  <input
+                    id="minPrice"
+                    type="number"
+                    min={0}
+                    step={100000}
+                    defaultValue={minPrice}
+                    onBlur={(e) => handlePriceChange('minPrice', e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-[13px] font-bold text-gray-800 outline-none focus:border-[#0064D2] focus:ring-1 focus:ring-[#0064D2]/20"
+                    placeholder="0"
+                  />
+                </div>
+                <div>
+                  <label className="text-[11px] font-medium text-gray-500" htmlFor="maxPrice">
+                    Đến
+                  </label>
+                  <input
+                    id="maxPrice"
+                    type="number"
+                    min={0}
+                    step={100000}
+                    defaultValue={maxPrice}
+                    onBlur={(e) => handlePriceChange('maxPrice', e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-[13px] font-bold text-gray-800 outline-none focus:border-[#0064D2] focus:ring-1 focus:ring-[#0064D2]/20"
+                    placeholder="Không giới hạn"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Clear filters */}
+            {(keyword || category || minPrice || maxPrice || duration || sort) && (
+              <button
+                onClick={() => router.push('/tours')}
+                className="mt-5 w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-[12px] font-semibold text-gray-500 transition hover:border-red-300 hover:text-red-500"
+                type="button"
+              >
+                Xóa bộ lọc
+              </button>
+            )}
+          </div>
         </aside>
 
         {/* Results */}
         <section className="min-w-0">
           {/* Toolbar */}
-          <div className="rounded-tv border border-tv-border bg-white p-4 shadow-tv-card">
+          <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
             <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-tv-blue">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-[#0064D2]">
                   Danh sách tour
                 </p>
-                <h1 className="mt-1 text-2xl font-bold">
+                <h1 className="mt-1 text-xl font-extrabold text-gray-900">
                   {loading
                     ? 'Đang tải...'
                     : `${totalElements} tour${keyword ? ` cho "${keyword}"` : ''}`}
                 </h1>
-                <p className="mt-1 text-sm text-tv-ink-3">Dữ liệu thật từ hệ thống.</p>
+                <p className="mt-0.5 text-[12px] text-gray-500">Dữ liệu thật từ hệ thống.</p>
               </div>
               <div className="flex flex-wrap gap-2">
                 {sortOptions.slice(1).map((option) => (
                   <button
                     key={option.value}
                     onClick={() => handleSortChange(option.value)}
-                    className={`rounded-full border px-3 py-2 text-xs font-bold ${
+                    className={`rounded-lg border px-3 py-1.5 text-[11px] font-semibold transition ${
                       sort === option.value
-                        ? 'border-tv-blue bg-tv-blue-light text-tv-blue'
-                        : 'border-tv-border bg-white text-tv-ink-3'
+                        ? 'border-[#0064D2] bg-blue-50 text-[#0064D2]'
+                        : 'border-gray-200 bg-white text-gray-500 hover:border-[#0064D2]'
                     }`}
                     type="button"
                   >
@@ -610,42 +661,45 @@ function TourCard({ tour }: { tour: Tour }) {
   const hasSale = tour.salePrice != null && tour.salePrice < tour.basePrice;
 
   return (
-    <article className="tv-card flex flex-col overflow-hidden transition hover:-translate-y-0.5 hover:shadow-tv-hover">
+    <article className="group flex flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
       <Link
         href={`/tours/${tour.slug}`}
-        className="relative block h-48 bg-cover bg-center"
-        style={{ backgroundImage: `url(${imgSrc})` }}
+        className="relative block h-48 overflow-hidden"
         aria-label={`Xem chi tiết ${tour.title}`}
       >
+        <img
+          src={imgSrc}
+          alt={tour.title}
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+        />
         {tour.featured && (
-          <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-tv-orange px-2.5 py-1 text-xs font-bold text-white shadow">
-            <Sparkles size={12} aria-hidden="true" />
+          <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-md bg-[#FF6D00] px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
+            <Sparkles size={11} aria-hidden="true" />
             Nổi bật
           </span>
         )}
         {hasSale && (
-          <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-tv-blue px-2.5 py-1 text-xs font-bold text-white shadow">
-            <Tag size={12} aria-hidden="true" />
+          <span className="absolute right-3 top-3 rounded-md bg-red-600 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
             Ưu đãi
           </span>
         )}
       </Link>
 
-      <div className="flex flex-1 flex-col p-5">
-        <div className="flex flex-wrap items-center gap-2 text-xs">
+      <div className="flex flex-1 flex-col p-4">
+        <div className="flex flex-wrap items-center gap-2">
           {tour.destination && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-tv-blue-light px-2.5 py-1 font-bold text-tv-blue">
-              <MapPin size={11} aria-hidden="true" />
+            <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-[#0064D2]">
+              <MapPin size={10} aria-hidden="true" />
               {tour.destination.city ?? tour.destination.name}
             </span>
           )}
-          <span className="inline-flex items-center gap-1 rounded-full bg-tv-bg px-2.5 py-1 font-bold text-tv-ink-3">
-            <Clock size={11} aria-hidden="true" />
-            {tour.durationDays} ngày {tour.durationNights} đêm
+          <span className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-2 py-0.5 text-[11px] font-semibold text-gray-600">
+            <Clock size={10} aria-hidden="true" />
+            {tour.durationDays}N{tour.durationNights}Đ
           </span>
           {tour.ratingAvg != null && (
-            <span className="inline-flex items-center gap-1 font-bold text-[#b45309]">
-              <Star size={12} fill="currentColor" aria-hidden="true" />
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-600">
+              <Star size={11} fill="currentColor" aria-hidden="true" />
               {tour.ratingAvg.toFixed(1)}
             </span>
           )}
@@ -653,31 +707,29 @@ function TourCard({ tour }: { tour: Tour }) {
 
         <Link
           href={`/tours/${tour.slug}`}
-          className="mt-3 line-clamp-2 text-lg font-bold leading-snug hover:text-tv-blue"
+          className="mt-2.5 line-clamp-2 text-[14px] font-bold leading-snug text-gray-800 group-hover:text-[#0064D2] transition-colors"
         >
           {tour.title}
         </Link>
 
-        <p className="mt-2 line-clamp-2 flex-1 text-sm leading-6 text-tv-ink-3">
+        <p className="mt-1.5 line-clamp-2 flex-1 text-[12px] leading-relaxed text-gray-500">
           {tour.shortDescription ?? tour.description}
         </p>
 
-        <div className="mt-4 flex items-center justify-between gap-3 border-t border-tv-border pt-4">
+        <div className="mt-3 flex items-end justify-between border-t border-gray-100 pt-3">
           <div>
             {hasSale && (
-              <p className="text-xs font-bold text-tv-ink-3 line-through">
-                {formatVnd(tour.basePrice)}
-              </p>
+              <p className="text-[11px] text-gray-400 line-through">{formatVnd(tour.basePrice)}</p>
             )}
-            <p className="text-xl font-bold text-tv-orange">{formatVnd(displayPrice)}</p>
-            <p className="text-xs font-bold text-tv-ink-3">/ người</p>
+            <p className="text-[16px] font-extrabold text-[#FF6D00]">{formatVnd(displayPrice)}</p>
+            <p className="text-[10px] text-gray-400">/ người</p>
           </div>
           <Link
             href={`/tours/${tour.slug}`}
-            className="inline-flex items-center gap-1.5 rounded-tv-sm bg-tv-orange px-4 py-2.5 text-sm font-bold text-white hover:bg-tv-orange-dark"
+            className="inline-flex items-center gap-1 rounded-lg bg-[#FF6D00] px-3.5 py-2 text-[12px] font-bold text-white shadow-sm transition-all hover:bg-[#E55A00] hover:shadow-md active:scale-[0.97]"
           >
             Xem tour
-            <ArrowRight size={15} aria-hidden="true" />
+            <ArrowRight size={13} aria-hidden="true" />
           </Link>
         </div>
       </div>

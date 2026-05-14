@@ -49,7 +49,13 @@ function generateReferenceCode(): string {
  * and fake credit card form. Never processes real transactions.
  * Accepts initialData to restore previously entered values on back/forward navigation.
  */
-export function MockPayment({ initialData, onDataChange, onSuccess, onFailure, className }: MockPaymentProps) {
+export function MockPayment({
+  initialData,
+  onDataChange,
+  onSuccess,
+  onFailure,
+  className,
+}: MockPaymentProps) {
   const { t } = useLocale();
   const [method, setMethod] = useState<PaymentMethod>(initialData?.method ?? 'credit-card');
   const [cardNumber, setCardNumber] = useState(initialData?.cardNumber ?? '');
@@ -200,7 +206,7 @@ export function MockPayment({ initialData, onDataChange, onSuccess, onFailure, c
                 placeholder="MM/YY"
                 maxLength={5}
                 value={expiry}
-                onChange={(e) => setExpiry(e.target.value)}
+                onChange={(e) => handleExpiryChange(e.target.value)}
                 className="w-full rounded-tv-sm border border-border px-3 py-2.5 text-sm text-ink placeholder:text-muted-ink/60 focus:border-booking-blue focus:outline-none focus:ring-1 focus:ring-booking-blue"
                 autoComplete="off"
               />
@@ -215,7 +221,7 @@ export function MockPayment({ initialData, onDataChange, onSuccess, onFailure, c
                 placeholder="123"
                 maxLength={4}
                 value={cvv}
-                onChange={(e) => setCvv(e.target.value)}
+                onChange={(e) => handleCvvChange(e.target.value)}
                 className="w-full rounded-tv-sm border border-border px-3 py-2.5 text-sm text-ink placeholder:text-muted-ink/60 focus:border-booking-blue focus:outline-none focus:ring-1 focus:ring-booking-blue"
                 autoComplete="off"
               />

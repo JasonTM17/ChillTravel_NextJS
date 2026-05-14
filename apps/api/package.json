@@ -10,11 +10,17 @@
     "url": "https://github.com/nguyenson1710/wanderviet.git",
     "directory": "apps/api"
   },
-  "keywords": ["nestjs", "rest-api", "swagger", "travel", "vietnam"],
+  "keywords": [
+    "nestjs",
+    "rest-api",
+    "swagger",
+    "travel",
+    "vietnam"
+  ],
   "scripts": {
     "dev": "node -r @swc-node/register src/main.ts",
     "build": "tsc -p tsconfig.json",
-    "lint": "eslint src --max-warnings 100",
+    "lint": "eslint src --max-warnings 0",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run src"
   },

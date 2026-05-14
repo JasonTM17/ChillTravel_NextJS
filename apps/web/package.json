@@ -20,7 +20,7 @@
   "scripts": {
     "dev": "next dev --port 3001",
     "build": "next build",
-    "lint": "eslint . --max-warnings 50",
+    "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "test": "vitest run lib",
     "storybook": "storybook dev -p 6006",

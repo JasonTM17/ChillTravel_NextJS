@@ -17,8 +17,8 @@ import { useEffect, useState, useCallback, Suspense } from 'react';
 import { tourApi } from '@/lib/api/tour.api';
 import type { Tour } from '@/lib/api/tour.api';
 import { getDestinationImage } from '@/lib/destination-images';
-import { formatVnd } from '@/lib/utils';
 import { MOCK_TOURS, sortOptions, categoryOptions, durationOptions } from '@/lib/mocks/tours';
+import { formatVnd } from '@/lib/utils';
 
 const PAGE_SIZE = 9;
 

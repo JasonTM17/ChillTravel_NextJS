@@ -11,6 +11,9 @@ env:
   API_IMAGE: ${{ vars.DOCKER_HUB_USERNAME || 'nguyenson1710' }}/wanderviet-api
   WEB_IMAGE: ${{ vars.DOCKER_HUB_USERNAME || 'nguyenson1710' }}/wanderviet-web
   AI_IMAGE: ${{ vars.DOCKER_HUB_USERNAME || 'nguyenson1710' }}/wanderviet-ai
+  GHCR_API_IMAGE: ghcr.io/${{ github.repository_owner }}/wanderviet-api
+  GHCR_WEB_IMAGE: ghcr.io/${{ github.repository_owner }}/wanderviet-web
+  GHCR_AI_IMAGE: ghcr.io/${{ github.repository_owner }}/wanderviet-ai
 
 jobs:
   build-and-push:
@@ -35,6 +38,13 @@ jobs:
           username: ${{ env.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build and push API image
         uses: docker/build-push-action@v6
         with:
@@ -44,6 +54,8 @@ jobs:
           tags: |
             ${{ env.API_IMAGE }}:latest
             ${{ env.API_IMAGE }}:${{ steps.version.outputs.VERSION }}
+            ${{ env.GHCR_API_IMAGE }}:latest
+            ${{ env.GHCR_API_IMAGE }}:${{ steps.version.outputs.VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -56,18 +68,22 @@ jobs:
           tags: |
             ${{ env.WEB_IMAGE }}:latest
             ${{ env.WEB_IMAGE }}:${{ steps.version.outputs.VERSION }}
+            ${{ env.GHCR_WEB_IMAGE }}:latest
+            ${{ env.GHCR_WEB_IMAGE }}:${{ steps.version.outputs.VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Build and push AI Service image
         uses: docker/build-push-action@v6
         with:
-          context: apps/ai-service
-          file: apps/ai-service/Dockerfile
+          context: .
+          file: ./apps/ai-service/Dockerfile
           push: true
           tags: |
             ${{ env.AI_IMAGE }}:latest
             ${{ env.AI_IMAGE }}:${{ steps.version.outputs.VERSION }}
+            ${{ env.GHCR_AI_IMAGE }}:latest
+            ${{ env.GHCR_AI_IMAGE }}:${{ steps.version.outputs.VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -76,3 +92,8 @@ jobs:
           echo "API: ${{ env.API_IMAGE }}:${{ steps.version.outputs.VERSION }}"
           echo "Web: ${{ env.WEB_IMAGE }}:${{ steps.version.outputs.VERSION }}"
           echo "AI:  ${{ env.AI_IMAGE }}:${{ steps.version.outputs.VERSION }}"
+          echo ""
+          echo "GHCR:"
+          echo "API: ${{ env.GHCR_API_IMAGE }}:${{ steps.version.outputs.VERSION }}"
+          echo "Web: ${{ env.GHCR_WEB_IMAGE }}:${{ steps.version.outputs.VERSION }}"
+          echo "AI:  ${{ env.GHCR_AI_IMAGE }}:${{ steps.version.outputs.VERSION }}"

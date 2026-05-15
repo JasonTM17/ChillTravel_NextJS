@@ -49,6 +49,7 @@ __pycache__/
 # === Internal tools ===
 .stitch/
 .kiro/
+.omc/
 
 # === Flutter ===
 .flutter-plugins

@@ -24,13 +24,24 @@ async function recordScene(name, fn) {
   const page = await context.newPage();
 
   await page.addInitScript(() => {
-    const style = document.createElement('style');
-    style.textContent = 'nextjs-portal { display: none !important; }';
-    (document.head || document.documentElement).appendChild(style);
+    new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        for (const node of m.addedNodes) {
+          if (node.tagName && node.tagName.toLowerCase() === 'nextjs-portal') {
+            node.style.display = 'none';
+            node.style.visibility = 'hidden';
+          }
+        }
+      }
+    }).observe(document.documentElement, { childList: true, subtree: true });
   });
 
   try {
     await fn(page);
+    await page.evaluate(() => {
+      document.querySelectorAll('nextjs-portal').forEach((el) => el.remove());
+    });
+    await page.waitForTimeout(500);
   } catch (e) {
     console.error(`Error in scene "${name}":`, e.message);
   }

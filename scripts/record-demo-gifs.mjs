@@ -23,6 +23,12 @@ async function recordScene(name, fn) {
   });
   const page = await context.newPage();
 
+  await page.addInitScript(() => {
+    const style = document.createElement('style');
+    style.textContent = 'nextjs-portal { display: none !important; }';
+    (document.head || document.documentElement).appendChild(style);
+  });
+
   try {
     await fn(page);
   } catch (e) {

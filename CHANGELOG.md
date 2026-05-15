@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-05-15
+
+### Added
+
+- `.omc/` added to `.gitignore` for tooling isolation
+- shadcn MCP server integration for UI component access
+- n8n MCP server integration for workflow automation
+- Repository made public for portfolio visibility
+
+### Fixed
+
+- Gitleaks action pinned to v2 (v3 does not exist yet)
+- Removed incorrect Vercel homepage link from repo About
+
+### Changed
+
+- Repository visibility: private → public
+- CI badge now visible to external viewers
+- GitHub Packages containers publicly accessible
+
 ## [0.4.0] - 2026-05-14
 
 ### Fixed

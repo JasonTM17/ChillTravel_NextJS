@@ -19,6 +19,9 @@
   <img src="https://img.shields.io/badge/Node.js-22+-339933?logo=node.js&logoColor=white" alt="Node 22+" />
   <img src="https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter&logoColor=white" alt="Flutter" />
   <img src="https://img.shields.io/badge/Python-3.12+-3776AB?logo=python&logoColor=white" alt="Python 3.12+" />
+  <img src="https://img.shields.io/github/license/JasonTM17/ChillTravel_NextJS?color=blue" alt="License" />
+  <img src="https://img.shields.io/github/last-commit/JasonTM17/ChillTravel_NextJS?color=green" alt="Last Commit" />
+  <img src="https://img.shields.io/github/repo-size/JasonTM17/ChillTravel_NextJS" alt="Repo Size" />
   <a href="./LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
   </a>

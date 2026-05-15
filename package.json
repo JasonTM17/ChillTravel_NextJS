@@ -1,7 +1,7 @@
 {
   "name": "wanderviet",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.5.0",
   "description": "WanderViet — Full-stack Vietnam travel platform monorepo",
   "author": "Nguyen Son <nguyenson1710@gmail.com>",
   "license": "MIT",

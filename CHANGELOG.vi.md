@@ -7,6 +7,26 @@ và dự án tuân theo [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Chưa phát hành]
 
+## [0.5.0] - 2026-05-15
+
+### Thêm mới
+
+- Thêm `.omc/` vào `.gitignore` để cách ly tooling
+- Tích hợp shadcn MCP server cho truy cập UI components
+- Tích hợp n8n MCP server cho tự động hóa workflow
+- Chuyển repository sang public cho portfolio
+
+### Sửa lỗi
+
+- Ghim gitleaks action ở v2 (v3 chưa tồn tại)
+- Xóa link Vercel sai trong repo About
+
+### Thay đổi
+
+- Visibility repository: private → public
+- Badge CI hiển thị cho người ngoài
+- GitHub Packages containers truy cập công khai
+
 ## [0.4.0] - 2026-05-14
 
 ### Sửa lỗi

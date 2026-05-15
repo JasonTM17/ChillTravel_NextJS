@@ -50,7 +50,7 @@ Dự án được xây dựng với kiến trúc monorepo hiện đại, áp d�
 
 |                          Trang chủ                          |                          Khám phá                          |                          AI Planner                           |
 | :---------------------------------------------------------: | :--------------------------------------------------------: | :-----------------------------------------------------------: |
-| <img src="./assets/images/demo-homepage.png" width="280" /> | <img src="./assets/images/demo-explore.png" width="280" /> | <img src="./assets/images/demo-ai-planner.png" width="280" /> |
+| <img src="./assets/images/demo-homepage.gif" width="280" /> | <img src="./assets/images/demo-explore.gif" width="280" /> | <img src="./assets/images/demo-ai-planner.gif" width="280" /> |
 
 ```
 41 trang web | 21 API modules | 10 AI endpoints | 12 màn hình mobile

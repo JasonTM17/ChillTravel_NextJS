@@ -1,6 +1,6 @@
 # WanderViet — Sơ Đồ Entity-Relationship
 
-Sinh từ `packages/db/prisma/schema.prisma`. Phản ánh schema WanderViet đã phát triển (các model legacy WanderViet được bỏ qua cho rõ ràng; xem schema.prisma cho toàn bộ bao gồm Trip, ChatbotSession, AiKnowledge\*, v.v.).
+Sinh từ `packages/db/prisma/schema.prisma`. Phản ánh schema WanderViet đã phát triển (các model phụ trợ như Trip, ChatbotSession, AiKnowledge\* được bỏ qua cho rõ ràng; xem schema.prisma cho toàn bộ).
 
 ```mermaid
 erDiagram

@@ -42,16 +42,16 @@ WanderViet theo phong cách thiết kế OTA Việt Nam: tìm kiếm nhanh, so s
 
 ### Nhãn Route
 
-| Route            | Nhãn tiếng Việt |
-| ---------------- | --------------- |
-| `/`              | Trang chủ       |
-| `/tours`         | Danh sách tour  |
-| `/explore`       | Khám phá        |
-| `/wishlist`      | Yêu thích       |
-| `/my-bookings`   | Đặt chỗ của tôi |
-| `/profile`       | Hồ sơ           |
-| `/notifications` | Thông báo       |
-| `/admin`         | Bảng vận hành   |
+| Route            | Nhãn tiếng Việt       |
+| ---------------- | --------------------- |
+| `/`              | Trang chủ             |
+| `/tours`         | Danh sách tour        |
+| `/explore`       | Khám phá              |
+| `/wishlist`      | Yêu thích             |
+| `/my-bookings`   | Đặt chỗ của tôi       |
+| `/profile`       | Hồ sơ                 |
+| `/notifications` | Thông báo             |
+| `/admin`         | Bảng điều khiển Admin |
 
 ## Ranh Giới Thanh Toán
 

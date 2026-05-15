@@ -5,7 +5,7 @@ Chạy các bước kiểm tra sau trước khi tag release hoặc merge vào `m
 ## Chất Lượng Code
 
 ```bash
-pnpm lint          # Type-check TypeScript trên tất cả packages
+pnpm lint          # Chạy ESLint trên tất cả packages
 pnpm typecheck     # Chạy tsc --noEmit riêng
 pnpm test          # Unit tests (147 tests trên api/web/shared)
 pnpm build         # Build production đầy đủ
@@ -15,15 +15,15 @@ pnpm build         # Build production đầy đủ
 
 ```bash
 pnpm docker:config                    # Kiểm tra cú pháp docker-compose.yml
-make docker-build                     # Xác nhận multi-stage Dockerfiles build được
+docker compose -f infra/docker/docker-compose.yml build  # Xác nhận multi-stage Dockerfiles build được
 pnpm ai:test                          # Unit tests dịch vụ AI Python
 ```
 
 ## End-to-End
 
 ```bash
-# Yêu cầu postgres đang chạy (make docker-up trước)
-make e2e           # Playwright E2E suite
+# Yêu cầu postgres đang chạy (pnpm docker:up trước)
+pnpm e2e           # Playwright E2E suite
 ```
 
 ## Kiểm Tra Thủ Công

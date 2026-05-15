@@ -419,15 +419,15 @@ pnpm ai:test
 
 ## Tài Liệu
 
-| Tài liệu                                         | Mô tả                                  |
-| ------------------------------------------------ | -------------------------------------- |
-| [Architecture](./docs/architecture.md)           | Tổng quan kiến trúc hệ thống           |
-| [Features](./docs/FEATURES.md)                   | Chi tiết 41 trang và tính năng         |
-| [ADRs](./docs/adr/)                              | Architecture Decision Records (4 ADRs) |
-| [ER Diagram](./docs/er-diagram.md)               | Sơ đồ quan hệ thực thể                 |
-| [Contributing](./CONTRIBUTING.md)                | Hướng dẫn đóng góp                     |
-| [Changelog](./CHANGELOG.md)                      | Lịch sử thay đổi                       |
-| [Release Checklist](./docs/release-checklist.md) | Quy trình release                      |
+| Tài liệu                                            | Mô tả                                  |
+| --------------------------------------------------- | -------------------------------------- |
+| [Kiến trúc](./docs/architecture.vi.md)              | Tổng quan kiến trúc hệ thống           |
+| [Tính năng](./docs/FEATURES.vi.md)                  | Chi tiết 41 trang và tính năng         |
+| [ADRs](./docs/adr/)                                 | Architecture Decision Records (4 ADRs) |
+| [Sơ đồ ER](./docs/er-diagram.vi.md)                 | Sơ đồ quan hệ thực thể                 |
+| [Đóng góp](./CONTRIBUTING.vi.md)                    | Hướng dẫn đóng góp                     |
+| [Nhật ký](./CHANGELOG.vi.md)                        | Lịch sử thay đổi                       |
+| [Release Checklist](./docs/release-checklist.vi.md) | Quy trình release                      |
 
 ---
 

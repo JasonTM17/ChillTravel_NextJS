@@ -32,6 +32,8 @@ uvicorn app.main:app --reload --port 8010
 | ------ | --------------------- | ------------------------------------ |
 | GET    | `/health`             | Health check                         |
 | POST   | `/chat`               | Chat với RAG context                 |
+| POST   | `/plan`               | Lập lịch trình du lịch AI            |
+| POST   | `/budget`             | Ước tính ngân sách chuyến đi         |
 | POST   | `/personality/detect` | Phát hiện phong cách du lịch từ text |
 | POST   | `/compare`            | So sánh điểm đến                     |
 | POST   | `/mood-search`        | Tìm kiếm điểm đến theo tâm trạng     |

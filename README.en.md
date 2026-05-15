@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <a href="./README.md">Tieng Viet</a> |
+  <a href="./README.md">Tiếng Việt</a> |
   <a href="#quick-start">Quick Start</a> |
   <a href="#documentation">Docs</a> |
   <a href="#api-documentation">API Docs</a>

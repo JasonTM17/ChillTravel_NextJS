@@ -2,7 +2,7 @@
 
 > Xem thiết kế kỹ thuật đầy đủ tại [`.kiro/specs/wanderviet-travel-platform/design.md`](../.kiro/specs/wanderviet-travel-platform/design.md).
 > Xem Architecture Decision Records tại [`docs/adr/`](./adr/).
-> Xem sơ đồ Entity-Relationship tại [`docs/er-diagram.md`](./er-diagram.md).
+> Xem sơ đồ Entity-Relationship tại [`docs/er-diagram.vi.md`](./er-diagram.vi.md).
 
 ## Bối Cảnh Hệ Thống
 
@@ -42,14 +42,14 @@ wanderviet/
 
 ## Quyết Định Chính
 
-| Vấn đề            | Lựa chọn                        | ADR                                             |
-| ----------------- | ------------------------------- | ----------------------------------------------- |
-| Backend framework | NestJS 11 (TypeScript)          | [ADR-001](./adr/001-nestjs-over-spring-boot.md) |
-| ORM               | Prisma 7                        | [ADR-002](./adr/002-prisma-over-typeorm.md)     |
-| Thanh toán        | Chỉ mock                        | [ADR-003](./adr/003-mock-payment-only.md)       |
-| Monorepo tooling  | pnpm + Turborepo                | [ADR-004](./adr/004-pnpm-turborepo-monorepo.md) |
-| Xác thực          | JWT access (15p) + refresh (7n) | design.md §4                                    |
-| AI runtime        | Ollama + Qdrant, không OpenAI   | design.md §17                                   |
+| Vấn đề            | Lựa chọn                                | ADR                                                |
+| ----------------- | --------------------------------------- | -------------------------------------------------- |
+| Backend framework | NestJS 11 (TypeScript)                  | [ADR-001](./adr/001-nestjs-over-spring-boot.vi.md) |
+| ORM               | Prisma 7                                | [ADR-002](./adr/002-prisma-over-typeorm.vi.md)     |
+| Thanh toán        | Chỉ mock                                | [ADR-003](./adr/003-mock-payment-only.vi.md)       |
+| Monorepo tooling  | pnpm + Turborepo                        | [ADR-004](./adr/004-pnpm-turborepo-monorepo.vi.md) |
+| Xác thực          | JWT access (15 phút) + refresh (7 ngày) | design.md §4                                       |
+| AI runtime        | Ollama + Qdrant, không OpenAI           | design.md §17                                      |
 
 ## Kiến Trúc Triển Khai
 

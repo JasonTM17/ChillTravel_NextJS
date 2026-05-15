@@ -46,6 +46,12 @@
 
 Built with modern monorepo architecture, applying best practices in security, testing, CI/CD, and containerization.
 
+### Demo
+
+|                          Homepage                           |                          Explore                           |                          AI Planner                           |
+| :---------------------------------------------------------: | :--------------------------------------------------------: | :-----------------------------------------------------------: |
+| <img src="./assets/images/demo-homepage.png" width="280" /> | <img src="./assets/images/demo-explore.png" width="280" /> | <img src="./assets/images/demo-ai-planner.png" width="280" /> |
+
 ```
 41 web pages | 21 API modules | 10 AI endpoints | 12 mobile screens
 ```

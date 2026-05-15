@@ -1,0 +1,5419 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "HealthController_check",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Service is healthy\n\nThe Health Check is successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": ["status"],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {},
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": ["status"],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": ["status"],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service degraded\n\nThe Health Check is not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": ["status"],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": ["status"],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        },
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": ["status"],
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Health check — DB + Redis status (Req 5.7)",
+        "tags": ["Health"]
+      }
+    },
+    "/health/live": {
+      "get": {
+        "operationId": "HealthController_live",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Process is alive"
+          }
+        },
+        "summary": "Liveness probe — is the process alive?",
+        "tags": ["Health"]
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "operationId": "HealthController_ready",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Service is ready"
+          },
+          "503": {
+            "description": "Service not ready"
+          }
+        },
+        "summary": "Readiness probe — is the DB connected?",
+        "tags": ["Health"]
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "409": {
+            "description": "Email already registered"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Register a new user account",
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful, returns tokens"
+          },
+          "401": {
+            "description": "Invalid credentials"
+          },
+          "423": {
+            "description": "Account locked due to too many failed attempts"
+          },
+          "429": {
+            "description": "Too many requests"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Login with email and password",
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refresh",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "New tokens issued"
+          },
+          "401": {
+            "description": "Invalid or expired refresh token"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Refresh access token using refresh token",
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logged out successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Logout and revoke refresh token",
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "operationId": "AuthController_getMe",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "User profile"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get current user profile",
+        "tags": ["Auth"]
+      },
+      "put": {
+        "operationId": "AuthController_updateMe",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated profile"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update current user profile",
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/auth/change-password": {
+      "put": {
+        "operationId": "AuthController_changePassword",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed successfully"
+          },
+          "400": {
+            "description": "Old password is incorrect"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Change current user password",
+        "tags": ["Auth"]
+      }
+    },
+    "/api/v1/destinations": {
+      "get": {
+        "description": "Returns a paginated list of ACTIVE destinations. Supports filtering by keyword, country, city, and category.",
+        "operationId": "DestinationsController_findAll",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Zero-based page index",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "size",
+            "required": false,
+            "in": "query",
+            "description": "Page size (items per page)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Sort expression using \"field,direction\" syntax (e.g. \"createdAt,desc\"). Pass the parameter multiple times for multi-column sorting.",
+            "schema": {
+              "example": "createdAt,desc",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
+            }
+          },
+          {
+            "name": "keyword",
+            "required": false,
+            "in": "query",
+            "description": "Search keyword (matches name or description)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "country",
+            "required": false,
+            "in": "query",
+            "description": "Filter by country name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "city",
+            "required": false,
+            "in": "query",
+            "description": "Filter by city name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "description": "Filter by category (beach, mountain, culture, etc.)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of destinations"
+          }
+        },
+        "summary": "List destinations",
+        "tags": ["Destinations"]
+      }
+    },
+    "/api/v1/destinations/{slug}": {
+      "get": {
+        "description": "Returns full destination detail including images and tags.",
+        "operationId": "DestinationsController_findBySlug",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "description": "URL-friendly destination identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Destination detail"
+          },
+          "404": {
+            "description": "Destination not found"
+          }
+        },
+        "summary": "Get destination by slug",
+        "tags": ["Destinations"]
+      }
+    },
+    "/api/v1/admin/destinations": {
+      "post": {
+        "description": "Creates a new destination. Slug is auto-generated from name. Country and city are found or created automatically.",
+        "operationId": "DestinationsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDestinationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Destination created"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create destination (Admin)",
+        "tags": ["Destinations"]
+      },
+      "get": {
+        "operationId": "AdminController_adminDestinations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["Admin"]
+      }
+    },
+    "/api/v1/admin/destinations/{id}": {
+      "put": {
+        "description": "Updates destination fields. Slug is regenerated only if name changes.",
+        "operationId": "DestinationsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Destination ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDestinationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Destination updated"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Destination not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update destination (Admin)",
+        "tags": ["Destinations"]
+      },
+      "delete": {
+        "description": "Sets destination status to DELETED. The record is not removed from the database.",
+        "operationId": "DestinationsController_softDelete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Destination ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Destination deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Destination not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Soft-delete destination (Admin)",
+        "tags": ["Destinations"]
+      }
+    },
+    "/api/v1/admin/destinations/{id}/images": {
+      "post": {
+        "description": "Adds an image record to the destination. Accepts imageUrl as a string. File upload support will be added in Task 22.",
+        "operationId": "DestinationsController_addImage",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Destination ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddDestinationImageDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Image added"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Destination not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Add image to destination (Admin)",
+        "tags": ["Destinations"]
+      }
+    },
+    "/api/v1/admin/destination-images/{imageId}": {
+      "delete": {
+        "description": "Deletes a destination image record by its ID.",
+        "operationId": "DestinationsController_removeImage",
+        "parameters": [
+          {
+            "name": "imageId",
+            "required": true,
+            "in": "path",
+            "description": "DestinationImage ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Image removed"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Image not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remove destination image (Admin)",
+        "tags": ["Destinations"]
+      }
+    },
+    "/api/v1/tours": {
+      "get": {
+        "description": "Returns a paginated list of ACTIVE tours. Supports filtering by keyword, category, price range, duration, and destination. Sort options: price, popular, rating, newest.",
+        "operationId": "TourController_findAll",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Zero-based page index",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "size",
+            "required": false,
+            "in": "query",
+            "description": "Page size (items per page)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Sort expression using \"field,direction\" syntax (e.g. \"createdAt,desc\"). Pass the parameter multiple times for multi-column sorting.",
+            "schema": {
+              "example": "createdAt,desc",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
+            }
+          },
+          {
+            "name": "keyword",
+            "required": false,
+            "in": "query",
+            "description": "Search keyword (matches title and description)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "description": "Filter by tour category",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "minPrice",
+            "required": false,
+            "in": "query",
+            "description": "Minimum base price (VND)",
+            "schema": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "maxPrice",
+            "required": false,
+            "in": "query",
+            "description": "Maximum base price (VND)",
+            "schema": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "duration",
+            "required": false,
+            "in": "query",
+            "description": "Filter by exact duration in days",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "destinationId",
+            "required": false,
+            "in": "query",
+            "description": "Filter by destination ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Sort order: price (basePrice asc), popular (bookings count desc), rating (avg review rating desc), newest (createdAt desc)",
+            "schema": {
+              "type": "string",
+              "enum": ["price", "popular", "rating", "newest"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of tours"
+          }
+        },
+        "summary": "List tours",
+        "tags": ["Tours"]
+      }
+    },
+    "/api/v1/tours/featured": {
+      "get": {
+        "description": "Returns up to 8 featured ACTIVE tours for homepage display.",
+        "operationId": "TourController_findFeatured",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of featured tours"
+          }
+        },
+        "summary": "Get featured tours",
+        "tags": ["Tours"]
+      }
+    },
+    "/api/v1/tours/{slug}": {
+      "get": {
+        "description": "Returns full tour detail including images, itinerary (ordered by day), open future departures, and average rating from APPROVED reviews.",
+        "operationId": "TourController_findBySlug",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "description": "URL-friendly tour identifier",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tour detail"
+          },
+          "404": {
+            "description": "Tour not found"
+          }
+        },
+        "summary": "Get tour by slug",
+        "tags": ["Tours"]
+      }
+    },
+    "/api/v1/admin/tours": {
+      "post": {
+        "description": "Creates a new tour. Slug is auto-generated from title. Validates destination exists, price >= 0, maxGuests > 0.",
+        "operationId": "TourController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTourDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tour created"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Destination not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create tour (Admin)",
+        "tags": ["Tours"]
+      }
+    },
+    "/api/v1/admin/tours/{id}": {
+      "put": {
+        "description": "Updates tour fields. Slug is regenerated only if title changes. Validates destination if changed.",
+        "operationId": "TourController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Tour ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTourDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tour updated"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Tour or destination not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update tour (Admin)",
+        "tags": ["Tours"]
+      },
+      "delete": {
+        "description": "Sets tour status to DELETED. The record is not removed from the database.",
+        "operationId": "TourController_softDelete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Tour ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Tour deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Tour not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Soft-delete tour (Admin)",
+        "tags": ["Tours"]
+      }
+    },
+    "/api/v1/admin/tours/{id}/itinerary": {
+      "post": {
+        "description": "Adds or updates an itinerary day for the tour. Upserted by (tourId, dayNumber) unique constraint.",
+        "operationId": "TourController_addItinerary",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Tour ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateItineraryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Itinerary day added/updated"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Tour not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Add/upsert itinerary day (Admin)",
+        "tags": ["Tours"]
+      }
+    },
+    "/api/v1/admin/tour-itinerary/{id}": {
+      "put": {
+        "description": "Updates an existing tour itinerary item by its ID.",
+        "operationId": "TourController_updateItinerary",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "TourItinerary ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateItineraryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Itinerary item updated"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Itinerary item not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update itinerary item (Admin)",
+        "tags": ["Tours"]
+      },
+      "delete": {
+        "description": "Deletes a tour itinerary item by its ID.",
+        "operationId": "TourController_deleteItinerary",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "TourItinerary ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Itinerary item deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Itinerary item not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete itinerary item (Admin)",
+        "tags": ["Tours"]
+      }
+    },
+    "/api/v1/admin/tours/{id}/departures": {
+      "post": {
+        "description": "Creates a new departure for the specified tour.",
+        "operationId": "TourController_addDeparture",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Tour ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDepartureDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Departure created"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Tour not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Add tour departure (Admin)",
+        "tags": ["Tours"]
+      }
+    },
+    "/api/v1/admin/tour-departures/{id}": {
+      "put": {
+        "description": "Updates an existing tour departure by its ID.",
+        "operationId": "TourController_updateDeparture",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "TourDeparture ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDepartureDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Departure updated"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Departure not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update tour departure (Admin)",
+        "tags": ["Tours"]
+      },
+      "delete": {
+        "description": "Deletes a tour departure by its ID.",
+        "operationId": "TourController_deleteDeparture",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "TourDeparture ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Departure deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Departure not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete tour departure (Admin)",
+        "tags": ["Tours"]
+      }
+    },
+    "/api/v1/search/autocomplete": {
+      "get": {
+        "description": "Returns up to 8 autocomplete suggestions matching the query string. Searches across destinations, cities, and hotels using ILIKE pattern matching. Returns empty array if query is less than 2 characters.",
+        "operationId": "SearchController_autocomplete",
+        "parameters": [
+          {
+            "name": "q",
+            "required": true,
+            "in": "query",
+            "description": "Search query string (minimum 2 characters)",
+            "schema": {
+              "minLength": 2,
+              "example": "Da Nang",
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "description": "Filter by service type",
+            "schema": {
+              "default": "all",
+              "type": "string",
+              "enum": ["hotel", "flight", "tour", "all"]
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Maximum number of results (1-8, default 8)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 8,
+              "default": 8,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of autocomplete suggestions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string",
+                        "enum": ["destination", "city", "hotel"]
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "imageUrl": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Search autocomplete",
+        "tags": ["Search"]
+      }
+    },
+    "/api/v1/hotels": {
+      "get": {
+        "description": "Returns a paginated list of hotels. Supports filtering by price range, star rating, amenities, property type, distance from center, and destination. Sort options: price-asc, price-desc, rating, popularity, distance.",
+        "operationId": "HotelsController_findAll",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Zero-based page index",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "size",
+            "required": false,
+            "in": "query",
+            "description": "Page size (items per page)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Sort expression using \"field,direction\" syntax (e.g. \"createdAt,desc\"). Pass the parameter multiple times for multi-column sorting.",
+            "schema": {
+              "example": "createdAt,desc",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
+            }
+          },
+          {
+            "name": "destinationId",
+            "required": false,
+            "in": "query",
+            "description": "Filter by destination ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "minPrice",
+            "required": false,
+            "in": "query",
+            "description": "Minimum nightly price (VND)",
+            "schema": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "maxPrice",
+            "required": false,
+            "in": "query",
+            "description": "Maximum nightly price (VND)",
+            "schema": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "stars",
+            "required": false,
+            "in": "query",
+            "description": "Comma-separated star ratings to filter by (e.g. '3,4,5')",
+            "schema": {
+              "example": "4,5",
+              "type": "string"
+            }
+          },
+          {
+            "name": "amenities",
+            "required": false,
+            "in": "query",
+            "description": "Comma-separated amenities to filter by (e.g. 'wifi,pool,parking')",
+            "schema": {
+              "example": "wifi,pool",
+              "type": "string"
+            }
+          },
+          {
+            "name": "propertyType",
+            "required": false,
+            "in": "query",
+            "description": "Filter by property type (hotel, resort, villa, hostel)",
+            "schema": {
+              "example": "hotel",
+              "type": "string"
+            }
+          },
+          {
+            "name": "maxDistance",
+            "required": false,
+            "in": "query",
+            "description": "Maximum distance from center in km",
+            "schema": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "keyword",
+            "required": false,
+            "in": "query",
+            "description": "Search keyword (matches hotel name)",
+            "schema": {
+              "example": "Marriott",
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Sort order: price-asc (cheapest first), price-desc (most expensive first), rating (reviewScore desc), popularity (reviewCount desc), distance (nearest first)",
+            "schema": {
+              "type": "string",
+              "enum": ["price-asc", "price-desc", "rating", "popularity", "distance"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of hotels"
+          }
+        },
+        "summary": "List hotels",
+        "tags": ["Hotels"]
+      }
+    },
+    "/api/v1/hotels/{id}": {
+      "get": {
+        "description": "Returns full hotel detail including rooms, destination info, and all metadata.",
+        "operationId": "HotelsController_findById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Hotel ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hotel detail"
+          },
+          "404": {
+            "description": "Hotel not found"
+          }
+        },
+        "summary": "Get hotel by ID",
+        "tags": ["Hotels"]
+      }
+    },
+    "/api/v1/flights": {
+      "get": {
+        "description": "Returns a paginated list of flights. Supports filtering by origin, destination, departure date, departure time blocks (00-06, 06-12, 12-18, 18-24), number of stops, airlines, and price range. Default sort: lowest price. Max 20 results per page.",
+        "operationId": "FlightsController_findAll",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Zero-based page index",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "size",
+            "required": false,
+            "in": "query",
+            "description": "Page size (items per page)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Sort expression using \"field,direction\" syntax (e.g. \"createdAt,desc\"). Pass the parameter multiple times for multi-column sorting.",
+            "schema": {
+              "example": "createdAt,desc",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
+            }
+          },
+          {
+            "name": "origin",
+            "required": false,
+            "in": "query",
+            "description": "Origin airport code (e.g. SGN, HAN)",
+            "schema": {
+              "example": "SGN",
+              "type": "string"
+            }
+          },
+          {
+            "name": "destination",
+            "required": false,
+            "in": "query",
+            "description": "Destination airport code (e.g. HAN, DAD)",
+            "schema": {
+              "example": "HAN",
+              "type": "string"
+            }
+          },
+          {
+            "name": "departureDate",
+            "required": false,
+            "in": "query",
+            "description": "Departure date in YYYY-MM-DD format",
+            "schema": {
+              "example": "2025-07-15",
+              "type": "string"
+            }
+          },
+          {
+            "name": "departureTimeBlock",
+            "required": false,
+            "in": "query",
+            "description": "Comma-separated departure time blocks: \"00-06,06-12,12-18,18-24\"",
+            "schema": {
+              "example": "06-12,12-18",
+              "type": "string"
+            }
+          },
+          {
+            "name": "stops",
+            "required": false,
+            "in": "query",
+            "description": "Comma-separated number of stops: \"0,1,2\"",
+            "schema": {
+              "example": "0,1",
+              "type": "string"
+            }
+          },
+          {
+            "name": "airlines",
+            "required": false,
+            "in": "query",
+            "description": "Comma-separated airline codes (e.g. \"VN,VJ,QH\")",
+            "schema": {
+              "example": "VN,VJ",
+              "type": "string"
+            }
+          },
+          {
+            "name": "minPrice",
+            "required": false,
+            "in": "query",
+            "description": "Minimum total price (VND)",
+            "schema": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "maxPrice",
+            "required": false,
+            "in": "query",
+            "description": "Maximum total price (VND)",
+            "schema": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Sort order: price-asc (cheapest first, default), price-desc, duration (shortest), departure (earliest)",
+            "schema": {
+              "type": "string",
+              "enum": ["price-asc", "price-desc", "duration", "departure"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of flights"
+          }
+        },
+        "summary": "List flights",
+        "tags": ["Flights"]
+      }
+    },
+    "/api/v1/promotions": {
+      "get": {
+        "description": "Returns currently active promo banners (sorted by display order) and flash sale items (sorted by end time). Only items within their active date range are returned.",
+        "operationId": "PromotionsController_getActivePromotions",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Active promotions"
+          }
+        },
+        "summary": "Get active promotions",
+        "tags": ["Promotions"]
+      }
+    },
+    "/api/v1/promotions/validate-coupon": {
+      "post": {
+        "description": "Validates the given coupon code against the provided booking amount. Returns discount type, discount amount, and final amount on success. Returns 400 with error message if the coupon is invalid, expired, or the booking amount is below the minimum required.",
+        "operationId": "PromotionsController_validateCoupon",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateCouponDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Coupon is valid — discount info returned"
+          },
+          "400": {
+            "description": "Invalid coupon — error message in response"
+          }
+        },
+        "summary": "Validate a coupon code",
+        "tags": ["Promotions"]
+      }
+    },
+    "/api/v1/ai/chat": {
+      "post": {
+        "operationId": "AiController_chat",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Ai"]
+      }
+    },
+    "/api/v1/ai/chat/stream": {
+      "post": {
+        "operationId": "AiController_stream",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Ai"]
+      }
+    },
+    "/api/v1/ai/itinerary": {
+      "post": {
+        "operationId": "AiController_itinerary",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ItineraryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Ai"]
+      }
+    },
+    "/api/v1/ai/budget": {
+      "post": {
+        "operationId": "AiController_budget",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BudgetEstimateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Ai"]
+      }
+    },
+    "/api/v1/ai/budget/simulate": {
+      "post": {
+        "operationId": "AiController_simulateBudget",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BudgetDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Ai"]
+      }
+    },
+    "/api/v1/ai/compare": {
+      "post": {
+        "operationId": "AiController_compare",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompareDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Ai"]
+      }
+    },
+    "/api/v1/ai/personality": {
+      "post": {
+        "operationId": "AiController_personality",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonalityDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Ai"]
+      }
+    },
+    "/api/v1/ai/mood-search": {
+      "post": {
+        "operationId": "AiController_moodSearch",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MoodSearchDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Ai"]
+      }
+    },
+    "/api/v1/ai/reindex": {
+      "post": {
+        "operationId": "AiController_reindex",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReindexDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Ai"]
+      }
+    },
+    "/api/v1/bookings": {
+      "post": {
+        "operationId": "BookingController_createBooking",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBookingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Booking created successfully"
+          },
+          "400": {
+            "description": "Validation error / not enough slots / inactive tour"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a new booking",
+        "tags": ["Bookings"]
+      }
+    },
+    "/api/v1/bookings/my": {
+      "get": {
+        "operationId": "BookingController_listMyBookings",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Zero-based page index",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "size",
+            "required": false,
+            "in": "query",
+            "description": "Page size (items per page)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Sort expression using \"field,direction\" syntax (e.g. \"createdAt,desc\"). Pass the parameter multiple times for multi-column sorting.",
+            "schema": {
+              "example": "createdAt,desc",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of user bookings"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List my bookings (paginated)",
+        "tags": ["Bookings"]
+      }
+    },
+    "/api/v1/bookings/{bookingCode}": {
+      "get": {
+        "operationId": "BookingController_getByCode",
+        "parameters": [
+          {
+            "name": "bookingCode",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "example": "WV-20260511-A3F9C2",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Booking detail"
+          },
+          "403": {
+            "description": "Forbidden — not the booking owner"
+          },
+          "404": {
+            "description": "Booking not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get booking detail by booking code (owner only)",
+        "tags": ["Bookings"]
+      }
+    },
+    "/api/v1/bookings/{bookingCode}/cancel": {
+      "put": {
+        "operationId": "BookingController_cancelBooking",
+        "parameters": [
+          {
+            "name": "bookingCode",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "example": "WV-20260511-A3F9C2",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Booking cancelled"
+          },
+          "400": {
+            "description": "Cannot cancel this booking (COMPLETED or already CANCELLED)"
+          },
+          "403": {
+            "description": "Forbidden — not the booking owner"
+          },
+          "404": {
+            "description": "Booking not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cancel a booking",
+        "tags": ["Bookings"]
+      }
+    },
+    "/api/v1/bookings/demo": {
+      "post": {
+        "description": "Creates a mock booking confirmation without requiring authentication. Generates a reference code (WV-YYYYMMDD-XXXXXX format) and returns confirmation with service details and total. No real payment is processed.",
+        "operationId": "BookingsController_createDemoBooking",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDemoBookingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Demo booking created successfully"
+          },
+          "400": {
+            "description": "Validation error or invalid coupon"
+          }
+        },
+        "summary": "Create a demo booking",
+        "tags": ["Bookings"]
+      }
+    },
+    "/api/v1/me/profile": {
+      "get": {
+        "operationId": "TripsController_profile",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["Trips"]
+      },
+      "patch": {
+        "operationId": "TripsController_updateProfile",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfileUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["Trips"]
+      }
+    },
+    "/api/v1/me/wishlist": {
+      "get": {
+        "operationId": "TripsController_wishlist",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["Trips"]
+      },
+      "post": {
+        "operationId": "TripsController_saveWishlist",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WishlistSaveDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Trips"]
+      }
+    },
+    "/api/v1/me/trips": {
+      "get": {
+        "operationId": "TripsController_trips",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["Trips"]
+      },
+      "post": {
+        "operationId": "TripsController_createTrip",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TripCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Trips"]
+      }
+    },
+    "/api/v1/me/bookings": {
+      "get": {
+        "operationId": "TripsController_bookings",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["Trips"]
+      }
+    },
+    "/api/v1/admin/analytics": {
+      "get": {
+        "operationId": "AdminController_analytics",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["Admin"]
+      }
+    },
+    "/api/v1/admin/ai-knowledge/reindex": {
+      "post": {
+        "operationId": "AdminController_reindex",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminReindexDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["Admin"]
+      }
+    },
+    "/api/v1/admin/bookings": {
+      "get": {
+        "description": "Returns a paginated list of all bookings. Supports optional filtering by status and paymentStatus.",
+        "operationId": "AdminBookingController_listBookings",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Zero-based page index",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "size",
+            "required": false,
+            "in": "query",
+            "description": "Page size (items per page)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Sort expression using \"field,direction\" syntax (e.g. \"createdAt,desc\"). Pass the parameter multiple times for multi-column sorting.",
+            "schema": {
+              "example": "createdAt,desc",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Filter by booking status",
+            "schema": {
+              "enum": ["pending", "confirmed", "cancelled", "completed", "refunded_mock"],
+              "type": "string"
+            }
+          },
+          {
+            "name": "paymentStatus",
+            "required": false,
+            "in": "query",
+            "description": "Filter by payment status",
+            "schema": {
+              "enum": ["pending", "confirmed_mock", "failed_mock", "refunded_mock"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of bookings"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List all bookings (Admin)",
+        "tags": ["Admin — Bookings"]
+      }
+    },
+    "/api/v1/admin/bookings/{id}": {
+      "get": {
+        "description": "Returns full booking detail including tour info, user info, guest list, payment, and coupon.",
+        "operationId": "AdminBookingController_getBooking",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Booking ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Booking detail"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Booking not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get booking detail (Admin)",
+        "tags": ["Admin — Bookings"]
+      }
+    },
+    "/api/v1/admin/bookings/{id}/status": {
+      "put": {
+        "description": "Updates the booking status and writes an audit log entry with old/new status metadata.",
+        "operationId": "AdminBookingController_updateStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Booking ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBookingStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Booking status updated"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Booking not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update booking status (Admin)",
+        "tags": ["Admin — Bookings"]
+      }
+    },
+    "/api/v1/admin/bookings/{id}/payment-status": {
+      "put": {
+        "description": "Updates the booking paymentStatus and the linked Payment.status, then writes an audit log entry.",
+        "operationId": "AdminBookingController_updatePaymentStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Booking ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePaymentStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Payment status updated"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Booking not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update booking payment status (Admin)",
+        "tags": ["Admin — Bookings"]
+      }
+    },
+    "/api/v1/payments/mock-checkout": {
+      "post": {
+        "operationId": "PaymentController_mockCheckout",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MockCheckoutDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Mock checkout initiated"
+          },
+          "400": {
+            "description": "Booking is not in pending status"
+          },
+          "403": {
+            "description": "Booking does not belong to the current user"
+          },
+          "404": {
+            "description": "Booking not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Initiate mock payment checkout for a booking",
+        "tags": ["Payment"]
+      }
+    },
+    "/api/v1/payments/mock-callback": {
+      "post": {
+        "operationId": "PaymentController_mockCallback",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MockCallbackDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Payment callback processed"
+          },
+          "404": {
+            "description": "Transaction not found"
+          }
+        },
+        "summary": "Mock payment gateway callback",
+        "tags": ["Payment"]
+      }
+    },
+    "/api/v1/tours/{tourId}/reviews": {
+      "get": {
+        "description": "Returns a paginated list of APPROVED reviews for the specified tour. No authentication required.",
+        "operationId": "ReviewController_listByTour",
+        "parameters": [
+          {
+            "name": "tourId",
+            "required": true,
+            "in": "path",
+            "description": "Tour ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Zero-based page index",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "size",
+            "required": false,
+            "in": "query",
+            "description": "Page size (items per page)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Sort expression using \"field,direction\" syntax (e.g. \"createdAt,desc\"). Pass the parameter multiple times for multi-column sorting.",
+            "schema": {
+              "example": "createdAt,desc",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of approved reviews"
+          },
+          "404": {
+            "description": "Tour not found"
+          }
+        },
+        "summary": "List approved reviews for a tour",
+        "tags": ["Reviews"]
+      },
+      "post": {
+        "description": "Creates a new review (status=PENDING) for the specified tour. The authenticated user must have at least one COMPLETED booking for this tour, otherwise a 403 is returned.",
+        "operationId": "ReviewController_createReview",
+        "parameters": [
+          {
+            "name": "tourId",
+            "required": true,
+            "in": "path",
+            "description": "Tour ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReviewDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Review created (status=PENDING, awaiting admin approval)"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — no completed booking for this tour"
+          },
+          "404": {
+            "description": "Tour not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a review for a tour",
+        "tags": ["Reviews"]
+      }
+    },
+    "/api/v1/reviews/{id}": {
+      "put": {
+        "description": "Updates the authenticated user's review. Returns 403 if the user is not the review owner.",
+        "operationId": "ReviewController_updateReview",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Review ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReviewDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Review updated"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — not the review owner"
+          },
+          "404": {
+            "description": "Review not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update own review",
+        "tags": ["Reviews"]
+      },
+      "delete": {
+        "description": "Deletes the authenticated user's review. Returns 403 if the user is not the review owner.",
+        "operationId": "ReviewController_deleteReview",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Review ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Review deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — not the review owner"
+          },
+          "404": {
+            "description": "Review not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete own review",
+        "tags": ["Reviews"]
+      }
+    },
+    "/api/v1/admin/reviews": {
+      "get": {
+        "description": "Returns a paginated list of all reviews. Supports optional filtering by status (PENDING, APPROVED, REJECTED, HIDDEN).",
+        "operationId": "ReviewController_adminList",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Zero-based page index",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "size",
+            "required": false,
+            "in": "query",
+            "description": "Page size (items per page)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Sort expression using \"field,direction\" syntax (e.g. \"createdAt,desc\"). Pass the parameter multiple times for multi-column sorting.",
+            "schema": {
+              "example": "createdAt,desc",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Filter by review status",
+            "schema": {
+              "enum": ["PENDING", "APPROVED", "REJECTED", "HIDDEN"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of reviews"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List all reviews (Admin)",
+        "tags": ["Reviews"]
+      }
+    },
+    "/api/v1/admin/reviews/{id}/approve": {
+      "put": {
+        "description": "Sets the review status to APPROVED and writes an audit log entry.",
+        "operationId": "ReviewController_approveReview",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Review ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review approved"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Review not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Approve a review (Admin)",
+        "tags": ["Reviews"]
+      }
+    },
+    "/api/v1/admin/reviews/{id}/reject": {
+      "put": {
+        "description": "Sets the review status to REJECTED and writes an audit log entry.",
+        "operationId": "ReviewController_rejectReview",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Review ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review rejected"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Review not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Reject a review (Admin)",
+        "tags": ["Reviews"]
+      }
+    },
+    "/api/v1/admin/reviews/{id}/hide": {
+      "put": {
+        "description": "Sets the review status to HIDDEN and writes an audit log entry.",
+        "operationId": "ReviewController_hideReview",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Review ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review hidden"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Review not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Hide a review (Admin)",
+        "tags": ["Reviews"]
+      }
+    },
+    "/api/v1/wishlist": {
+      "get": {
+        "description": "Returns all wishlist entries for the authenticated user. Each entry is populated with tour or destination details based on itemType.",
+        "operationId": "WishlistController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of wishlist entries with populated item info"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get user wishlist",
+        "tags": ["Wishlist"]
+      },
+      "post": {
+        "description": "Adds a tour or destination to the authenticated user's wishlist. If the item is already in the wishlist, returns the existing entry (idempotent — no error).",
+        "operationId": "WishlistController_add",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddWishlistDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Wishlist entry created or existing entry returned"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Add item to wishlist",
+        "tags": ["Wishlist"]
+      }
+    },
+    "/api/v1/wishlist/{id}": {
+      "delete": {
+        "description": "Removes a wishlist entry by its ID. The entry must belong to the authenticated user, otherwise a 403 is returned.",
+        "operationId": "WishlistController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "WishlistEntry ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Wishlist entry removed"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — entry does not belong to user"
+          },
+          "404": {
+            "description": "Wishlist entry not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remove item from wishlist",
+        "tags": ["Wishlist"]
+      }
+    },
+    "/api/v1/blogs": {
+      "get": {
+        "description": "Returns a paginated list of PUBLISHED blog posts ordered by publication date (newest first). Supports optional category filter.",
+        "operationId": "BlogController_listPublished",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Zero-based page index",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "size",
+            "required": false,
+            "in": "query",
+            "description": "Page size (items per page)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Sort expression using \"field,direction\" syntax (e.g. \"createdAt,desc\"). Pass the parameter multiple times for multi-column sorting.",
+            "schema": {
+              "example": "createdAt,desc",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
+            }
+          },
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "description": "Filter by blog category",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of published blog posts"
+          }
+        },
+        "summary": "List published blog posts",
+        "tags": ["Blog"]
+      }
+    },
+    "/api/v1/blogs/{slug}": {
+      "get": {
+        "description": "Returns the full content of a PUBLISHED blog post identified by its slug. Returns 404 if not found or not published.",
+        "operationId": "BlogController_getBySlug",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "description": "Blog post slug",
+            "schema": {
+              "example": "kham-pha-hoi-an-co-kinh",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Blog post detail"
+          },
+          "404": {
+            "description": "Blog post not found or not published"
+          }
+        },
+        "summary": "Get published blog post by slug",
+        "tags": ["Blog"]
+      }
+    },
+    "/api/v1/admin/blogs": {
+      "get": {
+        "description": "Returns a paginated list of all blog posts (DRAFT and PUBLISHED). DELETED posts are excluded unless status=DELETED is explicitly passed. Requires ADMIN role.",
+        "operationId": "BlogController_adminList",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Zero-based page index",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "size",
+            "required": false,
+            "in": "query",
+            "description": "Page size (items per page)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Sort expression using \"field,direction\" syntax (e.g. \"createdAt,desc\"). Pass the parameter multiple times for multi-column sorting.",
+            "schema": {
+              "example": "createdAt,desc",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Filter by blog status",
+            "schema": {
+              "enum": ["DRAFT", "PUBLISHED", "DELETED"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of blog posts"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List all blog posts (Admin)",
+        "tags": ["Blog"]
+      },
+      "post": {
+        "description": "Creates a new blog post with an auto-generated unique slug derived from the title. If status is PUBLISHED, publishedAt is set to the current timestamp. Requires ADMIN role.",
+        "operationId": "BlogController_adminCreate",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBlogDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Blog post created"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create blog post (Admin)",
+        "tags": ["Blog"]
+      }
+    },
+    "/api/v1/admin/blogs/{id}": {
+      "put": {
+        "description": "Updates an existing blog post. If the title changes, the slug is regenerated (unique). If status transitions to PUBLISHED for the first time, publishedAt is set to now. Requires ADMIN role.",
+        "operationId": "BlogController_adminUpdate",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Blog post ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBlogDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Blog post updated"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Blog post not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update blog post (Admin)",
+        "tags": ["Blog"]
+      },
+      "delete": {
+        "description": "Soft-deletes a blog post by setting its status to DELETED. The record is retained in the database. Requires ADMIN role.",
+        "operationId": "BlogController_adminSoftDelete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Blog post ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Blog post soft-deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Blog post not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Soft-delete blog post (Admin)",
+        "tags": ["Blog"]
+      }
+    },
+    "/api/v1/contact-requests": {
+      "post": {
+        "description": "Allows any visitor (guest or logged-in user) to submit a contact/consultation request. The request is created with status=NEW and will appear in the admin triage queue.",
+        "operationId": "ContactController_submit",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateContactDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Contact request submitted successfully"
+          },
+          "400": {
+            "description": "Validation error — check required fields"
+          }
+        },
+        "summary": "Submit a contact request",
+        "tags": ["Contact"]
+      }
+    },
+    "/api/v1/admin/contact-requests": {
+      "get": {
+        "description": "Returns a paginated list of all contact requests ordered by creation date (newest first). Supports optional filtering by status. Requires ADMIN role.",
+        "operationId": "ContactController_adminList",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Zero-based page index",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "size",
+            "required": false,
+            "in": "query",
+            "description": "Page size (items per page)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Sort expression using \"field,direction\" syntax (e.g. \"createdAt,desc\"). Pass the parameter multiple times for multi-column sorting.",
+            "schema": {
+              "example": "createdAt,desc",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Filter by contact request status",
+            "schema": {
+              "enum": ["NEW", "IN_PROGRESS", "RESOLVED", "CLOSED"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of contact requests"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List all contact requests (Admin)",
+        "tags": ["Contact"]
+      }
+    },
+    "/api/v1/admin/contact-requests/{id}/status": {
+      "put": {
+        "description": "Updates the status of a contact request. Valid values: NEW, IN_PROGRESS, RESOLVED, CLOSED. Requires ADMIN role.",
+        "operationId": "ContactController_updateStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Contact request ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateContactStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contact request status updated"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Contact request not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update contact request status (Admin)",
+        "tags": ["Contact"]
+      }
+    },
+    "/api/v1/admin/contact-requests/{id}/assign": {
+      "put": {
+        "description": "Assigns a contact request to a staff member identified by their ID or email. Requires ADMIN role.",
+        "operationId": "ContactController_assign",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Contact request ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateContactStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contact request assigned"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Contact request not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Assign contact request to staff (Admin)",
+        "tags": ["Contact"]
+      }
+    },
+    "/api/v1/admin/contact-requests/{id}/note": {
+      "put": {
+        "description": "Adds or updates the internal admin note for a contact request. Requires ADMIN role.",
+        "operationId": "ContactController_addNote",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Contact request ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateContactStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Admin note updated"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Contact request not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Add/update admin note on contact request (Admin)",
+        "tags": ["Contact"]
+      }
+    },
+    "/api/v1/admin/uploads/images": {
+      "post": {
+        "description": "Upload a single image file (jpg, png, or webp). Max size is controlled by MAX_FILE_SIZE env var (default 5 MB). Returns the public URL and generated filename. Requires ADMIN role.",
+        "operationId": "UploadController_uploadImage",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["file"],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Image file (jpg, png, or webp)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Image uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "example": "/uploads/550e8400-e29b-41d4-a716-446655440000.jpg"
+                    },
+                    "filename": {
+                      "type": "string",
+                      "example": "550e8400-e29b-41d4-a716-446655440000.jpg"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid file type or file too large"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Upload an image (Admin)",
+        "tags": ["Upload"]
+      }
+    },
+    "/api/v1/notifications": {
+      "get": {
+        "description": "Returns a paginated list of in-app notifications for the authenticated user, ordered by newest first. Supports optional unreadOnly filter.",
+        "operationId": "NotificationController_list",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Zero-based page index",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "size",
+            "required": false,
+            "in": "query",
+            "description": "Page size (items per page)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Sort expression using \"field,direction\" syntax (e.g. \"createdAt,desc\"). Pass the parameter multiple times for multi-column sorting.",
+            "schema": {
+              "example": "createdAt,desc",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
+            }
+          },
+          {
+            "name": "unreadOnly",
+            "required": false,
+            "in": "query",
+            "description": "When true, return only unread notifications",
+            "schema": {
+              "example": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of notifications"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List user notifications",
+        "tags": ["Notifications"]
+      }
+    },
+    "/api/v1/notifications/read-all": {
+      "put": {
+        "description": "Marks all unread notifications for the authenticated user as read. Returns the count of updated notifications.",
+        "operationId": "NotificationController_markAllRead",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All notifications marked as read, returns { count: number }"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mark all notifications as read",
+        "tags": ["Notifications"]
+      }
+    },
+    "/api/v1/notifications/{id}/read": {
+      "put": {
+        "description": "Marks a single notification as read. The notification must belong to the authenticated user, otherwise a 403 is returned.",
+        "operationId": "NotificationController_markRead",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Notification ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notification marked as read"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — notification does not belong to user"
+          },
+          "404": {
+            "description": "Notification not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mark notification as read",
+        "tags": ["Notifications"]
+      }
+    },
+    "/api/v1/admin/coupons": {
+      "get": {
+        "description": "Returns a paginated list of all coupons with usage statistics (usedCount, usageLimit). Ordered by creation date (newest first). Requires ADMIN role.",
+        "operationId": "CouponController_adminList",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Zero-based page index",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "size",
+            "required": false,
+            "in": "query",
+            "description": "Page size (items per page)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Sort expression using \"field,direction\" syntax (e.g. \"createdAt,desc\"). Pass the parameter multiple times for multi-column sorting.",
+            "schema": {
+              "example": "createdAt,desc",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of coupons"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List all coupons (Admin)",
+        "tags": ["Coupons"]
+      },
+      "post": {
+        "description": "Creates a new coupon. The code is automatically normalised to uppercase. Returns 409 Conflict if a coupon with the same code already exists. Requires ADMIN role.",
+        "operationId": "CouponController_adminCreate",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCouponDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Coupon created successfully"
+          },
+          "400": {
+            "description": "Validation error — check required fields"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "409": {
+            "description": "Conflict — coupon code already exists"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create coupon (Admin)",
+        "tags": ["Coupons"]
+      }
+    },
+    "/api/v1/admin/coupons/{id}": {
+      "put": {
+        "description": "Updates an existing coupon. All fields are optional — only provided fields are updated. If the code is changed, it is normalised to uppercase and checked for conflicts. Requires ADMIN role.",
+        "operationId": "CouponController_adminUpdate",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Coupon ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCouponDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Coupon updated successfully"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Coupon not found"
+          },
+          "409": {
+            "description": "Conflict — coupon code already exists"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update coupon (Admin)",
+        "tags": ["Coupons"]
+      },
+      "delete": {
+        "description": "Permanently deletes a coupon. This is a hard delete — the record is removed from the database. Requires ADMIN role.",
+        "operationId": "CouponController_adminDelete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Coupon ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Coupon deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          },
+          "404": {
+            "description": "Coupon not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete coupon (Admin)",
+        "tags": ["Coupons"]
+      }
+    },
+    "/api/v1/admin/dashboard/summary": {
+      "get": {
+        "description": "Returns aggregate overview: totalRevenue (confirmed_mock bookings), totalBookings, pendingBookings, totalUsers (ACTIVE), totalTours (ACTIVE), totalDestinations (ACTIVE).",
+        "operationId": "DashboardController_getSummary",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Dashboard summary statistics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "success": true,
+                    "message": "Success",
+                    "data": {
+                      "totalRevenue": 125000000,
+                      "totalBookings": 42,
+                      "pendingBookings": 8,
+                      "totalUsers": 150,
+                      "totalTours": 8,
+                      "totalDestinations": 12
+                    },
+                    "timestamp": "2026-01-01T00:00:00.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Dashboard summary (Admin)",
+        "tags": ["Admin — Dashboard"]
+      }
+    },
+    "/api/v1/admin/dashboard/revenue": {
+      "get": {
+        "description": "Returns revenue grouped by month for the last 12 months. Revenue = sum of totalAmount for bookings with paymentStatus=confirmed_mock. Months with no revenue are included with revenue=0.",
+        "operationId": "DashboardController_getRevenue",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Monthly revenue for the last 12 months",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "success": true,
+                    "message": "Success",
+                    "data": [
+                      {
+                        "month": "2025-02",
+                        "revenue": 0
+                      },
+                      {
+                        "month": "2025-03",
+                        "revenue": 15000000
+                      },
+                      {
+                        "month": "2026-01",
+                        "revenue": 45000000
+                      }
+                    ],
+                    "timestamp": "2026-01-01T00:00:00.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Revenue by month (Admin)",
+        "tags": ["Admin — Dashboard"]
+      }
+    },
+    "/api/v1/admin/dashboard/bookings": {
+      "get": {
+        "description": "Returns the count of bookings for each status: pending, confirmed, cancelled, completed, refunded_mock.",
+        "operationId": "DashboardController_getBookingsByStatus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Booking counts grouped by status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "success": true,
+                    "message": "Success",
+                    "data": {
+                      "pending": 8,
+                      "confirmed": 15,
+                      "cancelled": 3,
+                      "completed": 14,
+                      "refunded_mock": 2
+                    },
+                    "timestamp": "2026-01-01T00:00:00.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Booking counts by status (Admin)",
+        "tags": ["Admin — Dashboard"]
+      }
+    },
+    "/api/v1/admin/dashboard/top-tours": {
+      "get": {
+        "description": "Returns the top 10 tours ordered by total booking count (descending). Each item includes: id, title, slug, imageUrl, bookingCount.",
+        "operationId": "DashboardController_getTopTours",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Top 10 tours by booking count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "success": true,
+                    "message": "Success",
+                    "data": [
+                      {
+                        "id": "clxxx",
+                        "title": "Hạ Long Bay 3N2Đ",
+                        "slug": "ha-long-bay-3n2d",
+                        "imageUrl": "https://example.com/halong.jpg",
+                        "bookingCount": 12
+                      }
+                    ],
+                    "timestamp": "2026-01-01T00:00:00.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Top tours by booking count (Admin)",
+        "tags": ["Admin — Dashboard"]
+      }
+    },
+    "/api/v1/admin/dashboard/recent-activities": {
+      "get": {
+        "description": "Returns merged recent activities: recentBookings (last 10 with user + tour info), recentContacts (last 5 contact requests), pendingReviews (last 5 reviews with status=PENDING).",
+        "operationId": "DashboardController_getRecentActivities",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Recent activities across bookings, contacts, and reviews",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "success": true,
+                    "message": "Success",
+                    "data": {
+                      "recentBookings": [],
+                      "recentContacts": [],
+                      "pendingReviews": []
+                    },
+                    "timestamp": "2026-01-01T00:00:00.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Recent activities (Admin)",
+        "tags": ["Admin — Dashboard"]
+      }
+    },
+    "/api/v1/admin/users": {
+      "get": {
+        "description": "Returns paginated list of all users. Read-only view.",
+        "operationId": "AdminUsersController_getUsers",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "size",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "keyword",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated user list"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden — ADMIN role required"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List all users (Admin, read-only)",
+        "tags": ["Admin — Users"]
+      }
+    },
+    "/metrics": {
+      "get": {
+        "operationId": "PrometheusController_index",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["Prometheus"]
+      }
+    }
+  },
+  "info": {
+    "title": "WanderViet Travel Platform API",
+    "description": "## WanderViet Travel Platform — REST API v1\n\n**Base path:** `/api/v1`\n\n### Authentication\nAll protected endpoints require a Bearer JWT token in the `Authorization` header:\n```\nAuthorization: Bearer <accessToken>\n```\n\nObtain tokens via `POST /api/v1/auth/login` or `POST /api/v1/auth/register`.\n\n\n### Demo Accounts\n| Email | Password | Role |\n|-------|----------|------|\n| admin@wanderviet.com | Admin@123456 | ADMIN |\n| user@wanderviet.com | User@123456 | USER |\n| staff@wanderviet.com | Staff@123456 | STAFF |\n\n### Payment Notice\nAll payment flows are **demo/mock only** — no real transactions are processed.\n`Thanh toán demo — không phát sinh giao dịch thật`\n\n### Response Format\nAll endpoints return a unified envelope:\n```json\n{ \"success\": true, \"message\": \"OK\", \"data\": {}, \"timestamp\": \"...\" }\n```\nErrors: `{ \"success\": false, \"message\": \"...\", \"errors\": [{...}], \"timestamp\": \"...\" }`",
+    "version": "1.0.0",
+    "contact": {
+      "name": "WanderViet Team",
+      "url": "https://wanderviet.com",
+      "email": "support@wanderviet.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authentication — register, login, refresh, logout, profile"
+    },
+    {
+      "name": "Destinations",
+      "description": "Travel destinations — public browse + admin CRUD"
+    },
+    {
+      "name": "Tours",
+      "description": "Tours — public search/filter + admin CRUD + itinerary + departures"
+    },
+    {
+      "name": "Bookings",
+      "description": "Bookings — create, list, cancel (user endpoints)"
+    },
+    {
+      "name": "Admin — Bookings",
+      "description": "Admin booking management — list all, update status"
+    },
+    {
+      "name": "Payment",
+      "description": "Mock payment — checkout + callback (demo only)"
+    },
+    {
+      "name": "Reviews",
+      "description": "Tour reviews — public list + user create/update + admin moderation"
+    },
+    {
+      "name": "Wishlist",
+      "description": "User wishlist — add/remove/list tours and destinations"
+    },
+    {
+      "name": "Blog",
+      "description": "Blog CMS — public read + admin CRUD"
+    },
+    {
+      "name": "Contact",
+      "description": "Contact requests — public submit + admin triage"
+    },
+    {
+      "name": "Upload",
+      "description": "Image upload — local disk storage (admin only)"
+    },
+    {
+      "name": "Notifications",
+      "description": "In-app notifications — list, mark read"
+    },
+    {
+      "name": "Coupons",
+      "description": "Coupon management — admin CRUD + validation"
+    },
+    {
+      "name": "Admin — Dashboard",
+      "description": "Admin dashboard — summary, revenue, top tours, recent activities"
+    },
+    {
+      "name": "Health",
+      "description": "Health check endpoints for liveness and readiness probes"
+    }
+  ],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "JWT": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http",
+        "name": "Authorization",
+        "description": "Enter JWT access token",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "example": "Nguyễn Văn A"
+          },
+          "email": {
+            "type": "string",
+            "example": "user@wanderviet.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Password@123",
+            "minLength": 8
+          },
+          "phone": {
+            "type": "string",
+            "example": "+84901234567"
+          }
+        },
+        "required": ["fullName", "email", "password"]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@wanderviet.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Password@123"
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "RefreshTokenDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        },
+        "required": ["refreshToken"]
+      },
+      "UpdateProfileDto": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "avatarUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "ChangePasswordDto": {
+        "type": "object",
+        "properties": {
+          "oldPassword": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string",
+            "minLength": 8
+          }
+        },
+        "required": ["oldPassword", "newPassword"]
+      },
+      "Object": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateDestinationDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Hạ Long Bay",
+            "description": "Destination name (min 2 chars)"
+          },
+          "country": {
+            "type": "string",
+            "example": "Việt Nam",
+            "description": "Country name (will be found or created)"
+          },
+          "city": {
+            "type": "string",
+            "example": "Quảng Ninh",
+            "description": "City name (will be found or created)"
+          },
+          "category": {
+            "type": "string",
+            "example": "beach",
+            "description": "Category (beach, mountain, culture, etc.)"
+          },
+          "description": {
+            "type": "string",
+            "description": "Short description for cards"
+          },
+          "shortDescription": {
+            "type": "string",
+            "description": "One-line teaser shown on cards"
+          },
+          "longDescription": {
+            "type": "string",
+            "description": "Full rich-text description"
+          },
+          "bestTimeToVisit": {
+            "type": "string",
+            "example": "November to April",
+            "description": "Best time to visit"
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://example.com/image.jpg",
+            "description": "Primary image URL"
+          },
+          "budgetMin": {
+            "type": "number",
+            "default": 0,
+            "description": "Minimum daily budget in VND"
+          },
+          "budgetMax": {
+            "type": "number",
+            "default": 0,
+            "description": "Maximum daily budget in VND"
+          },
+          "currency": {
+            "type": "string",
+            "default": "VND",
+            "description": "Currency code"
+          },
+          "latitude": {
+            "type": "number",
+            "default": 0,
+            "description": "Latitude coordinate"
+          },
+          "longitude": {
+            "type": "number",
+            "default": 0,
+            "description": "Longitude coordinate"
+          },
+          "safetyLevel": {
+            "type": "string",
+            "default": "medium",
+            "description": "Safety level (low, medium, high)"
+          },
+          "travelStyles": {
+            "description": "Travel style tags",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cultureNotes": {
+            "description": "Culture notes",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "foodHighlights": {
+            "description": "Food highlights",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "isFeatured": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether this destination is featured"
+          }
+        },
+        "required": ["name", "country", "description"]
+      },
+      "UpdateDestinationDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Hạ Long Bay",
+            "description": "Destination name (min 2 chars)"
+          },
+          "country": {
+            "type": "string",
+            "example": "Việt Nam",
+            "description": "Country name (will be found or created)"
+          },
+          "city": {
+            "type": "string",
+            "example": "Quảng Ninh",
+            "description": "City name (will be found or created)"
+          },
+          "category": {
+            "type": "string",
+            "example": "beach",
+            "description": "Category (beach, mountain, culture, etc.)"
+          },
+          "description": {
+            "type": "string",
+            "description": "Short description for cards"
+          },
+          "shortDescription": {
+            "type": "string",
+            "description": "One-line teaser shown on cards"
+          },
+          "longDescription": {
+            "type": "string",
+            "description": "Full rich-text description"
+          },
+          "bestTimeToVisit": {
+            "type": "string",
+            "example": "November to April",
+            "description": "Best time to visit"
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://example.com/image.jpg",
+            "description": "Primary image URL"
+          },
+          "budgetMin": {
+            "type": "number",
+            "default": 0,
+            "description": "Minimum daily budget in VND"
+          },
+          "budgetMax": {
+            "type": "number",
+            "default": 0,
+            "description": "Maximum daily budget in VND"
+          },
+          "currency": {
+            "type": "string",
+            "default": "VND",
+            "description": "Currency code"
+          },
+          "latitude": {
+            "type": "number",
+            "default": 0,
+            "description": "Latitude coordinate"
+          },
+          "longitude": {
+            "type": "number",
+            "default": 0,
+            "description": "Longitude coordinate"
+          },
+          "safetyLevel": {
+            "type": "string",
+            "default": "medium",
+            "description": "Safety level (low, medium, high)"
+          },
+          "travelStyles": {
+            "description": "Travel style tags",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cultureNotes": {
+            "description": "Culture notes",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "foodHighlights": {
+            "description": "Food highlights",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "isFeatured": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether this destination is featured"
+          }
+        }
+      },
+      "AddDestinationImageDto": {
+        "type": "object",
+        "properties": {
+          "imageUrl": {
+            "type": "string",
+            "example": "https://example.com/image.jpg",
+            "description": "Image URL"
+          },
+          "altText": {
+            "type": "string",
+            "description": "Alt text for accessibility"
+          },
+          "sortOrder": {
+            "type": "number",
+            "default": 0,
+            "description": "Sort order (lower = first)"
+          }
+        },
+        "required": ["imageUrl"]
+      },
+      "CreateTourDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Tour title",
+            "minLength": 3,
+            "example": "Hà Nội City Tour 3 Ngày"
+          },
+          "destinationId": {
+            "type": "string",
+            "description": "Destination ID this tour belongs to",
+            "example": "clxxx..."
+          },
+          "description": {
+            "type": "string",
+            "description": "Full tour description"
+          },
+          "shortDescription": {
+            "type": "string",
+            "description": "Short description for cards/previews"
+          },
+          "durationDays": {
+            "type": "number",
+            "description": "Duration in days",
+            "minimum": 1,
+            "example": 3
+          },
+          "durationNights": {
+            "type": "number",
+            "description": "Duration in nights",
+            "minimum": 0,
+            "example": 2
+          },
+          "basePrice": {
+            "type": "number",
+            "description": "Base price in VND",
+            "minimum": 0,
+            "example": 2500000
+          },
+          "salePrice": {
+            "type": "number",
+            "description": "Sale price in VND (null = no sale)",
+            "minimum": 0,
+            "example": 1990000
+          },
+          "maxGuests": {
+            "type": "number",
+            "description": "Maximum number of guests",
+            "minimum": 1,
+            "example": 20
+          },
+          "minGuests": {
+            "type": "number",
+            "description": "Minimum number of guests",
+            "default": 1,
+            "minimum": 1,
+            "example": 2
+          },
+          "availableSlots": {
+            "type": "number",
+            "description": "Available booking slots",
+            "minimum": 0,
+            "example": 15
+          },
+          "startDate": {
+            "type": "string",
+            "description": "Tour start date (ISO 8601)",
+            "example": "2025-06-01"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "Tour end date (ISO 8601)",
+            "example": "2025-12-31"
+          },
+          "featured": {
+            "type": "boolean",
+            "description": "Whether this tour is featured on the homepage",
+            "default": false
+          },
+          "imageUrl": {
+            "type": "string",
+            "description": "Primary image URL",
+            "example": "https://example.com/tour.jpg"
+          },
+          "category": {
+            "type": "string",
+            "description": "Tour category (e.g. Adventure, Cultural, Beach)",
+            "example": "Cultural"
+          }
+        },
+        "required": [
+          "title",
+          "destinationId",
+          "description",
+          "durationDays",
+          "durationNights",
+          "basePrice",
+          "maxGuests",
+          "availableSlots"
+        ]
+      },
+      "UpdateTourDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Tour title",
+            "minLength": 3,
+            "example": "Hà Nội City Tour 3 Ngày"
+          },
+          "destinationId": {
+            "type": "string",
+            "description": "Destination ID this tour belongs to",
+            "example": "clxxx..."
+          },
+          "description": {
+            "type": "string",
+            "description": "Full tour description"
+          },
+          "shortDescription": {
+            "type": "string",
+            "description": "Short description for cards/previews"
+          },
+          "durationDays": {
+            "type": "number",
+            "description": "Duration in days",
+            "minimum": 1,
+            "example": 3
+          },
+          "durationNights": {
+            "type": "number",
+            "description": "Duration in nights",
+            "minimum": 0,
+            "example": 2
+          },
+          "basePrice": {
+            "type": "number",
+            "description": "Base price in VND",
+            "minimum": 0,
+            "example": 2500000
+          },
+          "salePrice": {
+            "type": "number",
+            "description": "Sale price in VND (null = no sale)",
+            "minimum": 0,
+            "example": 1990000
+          },
+          "maxGuests": {
+            "type": "number",
+            "description": "Maximum number of guests",
+            "minimum": 1,
+            "example": 20
+          },
+          "minGuests": {
+            "type": "number",
+            "description": "Minimum number of guests",
+            "default": 1,
+            "minimum": 1,
+            "example": 2
+          },
+          "availableSlots": {
+            "type": "number",
+            "description": "Available booking slots",
+            "minimum": 0,
+            "example": 15
+          },
+          "startDate": {
+            "type": "string",
+            "description": "Tour start date (ISO 8601)",
+            "example": "2025-06-01"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "Tour end date (ISO 8601)",
+            "example": "2025-12-31"
+          },
+          "featured": {
+            "type": "boolean",
+            "description": "Whether this tour is featured on the homepage",
+            "default": false
+          },
+          "imageUrl": {
+            "type": "string",
+            "description": "Primary image URL",
+            "example": "https://example.com/tour.jpg"
+          },
+          "category": {
+            "type": "string",
+            "description": "Tour category (e.g. Adventure, Cultural, Beach)",
+            "example": "Cultural"
+          }
+        }
+      },
+      "CreateItineraryDto": {
+        "type": "object",
+        "properties": {
+          "dayNumber": {
+            "type": "number",
+            "description": "Day number in the itinerary (1-based)",
+            "minimum": 1,
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "description": "Title for this day",
+            "example": "Arrival & City Orientation"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the day's activities"
+          },
+          "meals": {
+            "type": "string",
+            "description": "Meals included (e.g. Breakfast, Lunch, Dinner)",
+            "example": "Breakfast, Dinner"
+          },
+          "accommodation": {
+            "type": "string",
+            "description": "Accommodation details",
+            "example": "4-star hotel in city center"
+          },
+          "activities": {
+            "type": "string",
+            "description": "Activities for the day",
+            "example": "City tour, museum visit"
+          }
+        },
+        "required": ["dayNumber", "title"]
+      },
+      "CreateDepartureDto": {
+        "type": "object",
+        "properties": {
+          "departureDate": {
+            "type": "string",
+            "description": "Departure date (ISO 8601)",
+            "example": "2025-07-15"
+          },
+          "returnDate": {
+            "type": "string",
+            "description": "Return date (ISO 8601)",
+            "example": "2025-07-18"
+          },
+          "availableSlots": {
+            "type": "number",
+            "description": "Available slots for this departure",
+            "minimum": 0,
+            "example": 20
+          },
+          "priceOverride": {
+            "type": "number",
+            "description": "Price override for this departure in VND (null = use tour basePrice)",
+            "minimum": 0,
+            "example": 2200000
+          },
+          "status": {
+            "type": "string",
+            "description": "Departure status: OPEN | CLOSED | SOLDOUT",
+            "default": "OPEN",
+            "example": "OPEN"
+          }
+        },
+        "required": ["departureDate", "availableSlots"]
+      },
+      "ValidateCouponDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Coupon code to validate",
+            "example": "SUMMER2025"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Booking amount in VND to compute discount against",
+            "example": 5000000,
+            "minimum": 0
+          }
+        },
+        "required": ["code", "amount"]
+      },
+      "ChatDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "ItineraryDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "BudgetEstimateDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "BudgetDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CompareDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "PersonalityDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "MoodSearchDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "ReindexDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "BookingGuestDto": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "example": "Nguyen Van A"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "example": "1990-01-15"
+          },
+          "gender": {
+            "type": "string",
+            "example": "MALE"
+          },
+          "note": {
+            "type": "string",
+            "example": "Vegetarian meal"
+          }
+        },
+        "required": ["fullName"]
+      },
+      "CreateBookingDto": {
+        "type": "object",
+        "properties": {
+          "tourId": {
+            "type": "string",
+            "example": "clxyz123"
+          },
+          "departureId": {
+            "type": "string",
+            "example": "clxyz456",
+            "description": "TourDeparture ID (optional)"
+          },
+          "couponCode": {
+            "type": "string",
+            "example": "SUMMER20",
+            "description": "Coupon code for discount"
+          },
+          "contactName": {
+            "type": "string",
+            "example": "Nguyen Van A"
+          },
+          "contactEmail": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "contactPhone": {
+            "type": "string",
+            "example": "0901234567"
+          },
+          "numberOfGuests": {
+            "type": "number",
+            "example": 2,
+            "minimum": 1
+          },
+          "specialRequest": {
+            "type": "string",
+            "example": "Window seat preferred"
+          },
+          "guests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BookingGuestDto"
+            }
+          }
+        },
+        "required": ["tourId", "contactName", "contactEmail", "contactPhone", "numberOfGuests"]
+      },
+      "CreateDemoBookingDto": {
+        "type": "object",
+        "properties": {
+          "serviceType": {
+            "type": "string",
+            "enum": ["tour", "hotel", "flight"],
+            "description": "Type of service being booked",
+            "example": "tour"
+          },
+          "serviceId": {
+            "type": "string",
+            "description": "ID of the service being booked (tour, hotel, or flight ID)",
+            "example": "clx1234567890"
+          },
+          "departureDate": {
+            "type": "string",
+            "description": "Departure or check-in date in YYYY-MM-DD format",
+            "example": "2025-08-15"
+          },
+          "guests": {
+            "type": "number",
+            "description": "Number of guests",
+            "example": 2,
+            "minimum": 1
+          },
+          "totalAmount": {
+            "type": "number",
+            "description": "Total booking amount in VND",
+            "example": 5000000,
+            "minimum": 0
+          },
+          "couponCode": {
+            "type": "string",
+            "description": "Optional coupon code to apply",
+            "example": "SUMMER2025"
+          }
+        },
+        "required": ["serviceType", "serviceId", "departureDate", "guests", "totalAmount"]
+      },
+      "ProfileUpdateDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "WishlistSaveDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "TripCreateDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "AdminReindexDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdateBookingStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["pending", "confirmed", "cancelled", "completed", "refunded_mock"],
+            "example": "confirmed"
+          }
+        },
+        "required": ["status"]
+      },
+      "UpdatePaymentStatusDto": {
+        "type": "object",
+        "properties": {
+          "paymentStatus": {
+            "type": "string",
+            "enum": ["pending", "confirmed_mock", "failed_mock", "refunded_mock"],
+            "example": "confirmed_mock"
+          }
+        },
+        "required": ["paymentStatus"]
+      },
+      "MockCheckoutDto": {
+        "type": "object",
+        "properties": {
+          "bookingId": {
+            "type": "string",
+            "description": "Booking ID to initiate payment for"
+          }
+        },
+        "required": ["bookingId"]
+      },
+      "MockCallbackDto": {
+        "type": "object",
+        "properties": {
+          "transactionCode": {
+            "type": "string",
+            "description": "Transaction code from mock-checkout"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["SUCCESS", "FAILED"]
+          }
+        },
+        "required": ["transactionCode", "status"]
+      },
+      "CreateReviewDto": {
+        "type": "object",
+        "properties": {
+          "rating": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5,
+            "description": "Rating from 1 to 5",
+            "example": 5
+          },
+          "title": {
+            "type": "string",
+            "description": "Optional review title",
+            "example": "Chuyến đi tuyệt vời!"
+          },
+          "content": {
+            "type": "string",
+            "description": "Review content (minimum 10 characters)",
+            "example": "Tour rất tốt, hướng dẫn viên nhiệt tình và chuyên nghiệp."
+          }
+        },
+        "required": ["rating", "content"]
+      },
+      "AddWishlistDto": {
+        "type": "object",
+        "properties": {
+          "itemId": {
+            "type": "string",
+            "description": "Tour ID or Destination ID",
+            "example": "clxyz123"
+          },
+          "itemType": {
+            "type": "string",
+            "enum": ["TOUR", "DESTINATION"],
+            "description": "Type of the item being added to the wishlist",
+            "example": "TOUR"
+          }
+        },
+        "required": ["itemId", "itemType"]
+      },
+      "CreateBlogDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Blog post title",
+            "minLength": 3,
+            "example": "Khám phá Hội An cổ kính"
+          },
+          "excerpt": {
+            "type": "string",
+            "description": "Short excerpt / summary",
+            "example": "Hội An là một trong những điểm đến đẹp nhất Việt Nam..."
+          },
+          "content": {
+            "type": "string",
+            "description": "Full blog post content (HTML or Markdown)",
+            "minLength": 10,
+            "example": "Hội An nằm ở miền Trung Việt Nam..."
+          },
+          "coverImageUrl": {
+            "type": "string",
+            "description": "Cover image URL",
+            "example": "https://example.com/images/hoi-an.jpg"
+          },
+          "category": {
+            "type": "string",
+            "description": "Blog category",
+            "example": "Điểm đến"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["DRAFT", "PUBLISHED"],
+            "default": "DRAFT",
+            "description": "Publication status. Defaults to DRAFT."
+          }
+        },
+        "required": ["title", "content"]
+      },
+      "UpdateBlogDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Blog post title",
+            "minLength": 3,
+            "example": "Khám phá Hội An cổ kính"
+          },
+          "excerpt": {
+            "type": "string",
+            "description": "Short excerpt / summary",
+            "example": "Hội An là một trong những điểm đến đẹp nhất Việt Nam..."
+          },
+          "content": {
+            "type": "string",
+            "description": "Full blog post content (HTML or Markdown)",
+            "minLength": 10,
+            "example": "Hội An nằm ở miền Trung Việt Nam..."
+          },
+          "coverImageUrl": {
+            "type": "string",
+            "description": "Cover image URL",
+            "example": "https://example.com/images/hoi-an.jpg"
+          },
+          "category": {
+            "type": "string",
+            "description": "Blog category",
+            "example": "Điểm đến"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["DRAFT", "PUBLISHED"],
+            "default": "DRAFT",
+            "description": "Publication status. Defaults to DRAFT."
+          }
+        }
+      },
+      "CreateContactDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Full name of the requester",
+            "example": "Nguyễn Văn A",
+            "minLength": 2
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address",
+            "example": "nguyen.van.a@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Phone number (optional)",
+            "example": "0901234567"
+          },
+          "destinationInterested": {
+            "type": "string",
+            "description": "Destination the requester is interested in",
+            "example": "Hội An"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message content (min 10 characters)",
+            "example": "Tôi muốn tư vấn về tour Hội An 3 ngày 2 đêm.",
+            "minLength": 10
+          }
+        },
+        "required": ["name", "email", "message"]
+      },
+      "UpdateContactStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["NEW", "IN_PROGRESS", "RESOLVED", "CLOSED"],
+            "description": "New status for the contact request",
+            "example": "IN_PROGRESS"
+          },
+          "assignedTo": {
+            "type": "string",
+            "description": "Staff member ID or name to assign this request to",
+            "example": "staff@wanderviet.com"
+          },
+          "adminNote": {
+            "type": "string",
+            "description": "Internal admin note for this contact request",
+            "example": "Đã gọi điện tư vấn, khách hàng quan tâm tour Hội An."
+          }
+        }
+      },
+      "CreateCouponDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Unique coupon code",
+            "example": "SUMMER2025",
+            "minLength": 3
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description of the coupon",
+            "example": "Summer sale 20% off"
+          },
+          "discountType": {
+            "type": "string",
+            "enum": ["PERCENT", "FIXED"],
+            "description": "Discount type: PERCENT applies a percentage discount, FIXED deducts a fixed amount",
+            "example": "PERCENT"
+          },
+          "discountValue": {
+            "type": "number",
+            "description": "Discount value — percentage (0-100) for PERCENT, VND amount for FIXED",
+            "example": 20,
+            "minimum": 0
+          },
+          "minBookingAmount": {
+            "type": "number",
+            "default": 0,
+            "description": "Minimum booking amount (VND) required to use this coupon",
+            "example": 1000000,
+            "minimum": 0
+          },
+          "maxDiscountAmount": {
+            "type": "number",
+            "description": "Maximum discount amount (VND) — caps PERCENT discounts. Null = no cap.",
+            "example": 500000,
+            "minimum": 0
+          },
+          "usageLimit": {
+            "type": "number",
+            "description": "Maximum number of times this coupon can be used. Null = unlimited.",
+            "example": 100,
+            "minimum": 1
+          },
+          "validFrom": {
+            "type": "string",
+            "description": "Date from which the coupon is valid (ISO 8601)",
+            "example": "2025-01-01T00:00:00.000Z"
+          },
+          "validTo": {
+            "type": "string",
+            "description": "Date until which the coupon is valid (ISO 8601)",
+            "example": "2025-12-31T23:59:59.000Z"
+          },
+          "isActive": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether the coupon is active",
+            "example": true
+          }
+        },
+        "required": ["code", "discountType", "discountValue", "validFrom", "validTo"]
+      },
+      "UpdateCouponDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Unique coupon code",
+            "example": "SUMMER2025",
+            "minLength": 3
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description of the coupon",
+            "example": "Summer sale 20% off"
+          },
+          "discountType": {
+            "type": "string",
+            "enum": ["PERCENT", "FIXED"],
+            "description": "Discount type: PERCENT applies a percentage discount, FIXED deducts a fixed amount",
+            "example": "PERCENT"
+          },
+          "discountValue": {
+            "type": "number",
+            "description": "Discount value — percentage (0-100) for PERCENT, VND amount for FIXED",
+            "example": 20,
+            "minimum": 0
+          },
+          "minBookingAmount": {
+            "type": "number",
+            "default": 0,
+            "description": "Minimum booking amount (VND) required to use this coupon",
+            "example": 1000000,
+            "minimum": 0
+          },
+          "maxDiscountAmount": {
+            "type": "number",
+            "description": "Maximum discount amount (VND) — caps PERCENT discounts. Null = no cap.",
+            "example": 500000,
+            "minimum": 0
+          },
+          "usageLimit": {
+            "type": "number",
+            "description": "Maximum number of times this coupon can be used. Null = unlimited.",
+            "example": 100,
+            "minimum": 1
+          },
+          "validFrom": {
+            "type": "string",
+            "description": "Date from which the coupon is valid (ISO 8601)",
+            "example": "2025-01-01T00:00:00.000Z"
+          },
+          "validTo": {
+            "type": "string",
+            "description": "Date until which the coupon is valid (ISO 8601)",
+            "example": "2025-12-31T23:59:59.000Z"
+          },
+          "isActive": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether the coupon is active",
+            "example": true
+          }
+        }
+      }
+    }
+  }
+}

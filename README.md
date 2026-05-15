@@ -46,6 +46,12 @@
 
 Dự án được xây dựng với kiến trúc monorepo hiện đại, áp dụng các best practices về security, testing, CI/CD và containerization.
 
+### Demo
+
+|                          Trang chủ                          |                          Khám phá                          |                          AI Planner                           |
+| :---------------------------------------------------------: | :--------------------------------------------------------: | :-----------------------------------------------------------: |
+| <img src="./assets/images/demo-homepage.png" width="280" /> | <img src="./assets/images/demo-explore.png" width="280" /> | <img src="./assets/images/demo-ai-planner.png" width="280" /> |
+
 ```
 41 trang web | 21 API modules | 10 AI endpoints | 12 màn hình mobile
 ```

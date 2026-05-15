@@ -208,13 +208,18 @@ export function RevenueChart({ data }: { data: RevenueData[] }) {
 // ─── Bookings Donut ──────────────────────────────────────────────────────────
 
 export function BookingsDonut({ data }: { data: BookingStatusCounts }) {
+  const normalizeKey = (k: string) => k.replace(/_mock$/, '').toUpperCase();
+
   const entries = Object.entries(data)
     .filter(([, v]) => v > 0)
-    .map(([key, value]) => ({
-      name: STATUS_LABELS[key] ?? key,
-      value,
-      color: STATUS_COLORS[key] ?? GRAY,
-    }));
+    .map(([key, value]) => {
+      const normalized = normalizeKey(key);
+      return {
+        name: STATUS_LABELS[normalized] ?? key,
+        value,
+        color: STATUS_COLORS[normalized] ?? GRAY,
+      };
+    });
 
   const total = entries.reduce((s, e) => s + e.value, 0);
 

@@ -1,28 +1,28 @@
 ---
-name: Bug Report
-about: Report a bug to help us improve
-title: "[Bug] "
+name: Báo lỗi / Bug Report
+about: Báo lỗi để giúp cải thiện / Report a bug to help us improve
+title: '[Bug] '
 labels: bug
 ---
 
-## Describe the Bug
+## Mô tả lỗi / Describe the Bug
 
-<!-- Clear description of what happened -->
+<!-- Mô tả rõ ràng điều gì đã xảy ra / Clear description of what happened -->
 
-## Steps to Reproduce
+## Các bước tái hiện / Steps to Reproduce
 
 1.
 2.
 3.
 
-## Expected Behavior
+## Hành vi mong đợi / Expected Behavior
 
-<!-- What should have happened -->
+<!-- Điều gì lẽ ra phải xảy ra / What should have happened -->
 
-## Environment
+## Môi trường / Environment
 
 - OS:
 - Node.js version:
-- Browser (if applicable):
+- Trình duyệt / Browser (nếu có / if applicable):
 
-## Screenshots (if applicable)
+## Ảnh chụp màn hình / Screenshots (nếu có / if applicable)

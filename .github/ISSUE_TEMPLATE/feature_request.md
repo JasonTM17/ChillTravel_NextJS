@@ -1,20 +1,20 @@
 ---
-name: Feature Request
-about: Suggest a new feature
-title: "[Feature] "
+name: Yêu cầu tính năng / Feature Request
+about: Đề xuất tính năng mới / Suggest a new feature
+title: '[Feature] '
 labels: enhancement
 ---
 
-## Problem Statement
+## Vấn đề / Problem Statement
 
-<!-- What problem does this solve? -->
+<!-- Tính năng này giải quyết vấn đề gì? / What problem does this solve? -->
 
-## Proposed Solution
+## Giải pháp đề xuất / Proposed Solution
 
-<!-- How should it work? -->
+<!-- Nó nên hoạt động như thế nào? / How should it work? -->
 
-## Alternatives Considered
+## Các lựa chọn đã xem xét / Alternatives Considered
 
-<!-- Other approaches you've thought about -->
+<!-- Các cách tiếp cận khác bạn đã nghĩ đến / Other approaches you've thought about -->
 
-## Additional Context
+## Bối cảnh bổ sung / Additional Context

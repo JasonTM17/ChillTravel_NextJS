@@ -1,25 +1,25 @@
-## Summary
+## Tóm tắt / Summary
 
-<!-- Brief description of changes -->
+<!-- Mô tả ngắn gọn thay đổi / Brief description of changes -->
 
-## Type of Change
+## Loại thay đổi / Type of Change
 
-- [ ] 🐛 Bug fix
-- [ ] ✨ New feature
-- [ ] 📝 Documentation
-- [ ] ♻️ Refactor
-- [ ] 🔧 Configuration
+- [ ] 🐛 Sửa lỗi / Bug fix
+- [ ] ✨ Tính năng mới / New feature
+- [ ] 📝 Tài liệu / Documentation
+- [ ] ♻️ Tái cấu trúc / Refactor
+- [ ] 🔧 Cấu hình / Configuration
 
 ## Checklist
 
-- [ ] `pnpm lint` passes
-- [ ] `pnpm test` passes
-- [ ] `pnpm build` passes
-- [ ] No secrets or .env files committed
-- [ ] Commit messages follow Conventional Commits
+- [ ] `pnpm lint` pass
+- [ ] `pnpm test` pass
+- [ ] `pnpm build` pass
+- [ ] Không commit secrets hoặc .env / No secrets or .env files committed
+- [ ] Commit messages theo Conventional Commits
 
-## Screenshots (if applicable)
+## Ảnh chụp màn hình / Screenshots (nếu có / if applicable)
 
-## Related Issues
+## Issues liên quan / Related Issues
 
 Closes #
